@@ -13,6 +13,7 @@ class M_user extends CI_Model {
         $this->db->set('name', $this->input->post('nama'));
         $this->db->set('id_role', $this->input->post('role'));
         $this->db->set('pass', md5($this->input->post('pass')));
+        $this->db->set('id_create', $this->session->userdata('user')['id']);
         return $this->db->insert($this->table);
     }
 

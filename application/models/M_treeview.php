@@ -6,7 +6,7 @@ class M_treeview extends CI_Model {
 
     function create() {
         $this->db->set('name', $this->input->post('name'));
-        $this->db->set('created_by', $this->session->userdata('userId'));
+        $this->db->set('created_by', $this->session->userdata('user')['id']);
         return $this->db->insert($this->table);
     }
 
