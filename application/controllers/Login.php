@@ -12,8 +12,7 @@ class Login extends CI_Controller {
         } else if ($this->input->post('login')) {
             $this->load->model('m_login', 'model');
             if ($this->model->login()) {
-                $this->load->model('m_module');
-                $this->session->set_userdata('menu', $this->m_module->read());
+                $this->session->set_userdata('module', $this->model->access());
                 redirect('dashboard');
             }
         }

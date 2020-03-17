@@ -141,7 +141,7 @@
                         <div class="app-sidebar__inner">
                             <ul class="vertical-nav-menu">
                                 <li class="app-sidebar__heading">Menu</li>
-                                <?php foreach ($modules as $key => $m) { ?>
+                                <?php foreach ($this->session->userdata('module') as $key => $m) { ?>
                                     <?php if ($m['on_menu'] == 'YES') { ?>
                                         <li>
                                             <a href="<?php echo site_url($m['name']) ?>" class="<?php echo $m['name'] == $this->uri->segment(1) ? 'mm-active' : '' ?>">

@@ -37,6 +37,7 @@ class M_role extends CI_Model {
     }
 
     function role() {
+        $this->db->order_by('id');
         $result = $this->db->get('role')->result_array();
         foreach ($result as $r) {
             $data[$r['id']] = $r;
