@@ -20,11 +20,7 @@
                 console.log($(item).parent().remove());
             }
         </script>
-        <style>
-            .modal{
-                position: 
-            }
-        </style>
+        <style></style>
     </head>
     <body>
         <div class="app-container app-theme-white body-tabs-shadow fixed-sidebar fixed-header">
@@ -69,7 +65,7 @@
                         </div>
                         <ul class="header-menu nav">
                             <li class="nav-item">
-                                <a href="<?php echo site_url('dashboard')?>" class="nav-link">
+                                <a href="<?php echo site_url('dashboard') ?>" class="nav-link">
                                     <i class="nav-link-icon fa fa-home"> </i>
                                     <?php echo $this->config->item('app_name') ?>
                                 </a>
@@ -87,21 +83,21 @@
                                                 <i class="fa fa-angle-down ml-2 opacity-8"></i>
                                             </a>
                                             <div tabindex="-1" role="menu" aria-hidden="false" class="dropdown-menu dropdown-menu-right">
-                                                <!--<button type="button" tabindex="0" class="dropdown-item">User Account</button>-->
+                                                <a href="<?php echo site_url('account') ?>" class="dropdown-item">Account</a>
                                                 <!--<button type="button" tabindex="0" class="dropdown-item">Settings</button>-->
                                                 <!--<h6 tabindex="-1" class="dropdown-header">Header</h6>-->
                                                 <!--<button type="button" tabindex="0" class="dropdown-item">Actions</button>-->
-                                                <!--<div tabindex="-1" class="dropdown-divider"></div>-->
-                                                <a href="<?php echo site_url('login/logout') ?>" tabindex="0" class="dropdown-item">Logout</a>
+                                                <div class="dropdown-divider"></div>
+                                                <a href="<?php echo site_url('account/logout') ?>" class="dropdown-item">Logout</a>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="widget-content-left  ml-3 header-user-info">
                                         <div class="widget-heading">
-                                            <?php echo $this->session->userdata('user')['name']?>
+                                            <?php echo $this->session->userdata('user')['name'] ?>
                                         </div>
                                         <div class="widget-subheading">
-                                            <?php echo $this->session->userdata('user')['role']?>                                            
+                                            <?php echo $this->session->userdata('user')['role'] ?>                                            
                                         </div>
                                     </div>
                                 </div>
@@ -165,7 +161,7 @@
                             <div class="page-title-wrapper">
                                 <div class="page-title-heading">
                                     <div class="page-title-icon">
-                                        <i class="fa fa-<?php echo $activeModule['icon']?> icon-gradient bg-mean-fruit">
+                                        <i class="fa fa-<?php echo $activeModule['icon'] ?> icon-gradient bg-mean-fruit">
                                         </i>
                                     </div>
                                     <div>
@@ -177,16 +173,29 @@
                                 </div>
                             </div>
                         </div>
-                        <?php if ($this->session->flashdata('msgSuccess')) { ?>
-                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        <?php
+                        if ($this->session->flashdata('msgSuccess')) {
+                            $alertType = 'success';
+                            $alert_message = $this->session->flashdata('msgSuccess');
+                            $is_alert= true;
+                        } elseif ($this->session->flashdata('msgError')) {
+                            $alertType = 'danger';
+                            $alert_message = $this->session->flashdata('msgError');
+                            $is_alert= true;
+                        } elseif(isset ($msgSuccess)){
+                            $alertType = 'success';
+                            $alert_message = $msgSuccess;                            
+                            $is_alert= true;
+                        }elseif(isset ($msgError)){
+                            $alertType = 'danger';
+                            $alert_message = $msgError;                            
+                            $is_alert= true;                            
+                        }
+                        ?>
+                        <?php if (isset($is_alert)) { ?>
+                            <div class="alert alert-<?php echo $alertType?> alert-dismissible fade show" role="alert">
                                 <button type="button" class="close" onclick="closeAlert(this)"><span aria-hidden="true">×</span></button>
-                                <?php echo $this->session->flashdata('msgSuccess') ?>
-                            </div>
-                        <?php } ?>
-                        <?php if ($this->session->flashdata('msgError')) { ?>
-                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                <button type="button" class="close" onclick="closeAlert(this)"><span aria-hidden="true">×</span></button>
-                                <?php echo $this->session->flashdata('msgError') ?>
+                                <?php echo $alert_message ?>
                             </div>
                         <?php } ?>
                         <?php $this->load->view($view) ?>
