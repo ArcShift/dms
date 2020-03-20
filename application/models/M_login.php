@@ -3,7 +3,7 @@
 class M_login extends CI_Model {
 
     function login() {
-        $this->db->select('u.*, r.name AS role');
+        $this->db->select('u.*, r.name AS role, r.title');
         $this->db->where('u.name', $this->input->post('user'));
         $this->db->where('u.pass', md5($this->input->post('pass')));
         $this->db->join('role r', 'r.id=u.id_role');

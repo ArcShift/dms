@@ -1,6 +1,3 @@
-<?php
-//print_r($treeview);
-?>
 <style>
     #root ul {
         list-style-type: none;
@@ -13,7 +10,9 @@
                 <ul class="list-group">
                     <li id="root" class="list-group-item">
                         <span><?php echo $treeview['name'] ?></span>
-                        <span class="fa fa-plus text-primary" onclick="add(this)" title="Tambah"></span>
+                        <?php if ($activeModule['acc_create']) { ?>
+                            <span class="fa fa-plus text-primary" onclick="add(this)" title="Tambah"></span>
+                        <?php } ?>
                         <ul></ul>
                     </li>
                 </ul>
@@ -128,11 +127,23 @@
 <div class="invisible">
     <ul class="-list-group">
         <li id="tree" class="-list-group-item">
-            <span class="title"> </span>
-            <span class="fa fa-plus text-primary" onclick="add(this)" title="Tambah"></span>
-            <span class="fa fa-edit text-primary" onclick="edit(this)" title="Ubah"></span>
-            <span class="fa fa-trash text-danger" onclick="remove(this)" title="Hapus"></span>
-            <span class="fa fa-bars text-primary" onclick="detail(this)" title="Open Form">&nbsp;</span>
+            <span class="title"></span>
+            <?php if ($activeModule['acc_create']) { ?>
+                <span class="fa fa-plus text-primary" onclick="add(this)" title="Tambah"></span>
+            <?php } ?>
+            <?php if ($activeModule['acc_update']) { ?>
+                <span class="fa fa-edit text-primary" onclick="edit(this)" title="Ubah"></span>
+            <?php } ?>
+            <?php if ($activeModule['acc_delete']) { ?>
+                <span class="fa fa-trash text-danger" onclick="remove(this)" title="Hapus"></span>
+            <?php } ?>
+            <?php if ($activeModule['acc_update']) { ?>
+                <span class="fa fa-bars text-primary" onclick="detail(this)" title="Open Form">&nbsp;</span>
+            <?php } ?>
+                <span class="fa fa-download text-primary" onclick="download(this)" title="Download">&nbsp;</span>
+            <?php if ($this->session->userdata('user')['role']=='anggota') { ?>
+                <span class="fa fa-upload text-primary" onclick="download(this)" title="Upload">&nbsp;</span>
+            <?php } ?>
             <ul></ul>
         </li>
     </ul>

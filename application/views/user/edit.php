@@ -1,6 +1,3 @@
-<?php
-    print_r($data);
-?>
 <div class="main-card mb-3 card">
     <form class="form-horizontal" method="post">
         <div class="card-header">
@@ -27,6 +24,18 @@
                     <?php echo form_error('role'); ?>
                 </div>
             </div>
+            <div class="form-group">
+                <label>Company</label>
+                <select class="form-control <?php echo form_error('company') != "" ? "is-invalid" : "" ?>" name="company" required="">
+                    <option value="">-- Company --</option>
+                    <?php foreach ($company as $c) { ?>
+                        <option value="<?php echo $c['id'] ?>" <?php echo $c['id'] == $data['id_company'] ? 'selected' : ''; ?>><?php echo $c['name'] ?></option>
+                    <?php } ?>
+                </select>
+                <div class="error invalid-feedback">
+                    <?php echo form_error('role'); ?>
+                </div>
+            </div>
         </div>
         <div class="d-block text-right card-footer">
             <a class="mr-2 btn btn-primary" href="<?php echo site_url($module) ?>">Kembali</a>
@@ -35,8 +44,7 @@
     </form>
 </div>
 <div class="main-card mb-3 card">
-    <form method="post">
-        
+    <form method="post">        
         <div class="card-header">
             <h5>Edit Password</h5>
         </div>

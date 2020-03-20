@@ -11,7 +11,21 @@ class M_treeview extends CI_Model {
     }
 
     function read() {
-        return $this->db->get($this->table)->result_array();
+        $this->db->select('t.*, count(d.id) AS detail, u.name AS user');
+        $this->db->join('users u', 'u.id = t.created_by');
+        $this->db->join('treeview_detail d', 't.id = d.id_treeview', 'LEFT');
+        $this->db->group_by('t.id');
+        return $this->db->get($this->table. ' t')->result_array();
+    }
+
+    function detail($id) {
+        $this->db->where('id', $id);
+        return $this->db->get($this->table)->row_array();
+    }
+
+    function delete($id) {
+        $this->db->where('id', $id);
+        return $this->db->delete($this->table);
     }
 
 }

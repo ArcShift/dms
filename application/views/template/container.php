@@ -97,7 +97,7 @@
                                             <?php echo $this->session->userdata('user')['name'] ?>
                                         </div>
                                         <div class="widget-subheading">
-                                            <?php echo $this->session->userdata('user')['role'] ?>                                            
+                                            <?php echo $this->session->userdata('user')['title'] ?>                                            
                                         </div>
                                     </div>
                                 </div>

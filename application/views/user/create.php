@@ -9,6 +9,18 @@
                 </div>
             </div>
             <div class="form-group">
+                <label>Company</label>
+                <select class="form-control <?php echo form_error('company') != "" ? "is-invalid" : "" ?>" name="company" required="">
+                    <option value="">-- Company --</option>
+                    <?php foreach ($company as $r) { ?>
+                        <option value="<?php echo $r['id'] ?>" <?php echo $r['id'] == $this->input->post('role') ? 'selected' : ''; ?>><?php echo $r['name'] ?></option>
+                    <?php } ?>
+                </select>
+                <div class="error invalid-feedback">
+                    <?php echo form_error('role'); ?>
+                </div>
+            </div>
+            <div class="form-group">
                 <label>Role</label>
                 <select class="form-control <?php echo form_error('role') != "" ? "is-invalid" : "" ?>" name="role" required="">
                     <option value="">-- Role --</option>

@@ -9,6 +9,7 @@ class User extends MY_Controller {
         $this->load->model("m_user", "model");
         $this->load->library('form_validation');
         $this->data['role'] = $this->model->role();
+        $this->data['company'] = $this->model->company();
     }
 
     function index() {
@@ -60,9 +61,9 @@ class User extends MY_Controller {
             $this->data['data'] = $this->model->detail($this->input->post('initEdit'));
         } elseif ($this->input->post('edit')) {
             $result = $this->model->detail($this->input->post('edit'));
-            if ($this->input->post('nama')==$result['name']){
+            if ($this->input->post('nama') == $result['name']) {
                 $this->form_validation->set_rules('nama', 'Nama', 'required|is_unique[user.name]');
-                }
+            }
             $this->form_validation->set_rules('role', 'Role', 'required');
             if ($this->form_validation->run()) {
                 if ($this->model->updateData()) {
@@ -73,16 +74,16 @@ class User extends MY_Controller {
                 }
             }
             $this->data['data'] = array(
-                "id"=> $this->input->post('id'),
+                "id" => $this->input->post('id'),
                 "name" => $this->input->post('nama'),
-                "id_role"=> $this->input->post('role')
-            ); 
-                    
+                "id_role" => $this->input->post('role')
+            );
         } else {
             redirect($this->module);
         }
         $this->render('edit');
     }
+
     function updatePass() {
         
     }
