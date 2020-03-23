@@ -3,12 +3,12 @@
 class M_treeview_detail extends CI_Model {
 
     private $table = 'treeview_detail';
-    
+
     function treeview() {
         $this->db->where('id', $this->session->userdata('treeview'));
         return $this->db->get('treeview')->row_array();
     }
-    
+
     function reads() {
         $this->db->where('id_treeview', $this->session->userdata('treeview'));
         return $this->db->get($this->table)->result_array();
@@ -36,7 +36,13 @@ class M_treeview_detail extends CI_Model {
         $this->db->delete($this->table);
     }
 
-    function update_file() {
+    function update_desc() {
+        $this->db->set('description', $this->input->post('desc'));
+        $this->db->where('id', $this->input->post('id'));
+        return $this->db->update($this->table);
+    }
+
+    function update_file1() {
         $this->db->set('file', $this->upload->data()['file_name']);
         $this->db->where('id', $this->input->post('id'));
         $this->db->update($this->table);

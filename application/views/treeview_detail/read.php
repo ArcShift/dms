@@ -91,8 +91,8 @@
                         <button type="submit" class="btn btn-transition btn-outline-info" name="remove" value="ok">Hapus</button>
                     </div>
                 </form>
-                <!--DETAIL-->
-                <form id="formDetail" class="d-none" method="post">
+                <!--FORM 1-->
+                <form id="formDetail" class="d-none" method="post" enctype="multipart/form-data">
                     <div class="modal-header">
                         <h4 class="modal-title" id="form-title"></h4>
                         <button class="close" aria-label="Close" onclick="closeForm()">
@@ -100,22 +100,22 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <div class="form-group hidden">
-                            <label for="parent-id">Parent ID</label>
-                            <input class="form-control" id="parent-id" name="id" required="" readonly="">
+                        <div class="form-group d-none">
+                            <label for="parent-id">ID</label>
+                            <input class="form-control item-id" name="id" required="" readonly="">
                         </div>
                         <div class="form-group">
                             <label for="parent">Deskripsi</label>
-                            <input class="form-control" required="">
+                            <input class="form-control item-desc" name="desc">
                         </div>
                         <div class="form-group">
                             <label>File</label>
-                            <input type="file" accept=".pdf" class="form-control file" name="file" placeholder="Nama" required="" multiple="">
+                            <input type="file" accept=".pdf" class="form-control file" name="file" placeholder="Nama">
                         </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default pull-left" onclick="closeForm()">Batal</button>
-                        <button type="submit" class="btn btn-default" name="add" value="ok">Simpan</button>
+                        <button type="submit" class="btn btn-default" name="form1" value="ok">Simpan</button>
                     </div>
                 </form>
             </div>
@@ -127,6 +127,8 @@
 <div class="invisible">
     <ul class="-list-group">
         <li id="tree" class="-list-group-item">
+            <input class="desc d-none" name="desc" value="">
+            <input class="filename d-none" name="desc" value="">
             <span class="title"></span>
             <?php if ($activeModule['acc_create']) { ?>
                 <span class="fa fa-plus text-primary" onclick="add(this)" title="Tambah"></span>
@@ -156,6 +158,8 @@
         var clone = $('#tree').clone();
         clone.attr('id', l.id);
         clone.children('.title').text(' ' + l.name);
+        clone.children('.desc').val(l.description);
+        clone.children('.filename').val(l.file);
         parent.children('ul').append(clone);
         parent.children('.fa-trash').remove();
         if (parent.children('.fa-angle-double-right').length == 0) {
@@ -165,6 +169,7 @@
             clone.children('.fa-upload').after('<a class="fa fa-download text-success" href="<?php echo base_url('assets/') ?>' + l.file + '" title="Download"></a>');
         }
     }
+    console.log(list);
     $('#root ul').addClass('collapse');
     $('#root ul').collapse('toggle');
     $('#root ul').collapse('toggle');
@@ -184,7 +189,7 @@
         closeForm();
         showCrud('#formEdit');
         $('.item-id').val($(item).parent().attr('id'));
-        $('.item-name').val($(item).parent().children('span').text());
+        $('.item-name').val($(item).parent().children('span').text().trimLeft().trimRight());
     }
     function remove(item) {
         closeForm();
@@ -196,6 +201,9 @@
         closeForm();
         showCrud('#formDetail');
         $('#form-title').text($.trim($(item).parent().children('.title').text()));
+        $('.item-id').val($(item).parent().attr('id'));
+        console.log($(item).parent().children('.desc'));
+        $('.item-desc').val($(item).parent().children('.desc').val());
         $('#treeview-list').removeClass('col-sm-12');
         $('#treeview-list').addClass('col-sm-6');
         $('#treeview-crud').show();

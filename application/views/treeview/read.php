@@ -12,6 +12,7 @@
                         <th>No</th>
                         <th>Nama</th>
                         <th>Sub</th>
+                        <th>User</th>
                         <th>aksi</th>
                     </tr>
                 </thead>
@@ -21,6 +22,7 @@
                             <td><?php echo $k + 1 ?></td>
                             <td><?php echo $d['name'] ?></td>
                             <td><?php echo $d['detail'] ?></td>
+                            <td><?php echo $d['user'] ?></td>
                             <td>
                                 <button class="btn btn-primary fa fa-search" title="Detail" name="detail" value="<?php echo $d['id'] ?>" formaction="<?php echo site_url($module . '/detail') ?>"></button>
                                 <?php if (!$d['detail']) { ?>
