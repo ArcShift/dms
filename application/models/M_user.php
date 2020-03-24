@@ -26,7 +26,7 @@ class M_user extends CI_Model {
     }
 
     function read() {
-        $this->db->select('u.id, u.name, u.id_role, r.name AS role, u.id_company, c.name AS company');
+        $this->db->select('u.id, u.name, u.id_role, r.title AS role, u.id_company, c.name AS company');
         $this->db->join('role r', 'r.id = u.id_role');
         $this->db->join('company c', 'c.id = u.id_company', 'LEFT');
         if ($this->session->userdata('user')['name'] == 'pic') {

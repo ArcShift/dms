@@ -12,7 +12,7 @@
                         <th>No</th>
                         <th>Nama</th>
                         <th>Sub</th>
-                        <th>User</th>
+                        <th>Created by</th>
                         <th>aksi</th>
                     </tr>
                 </thead>

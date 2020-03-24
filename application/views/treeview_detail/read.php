@@ -21,7 +21,7 @@
                 <!--FORM TAMBAH-->
                 <form class="d-none" id="formAdd" method="post">
                     <div class="modal-header">
-                        <h4 class="modal-title">Tambah Modul</h4>
+                        <h4 class="modal-title">Tambah Pasal</h4>
                         <button class="close" data-dismiss="modal" aria-label="Close" onclick="closeForm()">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -32,7 +32,7 @@
                             <input class="form-control" id="parent-id" name="id" required="" readonly="">
                         </div>
                         <div class="form-group">
-                            <label for="parent">Parent Name</label>
+                            <label for="parent">Induk</label>
                             <input class="form-control" id="parent" required="" readonly="">
                         </div>
                         <div class="form-group">
@@ -48,7 +48,7 @@
                 <!--FORM EDIT-->
                 <form id="formEdit" class="d-none" method="post">
                     <div class="modal-header">
-                        <h4 class="modal-title">Ubah Item</h4>
+                        <h4 class="modal-title">Ubah Pasal</h4>
                         <span class="close" aria-label="Close" onclick="closeForm()">
                             <span aria-hidden="true">&times;</span>
                         </span>
@@ -72,9 +72,9 @@
                 <form id="formDelete" class="d-none" method="post">
                     <div class="modal-header">
                         <h4 class="modal-title">Hapus Item</h4>
-                        <button class="close" aria-label="Close" onclick="closeForm()">
+                        <span class="close" aria-label="Close" onclick="closeForm()">
                             <span aria-hidden="true">&times;</span>
-                        </button>
+                        </span>
                     </div>
                     <div class="modal-body">
                         <div class="form-group d-none">
@@ -92,12 +92,12 @@
                     </div>
                 </form>
                 <!--FORM 1-->
-                <form id="formDetail" class="d-none" method="post" enctype="multipart/form-data">
+                <form id="form1" class="d-none" method="post" enctype="multipart/form-data">
                     <div class="modal-header">
                         <h4 class="modal-title" id="form-title"></h4>
-                        <button class="close" aria-label="Close" onclick="closeForm()">
+                        <span class="close" aria-label="Close" onclick="closeForm()">
                             <span aria-hidden="true">&times;</span>
-                        </button>
+                        </span>
                     </div>
                     <div class="modal-body">
                         <div class="form-group d-none">
@@ -110,12 +110,16 @@
                         </div>
                         <div class="form-group">
                             <label>File</label>
+                            <div>
+                                <a class="fa fa-download text-primary item-download" title="Download">&nbsp;</a>
+                                <span class="text-primary item-file">filename</span> 
+                            </div>
                             <input type="file" accept=".pdf" class="form-control file" name="file" placeholder="Nama">
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-default pull-left" onclick="closeForm()">Batal</button>
-                        <button type="submit" class="btn btn-default" name="form1" value="ok">Simpan</button>
+                        <button type="button" class="btn btn-transition btn-outline-warning" onclick="closeForm()">Batal</button>
+                        <button type="submit" class="btn btn-transition btn-outline-info" name="form1" value="ok">Simpan</button>
                     </div>
                 </form>
             </div>
@@ -140,10 +144,9 @@
                 <span class="fa fa-trash text-danger" onclick="remove(this)" title="Hapus"></span>
             <?php } ?>
             <?php if ($activeModule['acc_update']) { ?>
-                <span class="fa fa-bars text-primary" onclick="detail(this)" title="Open Form">&nbsp;</span>
+                <span class="fa fa-bars text-primary" onclick="form1(this)" title="Open Form">&nbsp;</span>
             <?php } ?>
-                <span class="fa fa-download text-primary" onclick="download(this)" title="Download">&nbsp;</span>
-            <?php if ($this->session->userdata('user')['role']=='anggota') { ?>
+            <?php if ($this->session->userdata('user')['role'] == 'anggota') { ?>
                 <span class="fa fa-upload text-primary" onclick="download(this)" title="Upload">&nbsp;</span>
             <?php } ?>
             <ul></ul>
@@ -197,13 +200,14 @@
         $('.item-id').val($(item).parent().attr('id'));
         $('.item-name').val($(item).parent().children('span').text());
     }
-    function detail(item) {
+    function form1(item) {
         closeForm();
-        showCrud('#formDetail');
+        showCrud('#form1');
         $('#form-title').text($.trim($(item).parent().children('.title').text()));
         $('.item-id').val($(item).parent().attr('id'));
-        console.log($(item).parent().children('.desc'));
         $('.item-desc').val($(item).parent().children('.desc').val());
+        $('.item-file').text($(item).parent().children('.filename').val());
+        $('.item-download').attr('href','<?php echo base_url('assets/');?>'+$(item).parent().children('.filename').val());
         $('#treeview-list').removeClass('col-sm-12');
         $('#treeview-list').addClass('col-sm-6');
         $('#treeview-crud').show();
