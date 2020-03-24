@@ -16,7 +16,8 @@ class Login extends CI_Controller {
                 redirect('dashboard');
             }
         }
-        $this->load->view('login');
+//        $this->load->view('login/admin-lte');
+        $this->load->view('login/colorlib1');
     }
 
 }
