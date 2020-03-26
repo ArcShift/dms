@@ -87,6 +87,5 @@ class User extends MY_Controller {
     function updatePass() {
         
     }
-    
 
 }
