@@ -34,20 +34,8 @@ class Company extends MY_Controller {
     }
 
     function delete() {
-        $this->subTitle = 'Delete';
-        if ($this->input->post('initHapus')) {
-            $this->data['data'] = $this->model->detail($this->input->post('initHapus'));
-            $this->render('delete');
-        } else if ($this->input->post('hapus')) {
-            if ($this->model->delete($this->input->post('id'))) {
-                $this->session->set_flashdata('msgSuccess', 'Data berhasil dihapus');
-            } else {
-                $this->session->set_flashdata('msgError', $this->db->error()['message']);
-            }
-            redirect($this->module);
-        } else {
-            redirect($this->module);
-        }
+        $config['table'] = 'company';
+        parent::hapus($config);
     }
 
     function edit() {

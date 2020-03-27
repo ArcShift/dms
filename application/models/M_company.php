@@ -5,7 +5,10 @@ class M_company extends CI_Model {
     private $table = 'company';
 
     function read() {
-        return $this->db->get('company')->result_array();
+        $this->db->select('c.*, COUNT(u.id) AS count');
+        $this->db->join('unit_kerja u', 'u.id_company= c.id', 'LEFT');
+        $this->db->group_by('c.id');
+        return $this->db->get($this->table. ' c')->result_array();
     }
 
     function create() {
@@ -16,11 +19,6 @@ class M_company extends CI_Model {
     function detail($id) {
         $this->db->where('id', $id);
         return $this->db->get($this->table)->row_array();
-    }
-
-    function delete($id) {
-        $this->db->where('id', $id);
-        return $this->db->delete($this->table);
     }
 
     function update() {

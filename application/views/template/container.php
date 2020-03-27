@@ -94,7 +94,7 @@
                                     </div>
                                     <div class="widget-content-left  ml-3 header-user-info">
                                         <div class="widget-heading">
-                                            <?php echo $this->session->userdata('user')['name'] ?>
+                                            <?php echo $this->session->userdata('user')['fullname'] ?>
                                         </div>
                                         <div class="widget-subheading">
                                             <?php echo $this->session->userdata('user')['title'] ?>                                            

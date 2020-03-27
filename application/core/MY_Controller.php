@@ -38,8 +38,27 @@ class MY_Controller extends CI_Controller {
         }
     }
 
-    protected function load_module($id) {
-        $this->data['module'] = $this->session->userdata('menu')[$id];
+    function hapus($config) {
+        if ($this->input->post('initHapus')) {
+            $config['id'] = $this->input->post('initHapus');
+            if (isset($config['field'])) {
+                $config['name'] = $this->model->detail($config['id'])[$config['field']];
+            } else {
+                $config['name'] = $this->model->detail($config['id'])['name'];
+            }
+            $this->session->set_userdata('delete', $config);
+        } else if ($this->input->post('hapus')) {
+            if ($this->b_model->delete()) {
+                $this->session->set_flashdata('msgSuccess', 'Data berhasil dihapus');
+            } else {
+                $this->session->set_flashdata('msgError', $this->db->error()['message']);
+            }
+            redirect($this->module);
+        } else {
+            redirect($this->module);
+        }
+        $this->subTitle = 'Delete';
+        $this->render('template/delete', FALSE);
     }
 
 }
