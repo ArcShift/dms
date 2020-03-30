@@ -11,7 +11,7 @@ class M_treeview extends CI_Model {
     }
 
     function read() {
-        $this->db->select('t.*, count(d.id) AS detail, u.name AS user');
+        $this->db->select('t.*, count(d.id) AS detail, u.username AS user');
         $this->db->join('users u', 'u.id = t.created_by');
         $this->db->join('treeview_detail d', 't.id = d.id_treeview', 'LEFT');
         $this->db->group_by('t.id');

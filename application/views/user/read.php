@@ -8,8 +8,10 @@
                 <thead>
                     <tr>
                         <th>No</th>
+                        <th>Username</th>
                         <th>Nama</th>
                         <th>Role</th>
+                        <th>Unit Kerja</th>
                         <th>Company</th>                        
                         <th>Aksi</th>
                     </tr>
@@ -18,8 +20,10 @@
                     <?php foreach ($data as $k => $r) { ?>
                         <tr>
                             <td><?php echo $k + 1 ?></td>
-                            <td><?php echo $r['name'] ?></td>
+                            <td><?php echo $r['username'] ?></td>
+                            <td><?php echo $r['fullname'] ?></td>
                             <td><?php echo $r['role'] ?></td>
+                            <td><?php echo $r['unit_kerja'] ?></td>
                             <td><?php echo $r['company'] ?></td>
                             <td>
                                 <button class="btn btn-primary fa fa-edit" title="Edit" name="initEdit" value="<?php echo $r['id']?>" formaction="<?php echo site_url($module.'/edit') ?>"></button>

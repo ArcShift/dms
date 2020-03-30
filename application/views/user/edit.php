@@ -6,34 +6,17 @@
         <div class="card-body">
             <input hidden="" name="id" required="" value="<?php echo $data['id']?>">
             <div class="form-group">
-                <label>Nama</label>
-                <input class="form-control <?php echo form_error('nama') != "" ? "is-invalid" : "" ?>" name="nama" placeholder="Nama" required="" value="<?php echo $data['name'] ?>">
+                <label>Username</label>
+                <input class="form-control <?php echo form_error('nama') != "" ? "is-invalid" : "" ?>" name="nama" placeholder="Username" required="" value="<?php echo $data['username'] ?>">
                 <div class="error invalid-feedback">
                     <?php echo form_error('nama'); ?>
                 </div>
             </div>
             <div class="form-group">
-                <label>Role</label>
-                <select class="form-control <?php echo form_error('role') != "" ? "is-invalid" : "" ?>" name="role" required="">
-                    <option value="">-- Role --</option>
-                    <?php foreach ($role as $r) { ?>
-                        <option value="<?php echo $r['id'] ?>" <?php echo $r['id'] == $data['id_role'] ? 'selected' : ''; ?>><?php echo $r['name'] ?></option>
-                    <?php } ?>
-                </select>
+                <label>Nama Lengkap</label>
+                <input class="form-control <?php echo form_error('namaLengkap') != "" ? "is-invalid" : "" ?>" name="namaLengkap" placeholder="Nama Lengkap" required="" value="<?php echo $data['fullname'] ?>">
                 <div class="error invalid-feedback">
-                    <?php echo form_error('role'); ?>
-                </div>
-            </div>
-            <div class="form-group">
-                <label>Company</label>
-                <select class="form-control <?php echo form_error('company') != "" ? "is-invalid" : "" ?>" name="company" required="">
-                    <option value="">-- Company --</option>
-                    <?php foreach ($company as $c) { ?>
-                        <option value="<?php echo $c['id'] ?>" <?php echo $c['id'] == $data['id_company'] ? 'selected' : ''; ?>><?php echo $c['name'] ?></option>
-                    <?php } ?>
-                </select>
-                <div class="error invalid-feedback">
-                    <?php echo form_error('role'); ?>
+                    <?php echo form_error('nama'); ?>
                 </div>
             </div>
         </div>
