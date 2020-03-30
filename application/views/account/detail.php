@@ -1,4 +1,3 @@
-<?php // print_r($data)  ?>
 <div class="card">
     <form method="post">        
         <div class="card-header">
@@ -7,7 +6,14 @@
         <div class="card-body">
             <div class="form-group">
                 <label>Username</label>
-                <input class="form-control <?php echo form_error('name') != "" ? "is-invalid" : "" ?>" name="name" placeholder="Username" required="" value="<?php echo $data['name'] ?>">
+                <input class="form-control <?php echo form_error('name') != "" ? "is-invalid" : "" ?>" name="name" placeholder="Username" required="" value="<?php echo $data['username'] ?>">
+                <div class="error invalid-feedback">
+                    <?php echo form_error('name'); ?>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Nama Lengkap</label> 
+                <input class="form-control <?php echo form_error('namaLengkap') != "" ? "is-invalid" : "" ?>" name="namaLengkap" placeholder="Nama lengkap" required="" value="<?php echo $data['fullname'] ?>">
                 <div class="error invalid-feedback">
                     <?php echo form_error('name'); ?>
                 </div>

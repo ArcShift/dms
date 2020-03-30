@@ -50,7 +50,7 @@ class User extends MY_Controller {
             $this->data['data'] = $this->model->detail($this->input->post('initEdit'));
         } elseif ($this->input->post('edit')) {
             $result = $this->model->detail($this->input->post('edit'));
-            if ($this->input->post('nama') == $result['name']) {
+            if ($this->input->post('nama') == $result['username']) {
                 $this->form_validation->set_rules('nama', 'Nama', 'required|is_unique[user.username]');
             }
                 $this->form_validation->set_rules('namaLengkap', 'Nama Lengkap', 'required');

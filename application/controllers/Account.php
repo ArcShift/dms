@@ -13,12 +13,16 @@ class Account extends MY_Controller {
     function index() {
         $this->subTitle = 'Detail';
         if ($this->input->post('edit')) {
-            $this->form_validation->set_rules('name', 'Nama', 'required|is_unique[users.name]');
-            if ($this->form_validation->run()) {
+            $result = $this->model->detail($this->input->post('edit'));
+            if ($this->input->post('nama') == $result['name']) {
+                $this->form_validation->set_rules('nama', 'Nama', 'required|is_unique[user.username]');
+            }
+            $this->form_validation->set_rules('namaLengkap', 'Nama Lengkap', 'required');
+            if ($this->form_validation->run() == FALSE) {
                 if ($this->model->edit()) {
-                    $this->data['msgSuccess']='Data berhasil diubah';
+                    $this->data['msgSuccess'] = 'Data berhasil diubah';
                 } else {
-                    $this->data['msgError']=$this->db->error()['message'];
+                    $this->data['msgError'] = $this->db->error()['message'];
                 }
             }
         } elseif ($this->input->post('edit_pass')) {
@@ -27,9 +31,9 @@ class Account extends MY_Controller {
             $this->form_validation->set_rules('re_pass', 'Ulange Password', 'required|matches[new_pass]');
             if ($this->form_validation->run()) {
                 if ($this->model->change_pass()) {
-                    $this->data['msgSuccess']='Password berhasil diubah';
+                    $this->data['msgSuccess'] = 'Password berhasil diubah';
                 } else {
-                    $this->data['msgError']=$this->db->error()['message'];
+                    $this->data['msgError'] = $this->db->error()['message'];
                 }
             }
         }

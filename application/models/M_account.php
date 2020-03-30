@@ -5,14 +5,15 @@ class M_account extends CI_Model {
     private $table = 'users';
 
     function get() {
-        $this->db->select('u.name, r.name AS role');
+        $this->db->select('u.username, u.fullname, r.name AS role');
         $this->db->where('u.id', $this->session->userdata('user')['id']);
         $this->db->join('role r', 'r.id=u.id_role');
         return $this->db->get($this->table . ' u')->row_array();
     }
 
     function edit() {
-        $this->db->set('name', $this->input->post('name'));
+        $this->db->set('username', $this->input->post('name'));
+        $this->db->set('fullname', $this->input->post('namaLengkap'));
         $this->db->where('id', $this->session->userdata('user')['id']);
         return $this->db->update($this->table);
     }
@@ -32,6 +33,11 @@ class M_account extends CI_Model {
         } else {
             return false;
         }
+    }
+
+    function detail($id) {
+        $this->db->where('id', $id);
+        return $this->db->get($this->table)->row_array();
     }
 
 }
