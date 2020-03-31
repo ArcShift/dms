@@ -1,6 +1,8 @@
 <div class="main-card mb-3 card">
     <div class="card-header">
-        <a class="btn btn-primary fa fa-plus" title="Tambah" href="<?php echo site_url($module . '/create') ?>"></a>
+        <?php if ($activeModule['acc_create']) { ?>
+            <a class="btn btn-primary fa fa-plus" title="Tambah" href="<?php echo site_url($module . '/create') ?>"></a>
+        <?php } ?>
     </div>
     <div class="card-body">
         <form method="post">

@@ -1,5 +1,5 @@
 <div class="card">
-    <form method="post">        
+    <form method="post">
         <div class="card-header">
             <h6>Ubah Data</h6>
         </div>

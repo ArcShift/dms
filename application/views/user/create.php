@@ -1,4 +1,3 @@
-<?php print_r($this->input->post())?>
 <div class="main-card mb-3 card">
     <form class="form-horizontal" method="post">
         <div class="card-body">

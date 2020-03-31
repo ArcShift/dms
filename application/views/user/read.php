@@ -1,6 +1,8 @@
 <div class="main-card mb-3 card">
     <div class="card-header">
-        <a class="btn btn-primary fa fa-plus" title="Tambah" href="<?php echo site_url($module . '/create') ?>"></a>
+        <?php if ($activeModule['acc_create']) { ?>
+            <a class="btn btn-primary fa fa-plus" title="Tambah" href="<?php echo site_url($module . '/create') ?>"></a>
+        <?php } ?>
     </div>
     <div class="card-body">
         <form method="post">
@@ -12,7 +14,7 @@
                         <th>Nama</th>
                         <th>Role</th>
                         <th>Unit Kerja</th>
-                        <th>Company</th>                        
+                        <th>Company</th>
                         <th>Aksi</th>
                     </tr>
                 </thead>
@@ -26,8 +28,12 @@
                             <td><?php echo $r['unit_kerja'] ?></td>
                             <td><?php echo $r['company'] ?></td>
                             <td>
-                                <button class="btn btn-primary fa fa-edit" title="Edit" name="initEdit" value="<?php echo $r['id']?>" formaction="<?php echo site_url($module.'/edit') ?>"></button>
-                                <button class="btn btn-danger fa fa-trash" title="Hapus" name="initHapus" value="<?php echo $r['id']?>" formaction="<?php echo site_url($module.'/delete') ?>"></button>
+                                <?php if ($activeModule['acc_update']) { ?>
+                                    <button class="btn btn-primary fa fa-edit" title="Edit" name="initEdit" value="<?php echo $r['id'] ?>" formaction="<?php echo site_url($module . '/edit') ?>"></button>
+                                <?php } ?>
+                                <?php if ($activeModule['acc_delete']) { ?>
+                                    <button class="btn btn-danger fa fa-trash" title="Hapus" name="initHapus" value="<?php echo $r['id'] ?>" formaction="<?php echo site_url($module . '/delete') ?>"></button>
+                                <?php } ?>
                             </td>
                         </tr>
                     <?php } ?>

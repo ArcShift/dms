@@ -13,6 +13,9 @@ class M_user extends CI_Model {
     }
 
     function company() {
+        if ($this->session->userdata('user')['role'] == 'pic') {
+            $this->db->where('id', $this->session->userdata['user']['id_company']);
+        }
         return $this->db->get('company')->result_array();
     }
 
@@ -41,6 +44,7 @@ class M_user extends CI_Model {
         $this->db->join('company c', 'c.id = uk.id_company', 'LEFT');
         if ($this->session->userdata('user')['role'] == 'pic') {
             $this->db->where('r.name', 'anggota');
+            $this->db->where('c.id', $this->session->userdata['user']['id_company']);
         }
         return $this->db->get($this->table . ' u')->result_array();
     }

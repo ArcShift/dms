@@ -4,12 +4,18 @@ class M_unit_kerja extends CI_Model {
     private $table= 'unit_kerja';
     
     function company() {
+        if ($this->session->userdata('user')['role'] == 'pic') {
+            $this->db->where('id', $this->session->userdata['user']['id_company']);
+        }
         return $this->db->get('company')->result_array();
     }
 
     function read() {
         $this->db->select('u.id, u.name, u.jenis, c.name AS company');
         $this->db->join('company c', 'u.id_company=c.id');
+        if($this->session->userdata['user']['role']=='pic'){
+            $this->db->where('c.id', $this->session->userdata['user']['id_company']);
+        }
         return $this->db->get($this->table. ' u')->result_array();
     }
 
