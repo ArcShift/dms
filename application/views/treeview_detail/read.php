@@ -3,129 +3,148 @@
         list-style-type: none;
     }
 </style>
+
 <div class="main-card mb-3 card">
     <div class="card-body">
-        <div class="row">
-            <div class="col-sm-12" id="treeview-list">
-                <ul class="list-group">
-                    <li id="root" class="list-group-item">
-                        <span><?php echo $treeview['name'] ?></span>
-                        <?php if ($activeModule['acc_create']) { ?>
-                            <span class="fa fa-plus text-primary" onclick="add(this)" title="Tambah"></span>
-                        <?php } ?>
-                        <ul></ul>
-                    </li>
-                </ul>
+        <ul class="nav nav-tabs">
+            <li class="nav-item"><a data-toggle="tab" href="#tab-eg10-0" class="active nav-link">Pemenuhan</a></li>
+            <li class="nav-item"><a data-toggle="tab" href="#tab-eg10-1" class="nav-link">Pasal</a></li>
+            <li class="nav-item"><a data-toggle="tab" href="#tab-eg10-2" class="nav-link">Setting Jadwal</a></li>
+            <li class="nav-item"><a data-toggle="tab" href="#tab-eg10-3" class="nav-link">Penerapan</a></li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane active" id="tab-eg10-0" role="tabpanel">
+                <p>Pemenuhan</p>
             </div>
-            <div class="col-sm-6" id="treeview-crud">
-                <!--FORM TAMBAH-->
-                <form class="d-none" id="formAdd" method="post">
-                    <div class="modal-header">
-                        <h4 class="modal-title">Tambah Pasal</h4>
-                        <button class="close" data-dismiss="modal" aria-label="Close" onclick="closeForm()">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
+            <div class="tab-pane" id="tab-eg10-1" role="tabpanel">
+                <div class="row">
+                    <div class="col-sm-12" id="treeview-list">
+                        <ul class="list-group">
+                            <li id="root" class="list-group-item">
+                                <span><?php echo $treeview['name'] ?></span>
+                                <?php if ($activeModule['acc_create']) { ?>
+                                    <span class="fa fa-plus text-primary" onclick="add(this)" title="Tambah"></span>
+                                <?php } ?>
+                                <ul></ul>
+                            </li>
+                        </ul>
                     </div>
-                    <div class="modal-body">
-                        <div class="form-group d-none">
-                            <label for="parent-id">Parent ID</label>
-                            <input class="form-control" id="parent-id" name="id" required="" readonly="">
-                        </div>
-                        <div class="form-group">
-                            <label for="parent">Induk</label>
-                            <input class="form-control" id="parent" required="" readonly="">
-                        </div>
-                        <div class="form-group">
-                            <label for="namaModule">Nama</label>
-                            <input class="form-control" id="namaModule" name="nama" placeholder="Nama" required="">
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <span class="btn btn-transition btn-outline-warning" onclick="closeForm()">Batal</span>
-                        <button type="submit" class="btn btn-transition btn-outline-info" name="add" value="ok">Tambah</button>
-                    </div>
-                </form>
-                <!--FORM EDIT-->
-                <form id="formEdit" class="d-none" method="post">
-                    <div class="modal-header">
-                        <h4 class="modal-title">Ubah Pasal</h4>
-                        <span class="close" aria-label="Close" onclick="closeForm()">
-                            <span aria-hidden="true">&times;</span>
-                        </span>
-                    </div>
-                    <div class="modal-body">
-                        <div class="form-group d-none">
-                            <label for="id">ID</label>
-                            <input class="form-control item-id" name="id" required="" readonly="">
-                        </div>
-                        <div class="form-group">
-                            <label>Nama</label>
-                            <input class="form-control item-name" name="nama" placeholder="Nama" required="">
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <span class="btn btn-transition btn-outline-warning" onclick="closeForm()">Batal</span>
-                        <button type="submit" class="btn btn-transition btn-outline-info" name="modify" value="ok">Ubah</button>
-                    </div>
-                </form>
-                <!--FORM REMOVE-->
-                <form id="formDelete" class="d-none" method="post">
-                    <div class="modal-header">
-                        <h4 class="modal-title">Hapus Item</h4>
-                        <span class="close" aria-label="Close" onclick="closeForm()">
-                            <span aria-hidden="true">&times;</span>
-                        </span>
-                    </div>
-                    <div class="modal-body">
-                        <div class="form-group d-none">
-                            <label for="parent-id">ID</label>
-                            <input class="form-control item-id" name="id" required="" readonly="">
-                        </div>
-                        <div class="form-group">
-                            <label for="namaModule">Nama</label>
-                            <input class="form-control item-name" name="nama" placeholder="Nama" required="" readonly="">
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <span class="btn btn-transition btn-outline-warning" onclick="closeForm()">Batal</span>
-                        <button type="submit" class="btn btn-transition btn-outline-info" name="remove" value="ok">Hapus</button>
-                    </div>
-                </form>
-                <!--FORM 1-->
-                <form id="form1" class="d-none" method="post" enctype="multipart/form-data">
-                    <div class="modal-header">
-                        <h4 class="modal-title" id="form-title"></h4>
-                        <span class="close" aria-label="Close" onclick="closeForm()">
-                            <span aria-hidden="true">&times;</span>
-                        </span>
-                    </div>
-                    <div class="modal-body">
-                        <div class="form-group d-none">
-                            <label for="parent-id">ID</label>
-                            <input class="form-control item-id" name="id" required="" readonly="">
-                        </div>
-                        <div class="form-group">
-                            <label for="parent">Deskripsi</label>
-                            <input class="form-control item-desc" name="desc">
-                        </div>
-                        <div class="form-group">
-                            <label>File</label>
-                            <div>
-                                <a class="fa fa-download text-primary item-download" title="Download">&nbsp;</a>
-                                <span class="text-primary item-file">filename</span> 
+                    <div class="col-sm-6" id="treeview-crud">
+                        <!--FORM TAMBAH-->
+                        <form class="d-none" id="formAdd" method="post">
+                            <div class="modal-header">
+                                <h4 class="modal-title">Tambah Pasal</h4>
+                                <button class="close" data-dismiss="modal" aria-label="Close" onclick="closeForm()">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
                             </div>
-                            <input type="file" accept=".pdf" class="form-control file" name="file" placeholder="Nama">
-                        </div>
+                            <div class="modal-body">
+                                <div class="form-group d-none">
+                                    <label for="parent-id">Parent ID</label>
+                                    <input class="form-control" id="parent-id" name="id" required="" readonly="">
+                                </div>
+                                <div class="form-group">
+                                    <label for="parent">Induk</label>
+                                    <input class="form-control" id="parent" required="" readonly="">
+                                </div>
+                                <div class="form-group">
+                                    <label for="namaModule">Nama</label>
+                                    <input class="form-control" id="namaModule" name="nama" placeholder="Nama" required="">
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <span class="btn btn-transition btn-outline-warning" onclick="closeForm()">Batal</span>
+                                <button type="submit" class="btn btn-transition btn-outline-info" name="add" value="ok">Tambah</button>
+                            </div>
+                        </form>
+                        <!--FORM EDIT-->
+                        <form id="formEdit" class="d-none" method="post">
+                            <div class="modal-header">
+                                <h4 class="modal-title">Ubah Pasal</h4>
+                                <span class="close" aria-label="Close" onclick="closeForm()">
+                                    <span aria-hidden="true">&times;</span>
+                                </span>
+                            </div>
+                            <div class="modal-body">
+                                <div class="form-group d-none">
+                                    <label for="id">ID</label>
+                                    <input class="form-control item-id" name="id" required="" readonly="">
+                                </div>
+                                <div class="form-group">
+                                    <label>Nama</label>
+                                    <input class="form-control item-name" name="nama" placeholder="Nama" required="">
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <span class="btn btn-transition btn-outline-warning" onclick="closeForm()">Batal</span>
+                                <button type="submit" class="btn btn-transition btn-outline-info" name="modify" value="ok">Ubah</button>
+                            </div>
+                        </form>
+                        <!--FORM REMOVE-->
+                        <form id="formDelete" class="d-none" method="post">
+                            <div class="modal-header">
+                                <h4 class="modal-title">Hapus Item</h4>
+                                <span class="close" aria-label="Close" onclick="closeForm()">
+                                    <span aria-hidden="true">&times;</span>
+                                </span>
+                            </div>
+                            <div class="modal-body">
+                                <div class="form-group d-none">
+                                    <label for="parent-id">ID</label>
+                                    <input class="form-control item-id" name="id" required="" readonly="">
+                                </div>
+                                <div class="form-group">
+                                    <label for="namaModule">Nama</label>
+                                    <input class="form-control item-name" name="nama" placeholder="Nama" required="" readonly="">
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <span class="btn btn-transition btn-outline-warning" onclick="closeForm()">Batal</span>
+                                <button type="submit" class="btn btn-transition btn-outline-info" name="remove" value="ok">Hapus</button>
+                            </div>
+                        </form>
+                        <!--FORM 1-->
+                        <form id="form1" class="d-none" method="post" enctype="multipart/form-data">
+                            <div class="modal-header">
+                                <h4 class="modal-title" id="form-title"></h4>
+                                <span class="close" aria-label="Close" onclick="closeForm()">
+                                    <span aria-hidden="true">&times;</span>
+                                </span>
+                            </div>
+                            <div class="modal-body">
+                                <div class="form-group d-none">
+                                    <label for="parent-id">ID</label>
+                                    <input class="form-control item-id" name="id" required="" readonly="">
+                                </div>
+                                <div class="form-group">
+                                    <label for="parent">Deskripsi</label>
+                                    <input class="form-control item-desc" name="desc">
+                                </div>
+                                <div class="form-group">
+                                    <label>File</label>
+                                    <div>
+                                        <a class="fa fa-download text-primary item-download" title="Download">&nbsp;</a>
+                                        <span class="text-primary item-file">filename</span> 
+                                    </div>
+                                    <input type="file" accept=".pdf" class="form-control file" name="file" placeholder="Nama">
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-transition btn-outline-warning" onclick="closeForm()">Batal</button>
+                                <button type="submit" class="btn btn-transition btn-outline-info" name="form1" value="ok">Simpan</button>
+                            </div>
+                        </form>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-transition btn-outline-warning" onclick="closeForm()">Batal</button>
-                        <button type="submit" class="btn btn-transition btn-outline-info" name="form1" value="ok">Simpan</button>
-                    </div>
-                </form>
+                </div>
+            </div>
+            <div class="tab-pane" id="tab-eg10-2" role="tabpanel">
+                <p>Setting Jadwal</p>
+            </div>
+            <div class="tab-pane" id="tab-eg10-3" role="tabpanel">
+                <p>Penerapan</p>
             </div>
         </div>
     </div>
-    <div class="box-footer"></div>
 </div>
 <!--TEMPLATE-->
 <div class="invisible">
@@ -207,7 +226,7 @@
         $('.item-id').val($(item).parent().attr('id'));
         $('.item-desc').val($(item).parent().children('.desc').val());
         $('.item-file').text($(item).parent().children('.filename').val());
-        $('.item-download').attr('href','<?php echo base_url('assets/');?>'+$(item).parent().children('.filename').val());
+        $('.item-download').attr('href', '<?php echo base_url('assets/'); ?>' + $(item).parent().children('.filename').val());
         $('#treeview-list').removeClass('col-sm-12');
         $('#treeview-list').addClass('col-sm-6');
         $('#treeview-crud').show();
