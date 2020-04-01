@@ -2,7 +2,7 @@
 
 class M_standard extends CI_Model {
 
-    private $table = 'treeview';
+    private $table = 'standard';
 
     function create() {
         $this->db->set('name', $this->input->post('name'));
@@ -11,11 +11,11 @@ class M_standard extends CI_Model {
     }
 
     function read() {
-        $this->db->select('t.*, count(d.id) AS detail, u.username AS user');
-        $this->db->join('users u', 'u.id = t.created_by');
-        $this->db->join('treeview_detail d', 't.id = d.id_treeview', 'LEFT');
-        $this->db->group_by('t.id');
-        return $this->db->get($this->table. ' t')->result_array();
+        $this->db->select('s.*, count(p.id) AS detail, u.username AS user');
+        $this->db->join('users u', 'u.id = s.created_by');
+        $this->db->join('pasal p', 's.id = p.id_standard', 'LEFT');
+        $this->db->group_by('s.id');
+        return $this->db->get($this->table. ' s')->result_array();
     }
 
     function detail($id) {
