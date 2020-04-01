@@ -10,6 +10,15 @@ class Treeview_detail extends MY_Controller {
     }
 
     function index() {
+        $this->data['tab']= 'pemenuhan';
+        $this->render('tab');
+    }
+
+    function fulfillment() {
+        $this->render('pemenuhan');
+    }
+
+    function pasal() {
         if (!$this->session->userdata('treeview')) {
             redirect('standard');
         }
@@ -58,7 +67,15 @@ class Treeview_detail extends MY_Controller {
 //            }
         }
         $this->data['list'] = json_encode($this->model->reads());
-        $this->render('read');
+        $this->data['tab']= 'pasal';
+        $this->render('tab');
     }
-
+    function schedule() {
+        $this->data['tab']= 'jadwal';
+        $this->render('tab');
+    }
+    function implementation() {
+        $this->data['tab']= 'penerapan';
+        $this->render('tab');
+    }
 }
