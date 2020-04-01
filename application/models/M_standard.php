@@ -1,6 +1,6 @@
 <?php
 
-class M_treeview extends CI_Model {
+class M_standard extends CI_Model {
 
     private $table = 'treeview';
 

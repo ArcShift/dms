@@ -11,7 +11,7 @@ class Treeview_detail extends MY_Controller {
 
     function index() {
         if (!$this->session->userdata('treeview')) {
-            redirect('treeview');
+            redirect('standard');
         }
         $this->subTitle = 'Detail';
         $this->data['treeview'] = $this->model->treeview();

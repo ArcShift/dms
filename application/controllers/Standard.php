@@ -1,12 +1,12 @@
 <?php
 
-class Treeview extends MY_Controller {
+class Standard extends MY_Controller {
 
-    protected $module = 'treeview';
+    protected $module = 'standard';
 
     function __construct() {
         parent::__construct();
-        $this->load->model('m_treeview', 'model');
+        $this->load->model('m_standard', 'model');
     }
 
     function index() {

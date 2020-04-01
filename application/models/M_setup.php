@@ -10,14 +10,15 @@ class M_setup extends CI_Model {
             array('id' => '4', 'name' => 'anggota', 'title' => 'Anggota')
         );
         $module = array(
-            array('id' => '4', 'name' => 'account', 'on_menu' => 'NO', 'icon' => 'user', 'title' => 'Akun'),
-            array('id' => '5', 'name' => 'dashboard', 'on_menu' => 'NO', 'icon' => 'home'),
-            array('id' => '6', 'name' => 'company', 'on_menu' => 'YES', 'icon' => 'building', 'title' => 'Perusahaan'),
-            array('id' => '7', 'name' => 'unit_kerja', 'on_menu' => 'YES', 'icon' => 'id-badge', 'title' => 'Unit Kerja'),
-            array('id' => '8', 'name' => 'user', 'on_menu' => 'YES', 'icon' => 'users'),
-            array('id' => '9', 'name' => 'treeview', 'on_menu' => 'YES', 'icon' => 'briefcase', 'title' => 'Standar'),
-            array('id' => '10', 'name' => 'treeview_detail', 'on_menu' => 'NO', 'icon' => 'list-alt', 'title' => 'Pasal'),
-            array('id' => '100', 'name' => 'role', 'on_menu' => 'NO', 'icon' => 'universal-access'),
+            array('id' => '4', 'name' => 'account', 'icon' => 'user', 'title' => 'Akun'),
+            array('id' => '5', 'name' => 'dashboard', 'icon' => 'home'),
+            array('id' => '6', 'name' => 'company', 'on_menu' => 'YES', 'icon' => 'building', 'title' => 'Perusahaan', 'parent'=> 'user_management'),
+            array('id' => '7', 'name' => 'unit_kerja', 'on_menu' => 'YES', 'icon' => 'id-badge', 'title' => 'Unit Kerja', 'parent'=> 'user_management'),
+            array('id' => '8', 'name' => 'user', 'on_menu' => 'YES', 'icon' => 'users', 'parent'=> 'user_management'),
+            array('id' => '9', 'name' => 'standard', 'on_menu' => 'YES', 'icon' => 'list-alt', 'title' => 'Daftar Standar', 'parent'=> 'standard'),
+            array('id' => '10', 'name' => 'company_standard', 'on_menu' => 'YES', 'icon' => 'list-ul', 'title' => 'Standar Perusahaan','parent'=> 'standard'),
+            array('id' => '11', 'name' => 'treeview_detail', 'on_menu' => 'YES', 'icon' => 'newspaper-o', 'title' => 'Pasal','parent'=> 'user_data', ),
+            array('id' => '100', 'name' => 'role', 'icon' => 'universal-access'),
         );
         $user = array(
             array('id_role' => '1', 'username' => 'admin', 'fullname' => 'Super Admin', 'pass' => MD5('1234')),

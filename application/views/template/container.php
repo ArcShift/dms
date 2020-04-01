@@ -137,13 +137,33 @@
                                 </span>
                             </button>
                         </span>
-                    </div>    <div class="scrollbar-sidebar">
+                    </div>
+                    <div class="scrollbar-sidebar">
                         <div class="app-sidebar__inner">
                             <ul class="vertical-nav-menu">
                                 <li class="app-sidebar__heading">Menu</li>
+                                <?php
+                                $menubar = array(
+                                    array('name' => 'user_management', 'title' => 'Manajemen Pengguna', 'icon' => 'user-circle'),
+                                    array('name' => 'standard', 'title' => 'Standar', 'icon' => 'globe'),
+                                    array('name' => 'user_data', 'title' => 'Data Pengguna', 'icon' => 'tasks'),
+                                );
+                                ?>
+                                <?php
+                                foreach ($menubar as $m) {
+                                    $activeMenubar = $m['name'] == $activeModule['parent'] ? TRUE : FALSE;
+                                    ?>
+                                    <li id="<?php echo $m['name'] ?>" class="main-menu">
+                                        <a href="elements-buttons-standard.html" <?php echo $activeMenubar ? 'class="mm-active"' : ''; ?>>
+                                            <i class="metismenu-icon fa fa-<?php echo $m['icon']?>"></i>
+                                            <?php echo $m['title'] ?>
+                                        </a>
+                                        <ul <?php echo $activeMenubar ? 'class="mm-active mm-collapse mm-show"' : ''; ?>></ul>
+                                    </li>
+                                <?php } ?>
                                 <?php foreach ($this->session->userdata('module') as $key => $m) { ?>
                                     <?php if ($m['on_menu'] == 'YES') { ?>
-                                        <li>
+                                        <li id="module-<?php echo $m['id'] ?>">
                                             <a href="<?php echo site_url($m['name']) ?>" class="<?php echo $m['name'] == $this->uri->segment(1) ? 'mm-active' : '' ?>">
                                                 <i class="metismenu-icon fa fa-<?php echo $m['icon'] ?>"></i>
                                                 <?php echo isset($m['title']) ? $m['title'] : ucwords(str_replace('_', ' ', $m['name'])); ?>
@@ -177,23 +197,23 @@
                         if ($this->session->flashdata('msgSuccess')) {
                             $alertType = 'success';
                             $alert_message = $this->session->flashdata('msgSuccess');
-                            $is_alert= true;
+                            $is_alert = true;
                         } elseif ($this->session->flashdata('msgError')) {
                             $alertType = 'danger';
                             $alert_message = $this->session->flashdata('msgError');
-                            $is_alert= true;
-                        } elseif(isset ($msgSuccess)){
+                            $is_alert = true;
+                        } elseif (isset($msgSuccess)) {
                             $alertType = 'success';
-                            $alert_message = $msgSuccess;                            
-                            $is_alert= true;
-                        }elseif(isset ($msgError)){
+                            $alert_message = $msgSuccess;
+                            $is_alert = true;
+                        } elseif (isset($msgError)) {
                             $alertType = 'danger';
-                            $alert_message = $msgError;                            
-                            $is_alert= true;                            
+                            $alert_message = $msgError;
+                            $is_alert = true;
                         }
                         ?>
                         <?php if (isset($is_alert)) { ?>
-                            <div class="alert alert-<?php echo $alertType?> alert-dismissible fade show" role="alert">
+                            <div class="alert alert-<?php echo $alertType ?> alert-dismissible fade show" role="alert">
                                 <button type="button" class="close" onclick="closeAlert(this)"><span aria-hidden="true">×</span></button>
                                 <?php echo $alert_message ?>
                             </div>
@@ -236,10 +256,24 @@
                                 </div>
                             </div>
                         </div>
-                    </div>    
+                    </div>
                 </div>
                 <script src="http://maps.google.com/maps/api/js?sensor=true"></script>
             </div>
         </div>
+        <script>
+                                        var module = <?php echo json_encode($this->session->userdata('module')) ?>;
+                                        for (var i = 0; i < module.length; i++) {
+                                            var m = module[i];
+                                            $('#' + m.parent + ' ul').append($('#module-' + m.id));
+                                        }
+                                        var mainMenu = $('.main-menu');
+                                        for (var i = 0; i < mainMenu.length; i++) {
+                                            var m= $(mainMenu[i]);
+                                            if($(m).children('ul').children('li').length==0){
+                                                $(m).addClass('d-none');
+                                            }
+                                        }
+        </script>
     </body>
 </html>

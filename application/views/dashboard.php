@@ -1,3 +1,3 @@
 <pre>
-    <?php // print_r($this->session->userdata('module')) ?>
+    <?php print_r($this->session->userdata('module')) ?>
 </pre>
