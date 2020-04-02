@@ -3,7 +3,13 @@
 class M_company extends CI_Model {
 
     private $table = 'company';
-
+    
+    function get() {
+        if ($this->session->userdata('user')['role'] == 'pic') {
+            $this->db->where('id', $this->session->userdata['user']['id_company']);
+        }
+        return $this->db->get($this->table)->result_array();
+    }
     function read() {
         $this->db->select('c.*, COUNT(u.id) AS count');
         $this->db->join('unit_kerja u', 'u.id_company= c.id', 'LEFT');
