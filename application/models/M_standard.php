@@ -11,9 +11,10 @@ class M_standard extends CI_Model {
     }
 
     function read() {
-        $this->db->select('s.*, count(p.id) AS detail, u.username AS user');
+        $this->db->select('s.*, count(p.id) AS detail,count(cs.id) AS used, u.username AS user');
         $this->db->join('users u', 'u.id = s.created_by');
         $this->db->join('pasal p', 's.id = p.id_standard', 'LEFT');
+        $this->db->join('company_standard cs', 's.id = cs.id_standard', 'LEFT');
         $this->db->group_by('s.id');
         return $this->db->get($this->table. ' s')->result_array();
     }

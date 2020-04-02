@@ -146,7 +146,7 @@
                                 $menubar = array(
                                     array('name' => 'user_management', 'title' => 'Manajemen Pengguna', 'icon' => 'user-circle'),
                                     array('name' => 'standard', 'title' => 'Standar', 'icon' => 'globe'),
-                                    array('name' => 'user_data', 'title' => 'Data Pengguna', 'icon' => 'tasks'),
+                                    array('name' => 'user_data', 'title' => 'Data Perusahaan', 'icon' => 'tasks'),
                                 );
                                 ?>
                                 <?php
