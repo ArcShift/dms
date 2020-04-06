@@ -9,6 +9,13 @@ class M_treeview_detail extends CI_Model {
         return $this->db->get('standard')->row_array();
     }
 
+    function standard() {
+        $this->db->select('s.id, s.name');
+        $this->db->join('company_standard cs', 'cs.id_standard = s.id AND cs.id_company='.$this->input->post('id'));
+        return $this->db->get('standard s')->result_array();
+//        return $this->db->last_query();
+    }
+
     function reads() {
         $this->db->where('id_standard', $this->session->userdata('treeview'));
         return $this->db->get($this->table)->result_array();

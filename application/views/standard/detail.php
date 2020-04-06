@@ -94,6 +94,9 @@
             </div>
         </div>
     </div>
+    <div class="card-footer">
+        <a class="btn btn-transition btn-outline-info" href="<?php echo site_url($module)?>">Kembali</a>
+    </div>
 </div>
 <!--TEMPLATE-->
 <div class="invisible">

@@ -29,8 +29,24 @@ class Standard extends MY_Controller {
     }
 
     function detail() {
-        $this->session->set_userdata('treeview', $this->input->post('detail'));
-        redirect('treeview_detail');
+        if ($this->input->post('detail')) {
+            $this->session->set_userdata('treeview', $this->input->post('detail'));
+        }
+        $this->load->model('M_pasal', 'models');
+        $this->subTitle = 'Detail';
+        $this->data['treeview'] = $this->models->treeview();
+        if ($this->input->post()) {
+            $this->load->library('form_validation');
+            if ($this->input->post('add')) {
+                $this->models->create();
+            } else if ($this->input->post('modify')) {
+                $this->models->update();
+            } else if ($this->input->post('remove')) {
+                $this->models->delete();
+            }
+        }
+        $this->data['list'] = json_encode($this->models->reads());
+        $this->render('detail');
     }
 
     function delete() {

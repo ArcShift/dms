@@ -105,7 +105,7 @@
                         </div> 
                     </div>
                 </div>
-            </div>     
+            </div>
             <div class="app-main">
                 <div class="app-sidebar sidebar-shadow">
                     <div class="app-header__logo">
@@ -141,29 +141,17 @@
                     <div class="scrollbar-sidebar">
                         <div class="app-sidebar__inner">
                             <ul class="vertical-nav-menu">
-                                <li class="app-sidebar__heading">Menu</li>
-                                <?php
-                                $menubar = array(
-                                    array('name' => 'user_management', 'title' => 'Manajemen Pengguna', 'icon' => 'user-circle'),
-                                    array('name' => 'standard', 'title' => 'Standar', 'icon' => 'globe'),
-                                    array('name' => 'user_data', 'title' => 'Data Perusahaan', 'icon' => 'tasks'),
-                                );
-                                ?>
-                                <?php
-                                foreach ($menubar as $m) {
-                                    $activeMenubar = $m['name'] == $activeModule['parent'] ? TRUE : FALSE;
-                                    ?>
-                                    <li id="<?php echo $m['name'] ?>" class="main-menu">
-                                        <a href="elements-buttons-standard.html" <?php echo $activeMenubar ? 'class="mm-active"' : ''; ?>>
-                                            <i class="metismenu-icon fa fa-<?php echo $m['icon']?>"></i>
-                                            <?php echo $m['title'] ?>
-                                        </a>
-                                        <ul <?php echo $activeMenubar ? 'class="mm-active mm-collapse mm-show"' : ''; ?>></ul>
-                                    </li>
-                                <?php } ?>
+                                <li class="app-sidebar__heading">DASHBOARDS</li>
+                                <li id="menu-dashboard">ss</li>
+                                <li class="app-sidebar__heading">MANAJEMEN PENGGUNA</li>
+                                <li id="menu-company">ss</li>
+                                <li id="menu-unit_kerja">ss</li>
+                                <li id="menu-user">s</li>
+                                <li class="app-sidebar__heading">STANDAR</li>
+                                
                                 <?php foreach ($this->session->userdata('module') as $key => $m) { ?>
                                     <?php if ($m['on_menu'] == 'YES') { ?>
-                                        <li id="module-<?php echo $m['id'] ?>">
+                                        <li id="module-<?php echo $m['name'] ?>">
                                             <a href="<?php echo site_url($m['name']) ?>" class="<?php echo $m['name'] == $this->uri->segment(1) ? 'mm-active' : '' ?>">
                                                 <i class="metismenu-icon fa fa-<?php echo $m['icon'] ?>"></i>
                                                 <?php echo isset($m['title']) ? $m['title'] : ucwords(str_replace('_', ' ', $m['name'])); ?>
@@ -262,18 +250,22 @@
             </div>
         </div>
         <script>
-                                        var module = <?php echo json_encode($this->session->userdata('module')) ?>;
-                                        for (var i = 0; i < module.length; i++) {
-                                            var m = module[i];
-                                            $('#' + m.parent + ' ul').append($('#module-' + m.id));
-                                        }
-                                        var mainMenu = $('.main-menu');
-                                        for (var i = 0; i < mainMenu.length; i++) {
-                                            var m= $(mainMenu[i]);
-                                            if($(m).children('ul').children('li').length==0){
-                                                $(m).addClass('d-none');
-                                            }
-                                        }
+                                    var module = <?php echo json_encode($this->session->userdata('module')) ?>;
+//                                    for (var i = 0; i < module.length; i++) {
+//                                        var m = module[i];
+//                                        $('#' + m.parent + ' ul').append($('#module-' + m.id));
+//                                    }
+                                    var mainMenu = $('.main-menu');
+//                                    for (var i = 0; i < mainMenu.length; i++) {
+//                                        var m = $(mainMenu[i]);
+//                                        if ($(m).children('ul').children('li').length == 0) {
+//                                            $(m).addClass('d-none');
+//                                        }
+//                                    }
+                                    for (var i = 0; i < module.length; i++) {
+                                        var m = module[i];
+                                        $('#menu-' + m.name).replaceWith($('#module-' + m.name));
+                                    }
         </script>
     </body>
 </html>
