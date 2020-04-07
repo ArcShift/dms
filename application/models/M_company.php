@@ -11,7 +11,7 @@ class M_company extends CI_Model {
         return $this->db->get($this->table)->result_array();
     }
     function read() {
-        $this->db->select('c.*, COUNT(u.id) AS count, COUNT(cs.id) AS standard');
+        $this->db->select('c.*, COUNT(DISTINCT(u.id)) AS count, COUNT(DISTINCT(cs.id)) AS standard');
         $this->db->join('unit_kerja u', 'u.id_company= c.id', 'LEFT');
         $this->db->join('company_standard cs', 'cs.id_company= c.id', 'LEFT');        
         if($this->session->userdata['user']['role']=='pic'){

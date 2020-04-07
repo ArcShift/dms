@@ -11,9 +11,12 @@ class M_treeview_detail extends CI_Model {
 
     function standard() {
         $this->db->select('s.id, s.name');
-        $this->db->join('company_standard cs', 'cs.id_standard = s.id AND cs.id_company='.$this->input->post('id'));
+        $this->db->join('company_standard cs', 'cs.id_standard = s.id AND cs.id_company=' . $this->input->post('id'));
         return $this->db->get('standard s')->result_array();
-//        return $this->db->last_query();
+    }
+
+    function detail() {
+        
     }
 
     function reads() {
@@ -24,7 +27,7 @@ class M_treeview_detail extends CI_Model {
     function create() {
         $input = $this->input->post();
         $this->db->set('name', $input['nama']);
-        $this->db->set('id_standard', $this->session->userdata('treeview'));
+        $this->db->set('id_standard', $this->session->userdata('treeview'));   
         $this->db->set('created_by', $this->session->userdata('user')['id']);
         if (is_numeric($input['id'])) {
             $this->db->set('parent', $input['id']);

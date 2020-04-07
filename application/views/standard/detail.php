@@ -102,8 +102,6 @@
 <div class="invisible">
     <ul class="-list-group">
         <li id="tree" class="-list-group-item">
-            <input class="desc d-none" name="desc" value="">
-            <input class="filename d-none" name="desc" value="">
             <span class="title"></span>
             <?php if ($activeModule['acc_create']) { ?>
                 <span class="fa fa-plus text-primary" onclick="add(this)" title="Tambah"></span>
@@ -126,14 +124,10 @@
         var clone = $('#tree').clone();
         clone.attr('id', l.id);
         clone.children('.title').text(' ' + l.name);
-        clone.children('.desc').val(l.description);
         parent.children('ul').append(clone);
         parent.children('.fa-trash').remove();
         if (parent.children('.fa-angle-double-right').length == 0) {
             parent.children('.title').before('<span class="fa fa-angle-double-right text-success" onclick="collapse(this)"></span>');
-        }
-        if (l.file != null) {
-            clone.children('.fa-upload').after('<a class="fa fa-download text-success" href="<?php echo base_url('assets/') ?>' + l.file + '" title="Download"></a>');
         }
     }
     console.log(list);
@@ -176,7 +170,4 @@
         $('#treeview-crud').show();
         $(item).removeClass('d-none');
     }
-    $('.file').change(function () {
-        $('.filename').val($(this).val().split('\\').pop());
-    });
 </script>

@@ -22,6 +22,14 @@ class Treeview_detail extends MY_Controller {
         echo json_encode($this->model->standard());
     }
 
+    function get() {
+        if (!$this->input->is_ajax_request()) {
+            redirect('404');
+        }
+        $this->load->model('m_pasal');
+        echo json_encode($this->m_pasal->reads());
+    }
+
     function pemenuhan($param) {
         $this->data['tab'] = 'pemenuhan';
         $this->render('tab');
