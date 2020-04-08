@@ -37,7 +37,7 @@
                     <!--PASAL-->
                     <div class="tab-pane" id="tab-pasal" role="tabpanel">
                         <div class="row">
-                            <div class="col-sm-12" id="treeview-list">
+                            <div class="col-sm-6" id="treeview-list">
                                 <ul class="list-group">
                                     <li id="root" class="list-group-item">
                                         <span class="title"></span>
@@ -46,7 +46,32 @@
                                 </ul>
                             </div>
                             <div class="col-sm-6" id="treeview-crud">
-                                <!--TODO: FORM-->
+                                <form id="formDetail" class="d-none" method="post" enctype="multipart/form-data">
+                                    <div class="modal-header">
+                                        <h4 class="modal-title" id="form-title"></h4>
+                                        <button class="close" type="button" aria-label="Close" onclick="closeForm()">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="form-group d-none">
+                                            <label for="parent-id">ID</label>
+                                            <input class="form-control item-id" name="id" required="" readonly="">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="parent">Deskripsi</label>
+                                            <input class="form-control item-desc" name="desc">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>File</label>
+                                            <input type="file" accept=".pdf" class="form-control file" name="file" placeholder="Nama">
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-default pull-left" onclick="closeForm()">Batal</button>
+                                        <button type="submit" class="btn btn-default" name="form1" value="ok">Simpan</button>
+                                    </div>
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -69,6 +94,9 @@
             <input class="desc d-none" name="desc" value="">
             <input class="filename d-none" name="desc" value="">
             <span class="title"></span>
+            <?php if ($activeModule['acc_update']) { ?>
+                <span class="fa fa-bars text-primary" onclick="detail(this)" title="Open Form">&nbsp;</span>
+            <?php } ?>
             <ul></ul>
         </li>
     </ul>
@@ -157,5 +185,28 @@
     });
     function collapse(item) {
         $(item).parent('li').children('ul').collapse('toggle');
+    }
+    function detail(item) {
+        closeForm();
+        showCrud('#formDetail');
+        $('#form-title').text($.trim($(item).parent().children('.title').text()));
+        $('.item-id').val($(item).parent().attr('id'));
+        console.log($(item).parent().children('.desc'));
+        $('.item-desc').val($(item).parent().children('.desc').val());
+        $('#treeview-list').removeClass('col-sm-12');
+        $('#treeview-list').addClass('col-sm-6');
+        $('#treeview-crud').show();
+    }
+    function closeForm() {
+        $('#treeview-list').removeClass('col-sm-6');
+        $('#treeview-list').addClass('col-sm-12');
+        $('#treeview-crud').hide();
+        $('form').addClass('d-none');
+    }
+    function showCrud(item) {
+        $('#treeview-list').removeClass('col-sm-12');
+        $('#treeview-list').addClass('col-sm-6');
+        $('#treeview-crud').show();
+        $(item).removeClass('d-none');
     }
 </script>
