@@ -11,6 +11,9 @@ class M_login extends CI_Model {
         $result = $this->db->get('users u');
         if ($result->num_rows()) {
             $result = $result->row_array();
+            if(empty($result['photo'])){
+                $result['photo']='https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/User_icon_2.svg/220px-User_icon_2.svg.png';
+            }
             $this->session->set_userdata('user', $result);
             return true;
         } else {

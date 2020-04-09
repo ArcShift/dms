@@ -35,5 +35,16 @@ class M_pasal extends CI_Model {
         $this->db->where('id', $this->input->post('id'));
         $this->db->delete($this->table);
     }
+    function update_desc() {
+        $this->db->set('description', $this->input->post('desc'));
+        $this->db->where('id', $this->input->post('id'));
+        return $this->db->update($this->table);
+    }
+
+    function update_file() {
+        $this->db->set('file', $this->upload->data()['file_name']);
+        $this->db->where('id', $this->input->post('id'));
+        $this->db->update($this->table);
+    }
 
 }

@@ -79,11 +79,11 @@
                                     <div class="widget-content-left">
                                         <div class="btn-group">                                            
                                             <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="p-0 btn" onclick="userMenu()">
-                                                <img width="42" class="rounded-circle" src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/12/User_icon_2.svg/220px-User_icon_2.svg.png" alt="">
+                                                <img width="42" class="rounded-circle" src="<?php echo base_url('upload/profile_photo/'.$this->session->userdata('user')['photo']) ?>" alt="">
                                                 <i class="fa fa-angle-down ml-2 opacity-8"></i>
                                             </a>
                                             <div tabindex="-1" role="menu" aria-hidden="false" class="dropdown-menu dropdown-menu-right">
-                                                <a href="<?php echo site_url('account') ?>" class="dropdown-item">Account</a>
+                                                <a href="<?php echo site_url('account') ?>" class="dropdown-item">Akun</a>
                                                 <!--<button type="button" tabindex="0" class="dropdown-item">Settings</button>-->
                                                 <!--<h6 tabindex="-1" class="dropdown-header">Header</h6>-->
                                                 <!--<button type="button" tabindex="0" class="dropdown-item">Actions</button>-->

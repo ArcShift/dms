@@ -1,33 +1,55 @@
-<div class="card">
-    <form method="post">
-        <div class="card-header">
-            <h6>Ubah Data</h6>
-        </div>
-        <div class="card-body">
-            <div class="form-group">
-                <label>Username</label>
-                <input class="form-control <?php echo form_error('name') != "" ? "is-invalid" : "" ?>" name="name" placeholder="Username" required="" value="<?php echo $data['username'] ?>">
-                <div class="error invalid-feedback">
-                    <?php echo form_error('name'); ?>
+<div class="row"> 
+    <div class="col-sm-6">
+        <div class="card">
+            <form method="post">
+                <div class="card-header">
+                    <h6>Ubah Data</h6>
                 </div>
-            </div>
-            <div class="form-group">
-                <label>Nama Lengkap</label> 
-                <input class="form-control <?php echo form_error('namaLengkap') != "" ? "is-invalid" : "" ?>" name="namaLengkap" placeholder="Nama lengkap" required="" value="<?php echo $data['fullname'] ?>">
-                <div class="error invalid-feedback">
-                    <?php echo form_error('name'); ?>
+                <div class="card-body">
+                    <div class="form-group">
+                        <label>Username</label>
+                        <input class="form-control <?php echo form_error('name') != "" ? "is-invalid" : "" ?>" name="name" placeholder="Username" required="" value="<?php echo $data['username'] ?>">
+                        <div class="error invalid-feedback">
+                            <?php echo form_error('name'); ?>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Nama Lengkap</label> 
+                        <input class="form-control <?php echo form_error('namaLengkap') != "" ? "is-invalid" : "" ?>" name="namaLengkap" placeholder="Nama lengkap" required="" value="<?php echo $data['fullname'] ?>">
+                        <div class="error invalid-feedback">
+                            <?php echo form_error('name'); ?>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Role</label>
+                        <input class="form-control"  disabled="" value="<?php echo $data['role'] ?>">
+                    </div>
                 </div>
-            </div>
-            <div class="form-group">
-                <label>Role</label>
-                <input class="form-control"  disabled="" value="<?php echo $data['role'] ?>">
-            </div>
+                <div class="d-block card-footer text-right">
+                    <button class="btn btn-primary" name="edit" value="ok">Simpan</button>
+                </div>
+            </form>
         </div>
-        <div class="d-block card-footer text-right">
-            <button class="btn btn-primary" name="edit" value="ok">Simpan</button>
+    </div>
+    <div class="col-sm-6">
+        <div class="card">
+            <form method="post" enctype="multipart/form-data">
+                <div class="card-header">
+                    <h6>Upload Foto</h6>
+                </div>
+                <div class="card-body">
+                    <img class="rounded-circle text-right" src="<?php echo base_url('upload/profile_photo/'.$data['photo'])?>" alt="" width="100">
+                    <div class="form-group">
+                        <input class="form-control" name="foto" type="file" required="">
+                    </div>
+                </div>
+                <div class="d-block card-footer text-right">
+                    <button class="btn btn-primary" name="edit_foto" value="ok">Simpan</button>
+                </div>
+            </form>
         </div>
-    </form>
-</div>
+    </div>
+</div>    
 <br/>
 <div class="card">
     <form method="post">        

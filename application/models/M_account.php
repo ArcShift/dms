@@ -5,7 +5,7 @@ class M_account extends CI_Model {
     private $table = 'users';
 
     function get() {
-        $this->db->select('u.username, u.fullname, r.name AS role');
+        $this->db->select('u.username, u.fullname,u.photo, r.name AS role');
         $this->db->where('u.id', $this->session->userdata('user')['id']);
         $this->db->join('role r', 'r.id=u.id_role');
         return $this->db->get($this->table . ' u')->row_array();
@@ -34,10 +34,14 @@ class M_account extends CI_Model {
             return false;
         }
     }
-
+    function update_foto() {
+        $this->db->set('photo', $this->upload->data()['file_name']);
+        $this->db->where('id', $this->session->userdata('user')['id']);
+        return $this->db->update($this->table);
+    }
     function detail($id) {
         $this->db->where('id', $id);
         return $this->db->get($this->table)->row_array();
     }
-
+    
 }

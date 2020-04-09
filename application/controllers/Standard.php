@@ -43,6 +43,13 @@ class Standard extends MY_Controller {
                 $this->models->update();
             } else if ($this->input->post('remove')) {
                 $this->models->delete();
+            } else if ($this->input->post('form1')) {
+                if ($this->input->post('desc')) {
+                    $this->models->update_desc();
+                }
+                if (!empty($_FILES['userfile']['name'])) {
+                    
+                }
             }
         }
         $this->data['list'] = json_encode($this->models->reads());

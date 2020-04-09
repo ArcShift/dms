@@ -1,3 +1,6 @@
+<?php
+print_r($this->input->post());
+?>
 <style>
     #root ul {
         list-style-type: none;
@@ -91,11 +94,42 @@
                         <button type="submit" class="btn btn-transition btn-outline-info" name="remove" value="ok">Hapus</button>
                     </div>
                 </form>
+                <!--FORM 1-->
+                <form id="form1" class="d-none" method="post">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Form 1</h4>
+                        <span class="close" aria-label="Close" onclick="closeForm()">
+                            <span aria-hidden="true">&times;</span>
+                        </span>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group d-none">
+                            <label>ID</label>
+                            <input class="form-control item-id" name="id" required="" readonly="">
+                        </div>
+                        <div class="form-group">
+                            <label for="namaModule">Nama</label>
+                            <input class="form-control item-name" name="nama" placeholder="Nama" required="" readonly="">
+                        </div>
+                        <div class="form-group">
+                            <label for="namaModule">Description</label>
+                            <input class="form-control item-desc" name="desc" placeholder="Description">
+                        </div>
+                        <div class="form-group">
+                            <label for="namaModule">File</label>
+                            <input class="form-control item-file" name="nama" type="file">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <span class="btn btn-transition btn-outline-warning" onclick="closeForm()">Batal</span>
+                        <button type="submit" class="btn btn-transition btn-outline-info" name="form1" value="ok">Ubah</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
     <div class="card-footer">
-        <a class="btn btn-transition btn-outline-info" href="<?php echo site_url($module)?>">Kembali</a>
+        <a class="btn btn-transition btn-outline-info" href="<?php echo site_url($module) ?>">Kembali</a>
     </div>
 </div>
 <!--TEMPLATE-->
@@ -103,6 +137,7 @@
     <ul class="-list-group">
         <li id="tree" class="-list-group-item">
             <span class="title"></span>
+            <span class="desc d-none"></span>
             <?php if ($activeModule['acc_create']) { ?>
                 <span class="fa fa-plus text-primary" onclick="add(this)" title="Tambah"></span>
             <?php } ?>
@@ -111,6 +146,9 @@
             <?php } ?>
             <?php if ($activeModule['acc_delete']) { ?>
                 <span class="fa fa-trash text-danger" onclick="remove(this)" title="Hapus"></span>
+            <?php } ?>
+            <?php if ($activeModule['acc_update']) { ?>
+                <span class="fa fa-list-alt text-primary" onclick="form1(this)" title="Ubah"></span>
             <?php } ?>
             <ul></ul>
         </li>
@@ -124,6 +162,9 @@
         var clone = $('#tree').clone();
         clone.attr('id', l.id);
         clone.children('.title').text(' ' + l.name);
+        if (l.description != null) {
+            clone.children('.desc').text(' ' + l.description);
+        }
         parent.children('ul').append(clone);
         parent.children('.fa-trash').remove();
         if (parent.children('.fa-angle-double-right').length == 0) {
@@ -144,19 +185,26 @@
         closeForm();
         showCrud('#formAdd');
         $('#parent-id').val($(item).parent().attr('id'));
-        $('#parent').val($(item).parent().children('span').text());
+        $('#parent').val($(item).parent().children('.title').text());
     }
     function edit(item) {
         closeForm();
         showCrud('#formEdit');
         $('.item-id').val($(item).parent().attr('id'));
-        $('.item-name').val($(item).parent().children('span').text().trimLeft().trimRight());
+        $('.item-name').val($(item).parent().children('.title').text().trimLeft().trimRight());
     }
     function remove(item) {
         closeForm();
         showCrud('#formDelete');
         $('.item-id').val($(item).parent().attr('id'));
-        $('.item-name').val($(item).parent().children('span').text());
+        $('.item-name').val($(item).parent().children('.title').text());
+    }
+    function form1(item) {
+        closeForm();
+        showCrud('#form1');
+        $('.item-id').val($(item).parent().attr('id'));
+        $('.item-name').val($(item).parent().children('.title').text());
+        $('.item-desc').val($(item).parent().children('.desc').text().trimLeft());
     }
     function closeForm() {
         $('#treeview-list').removeClass('col-sm-6');

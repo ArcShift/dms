@@ -36,6 +36,22 @@ class Account extends MY_Controller {
                     $this->data['msgError'] = $this->db->error()['message'];
                 }
             }
+        } elseif ($this->input->post('edit_foto')) {
+            $config['upload_path'] = './upload/profile_photo';
+            $config['allowed_types'] = 'gif|jpg|png';
+            $config['max_size'] = 100000;
+            $config['max_width'] = 2000;
+            $config['max_height'] = 2000;
+            $this->load->library('upload', $config);
+            if ($this->upload->do_upload('foto')) {
+                if($this->model->update_foto()){
+                    $this->data['msgSuccess'] = 'Foto berhasil diubah';
+                }else{
+                    $this->data['msgError'] = $this->db->error()['message'];
+                }
+            } else {
+                $this->data['msgError'] = $this->upload->display_errors();
+            }
         }
         $this->data['data'] = $this->model->get();
         $this->render('detail');
