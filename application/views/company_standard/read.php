@@ -25,7 +25,7 @@
                                         </div>
                                         <div class="widget-content-left flex2">
                                             <div class="widget-heading"><?php echo $r['name'] ?></div>
-                                            <div class="widget-subheading opacity-7"><?php echo empty($r['username'])?'-': $r['username'] ?></div>
+                                            <div class="widget-subheading opacity-7"><?php echo empty($r['fullname'])?'-': $r['fullname'] ?></div>
                                         </div>
                                     </div>
                                 </div>

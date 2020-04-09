@@ -79,7 +79,7 @@
                                     <div class="widget-content-left">
                                         <div class="btn-group">                                            
                                             <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="p-0 btn" onclick="userMenu()">
-                                                <img width="42" class="rounded-circle" src="<?php echo base_url('upload/profile_photo/'.$this->session->userdata('user')['photo']) ?>" alt="">
+                                                <img width="42" class="rounded-circle" src="<?php echo empty($this->session->userdata('user')['photo'])?$this->config->item('user_photo'):base_url('upload/profile_photo/' . $this->session->userdata('user')['photo']) ?>" alt="">
                                                 <i class="fa fa-angle-down ml-2 opacity-8"></i>
                                             </a>
                                             <div tabindex="-1" role="menu" aria-hidden="false" class="dropdown-menu dropdown-menu-right">
@@ -142,16 +142,15 @@
                         <div class="app-sidebar__inner">
                             <ul class="vertical-nav-menu">
                                 <li class="app-sidebar__heading">DASHBOARDS</li>
-                                <li id="menu-dashboard">ss</li>
+                                <li id="menu-dashboard">-</li>
                                 <li class="app-sidebar__heading">MANAJEMEN PENGGUNA</li>
-                                <li id="menu-company">ss</li>
-                                <li id="menu-unit_kerja">ss</li>
-                                <li id="menu-user">s</li>
-                                <li class="app-sidebar__heading">STANDAR</li>
-                                
+                                <li id="menu-company">-</li>
+                                <li id="menu-unit_kerja">-</li>
+                                <li id="menu-user">-</li>
+                                <li class="app-sidebar__heading">STANDAR</li>                                
                                 <?php foreach ($this->session->userdata('module') as $key => $m) { ?>
                                     <?php if ($m['on_menu'] == 'YES') { ?>
-                                        <li id="module-<?php echo $m['name'] ?>">
+                                        <li id="module-<?php echo $m['name'] ?>" class="menu-item">
                                             <a href="<?php echo site_url($m['name']) ?>" class="<?php echo $m['name'] == $this->uri->segment(1) ? 'mm-active' : '' ?>">
                                                 <i class="metismenu-icon fa fa-<?php echo $m['icon'] ?>"></i>
                                                 <?php echo isset($m['title']) ? $m['title'] : ucwords(str_replace('_', ' ', $m['name'])); ?>
@@ -251,20 +250,21 @@
         </div>
         <script>
                                     var module = <?php echo json_encode($this->session->userdata('module')) ?>;
-//                                    for (var i = 0; i < module.length; i++) {
-//                                        var m = module[i];
-//                                        $('#' + m.parent + ' ul').append($('#module-' + m.id));
-//                                    }
-                                    var mainMenu = $('.main-menu');
-//                                    for (var i = 0; i < mainMenu.length; i++) {
-//                                        var m = $(mainMenu[i]);
-//                                        if ($(m).children('ul').children('li').length == 0) {
-//                                            $(m).addClass('d-none');
-//                                        }
-//                                    }
                                     for (var i = 0; i < module.length; i++) {
                                         var m = module[i];
                                         $('#menu-' + m.name).replaceWith($('#module-' + m.name));
+                                    }
+                                    var menu = $('.vertical-nav-menu li');
+                                    for (var i = 0; i < menu.length; i++) {//remove menu item
+                                        if ($(menu[i]).text() == '-') {
+                                            $(menu[i]).remove();
+                                        }
+                                    }
+                                    var menuHead = $('.app-sidebar__heading');
+                                    for (var i = 0; i < menuHead.length; i++) {//remove menuhead with 0 menu item
+                                       if(!$(menuHead[i]).next().hasClass('menu-item')){
+                                           $(menuHead[i]).remove();
+                                       }
                                     }
         </script>
     </body>
