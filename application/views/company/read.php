@@ -6,7 +6,7 @@
     </div>
     <div class="card-body">
         <form method="post">
-            <table class="table">
+            <table class="table table-borderless table-striped table-hover">
                 <thead>
                     <tr>
                         <th>No</th>
