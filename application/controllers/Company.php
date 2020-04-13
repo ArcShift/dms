@@ -7,6 +7,7 @@ class Company extends MY_Controller {
     function __construct() {
         parent::__construct();
         $this->load->model("m_company", "model");
+        $this->load->model("m_place");
         $this->load->library('form_validation');
     }
 
@@ -30,7 +31,15 @@ class Company extends MY_Controller {
                 $this->session->set_flashdata('msgError', 'validation error');
             }
         }
+        $this->data['province'] = $this->m_place->province();
         $this->render('create');
+    }
+
+    function kota() {
+        if (!$this->input->is_ajax_request()) {
+            redirect('404');
+        }
+        echo json_encode($this->m_place->city());
     }
 
     function delete() {

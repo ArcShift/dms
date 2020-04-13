@@ -23,6 +23,7 @@ class M_company extends CI_Model {
 
     function create() {
         $this->db->set('name', $this->input->post('nama'));
+        $this->db->set('id_regency', $this->input->post('kota'));
         return $this->db->insert($this->table);
     }
 
