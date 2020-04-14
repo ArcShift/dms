@@ -31,8 +31,8 @@ class M_company extends CI_Model {
 
     function detail($id) {
         $this->db->select('c.*, r.name AS kota, p.id AS province');
-        $this->db->join('regencies r', 'r.id = c.id_regency', 'LEFT');
-        $this->db->join('provinces p', 'p.id = r.province_id', 'LEFT');
+        $this->db->join('regency r', 'r.id = c.id_regency', 'LEFT');
+        $this->db->join('province p', 'p.id = r.id_province', 'LEFT');
         $this->db->where('c.id', $id);
         return $this->db->get($this->table. ' c')->row_array();
     }
@@ -41,6 +41,7 @@ class M_company extends CI_Model {
         $input = $this->input->post();
         $this->db->where('id', $input['id']);
         $this->db->set('name', $input['nama']);
+        $this->db->set('id_regency', $input['kota']);
         return $this->db->update($this->table);
     }
 
