@@ -8,15 +8,12 @@ class Setup extends CI_Controller {
     }
 
     public function index() {
-        //SETUP DEFAULT ACCESS ROLE
-    }
-
-    function core_table() {
-        if ($this->model->core_table()) {
-            die('success');
-        } else {
-            die('ERROR: ' . $this->db->error()['message']);
-        }
+        $this->model->setup('role');
+        $this->model->setup('module');
+        $this->model->setup('users');
+//        $this->model->setup('access');
+        $this->model->setup('province');
+        $this->model->setup('regency');
     }
 
     function access() {

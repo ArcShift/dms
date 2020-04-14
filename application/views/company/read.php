@@ -11,6 +11,7 @@
                     <tr>
                         <th>No</th>
                         <th>Nama</th>
+                        <th>Kota / Kab</th>
                         <th>Unit Kerja</th>
                         <th>Standard</th>
                         <th>Aksi</th>
@@ -21,6 +22,7 @@
                         <tr>
                             <td><?php echo $k + 1 ?></td>
                             <td><?php echo $r['name'] ?></td>
+                            <td><?php echo $r['city'] ?></td>
                             <td><?php echo $r['count'] ?></td>
                             <td><?php echo $r['standard'] ?></td>
                             <td>

@@ -7,6 +7,7 @@
                     <tr>
                         <th>No</th>
                         <th>Perusahaan</th>
+                        <th>Kota / Kab</th>
                         <th>Standar</th>
                         <th>Aksi</th>
                     </tr>
@@ -29,6 +30,9 @@
                                         </div>
                                     </div>
                                 </div>
+                            </td>
+                            <td>
+                                <?php echo $r['city'] ?>
                             </td>
                             <td>
                                 <div class="badge badge-info"><?php echo $r['count'] ?></div>

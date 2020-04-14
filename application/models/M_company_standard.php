@@ -5,10 +5,11 @@ class M_company_standard extends CI_Model {
     private $table = "company_standard";
 
     function company() {
-        $this->db->select('c.*, COUNT(cs.id) AS count, u.fullname, u.photo');
+        $this->db->select('c.*, COUNT(DISTINCT(cs.id)) AS count, u.fullname, u.photo, r.name AS city');
         $this->db->join('company_standard cs', 'c.id = cs.id_company', 'LEFT');
-        $this->db->join('unit_kerja uk', 'c.id = uk.id_company', 'LEFT');
+        $this->db->join('unit_kerja uk', 'c.id = uk.id_company AND uk.name="pic"', 'LEFT');
         $this->db->join('users u', 'uk.id = u.id_unit_kerja', 'LEFT');
+        $this->db->join('regencies r', 'r.id = c.id_regency', 'LEFT');
         $this->db->group_by('c.id');
         return $this->db->get('company c')->result_array();
     }

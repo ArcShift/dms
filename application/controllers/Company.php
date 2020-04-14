@@ -9,6 +9,7 @@ class Company extends MY_Controller {
         $this->load->model("m_company", "model");
         $this->load->model("m_place");
         $this->load->library('form_validation');
+        $this->data['province'] = $this->m_place->province();
     }
 
     function index() {
@@ -31,7 +32,6 @@ class Company extends MY_Controller {
                 $this->session->set_flashdata('msgError', 'validation error');
             }
         }
-        $this->data['province'] = $this->m_place->province();
         $this->render('create');
     }
 

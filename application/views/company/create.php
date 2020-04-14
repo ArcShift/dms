@@ -43,10 +43,7 @@
             var data = JSON.parse(data);
             for (let i = 0; i < data.length; i++) {
                 $('#kota').append('<option value="' + data[i].id + '">' + data[i].name + '</option>');
-
             }
-//                console.log(JSON.parse(data));
         });
-//        }
     });
 </script>
