@@ -15,7 +15,7 @@ class M_company extends CI_Model {
         $this->db->select('c.*, COUNT(DISTINCT(u.id)) AS count, COUNT(DISTINCT(cs.id)) AS standard, r.name AS city');
         $this->db->join('unit_kerja u', 'u.id_company= c.id', 'LEFT');
         $this->db->join('company_standard cs', 'cs.id_company= c.id', 'LEFT');
-        $this->db->join('regencies r', 'r.id = c.id_regency', 'LEFT');
+        $this->db->join('regency r', 'r.id = c.id_regency', 'LEFT');
         if ($this->session->userdata['user']['role'] == 'pic') {
             $this->db->where('c.id', $this->session->userdata['user']['id_company']);
         }
