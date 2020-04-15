@@ -53,7 +53,6 @@
                     selected = data[i].id;
                 }
             }
-            console.log(selected);
             if (selected != '') {
                 $("#kota").val(selected);
             }

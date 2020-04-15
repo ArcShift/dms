@@ -1,5 +1,6 @@
 <?php
-print_r($this->input->post());
+//print_r($this->input->post());
+print_r($list);
 ?>
 <style>
     #root ul {
@@ -95,7 +96,7 @@ print_r($this->input->post());
                     </div>
                 </form>
                 <!--FORM 1-->
-                <form id="form1" class="d-none" method="post">
+                <form id="form1" class="d-none" method="post" enctype="multipart/form-data">
                     <div class="modal-header">
                         <h4 class="modal-title">Form 1</h4>
                         <span class="close" aria-label="Close" onclick="closeForm()">
@@ -117,7 +118,7 @@ print_r($this->input->post());
                         </div>
                         <div class="form-group">
                             <label for="namaModule">File</label>
-                            <input class="form-control item-file" name="nama" type="file">
+                            <input class="form-control item-file" name="file" type="file">
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -150,6 +151,7 @@ print_r($this->input->post());
             <?php if ($activeModule['acc_update']) { ?>
                 <span class="fa fa-list-alt text-primary" onclick="form1(this)" title="Ubah"></span>
             <?php } ?>
+                <a class="fa fa-download text-primary"></a>
             <ul></ul>
         </li>
     </ul>
@@ -169,6 +171,11 @@ print_r($this->input->post());
         parent.children('.fa-trash').remove();
         if (parent.children('.fa-angle-double-right').length == 0) {
             parent.children('.title').before('<span class="fa fa-angle-double-right text-success" onclick="collapse(this)"></span>');
+        }
+        if(l.file!=null){
+            clone.children('.fa-download').attr('href','<?php echo base_url('upload/form1/')?>'+l.file);
+        }else{
+            clone.children('.fa-download').remove();
         }
     }
     console.log(list);

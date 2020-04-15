@@ -44,7 +44,7 @@ class M_pasal extends CI_Model {
     function update_file() {
         $this->db->set('file', $this->upload->data()['file_name']);
         $this->db->where('id', $this->input->post('id'));
-        $this->db->update($this->table);
+        return $this->db->update($this->table);
     }
 
 }
