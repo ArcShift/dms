@@ -26,8 +26,7 @@ class Treeview_detail extends MY_Controller {
         if (!$this->input->is_ajax_request()) {
             redirect('404');
         }
-        $this->load->model('m_pasal');
-        echo json_encode($this->m_pasal->reads());
+        echo json_encode($this->model->reads($this->input->post('id')));
     }
 
     function pemenuhan($param) {

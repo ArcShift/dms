@@ -40,7 +40,7 @@
                             <div class="col-sm-6" id="treeview-list">
                                 <ul class="list-group">
                                     <li id="root" class="list-group-item">
-                                        <span class="title"></span>
+                                        <span class="-title"></span>
                                         <ul></ul>
                                     </li>
                                 </ul>
@@ -155,9 +155,8 @@
                         clone.children('.fa-upload').after('<a class="fa fa-download text-success" href="<?php echo base_url('assets/') ?>' + l.file + '" title="Download"></a>');
                     }
                 }
-                $('#root ul').addClass('collapse');
-                $('#root ul').collapse('toggle');
-                $('#root ul').collapse('toggle');
+                $('#root ul ul').addClass('collapse');
+                $('#root ul ul').collapse('toggle');
                 $('#treeview-list li .title').each(function (index) {
 //                PEMENUHAN
                     var r = Math.floor(Math.random() * 101);

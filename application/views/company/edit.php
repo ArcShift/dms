@@ -1,9 +1,8 @@
-<?php print_r($data) ?>
 <div class="main-card mb-3 card">
     <form class="form-horizontal" method="post">
         <div class="card-header">
             <h5>Edit Data</h5>
-        </div>
+        </div>  
         <div class="card-body">
             <input hidden="" name="id" required="" value="<?php echo $data['id'] ?>">
             <div class="form-group">
@@ -15,7 +14,7 @@
             </div>
             <div class="form-group">
                 <label>Provinsi</label>
-                <select class="form-control" id="provinsi" name="provinsi">               
+                <select class="form-control" id="provinsi" name="provinsi">
                     <option value="">-- Provinsi --</option>
                     <?php foreach ($province as $p) { ?>
                         <option value="<?php echo $p['id'] ?>" <?php echo $p['id'] == $data['province'] ? 'selected' : ''; ?>><?php echo $p['name'] ?></option>
@@ -42,7 +41,7 @@
 <script>
     var kota = '<?php echo $data['kota'] ?>';
     $('#provinsi').change(function () {
-    var selected = '';
+        var selected = '';
         $.post('<?php echo site_url($module . '/kota') ?>', {'id': $(this).val()}, function (data) {
             $('#kota').html('');
             $('#kota').append('<option value="">-- Kota --</option>');

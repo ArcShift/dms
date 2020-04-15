@@ -10,6 +10,9 @@ class M_company_standard extends CI_Model {
         $this->db->join('unit_kerja uk', 'c.id = uk.id_company AND uk.name="pic"', 'LEFT');
         $this->db->join('users u', 'uk.id = u.id_unit_kerja', 'LEFT');
         $this->db->join('regency r', 'r.id = c.id_regency', 'LEFT');
+        if ($this->session->userdata['user']['role'] == 'pic') {
+            $this->db->where('c.id', $this->session->userdata['user']['id_company']);
+        }
         $this->db->group_by('c.id');
         return $this->db->get('company c')->result_array();
     }

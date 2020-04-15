@@ -19,8 +19,8 @@ class M_treeview_detail extends CI_Model {
         
     }
 
-    function reads() {
-        $this->db->where('id_standard', $this->session->userdata('treeview'));
+    function reads($id) {
+        $this->db->where('id_standard', $id);
         return $this->db->get($this->table)->result_array();
     }
 
