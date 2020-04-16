@@ -9,17 +9,12 @@ class Treeview_detail extends MY_Controller {
         $this->load->model('m_treeview_detail', 'model');
     }
 
-    function index() {//replace
+    function index() {
         $this->load->model('m_company');
         $this->data['company'] = $this->m_company->get();
         $this->render('read');
     }
-    function s() {
-        $this->load->model('m_company');
-        $this->data['company'] = $this->m_company->get();
-        $this->render('read2');
-    }
-
+    
     function tabs() {
         $id= $this->input->get('id');
         if(empty($id)){
@@ -30,7 +25,7 @@ class Treeview_detail extends MY_Controller {
             $data2[$d['id']] = $d;
         }
         $this->data['data'] = $data;
-        $this->render('tabs', TRUE, TRUE);
+        $this->render('tab', TRUE, TRUE);
     }
 
     function standard() {
