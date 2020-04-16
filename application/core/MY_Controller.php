@@ -16,7 +16,7 @@ class MY_Controller extends CI_Controller {
         $this->load->model("base_model", "b_model");
     }
 
-    protected function render($view, $includeModule = true) {
+    protected function render($view, $includeModule = true, $blank = false) {
         foreach ($this->session->userdata('module') as $k => $m) {
             if ($m['name'] == $this->module) {
                 $this->activeModule = $m;
@@ -34,7 +34,11 @@ class MY_Controller extends CI_Controller {
             } else {
                 $this->data['view'] = $view;
             }
-            $this->load->view('template/container', $this->data);
+            if ($blank) {
+                $this->load->view($this->data['view'], $this->data);
+            } else {
+                $this->load->view('template/container', $this->data);
+            }
         }
     }
 

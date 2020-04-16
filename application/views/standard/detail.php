@@ -1,7 +1,4 @@
-<?php
-//print_r($this->input->post());
-print_r($list);
-?>
+<?php ?>
 <style>
     #root ul {
         list-style-type: none;

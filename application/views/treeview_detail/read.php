@@ -1,4 +1,7 @@
-<?php ?>
+<?php
+$role = $this->session->userdata['user']['role'];
+echo $role;
+?>
 <style>
     #root ul {
         list-style-type: none;
@@ -69,7 +72,6 @@
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-default pull-left" onclick="closeForm()">Batal</button>
-                                        <button type="submit" class="btn btn-default" name="form1" value="ok">Simpan</button>
                                     </div>
                                 </form>
                             </div>
@@ -95,7 +97,9 @@
             <input class="filename d-none" name="desc" value="">
             <span class="title"></span>
             <?php if ($activeModule['acc_update']) { ?>
-                <span class="fa fa-bars text-primary" onclick="detail(this)" title="Open Form">&nbsp;</span>
+                <?php if ($role == 'pic' || $role = 'admin') { ?>
+                    <span class="fa fa-bars text-primary" onclick="form1(this)" title="Open Form">&nbsp;</span>
+                <?php } ?>
             <?php } ?>
             <ul></ul>
         </li>
@@ -185,7 +189,7 @@
     function collapse(item) {
         $(item).parent('li').children('ul').collapse('toggle');
     }
-    function detail(item) {
+    function form1(item) {
         closeForm();
         showCrud('#formDetail');
         $('#form-title').text($.trim($(item).parent().children('.title').text()));

@@ -27,7 +27,7 @@ class M_treeview_detail extends CI_Model {
     function create() {
         $input = $this->input->post();
         $this->db->set('name', $input['nama']);
-        $this->db->set('id_standard', $this->session->userdata('treeview'));   
+        $this->db->set('id_standard', $this->session->userdata('treeview'));
         $this->db->set('created_by', $this->session->userdata('user')['id']);
         if (is_numeric($input['id'])) {
             $this->db->set('parent', $input['id']);
