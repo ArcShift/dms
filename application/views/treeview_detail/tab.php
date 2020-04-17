@@ -1,9 +1,6 @@
 <?php
 $role = $this->session->userdata['user']['role'];
 ?>
-<!--<pre>-->
-<?php // print_r($data) ?>
-<!--</pre>-->
 <style>
     #root ul {
         list-style-type: none;
@@ -19,8 +16,9 @@ $role = $this->session->userdata['user']['role'];
             <span class="title"><?php echo $d['name'] ?></span>
             <?php if ($activeModule['acc_update']) { ?>
                 <?php if ($role == 'pic' || $role = 'admin') { ?>
-                    <span class="fa fa-bars text-primary" onclick="form1(<?php echo $k ?>)" title="Open Form">&nbsp;</span>
+                    <span class="fa fa-info-circle text-primary" onclick="form1(<?php echo $k ?>)" title="Open Form 1">&nbsp;</span>
                 <?php } ?>
+                <span class="fa fa-bars text-success" onclick="form2(<?php echo $k ?>)" title="Open Form 2">&nbsp;</span>
             <?php } ?>
             <ul></ul>
         </li>
@@ -50,6 +48,7 @@ $role = $this->session->userdata['user']['role'];
                 </ul>
             </div>
             <div class="col-sm-6" id="treeview-crud">
+                <!--FORM 1-->
                 <form id="form1" class="d-none">
                     <div class="modal-header">
                         <h4 class="modal-title">Form 1</h4>
@@ -82,6 +81,8 @@ $role = $this->session->userdata['user']['role'];
                         <button type="button" class="btn btn-transition btn-outline-warning" onclick="closeForm()">Tutup</button>
                     </div>
                 </form>
+                <!--FORM 2-->
+                <form id="form2" class="d-none"></form>
             </div>
         </div>
     </div>
@@ -116,7 +117,6 @@ $role = $this->session->userdata['user']['role'];
         p = pasal[i]
         $('#' + $(p).children('.parent').text()).children('ul').append(p);
     }
-//    console.log($('#root li'));
     function form1(i) {
         var d = data[i];
         closeForm();
@@ -130,6 +130,30 @@ $role = $this->session->userdata['user']['role'];
             $('.item-file').addClass('d-none');
         }
     }
+    function form2(i) {
+        closeForm();
+        $.post('<?php echo site_url($module); ?>/form2', {'idPasal': data[i].id, 'idPerusahaan':idPerusahaan}, function (data) {
+            $('#form2').empty();
+            $('#form2').append(data);
+//            var d = JSON.parse(data);
+//            $('#standar').html('');
+//            $('#standar').append('<option value="">-- Standar --</option>');
+//            for (var i = 0; i < d.length; i++) {
+//                $('#standar').append('<option value="' + d[i].id + '">' + d[i].name + '</option>');
+//            }
+            showCrud('#form2');
+        });
+        //=====================
+        var d = data[i];
+//        $('.item-name').text(d.name);
+//        $('.item-desc').text(d.description);
+//        if (d.file != null) {
+//            $('.item-file').attr('href', '<?php // echo base_url('upload/form1/')  ?>' + d.file);
+//            $('.item-file').removeClass('d-none');
+//        } else {
+//            $('.item-file').addClass('d-none');
+//        }
+    }
     function closeForm() {
         $('#treeview-list').removeClass('col-sm-6');
         $('#treeview-list').addClass('col-sm-12');
@@ -142,8 +166,12 @@ $role = $this->session->userdata['user']['role'];
         $('#treeview-crud').show();
         $(item).removeClass('d-none');
     }
+    $('#form2').on('submit', function (e) {
+        e.preventDefault();
+        console.log($(this).serialize());
+    });
     $('#treeview-list li .title').each(function (index) {
-//                PEMENUHAN
+//        PEMENUHAN
         var r = Math.floor(Math.random() * 101);
         var clone = $('#template-pemenuhan').clone();
         clone.attr('id', 'pemenuhan-' + index);
@@ -152,13 +180,13 @@ $role = $this->session->userdata['user']['role'];
         clone.find('.progress').append(bar);
         $('#tab-pemenuhan .list-group').append(clone);
         var clone2 = clone.clone();
-//                    JADWAL
+//        JADWAL
         clone2.attr('id', 'jadwal-' + index);
         clone2.find('.progress').addClass('jadwal');
         clone2.find('.progress').removeClass('progress');
         clone2.find('.jadwal').text('00:00');
         $('#tab-jadwal').append(clone2);
-//                    PENERAPAN
+//        PENERAPAN
         var clone3 = clone2.clone();
         clone3.attr('id', 'penerapan-' + index);
         clone3.find('.jadwal').text('-');

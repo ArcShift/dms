@@ -14,11 +14,13 @@ class M_treeview_detail extends CI_Model {
         $this->db->join('company_standard cs', 'cs.id_standard = s.id AND cs.id_company=' . $this->input->post('id'));
         return $this->db->get('standard s')->result_array();
     }
-
-    function detail() {
-        
+    function member() {
+        $this->db->select('u.*');
+        $this->db->join('unit_kerja uk', 'uk.id=u.id_unit_kerja');
+        $this->db->join('company c', 'c.id=uk.id_company');
+        $this->db->where('c.id', $this->input->post('idPerusahaan'));
+        return $this->db->get('users u')->result_array();
     }
-
     function reads($id) {
         $this->db->where('id_standard', $id);
         return $this->db->get($this->table)->result_array();
@@ -57,5 +59,4 @@ class M_treeview_detail extends CI_Model {
         $this->db->where('id', $this->input->post('id'));
         $this->db->update($this->table);
     }
-
 }

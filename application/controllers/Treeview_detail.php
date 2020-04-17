@@ -16,15 +16,11 @@ class Treeview_detail extends MY_Controller {
     }
     
     function tabs() {
-        $id= $this->input->get('id');
+        $id= $this->input->get('idStandar');
         if(empty($id)){
             die('NO ACCESS');
         }
-        $data = $this->model->reads($id);
-        foreach ($data as $k => $d) {
-            $data2[$d['id']] = $d;
-        }
-        $this->data['data'] = $data;
+        $this->data['data'] = $this->model->reads($id);
         $this->render('tab', TRUE, TRUE);
     }
 
@@ -34,52 +30,15 @@ class Treeview_detail extends MY_Controller {
         }
         echo json_encode($this->model->standard());
     }
-
-    function get() {
-        if (!$this->input->is_ajax_request()) {
-            redirect('404');
-        }
-        echo json_encode($this->model->reads($this->input->post('id')));
+    function form2() {
+        $this->data['member'] = $this->model->member();        
+        $this->render('form2', TRUE, TRUE);
     }
-
-    function pemenuhan($param) {
-        $this->data['tab'] = 'pemenuhan';
-        $this->render('tab');
-    }
-
-    function fulfillment() {
-        $this->render('pemenuhan');
-    }
-
-    function pasal() {
-        if (!$this->session->userdata('treeview')) {
-            redirect('standard');
-        }
-        $this->subTitle = 'Detail';
-        $this->data['treeview'] = $this->model->treeview();
-        if ($this->input->post()) {
-            $this->load->library('form_validation');
-            if ($this->input->post('add')) {
-                $this->model->create();
-            } else if ($this->input->post('modify')) {
-                $this->model->update();
-            } else if ($this->input->post('remove')) {
-                $this->model->delete();
-            }
-        }
-        $this->data['list'] = json_encode($this->model->reads());
-        $this->data['tab'] = 'pasal';
-        $this->render('tab');
-    }
-
-    function schedule() {
-        $this->data['tab'] = 'jadwal';
-        $this->render('tab');
-    }
-
-    function implementation() {
-        $this->data['tab'] = 'penerapan';
-        $this->render('tab');
-    }
-
+    
+//    function get() {
+//        if (!$this->input->is_ajax_request()) {
+//            redirect('404');
+//        }
+//        echo json_encode($this->model->reads($this->input->post('id')));
+//    }
 }

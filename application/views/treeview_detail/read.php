@@ -1,7 +1,8 @@
 <?php
 $role = $this->session->userdata['user']['role'];
-echo $role;
 ?>
+<link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
 <div class="main-card mb-3 card">
     <div class="card-body">
         <div class="form-group">
@@ -24,6 +25,7 @@ echo $role;
     </div>
 </div>
 <script>
+    var idPerusahaan;
     $('#perusahaan').change(function (s) {
         if ($(this).val()) {
             $.post('<?php echo site_url($module); ?>/standard', {'id': $(this).val()}, function (data) {
@@ -34,12 +36,14 @@ echo $role;
                     $('#standar').append('<option value="' + d[i].id + '">' + d[i].name + '</option>');
                 }
             });
+            idPerusahaan = $(this).val();
         }
     });
     $('#standar').change(function (s) {
+        console.log(idPerusahaan);
         if ($(this).val()) {
             $('#root span').text($('#standar option:selected').text());
-            $.get('<?php echo site_url($module); ?>/tabs', {'id': $(this).val()}, function (data) {
+            $.get('<?php echo site_url($module);  ?>/tabs', {'idPerusahaan':idPerusahaan,'idStandar': $(this).val()}, function (data) {
                 $('#container').html(data);
             });
         }
