@@ -168,7 +168,10 @@ $role = $this->session->userdata['user']['role'];
     }
     $('#form2').on('submit', function (e) {
         e.preventDefault();
-        console.log($(this).serialize());
+//        console.log($(this).serializeArray());
+        $.post('<?php echo site_url($module); ?>/form2_send',$(this).serializeArray(), function (data) {
+            console.log(data);
+        });
     });
     $('#treeview-list li .title').each(function (index) {
 //        PEMENUHAN

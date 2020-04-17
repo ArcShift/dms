@@ -6,14 +6,16 @@
     </button>
 </div>
 <div class="modal-body">
+    <input class="d-none" name="perusahaan" value="<?php echo $this->input->post('idPerusahaan')?>">
+    <input class="d-none" name="pasal" value="<?php echo $this->input->post('idPasal')?>">
     <div class="form-group">
         <label>Catatan</label>
-        <input class="form-control" name="keterangan">
+        <input class="form-control" name="catatan">
     </div>
     <div class="form-group">
         <label>Anggota</label>
         <br/>
-        <select class="form-control" multiple="multiple" id="anggota" name="anggota">
+        <select class="form-control" multiple="multiple" id="anggota" name="anggota[]">
             <?php foreach ($member as $k => $m) { ?>
                 <option value="<?php echo $m['id'] ?>"><?php echo $m['username'] ?></option>
             <?php } ?>
@@ -26,7 +28,7 @@
     </div>
     <div class="form-group">
         <label>Jadwal</label>
-        <input class="form-control" name="jadwal">
+        <input class="form-control" name="jadwal" type="date">
     </div>
 </div>
 <div class="modal-footer">

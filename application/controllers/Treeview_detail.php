@@ -14,10 +14,10 @@ class Treeview_detail extends MY_Controller {
         $this->data['company'] = $this->m_company->get();
         $this->render('read');
     }
-    
+
     function tabs() {
-        $id= $this->input->get('idStandar');
-        if(empty($id)){
+        $id = $this->input->get('idStandar');
+        if (empty($id)) {
             die('NO ACCESS');
         }
         $this->data['data'] = $this->model->reads($id);
@@ -30,11 +30,21 @@ class Treeview_detail extends MY_Controller {
         }
         echo json_encode($this->model->standard());
     }
+
     function form2() {
-        $this->data['member'] = $this->model->member();        
+        $this->data['member'] = $this->model->member();
         $this->render('form2', TRUE, TRUE);
     }
-    
+
+    function form2_send() {
+        if ($this->model->form2_submit()) {
+//            echo $this->db->last_query();
+            echo 'success';
+        }else{
+            echo $this->db->error()['message'];
+        }
+    }
+
 //    function get() {
 //        if (!$this->input->is_ajax_request()) {
 //            redirect('404');

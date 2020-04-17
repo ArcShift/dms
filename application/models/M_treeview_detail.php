@@ -14,6 +14,7 @@ class M_treeview_detail extends CI_Model {
         $this->db->join('company_standard cs', 'cs.id_standard = s.id AND cs.id_company=' . $this->input->post('id'));
         return $this->db->get('standard s')->result_array();
     }
+
     function member() {
         $this->db->select('u.*');
         $this->db->join('unit_kerja uk', 'uk.id=u.id_unit_kerja');
@@ -21,6 +22,7 @@ class M_treeview_detail extends CI_Model {
         $this->db->where('c.id', $this->input->post('idPerusahaan'));
         return $this->db->get('users u')->result_array();
     }
+
     function reads($id) {
         $this->db->where('id_standard', $id);
         return $this->db->get($this->table)->result_array();
@@ -59,4 +61,32 @@ class M_treeview_detail extends CI_Model {
         $this->db->where('id', $this->input->post('id'));
         $this->db->update($this->table);
     }
+
+    function form2_submit() {
+        $mod = false;
+        $in = $this->input->post();
+        $this->db->where('id_pasal', $in['pasal']);
+        $this->db->where('id_company', $in['perusahaan']);
+        $count = $this->db->count_all_results('form2');
+        if (!empty($in['catatan'])) {
+            $this->db->set('note', $in['catatan']);
+            $mod = true;
+        }
+        if (!empty($in['jadwal'])) {
+            $this->db->set('jadwal', $in['jadwal']);
+            $mod = true;
+        }
+        if ($mod) {
+            if ($count) {
+                $this->db->where('id_pasal', $in['pasal']);
+                $this->db->where('id_company', $in['perusahaan']);
+                return $this->db->update('form2');
+            } else {
+                $this->db->set('id_pasal', $in['pasal']);
+                $this->db->set('id_company', $in['perusahaan']);
+                return $this->db->insert('form2');
+            }
+        }
+    }
+
 }
