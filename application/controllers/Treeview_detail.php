@@ -16,11 +16,11 @@ class Treeview_detail extends MY_Controller {
     }
 
     function tabs() {
-        $id = $this->input->get('idStandar');
-        if (empty($id)) {
+        if (empty($this->input->post('idStandar'))) {
             die('NO ACCESS');
         }
-        $this->data['data'] = $this->model->reads($id);
+        $this->data['data'] = $this->model->reads();
+//        die($this->db->last_query());
         $this->render('tab', TRUE, TRUE);
     }
 
@@ -32,6 +32,7 @@ class Treeview_detail extends MY_Controller {
     }
 
     function form2() {
+        $this->data['data']= $this->model->reads();
         $this->data['member'] = $this->model->member();
         $this->render('form2', TRUE, TRUE);
     }

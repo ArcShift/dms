@@ -26,8 +26,8 @@ $role = $this->session->userdata['user']['role'];
 </ul>
 <ul class="nav nav-tabs">
     <li class="nav-item"><a data-toggle="tab" href="#tab-pemenuhan" class="nav-link">Pemenuhan</a></li>
-    <li class="nav-item"><a data-toggle="tab" href="#tab-pasal" class="nav-link active">Pasal</a></li>
-    <li class="nav-item"><a data-toggle="tab" href="#tab-jadwal" class="nav-link">Jadwal</a></li>
+    <li class="nav-item"><a data-toggle="tab" href="#tab-pasal" class="nav-link">Pasal</a></li>
+    <li class="nav-item"><a data-toggle="tab" href="#tab-jadwal" class="nav-link active">Jadwal</a></li>
     <li class="nav-item"><a data-toggle="tab" href="#tab-penerapan" class="nav-link">Penerapan</a></li>
 </ul>
 <div class="tab-content">
@@ -37,7 +37,7 @@ $role = $this->session->userdata['user']['role'];
         </ul>
     </div>
     <!--PASAL-->
-    <div class="tab-pane active" id="tab-pasal" role="tabpanel">
+    <div class="tab-pane" id="tab-pasal" role="tabpanel">
         <div class="row">
             <div class="col-sm-6" id="treeview-list">
                 <ul class="list-group">
@@ -87,7 +87,7 @@ $role = $this->session->userdata['user']['role'];
         </div>
     </div>
     <!--JADWAL-->
-    <div class="tab-pane" id="tab-jadwal" role="tabpanel">
+    <div class="tab-pane active" id="tab-jadwal" role="tabpanel">
         <p>Jadwal</p>
     </div>
     <div class="tab-pane" id="tab-penerapan" role="tabpanel">
@@ -111,7 +111,6 @@ $role = $this->session->userdata['user']['role'];
 </div>
 <script>
     var data = JSON.parse('<?php echo json_encode($data) ?>');
-    console.log(data);
     var pasal = $('.list-pasal');
     for (var p, i = 0; i < data.length; i++) {
         p = pasal[i]
@@ -132,27 +131,11 @@ $role = $this->session->userdata['user']['role'];
     }
     function form2(i) {
         closeForm();
-        $.post('<?php echo site_url($module); ?>/form2', {'idPasal': data[i].id, 'idPerusahaan':idPerusahaan}, function (data) {
+        $.post('<?php echo site_url($module); ?>/form2', {'idPasal': data[i].id, 'idPerusahaan': idPerusahaan, 'idStandar': idStandar}, function (data) {
             $('#form2').empty();
             $('#form2').append(data);
-//            var d = JSON.parse(data);
-//            $('#standar').html('');
-//            $('#standar').append('<option value="">-- Standar --</option>');
-//            for (var i = 0; i < d.length; i++) {
-//                $('#standar').append('<option value="' + d[i].id + '">' + d[i].name + '</option>');
-//            }
             showCrud('#form2');
         });
-        //=====================
-        var d = data[i];
-//        $('.item-name').text(d.name);
-//        $('.item-desc').text(d.description);
-//        if (d.file != null) {
-//            $('.item-file').attr('href', '<?php // echo base_url('upload/form1/')  ?>' + d.file);
-//            $('.item-file').removeClass('d-none');
-//        } else {
-//            $('.item-file').addClass('d-none');
-//        }
     }
     function closeForm() {
         $('#treeview-list').removeClass('col-sm-6');
@@ -168,8 +151,7 @@ $role = $this->session->userdata['user']['role'];
     }
     $('#form2').on('submit', function (e) {
         e.preventDefault();
-//        console.log($(this).serializeArray());
-        $.post('<?php echo site_url($module); ?>/form2_send',$(this).serializeArray(), function (data) {
+        $.post('<?php echo site_url($module); ?>/form2_send', $(this).serializeArray(), function (data) {
             console.log(data);
         });
     });
@@ -187,7 +169,8 @@ $role = $this->session->userdata['user']['role'];
         clone2.attr('id', 'jadwal-' + index);
         clone2.find('.progress').addClass('jadwal');
         clone2.find('.progress').removeClass('progress');
-        clone2.find('.jadwal').text('00:00');
+        clone2.find('.jadwal').text(data[index].jadwal != null ? moment(data[index].jadwal).format( "DD MMMM YYYY") : '-');
+//        clone2.find('.jadwal').text(data[index].jadwal != null ? moment(data[index].jadwal, "DDDD, MMMM DD YYYY") : '-');
         $('#tab-jadwal').append(clone2);
 //        PENERAPAN
         var clone3 = clone2.clone();

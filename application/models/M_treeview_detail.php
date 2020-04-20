@@ -15,6 +15,14 @@ class M_treeview_detail extends CI_Model {
         return $this->db->get('standard s')->result_array();
     }
 
+    function detail() {
+        $input = $this->input->post();
+        $this->db->select('p.*, f.note, f.jadwal');
+        $this->db->where('p.id', $input['idPasal']);
+        $this->db->join('form2 f', 'f.id_pasal= p.id AND f.id_company=' . $input['idPerusahaan'], 'LEFT');
+        return $this->db->get($this->table . ' p')->row_array();
+    }
+
     function member() {
         $this->db->select('u.*');
         $this->db->join('unit_kerja uk', 'uk.id=u.id_unit_kerja');
@@ -23,9 +31,20 @@ class M_treeview_detail extends CI_Model {
         return $this->db->get('users u')->result_array();
     }
 
-    function reads($id) {
-        $this->db->where('id_standard', $id);
-        return $this->db->get($this->table)->result_array();
+    function reads() {
+        $input = $this->input->post();
+        $this->db->select('p.*, f.note, f.jadwal');
+        if (isset($input['idPasal'])) {
+            $this->db->where('p.id', $input['idPasal']);
+        }
+        $this->db->join('form2 f', 'f.id_pasal= p.id AND f.id_company=' . $input['idPerusahaan'], 'LEFT');
+        $this->db->where('p.id_standard', $input['idStandar']);
+        $result = $this->db->get($this->table . ' p');
+        if (isset($input['idPasal'])) {
+            return $result->row_array();
+        } else {
+            return $result->result_array();
+        }
     }
 
     function create() {

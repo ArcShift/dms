@@ -3,6 +3,8 @@ $role = $this->session->userdata['user']['role'];
 ?>
 <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
 <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment-with-locales.min.js" integrity="sha256-AdQN98MVZs44Eq2yTwtoKufhnU+uZ7v2kXnD5vqzZVo=" crossorigin="anonymous"></script>
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js" integrity="sha256-4iQZ6BVL4qNKlQ27TExEhBN1HFPvAvAMbFavKKosSWQ=" crossorigin="anonymous"></script>-->
 <div class="main-card mb-3 card">
     <div class="card-body">
         <div class="form-group">
@@ -26,6 +28,7 @@ $role = $this->session->userdata['user']['role'];
 </div>
 <script>
     var idPerusahaan;
+    var idStandar;
     $('#perusahaan').change(function (s) {
         if ($(this).val()) {
             $.post('<?php echo site_url($module); ?>/standard', {'id': $(this).val()}, function (data) {
@@ -40,10 +43,10 @@ $role = $this->session->userdata['user']['role'];
         }
     });
     $('#standar').change(function (s) {
-        console.log(idPerusahaan);
-        if ($(this).val()) {
+        idStandar = $(this).val();
+        if (idStandar) {
             $('#root span').text($('#standar option:selected').text());
-            $.get('<?php echo site_url($module);  ?>/tabs', {'idPerusahaan':idPerusahaan,'idStandar': $(this).val()}, function (data) {
+            $.post('<?php echo site_url($module); ?>/tabs', {'idPerusahaan': idPerusahaan, 'idStandar': idStandar}, function (data) {
                 $('#container').html(data);
             });
         }
