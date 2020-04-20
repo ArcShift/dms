@@ -152,7 +152,12 @@ $role = $this->session->userdata['user']['role'];
     $('#form2').on('submit', function (e) {
         e.preventDefault();
         $.post('<?php echo site_url($module); ?>/form2_send', $(this).serializeArray(), function (data) {
-            console.log(data);
+            if (data == 'success') {
+                $('#standar').change();
+            } else {
+                $('#form2').empty();
+                $('#form2').append(data);
+            }
         });
     });
     $('#treeview-list li .title').each(function (index) {
@@ -169,7 +174,7 @@ $role = $this->session->userdata['user']['role'];
         clone2.attr('id', 'jadwal-' + index);
         clone2.find('.progress').addClass('jadwal');
         clone2.find('.progress').removeClass('progress');
-        clone2.find('.jadwal').text(data[index].jadwal != null ? moment(data[index].jadwal).format( "DD MMMM YYYY") : '-');
+        clone2.find('.jadwal').text(data[index].jadwal != null ? moment(data[index].jadwal).format("DD MMMM YYYY") : '-');
 //        clone2.find('.jadwal').text(data[index].jadwal != null ? moment(data[index].jadwal, "DDDD, MMMM DD YYYY") : '-');
         $('#tab-jadwal').append(clone2);
 //        PENERAPAN
