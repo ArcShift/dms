@@ -4,7 +4,9 @@ $role = $this->session->userdata['user']['role'];
 <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
 <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment-with-locales.min.js" integrity="sha256-AdQN98MVZs44Eq2yTwtoKufhnU+uZ7v2kXnD5vqzZVo=" crossorigin="anonymous"></script>
-<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js" integrity="sha256-4iQZ6BVL4qNKlQ27TExEhBN1HFPvAvAMbFavKKosSWQ=" crossorigin="anonymous"></script>-->
+<script src="https://blueimp.github.io/jQuery-File-Upload/js/vendor/jquery.ui.widget.js"></script>
+<!--<script src="js/jquery.iframe-transport.js"></script>-->
+<script src="https://blueimp.github.io/jQuery-File-Upload/js/jquery.fileupload.js"></script>
 <div class="main-card mb-3 card">
     <div class="card-body">
         <div class="form-group">
@@ -50,5 +52,23 @@ $role = $this->session->userdata['user']['role'];
                 $('#container').html(data);
             });
         }
+    });
+    $(function () {
+        $('#fileupload').fileupload({
+            dataType: 'json',
+            done: function (e, data) {
+                $.each(data.result.files, function (index, file) {
+                    $('<p/>').text(file.name).appendTo(document.body);
+                });
+            }, 
+            progressall: function (e, data) {
+                var progress = parseInt(data.loaded / data.total * 100, 10);
+                $('#progress .bar').css(
+                        'width',
+                        progress + '%'
+                        );
+            }
+
+        });
     });
 </script>

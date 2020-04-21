@@ -27,7 +27,7 @@ $role = $this->session->userdata['user']['role'];
 <ul class="nav nav-tabs">
     <li class="nav-item"><a data-toggle="tab" href="#tab-pemenuhan" class="nav-link">Pemenuhan</a></li>
     <li class="nav-item"><a data-toggle="tab" href="#tab-pasal" class="nav-link">Pasal</a></li>
-    <li class="nav-item"><a data-toggle="tab" href="#tab-jadwal" class="nav-link active">Jadwal</a></li>
+    <li class="nav-item"><a data-toggle="tab" href="#tab-jadwal" class="nav-link">Jadwal</a></li>
     <li class="nav-item"><a data-toggle="tab" href="#tab-penerapan" class="nav-link">Penerapan</a></li>
 </ul>
 <div class="tab-content">
@@ -37,7 +37,7 @@ $role = $this->session->userdata['user']['role'];
         </ul>
     </div>
     <!--PASAL-->
-    <div class="tab-pane" id="tab-pasal" role="tabpanel">
+    <div class="tab-pane active" id="tab-pasal" role="tabpanel">
         <div class="row">
             <div class="col-sm-6" id="treeview-list">
                 <ul class="list-group">
@@ -87,7 +87,7 @@ $role = $this->session->userdata['user']['role'];
         </div>
     </div>
     <!--JADWAL-->
-    <div class="tab-pane active" id="tab-jadwal" role="tabpanel">
+    <div class="tab-pane" id="tab-jadwal" role="tabpanel">
         <p>Jadwal</p>
     </div>
     <div class="tab-pane" id="tab-penerapan" role="tabpanel">

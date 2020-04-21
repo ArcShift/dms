@@ -32,16 +32,19 @@ class Treeview_detail extends MY_Controller {
     }
 
     function form2() {
-        $this->data['data']= $this->model->reads();
+        $this->data['data'] = $this->model->reads();
         $this->data['member'] = $this->model->member();
         $this->render('form2', TRUE, TRUE);
     }
 
     function form2_send() {
         if ($this->model->form2_submit()) {
-//            echo $this->db->last_query();
-            echo 'success';
-        }else{
+            if ($this->model->anggota_submit()) {
+                echo 'success';
+            } else {
+                echo $this->db->error()['message'];
+            }
+        } else {
             echo $this->db->error()['message'];
         }
     }

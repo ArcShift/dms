@@ -24,10 +24,11 @@ class M_treeview_detail extends CI_Model {
     }
 
     function member() {
-        $this->db->select('u.*');
+        $input=$this->input->post();
+        $this->db->select('u.id, u.username, m.id AS member');
         $this->db->join('unit_kerja uk', 'uk.id=u.id_unit_kerja');
-        $this->db->join('company c', 'c.id=uk.id_company');
-        $this->db->where('c.id', $this->input->post('idPerusahaan'));
+        $this->db->join('member m', 'm.id_user=u.id AND m.id_pasal='.$input['idPasal'], 'LEFT');
+        $this->db->where('uk.id_company', $input['idPerusahaan']);
         return $this->db->get('users u')->result_array();
     }
 
@@ -106,6 +107,35 @@ class M_treeview_detail extends CI_Model {
                 return $this->db->insert('form2');
             }
         }
+    }
+
+    function anggota_submit() {
+        $input= $this->input->post();
+        if(empty($input['anggota'])){
+            $input['anggota']= array();
+        }
+        $this->db->select('u.id, u.username, m.id AS member');
+        $this->db->join('member m', 'm.id_user=u.id AND m.id_pasal='.$input['pasal'], 'LEFT');
+        $this->db->join('unit_kerja uk', 'u.id_unit_kerja=uk.id AND uk.id_company='.$input['perusahaan']);
+        $result = $this->db->get('users u')->result_array();
+        foreach ($result as $k => $r) {
+            if(in_array($r['id'], $input['anggota']) & empty($r['member'])){
+                echo $r['username']. ' add<br/>';
+                $this->db->set('id_user', $r['id']);
+                $this->db->set('id_pasal', $input['pasal']);
+                $this->db->insert('member');
+            }else if (!in_array($r['id'], $input['anggota']) & !empty($r['member'])){
+                echo $r['username']. ' remove<br/>';
+                $this->db->where('id_user', $r['id']);
+                $this->db->where('id_pasal', $input['pasal']);
+                $this->db->delete('member');
+                
+            }
+        }
+        die();
+//        die($this->db->last_query());
+        die(print_r($this->input->post('anggota')));
+        die(print_r($result));
     }
 
 }
