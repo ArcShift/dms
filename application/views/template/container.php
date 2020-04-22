@@ -20,7 +20,11 @@
                 console.log($(item).parent().remove());
             }
         </script>
-        <style></style>
+        <style>
+            .menu-item a{
+                font-size: small;
+            }
+        </style>
     </head>
     <body>
         <div class="app-container app-theme-white body-tabs-shadow fixed-sidebar fixed-header">
@@ -53,7 +57,7 @@
                             </span>
                         </button>
                     </span>
-                </div>    
+                </div>
                 <div class="app-header__content">
                     <div class="app-header-left">
                         <div class="search-wrapper">
@@ -79,7 +83,7 @@
                                     <div class="widget-content-left">
                                         <div class="btn-group">                                            
                                             <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="p-0 btn" onclick="userMenu()">
-                                                <img width="42" class="rounded-circle" src="<?php echo empty($this->session->userdata('user')['photo'])?$this->config->item('user_photo'):base_url('upload/profile_photo/' . $this->session->userdata('user')['photo']) ?>" alt="">
+                                                <img width="42" class="rounded-circle" src="<?php echo empty($this->session->userdata('user')['photo']) ? $this->config->item('user_photo') : base_url('upload/profile_photo/' . $this->session->userdata('user')['photo']) ?>" alt="">
                                                 <i class="fa fa-angle-down ml-2 opacity-8"></i>
                                             </a>
                                             <div tabindex="-1" role="menu" aria-hidden="false" class="dropdown-menu dropdown-menu-right">
@@ -245,27 +249,26 @@
                         </div>
                     </div>
                 </div>
-                <script src="http://maps.google.com/maps/api/js?sensor=true"></script>
             </div>
         </div>
         <script>
-                                    var module = <?php echo json_encode($this->session->userdata('module')) ?>;
-                                    for (var i = 0; i < module.length; i++) {
-                                        var m = module[i];
-                                        $('#menu-' + m.name).replaceWith($('#module-' + m.name));
-                                    }
-                                    var menu = $('.vertical-nav-menu li');
-                                    for (var i = 0; i < menu.length; i++) {//remove menu item
-                                        if ($(menu[i]).text() == '-') {
-                                            $(menu[i]).remove();
-                                        }
-                                    }
-                                    var menuHead = $('.app-sidebar__heading');
-                                    for (var i = 0; i < menuHead.length; i++) {//remove menuhead with 0 menu item
-                                       if(!$(menuHead[i]).next().hasClass('menu-item')){
-                                           $(menuHead[i]).remove();
-                                       }
-                                    }
+            var module = <?php echo json_encode($this->session->userdata('module')) ?>;
+            for (var i = 0; i < module.length; i++) {
+                var m = module[i];
+                $('#menu-' + m.name).replaceWith($('#module-' + m.name));
+            }
+            var menu = $('.vertical-nav-menu li');
+            for (var i = 0; i < menu.length; i++) {//remove menu item
+                if ($(menu[i]).text() == '-') {
+                    $(menu[i]).remove();
+                }
+            }
+            var menuHead = $('.app-sidebar__heading');
+            for (var i = 0; i < menuHead.length; i++) {//remove menuhead with 0 menu item
+                if (!$(menuHead[i]).next().hasClass('menu-item')) {
+                    $(menuHead[i]).remove();
+                }
+            }
         </script>
     </body>
 </html>

@@ -48,11 +48,7 @@ class Treeview_detail extends MY_Controller {
             echo $this->db->error()['message'];
         }
     }
-
-//    function get() {
-//        if (!$this->input->is_ajax_request()) {
-//            redirect('404');
-//        }
-//        echo json_encode($this->model->reads($this->input->post('id')));
-//    }
+    function upload() {
+        $this->render('upload');
+    }
 }
