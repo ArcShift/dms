@@ -22,9 +22,11 @@
                             <td><?php echo $k + 1 ?></td>
                             <td><?php echo $d['name'] ?></td>
                             <td><?php echo $d['company'] ?></td>
-                            <td><?php echo ucwords(strtolower($d['jenis'])).' Dokumen' ?></td>
+                            <td><?php echo ucwords(strtolower($d['jenis'])) . ' Dokumen' ?></td>
                             <td>
-                                <!--<button class="btn btn-primary fa fa-search" title="Detail" name="detail" value="<?php // echo $d['id'] ?>" formaction="<?php echo site_url($module . '/detail') ?>"></button>-->
+                                <?php if ($activeModule['acc_update']) { ?>
+                                    <button class="btn btn-primary fa fa-edit" title="Edit" name="initEdit" value="<?php echo $d['id'] ?>" formaction="<?php echo site_url($module . '/edit') ?>"></button>
+                                <?php } ?>
                                 <?php if ($activeModule['acc_delete']) { ?>
                                     <button class="btn btn-danger fa fa-trash" title="Hapus" name="initHapus" value="<?php echo $d['id'] ?>" formaction="<?php echo site_url($module . '/delete') ?>"></button>
                                 <?php } ?>

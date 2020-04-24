@@ -57,7 +57,7 @@
                             </span>
                         </button>
                     </span>
-                </div>
+                </div>    
                 <div class="app-header__content">
                     <div class="app-header-left">
                         <div class="search-wrapper">

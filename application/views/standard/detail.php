@@ -95,7 +95,7 @@
                 <!--FORM 1-->
                 <form id="form1" class="d-none" method="post" enctype="multipart/form-data">
                     <div class="modal-header">
-                        <h4 class="modal-title">Form 1</h4>
+                        <h4 class="modal-title">Informasi Standar</h4>
                         <span class="close" aria-label="Close" onclick="closeForm()">
                             <span aria-hidden="true">&times;</span>
                         </span>
@@ -146,7 +146,7 @@
                 <span class="fa fa-trash text-danger" onclick="remove(this)" title="Hapus"></span>
             <?php } ?>
             <?php if ($activeModule['acc_update']) { ?>
-                <span class="fa fa-list-alt text-primary" onclick="form1(this)" title="Ubah"></span>
+                <span class="fa fa-list-alt text-primary ctrl-form1" onclick="form1(this)" title="Form1"></span>
             <?php } ?>
                 <a class="fa fa-download text-primary"></a>
             <ul></ul>
@@ -168,6 +168,7 @@
         parent.children('.fa-trash').remove();
         if (parent.children('.fa-angle-double-right').length == 0) {
             parent.children('.title').before('<span class="fa fa-angle-double-right text-success" onclick="collapse(this)"></span>');
+            parent.children('.ctrl-form1').remove();
         }
         if(l.file!=null){
             clone.children('.fa-download').attr('href','<?php echo base_url('upload/form1/')?>'+l.file);

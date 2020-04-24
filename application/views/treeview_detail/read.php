@@ -1,8 +1,6 @@
 <?php
 $role = $this->session->userdata['user']['role'];
 ?>
-<link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
-<script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment-with-locales.min.js" integrity="sha256-AdQN98MVZs44Eq2yTwtoKufhnU+uZ7v2kXnD5vqzZVo=" crossorigin="anonymous"></script>
 <script src="https://blueimp.github.io/jQuery-File-Upload/js/vendor/jquery.ui.widget.js"></script>
 <!--<script src="js/jquery.iframe-transport.js"></script>-->
@@ -31,6 +29,11 @@ $role = $this->session->userdata['user']['role'];
 <script>
     var idPerusahaan;
     var idStandar;
+    var post = null;
+<?php if ($this->input->post()) { ?>
+        var post = JSON.parse('<?php echo json_encode($this->input->post()) ?>');
+<?php } ?>
+    console.log(post);
     $('#perusahaan').change(function (s) {
         if ($(this).val()) {
             $.post('<?php echo site_url($module); ?>/standard', {'id': $(this).val()}, function (data) {
@@ -40,10 +43,18 @@ $role = $this->session->userdata['user']['role'];
                 for (var i = 0; i < d.length; i++) {
                     $('#standar').append('<option value="' + d[i].id + '">' + d[i].name + '</option>');
                 }
+                if (post != null) {
+                    $('#standar').val(post.idStandar);
+                    $('#standar').change();
+                }
             });
             idPerusahaan = $(this).val();
         }
     });
+    if (post != null) {
+        $('#perusahaan').val(post.idPerusahaan);
+        $('#perusahaan').change();
+    }
     $('#standar').change(function (s) {
         idStandar = $(this).val();
         if (idStandar) {
@@ -52,23 +63,5 @@ $role = $this->session->userdata['user']['role'];
                 $('#container').html(data);
             });
         }
-    });
-    $(function () {
-        $('#fileupload').fileupload({
-            dataType: 'json',
-            done: function (e, data) {
-                $.each(data.result.files, function (index, file) {
-                    $('<p/>').text(file.name).appendTo(document.body);
-                });
-            }, 
-            progressall: function (e, data) {
-                var progress = parseInt(data.loaded / data.total * 100, 10);
-                $('#progress .bar').css(
-                        'width',
-                        progress + '%'
-                        );
-            }
-
-        });
     });
 </script>

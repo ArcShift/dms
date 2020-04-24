@@ -9,6 +9,13 @@ $role = $this->session->userdata['user']['role'];
 </style>
 <ul>
     <?php foreach ($data as $k => $d) { ?>
+        <?php
+        if ($this->input->post('pasal')) {
+            if ($this->input->post('pasal') == $d['id']) {
+                $activePasal = $k;
+            }
+        }
+        ?>
         <li id="pasal<?php echo $d['id'] ?>" class="-list-group-item list-pasal">
             <input class="desc d-none" name="desc" value="">
             <input class="filename d-none" name="desc" value="">
@@ -112,9 +119,17 @@ $role = $this->session->userdata['user']['role'];
 <script>
     var data = JSON.parse('<?php echo json_encode($data) ?>');
     var pasal = $('.list-pasal');
+    var formIndex= null
     for (var p, i = 0; i < data.length; i++) {
         p = pasal[i]
         $('#' + $(p).children('.parent').text()).children('ul').append(p);
+        if(post!=null){
+            if(post.idForm!=null){
+                if(post.idForm==data[i].id){
+                    formIndex= i;
+                }
+            }
+        }
     }
     function form1(i) {
         var d = data[i];
@@ -137,6 +152,7 @@ $role = $this->session->userdata['user']['role'];
             showCrud('#form2');
         });
     }
+
     function closeForm() {
         $('#treeview-list').removeClass('col-sm-6');
         $('#treeview-list').addClass('col-sm-12');
@@ -175,7 +191,6 @@ $role = $this->session->userdata['user']['role'];
         clone2.find('.progress').addClass('jadwal');
         clone2.find('.progress').removeClass('progress');
         clone2.find('.jadwal').text(data[index].jadwal != null ? moment(data[index].jadwal).format("DD MMMM YYYY") : '-');
-//        clone2.find('.jadwal').text(data[index].jadwal != null ? moment(data[index].jadwal, "DDDD, MMMM DD YYYY") : '-');
         $('#tab-jadwal').append(clone2);
 //        PENERAPAN
         var clone3 = clone2.clone();
@@ -183,4 +198,8 @@ $role = $this->session->userdata['user']['role'];
         clone3.find('.jadwal').text('-');
         $('#tab-penerapan').append(clone3);
     });
+    if (post != null) {
+        form2(formIndex);
+        post = null;
+    }
 </script>
