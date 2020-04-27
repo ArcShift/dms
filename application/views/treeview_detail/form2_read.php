@@ -17,29 +17,34 @@
             </div>
         </div>
         <div class="form-group">
-            <label>Anggota</label>
-            <div>
-                <?php // foreach ($member as $k => $m) { ?>
-                    <?php // if (!empty($m['member'])) { ?>
-                        <!--<div class="mb-2 mr-2 badge badge-primary">-->
-                            <?php // echo $m['username'] ?>
-                        <!--</div>-->
-                    <?php // } ?>
-                <?php // } ?>
-            </div>
-        </div>
-        <div class="form-group">
             <label>Dokumen & form terisi</label>
             <br>
-            <div class="mb-2 mr-2 badge badge-primary">
-                download
-            </div>
+            <a href="<?php echo base_url('upload/form2/' . $data['file']) ?>">
+                <span class="mb-2 mr-2 badge badge-primary">
+                    download
+                </span>
+            </a>
+            <span><?php echo $data['file'] ?></span>
         </div>
         <div class="form-group">
             <label>Jadwal</label>
             <br>
-            <div class="mb-2 mr-2 badge badge-primary">
-                Jadwal
+            <div>
+                <?php foreach ($schedule as $s) { ?>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <span class="mb-2 mr-2 badge badge-primary">
+                                <?php echo $s['date'] ?>
+                            </span>
+                        </div>
+                        <div class="col-sm-6">
+                            <span class="mb-2 mr-2 badge badge-primary">
+                                <?php echo $s['username'] ?>
+                            </span>
+                        </div>
+                    </div>
+                <?php } ?>
+
             </div>
         </div>
     </div>

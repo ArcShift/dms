@@ -48,64 +48,6 @@ class M_treeview_detail extends CI_Model {
         }
     }
 
-//    function create() {
-//        $input = $this->input->post();
-//        $this->db->set('name', $input['nama']);
-//        $this->db->set('id_standard', $this->session->userdata('treeview'));
-//        $this->db->set('created_by', $this->session->userdata('user')['id']);
-//        if (is_numeric($input['id'])) {
-//            $this->db->set('parent', $input['id']);
-//        }
-//        $this->db->insert($this->table);
-//    }
-//
-//    function update() {
-//        $this->db->set('name', $this->input->post('nama'));
-//        $this->db->where('id', $this->input->post('id'));
-//        $this->db->update($this->table);
-//    }
-//
-//    function delete() {
-//        $this->db->where('id', $this->input->post('id'));
-//        $this->db->delete($this->table);
-//    }
-//    function update_desc() {
-//        $this->db->set('description', $this->input->post('desc'));
-//        $this->db->where('id', $this->input->post('id'));
-//        return $this->db->update($this->table);
-//    }
-//
-//    function update_file1() {
-//        $this->db->set('file', $this->upload->data()['file_name']);
-//        $this->db->where('id', $this->input->post('id'));
-//        $this->db->update($this->table);
-//    }
-//    function form2_submit() {
-//        $mod = false;
-//        $in = $this->input->post();
-//        $this->db->where('id_pasal', $in['pasal']);
-//        $this->db->where('id_company', $in['perusahaan']);
-//        $count = $this->db->count_all_results('form2');
-//        if (!empty($in['catatan'])) {
-//            $this->db->set('note', $in['catatan']);
-//            $mod = true;
-//        }
-//        if (!empty($in['jadwal'])) {
-//            $this->db->set('jadwal', $in['jadwal']);
-//            $mod = true;
-//        }
-//        if ($mod) {
-//            if ($count) {
-//                $this->db->where('id_pasal', $in['pasal']);
-//                $this->db->where('id_company', $in['perusahaan']);
-//                return $this->db->update('form2');
-//            } else {
-//                $this->db->set('id_pasal', $in['pasal']);
-//                $this->db->set('id_company', $in['perusahaan']);
-//                return $this->db->insert('form2');
-//            }
-//        }
-//    }
     function add_schedule() {
         $in = $this->input->post();
         if (isset($in['idForm'])) {
@@ -133,6 +75,10 @@ class M_treeview_detail extends CI_Model {
         $this->db->order_by('s.id');
         return $this->db->get('schedule s')->result_array();
     }
+    function reads_schedule() {
+        $this->db->get('schedule s');
+//        die($this->db->last_query());
+    }
 
     function delete_schedule() {
         $this->db->where('id', $this->input->post('hapus'));
@@ -149,10 +95,10 @@ class M_treeview_detail extends CI_Model {
             $this->db->set('description', $in['deskripsi']);
             $mod = true;
         }
-//        if (!empty($in['jadwal'])) {
-//            $this->db->set('jadwal', $in['jadwal']);
-//            $mod = true;
-//        }
+        if ($this->upload->data('file_name')) {
+            $this->db->set('file', $this->upload->data('file_name'));
+            $mod = true;
+        }
         if ($mod) {
             if ($count) {
                 $this->db->where('id_pasal', $in['idPasal']);
@@ -166,32 +112,4 @@ class M_treeview_detail extends CI_Model {
         }
     }
 
-//    function anggota_submit() {
-//        $input= $this->input->post();
-//        if(empty($input['anggota'])){
-//            $input['anggota']= array();
-//        }
-//        $this->db->select('u.id, u.username, m.id AS member');
-//        $this->db->join('member m', 'm.id_user=u.id AND m.id_pasal='.$input['pasal'], 'LEFT');
-//        $this->db->join('unit_kerja uk', 'u.id_unit_kerja=uk.id AND uk.id_company='.$input['perusahaan']);
-//        $result = $this->db->get('users u')->result_array();
-//        foreach ($result as $k => $r) {
-//            if(in_array($r['id'], $input['anggota']) & empty($r['member'])){
-//                echo $r['username']. ' add<br/>';
-//                $this->db->set('id_user', $r['id']);
-//                $this->db->set('id_pasal', $input['pasal']);
-//                $this->db->insert('member');
-//            }else if (!in_array($r['id'], $input['anggota']) & !empty($r['member'])){
-//                echo $r['username']. ' remove<br/>';
-//                $this->db->where('id_user', $r['id']);
-//                $this->db->where('id_pasal', $input['pasal']);
-//                $this->db->delete('member');
-//                
-//            }
-//        }
-//        die();
-////        die($this->db->last_query());
-//        die(print_r($this->input->post('anggota')));
-//        die(print_r($result));
-//    }
 }

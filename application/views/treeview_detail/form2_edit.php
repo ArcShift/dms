@@ -20,6 +20,7 @@
                 <label class="col-sm-3">Dokumen Perusahaan</label>                    
                 <div class="col-sm-9">
                     <input class="form-control" type="file" name="doc">
+                    <span><?php echo $data['file'] ?></span>
                 </div>
             </div>
             <label>Implementasi & Distribusi</label>
@@ -29,7 +30,7 @@
                 </div>
                 <div class="form-group col-sm-5">
                     <select class="form-control" name="anggota">
-                        <option>-- Anggota --</option>
+                        <option value="">-- Anggota --</option>
                         <?php foreach ($member as $k => $m) { ?>
                             <option value="<?php echo $m['id'] ?>" <?php echo empty($m['member']) ? '' : 'selected' ?>><?php echo $m['username'] ?></option>
                         <?php } ?>
@@ -52,7 +53,7 @@
             </div>
         </div>
         <div class="card-footer text-right d-block">
-            <button type="submit" name="batal" value="ok" formaction="<?php echo site_url($module) ?>" class="mr-2 btn btn-transition btn-outline-warning">Batal</button>
+            <button type="submit" name="batal" value="ok" formaction="<?php echo site_url($module) ?>" class="mr-2 btn btn-transition btn-outline-warning">Kembali</button>
             <button type="submit" name="simpan" value="ok" class="btn btn-transition btn-outline-info">Simpan</button>
         </div>
     </div>

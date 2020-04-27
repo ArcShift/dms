@@ -121,8 +121,14 @@ $role = $this->session->userdata['user']['role'];
     var pasal = $('.list-pasal');
     var formIndex= null
     for (var p, i = 0; i < data.length; i++) {
-        p = pasal[i]
+//        var parent = l.parent == null ? 'root' : l.parent;
+//        parent = $('#' + parent);
+        p = pasal[i];
         $('#' + $(p).children('.parent').text()).children('ul').append(p);
+//        if (parent.children('.fa-angle-double-right').length == 0) {
+//            parent.children('.title').before('<span class="fa fa-angle-double-right text-success" onclick="collapse(this)"></span>');
+//            parent.children('.ctrl-form1').remove();
+//        }
         if(post!=null){
             if(post.idForm!=null){
                 if(post.idForm==data[i].id){
