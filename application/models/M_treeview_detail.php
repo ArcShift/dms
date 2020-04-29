@@ -42,7 +42,7 @@ class M_treeview_detail extends CI_Model {
         $this->db->where('p.id_standard', $input['idStandar']);
         $result = $this->db->get($this->table . ' p');
         if (isset($input['idPasal'])) {
-            return $result->row_array();
+            return $result->row_array() ;
         } else {
             return $result->result_array();
         }
@@ -75,14 +75,27 @@ class M_treeview_detail extends CI_Model {
         $this->db->order_by('s.id');
         return $this->db->get('schedule s')->result_array();
     }
+
     function reads_schedule() {
-        $this->db->get('schedule s');
+        $this->db->select("s.id, p.name AS pasal,DATE_FORMAT(s.date,'%e %M %Y') AS date, u.username AS name, uk.name AS division");
+        $this->db->join('form2 f', 'f.id = s.id_form2');
+        $this->db->join('pasal p', 'p.id = f.id_pasal');
+        $this->db->join('users u', 'u.id = s.id_user');
+        $this->db->join('unit_kerja uk', 'uk.id = u.id_unit_kerja');
+        $this->db->order_by('p.id, s.date');
+        return $this->db->get('schedule s')->result_array();
 //        die($this->db->last_query());
     }
 
     function delete_schedule() {
         $this->db->where('id', $this->input->post('hapus'));
         return $this->db->delete('schedule');
+    }
+    function upload_bukti_penerapan() {
+        $this->db->set('file',$this->upload->data()['file_name']);
+        $this->db->set('upload_date', date("Y-m-d", time()));
+        $this->db->where('id', $this->input->post('jadwal'));
+        return $this->db->update('schedule');
     }
 
     function form2_save() {

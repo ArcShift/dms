@@ -95,10 +95,50 @@ $role = $this->session->userdata['user']['role'];
     </div>
     <!--JADWAL-->
     <div class="tab-pane" id="tab-jadwal" role="tabpanel">
-        <p>Jadwal</p>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Pasal</th>
+                    <th>Tanggal</th>
+                    <th>Distribusi</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($schedule as $k => $s) { ?>
+                    <tr>
+                        <td><?php echo $s['pasal'] ?></td>
+                        <td class="item-tgl"><?php echo $s['date'] ?></td>
+                        <td class="col-sm-6"><?php echo $s['name'] . ' - ' . $s['division'] ?></td>
+                        <td>-</td>
+                    </tr>
+                <?php } ?>
+            </tbody>
+        </table>
     </div>
     <div class="tab-pane" id="tab-penerapan" role="tabpanel">
-        <p>Penerapan</p>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Pasal</th>
+                    <th>Tanggal</th>
+                    <th>Distribusi</th>
+                    <th>Bukti</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($schedule as $k => $s) { ?>
+                    <tr>
+                        <td><?php echo $s['pasal'] ?></td>
+                        <td class="item-tgl"><?php echo $s['date'] ?></td>
+                        <td class="col-sm-6"><?php echo $s['name'] . ' - ' . $s['division'] ?></td>
+                        <td><button class="btn btn-primary item-upload-penerapan" type="submit" name="uploadPenerapan" value="<?php echo $s['id'] ?>">Upload</button></td>
+                        <td>-</td>
+                    </tr>
+                <?php } ?>
+            </tbody>
+        </table>
     </div>
 </div>
 <div class="d-none">
@@ -116,10 +156,38 @@ $role = $this->session->userdata['user']['role'];
         </li>
     </ul>
 </div>
+<!--MODAL-->
+<div class="modal fade" id="modalUploadPenerapan" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <form method="post" id="formUploadBuktiPenerapan" enctype="multipart/form-data">            
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Upload Bukti</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!--<input name="idPerusahaan" class="inputPerusahaan" value=""/>-->
+                    <!--<input name="idPasal" class="inputPasal" value=""/>-->
+                    <input class="d-none input-schedule" name="jadwal">
+                    <div class="form-group">
+                        <input class="form-control" type="file" name="doc" required="">
+                        <span><?php // echo $data['file']    ?></span>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-primary">Simpan</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
 <script>
     var data = JSON.parse('<?php echo json_encode($data) ?>');
     var pasal = $('.list-pasal');
-    var formIndex= null
+    var formIndex = null;
     for (var p, i = 0; i < data.length; i++) {
 //        var parent = l.parent == null ? 'root' : l.parent;
 //        parent = $('#' + parent);
@@ -129,10 +197,10 @@ $role = $this->session->userdata['user']['role'];
 //            parent.children('.title').before('<span class="fa fa-angle-double-right text-success" onclick="collapse(this)"></span>');
 //            parent.children('.ctrl-form1').remove();
 //        }
-        if(post!=null){
-            if(post.idForm!=null){
-                if(post.idForm==data[i].id){
-                    formIndex= i;
+        if (post != null) {
+            if (post.idForm != null) {
+                if (post.idForm == data[i].id) {
+                    formIndex = i;
                 }
             }
         }
@@ -191,18 +259,28 @@ $role = $this->session->userdata['user']['role'];
         var bar = '<div class="progress-bar bg-success" role="progressbar" aria-valuenow="' + r + '" aria-valuemin="0" aria-valuemax="100" style="width: ' + r + '%">' + r + '%</div>';
         clone.find('.progress').append(bar);
         $('#tab-pemenuhan .list-group').append(clone);
-        var clone2 = clone.clone();
-//        JADWAL
-        clone2.attr('id', 'jadwal-' + index);
-        clone2.find('.progress').addClass('jadwal');
-        clone2.find('.progress').removeClass('progress');
-        clone2.find('.jadwal').text(data[index].jadwal != null ? moment(data[index].jadwal).format("DD MMMM YYYY") : '-');
-        $('#tab-jadwal').append(clone2);
-//        PENERAPAN
-        var clone3 = clone2.clone();
-        clone3.attr('id', 'penerapan-' + index);
-        clone3.find('.jadwal').text('-');
-        $('#tab-penerapan').append(clone3);
+    });
+    $('.item-upload-penerapan').click(function () {
+        $('.input-schedule').val($(this).val());
+        $('#modalContainer').append($('#modalUploadPenerapan'));
+        $('#modalUploadPenerapan').modal('show');
+    });
+    $('#formUploadBuktiPenerapan').submit(function (e) {
+        e.preventDefault();
+        console.log('submit');
+        $.ajax({
+            url: '<?php echo site_url($module . '/upload_bukti_penerapan') ?>',
+            type: "post",
+            data: new FormData(this),
+            processData: false,
+            contentType: false,
+            cache: false,
+            async: false,
+            success: function (data) {
+                $('#modalUploadPenerapan').modal('hide');
+                modalStatus(data);
+            }
+        });
     });
     if (post != null) {
         form2(formIndex);

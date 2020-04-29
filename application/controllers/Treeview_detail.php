@@ -103,12 +103,30 @@ class Treeview_detail extends MY_Controller {
             $this->render('form2_edit');
     }
 
-    function upload() {
-        $this->render('upload');
-    }
-
-    function test() {
-        $this->render('form2_edit');
+    function upload_bukti_penerapan() {
+        $config['upload_path'] = "./upload/penerapan";
+        $config['allowed_types'] = '*';
+        $this->load->library('upload', $config);
+        if ($this->upload->do_upload("doc")) {
+            if ($this->model->upload_bukti_penerapan()) {
+                $status['status'] = 'success';
+                $status['message'] = 'data berhasil diupload';
+            } else {
+                $status['status'] = 'error';
+                $status['message'] = $this->db->error()['message'];
+            }
+            $data = array('upload_data' => $this->upload->data());
+            $data1 = array(
+                'menu_id' => $this->input->post('selectmenuid'),
+                'submenu_id' => $this->input->post('selectsubmenu'),
+                'imagetitle' => $this->input->post('imagetitle'),
+                'imgpath' => $data['upload_data']['file_name']
+            );
+        } else {
+            $status['status'] = 'error';
+            $status['message'] = $this->upload->display_errors();
+        }
+        echo json_encode($status);
     }
 
 }

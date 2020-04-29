@@ -17,7 +17,7 @@
                 </div>
             </div>
             <div class="row form-group">
-                <label class="col-sm-3">Dokumen Perusahaan</label>                    
+                <label class="col-sm-3">Dokumen Perusahaan</label>
                 <div class="col-sm-9">
                     <input class="form-control" type="file" name="doc">
                     <span><?php echo $data['file'] ?></span>

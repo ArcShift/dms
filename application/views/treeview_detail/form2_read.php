@@ -19,12 +19,16 @@
         <div class="form-group">
             <label>Dokumen & form terisi</label>
             <br>
-            <a href="<?php echo base_url('upload/form2/' . $data['file']) ?>">
-                <span class="mb-2 mr-2 badge badge-primary">
-                    download
-                </span>
-            </a>
-            <span><?php echo $data['file'] ?></span>
+            <?php if (!empty($data['file'])) { ?>
+                <a href="<?php echo base_url('upload/form2/' . $data['file']) ?>">
+                    <span class="mb-2 mr-2 badge badge-primary">
+                        download
+                    </span>
+                </a>
+                <span><?php echo $data['file'] ?></span>
+            <?php } else { ?>
+                <span class="mb-2 mr-2 badge badge-primary">-</span>
+            <?php } ?>
         </div>
         <div class="form-group">
             <label>Jadwal</label>
@@ -44,7 +48,6 @@
                         </div>
                     </div>
                 <?php } ?>
-
             </div>
         </div>
     </div>
