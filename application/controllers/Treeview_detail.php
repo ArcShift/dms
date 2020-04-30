@@ -38,17 +38,21 @@ class Treeview_detail extends MY_Controller {
         $this->render('form2_read', TRUE, TRUE);
     }
 
-    function form2_send() {
-        if ($this->model->form2_submit()) {
-            if ($this->model->anggota_submit()) {
-                echo 'success';
-            } else {
-                echo $this->db->error()['message'];
-            }
-        } else {
-            echo $this->db->error()['message'];
-        }
+    function form2_edit2() {
+        $this->render('form2_edit2', TRUE, TRUE);
     }
+
+//    function form2_send() {
+//        if ($this->model->form2_submit()) {
+//            if ($this->model->anggota_submit()) {
+//                echo 'success';
+//            } else {
+//                echo $this->db->error()['message'];
+//            }
+//        } else {
+//            echo $this->db->error()['message'];
+//        }
+//    }
 
     function form2_edit() {
         $this->load->library('form_validation');

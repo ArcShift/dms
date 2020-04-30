@@ -44,7 +44,7 @@ $role = $this->session->userdata['user']['role'];
         </ul>
     </div>
     <!--PASAL-->
-    <div class="tab-pane active" id="tab-pasal" role="tabpanel">
+    <div class="tab-pane" id="tab-pasal" role="tabpanel">
         <div class="row">
             <div class="col-sm-6" id="treeview-list">
                 <ul class="list-group">
@@ -110,7 +110,7 @@ $role = $this->session->userdata['user']['role'];
                         <td><?php echo $s['pasal'] ?></td>
                         <td class="item-tgl"><?php echo $s['date'] ?></td>
                         <td class="col-sm-6"><?php echo $s['name'] . ' - ' . $s['division'] ?></td>
-                        <td>-</td>
+                        <td><?php echo $s['status'] ?></td>
                     </tr>
                 <?php } ?>
             </tbody>
@@ -133,8 +133,14 @@ $role = $this->session->userdata['user']['role'];
                         <td><?php echo $s['pasal'] ?></td>
                         <td class="item-tgl"><?php echo $s['date'] ?></td>
                         <td class="col-sm-6"><?php echo $s['name'] . ' - ' . $s['division'] ?></td>
-                        <td><button class="btn btn-primary item-upload-penerapan" type="submit" name="uploadPenerapan" value="<?php echo $s['id'] ?>">Upload</button></td>
-                        <td>-</td>
+                        <td>
+                            <?php if($s['status']=='-') { ?>
+                                <button class="btn btn-success item-upload-penerapan" type="submit" name="uploadPenerapan" value="<?php echo $s['id'] ?>">Upload</button>
+                            <?php }else{ ?>
+                                <span class="btn btn-danger">Upload</span>
+                            <?php } ?>
+                        </td>
+                        <td><?php echo $s['status'] ?></td>
                     </tr>
                 <?php } ?>
             </tbody>
@@ -173,7 +179,7 @@ $role = $this->session->userdata['user']['role'];
                     <input class="d-none input-schedule" name="jadwal">
                     <div class="form-group">
                         <input class="form-control" type="file" name="doc" required="">
-                        <span><?php // echo $data['file']    ?></span>
+                        <span><?php // echo $data['file']      ?></span>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -279,6 +285,7 @@ $role = $this->session->userdata['user']['role'];
             success: function (data) {
                 $('#modalUploadPenerapan').modal('hide');
                 modalStatus(data);
+                getTab('penerapan');
             }
         });
     });

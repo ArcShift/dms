@@ -42,10 +42,18 @@ class M_treeview_detail extends CI_Model {
         $this->db->where('p.id_standard', $input['idStandar']);
         $result = $this->db->get($this->table . ' p');
         if (isset($input['idPasal'])) {
-            return $result->row_array() ;
+            return $result->row_array();
         } else {
             return $result->result_array();
         }
+    }
+
+    function read_schedule() {
+        $this->db->select('s.id, s.date ,u.username');
+        $this->db->join('form2 f', 'f.id = s.id_form2 AND f.id_pasal = ' . $this->input->post('idPasal') . ' AND f.id_company = ' . $this->input->post('idPerusahaan'));
+        $this->db->join('users u', 'u.id= s.id_user');
+        $this->db->order_by('s.id');
+        return $this->db->get('schedule s')->result_array();
     }
 
     function add_schedule() {
@@ -68,22 +76,35 @@ class M_treeview_detail extends CI_Model {
         return $this->db->insert('schedule');
     }
 
-    function read_schedule() {
-        $this->db->select('s.id, s.date ,u.username');
-        $this->db->join('form2 f', 'f.id = s.id_form2 AND f.id_pasal = ' . $this->input->post('idPasal') . ' AND f.id_company = ' . $this->input->post('idPerusahaan'));
-        $this->db->join('users u', 'u.id= s.id_user');
-        $this->db->order_by('s.id');
-        return $this->db->get('schedule s')->result_array();
-    }
-
     function reads_schedule() {
-        $this->db->select("s.id, p.name AS pasal,DATE_FORMAT(s.date,'%e %M %Y') AS date, u.username AS name, uk.name AS division");
+        $this->db->select("s.id, p.name AS pasal,DATE_FORMAT(s.date,'%e %M %Y') AS date, s.date AS deadline, u.username AS name, uk.name AS division, s.file");
         $this->db->join('form2 f', 'f.id = s.id_form2');
         $this->db->join('pasal p', 'p.id = f.id_pasal');
+        $this->db->join('standard st', 'st.id = p.id_standard AND st.id = ' . $this->input->post('idStandar'));
         $this->db->join('users u', 'u.id = s.id_user');
         $this->db->join('unit_kerja uk', 'uk.id = u.id_unit_kerja');
+        $this->db->join('company c', 'c.id = uk.id_company AND c.id = ' . $this->input->post('idPerusahaan'));
         $this->db->order_by('p.id, s.date');
-        return $this->db->get('schedule s')->result_array();
+        $result = $this->db->get('schedule s')->result_array();
+        foreach ($result as $k => $r) {
+            if (empty($r['file'])) {
+                $date1 = new DateTime($r['deadline']);
+                $date2 = new DateTime('now');
+                $interval = date_diff($date2, $date1);
+                $result[$k]['dt'] = $interval->format('%R%a');
+                $diff = $interval->format('%R%a');
+                if ($diff < 0) {
+                    $result[$k]['status'] = 'terlambat';
+                } else {
+                    $result[$k]['status'] = '-';
+                }
+            } else {
+                $result[$k]['status'] = 'selesai';
+            }
+        }
+        return $result;
+
+        //TODO: compare date ; set late, ok, null
 //        die($this->db->last_query());
     }
 
@@ -91,8 +112,9 @@ class M_treeview_detail extends CI_Model {
         $this->db->where('id', $this->input->post('hapus'));
         return $this->db->delete('schedule');
     }
+
     function upload_bukti_penerapan() {
-        $this->db->set('file',$this->upload->data()['file_name']);
+        $this->db->set('file', $this->upload->data()['file_name']);
         $this->db->set('upload_date', date("Y-m-d", time()));
         $this->db->where('id', $this->input->post('jadwal'));
         return $this->db->update('schedule');

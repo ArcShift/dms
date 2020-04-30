@@ -1,4 +1,4 @@
-<form method="post" action="<?php echo site_url($module . '\form2_edit') ?>">
+<form method="post" id="form1" action="<?php echo site_url($module . '\form2_edit') ?>">
     <div class="modal-header">
         <h4 class="modal-title">Dokumen Perusahaan: <?php echo $data['name'] ?><span class="item-name"></span></h4>
         <button class="close" type="button" aria-label="Close" onclick="closeForm()">
@@ -53,6 +53,11 @@
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-transition btn-outline-warning" onclick="closeForm()">Tutup</button>
-        <button type="submit" class="btn btn-transition btn-outline-info" name="initEdit" value="ok">Edit</button>
+        <button type="submit" class="btn btn-transition btn-outline-info" name="initEdit" value="ok">Edits</button>
     </div>
 </form>
+<script>
+    $('#form1').submit(function (e) {
+        e.preventDefault();
+    });
+</script>
