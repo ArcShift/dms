@@ -131,9 +131,17 @@ $role = $this->session->userdata['user']['role'];
                 </tr>
             </thead>
             <tbody>
+                <?php $txtPasal = ''; ?>
                 <?php foreach ($schedule as $k => $s) { ?>
                     <tr>
-                        <td><?php echo $s['pasal'] ?></td>
+                        <td>
+                            <?php
+                            if ($txtPasal != $s['pasal']) {
+                                echo $s['pasal'];
+                                $txtPasal = $s['pasal'];
+                            }
+                            ?>
+                        </td>
                         <td class="item-tgl"><?php echo $s['date'] ?></td>
                         <td class="col-sm-6"><?php echo $s['name'] . ' - ' . $s['division'] ?></td>
                         <td><?php echo $s['status'] ?></td>
@@ -154,9 +162,17 @@ $role = $this->session->userdata['user']['role'];
                 </tr>
             </thead>
             <tbody>
+                <?php $txtPasal = ''; ?>
                 <?php foreach ($schedule as $k => $s) { ?>
                     <tr>
-                        <td><?php echo $s['pasal'] ?></td>
+                        <td>
+                            <?php
+                            if ($txtPasal != $s['pasal']) {
+                                echo $s['pasal'];
+                                $txtPasal = $s['pasal'];
+                            }
+                            ?>
+                        </td>
                         <td class="item-tgl"><?php echo $s['date'] ?></td>
                         <td class="col-sm-6"><?php echo $s['name'] . ' - ' . $s['division'] ?></td>
                         <td>
@@ -205,7 +221,7 @@ $role = $this->session->userdata['user']['role'];
                     <input class="d-none input-schedule" name="jadwal">
                     <div class="form-group">
                         <input class="form-control" type="file" name="doc" required="">
-                        <span><?php // echo $data['file']              ?></span>
+                        <span><?php // echo $data['file']                 ?></span>
                     </div>
                 </div>
                 <div class="modal-footer">
