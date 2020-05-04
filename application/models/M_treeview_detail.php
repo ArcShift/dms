@@ -27,6 +27,7 @@ class M_treeview_detail extends CI_Model {
         $input = $this->input->post();
         $this->db->select('u.id, u.username');
         $this->db->join('unit_kerja uk', 'uk.id=u.id_unit_kerja');
+        $this->db->join('role r', 'r.id=u.id_role AND r.name = "anggota"');
 //        $this->db->join('schedule s', 's.id_user=u.id AND m.id_pasal=' . $input['idPasal'], 'LEFT');
         $this->db->where('uk.id_company', $input['idPerusahaan']);
         return $this->db->get('users u')->result_array();
