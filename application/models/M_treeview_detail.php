@@ -34,23 +34,23 @@ class M_treeview_detail extends CI_Model {
 
     function reads_pemenuhan() {
         $this->db->select('p.name, COUNT(s.id) AS total');
-        $this->db->select('SUM(CASE WHEN s.date < CURDATE() AND s.file IS NULL THEN 1 ELSE 0 END) AS terlambat');//UNFIX
-        $this->db->select('SUM(CASE WHEN s.file IS NOT NULL AND s.date < s.upload_date THEN 1 ELSE 0 END) AS terlambat2');//UNFIX
+        $this->db->select('SUM(CASE WHEN s.date < CURDATE() AND s.file IS NULL THEN 1 ELSE 0 END) AS terlambat'); //UNFIX
+        $this->db->select('SUM(CASE WHEN s.file IS NOT NULL AND s.date < s.upload_date THEN 1 ELSE 0 END) AS terlambat2'); //UNFIX
         $this->db->select('SUM(CASE WHEN s.upload_date IS NULL AND s.date >= CURDATE() THEN 1 ELSE 0 END) AS unfinised');
         $this->db->select('SUM(CASE WHEN s.file IS NOT NULL AND s.date >= s.upload_date THEN 1 ELSE 0 END) AS finish');
-        $this->db->join('form2 f', 'f.id_pasal = p.id AND f.id_company = '.$this->input->post('idPerusahaan'));
+        $this->db->join('form2 f', 'f.id_pasal = p.id AND f.id_company = ' . $this->input->post('idPerusahaan'));
         $this->db->join('schedule s', 's.id_form2 = f.id');
         $this->db->group_by('p.id');
         $this->db->where('p.id_standard', $this->input->post('idStandar'));
         $result = $this->db->get('pasal p')->result_array();
         foreach ($result as $k => $r) {
-            $r['terlambat']+= $r['terlambat2'];
+            $r['terlambat'] += $r['terlambat2'];
             unset($r['terlambat2']);
-            $r['p_finish']= number_format($r['finish']/$r['total']*100, 0); 
-            $r['p_terlambat']= number_format($r['terlambat']/$r['total']*100, 0); 
-            $result[$k]= $r;
+            $r['p_finish'] = number_format($r['finish'] / $r['total'] * 100, 0);
+            $r['p_terlambat'] = number_format($r['terlambat'] / $r['total'] * 100, 0);
+            $result[$k] = $r;
         }
-        return $result; 
+        return $result;
     }
 
     function reads() {
@@ -108,19 +108,23 @@ class M_treeview_detail extends CI_Model {
         $this->db->order_by('p.id, s.date');
         $result = $this->db->get('schedule s')->result_array();
         foreach ($result as $k => $r) {
+            $date1 = new DateTime($r['deadline']);
+            $date2 = new DateTime('now');
+            $interval = date_diff($date2, $date1);
+            $result[$k]['dt'] = $interval->format('%R%a');
+            $diff = $interval->format('%R%a');
             if (empty($r['file'])) {
-                $date1 = new DateTime($r['deadline']);
-                $date2 = new DateTime('now');
-                $interval = date_diff($date2, $date1);
-                $result[$k]['dt'] = $interval->format('%R%a');
-                $diff = $interval->format('%R%a');
                 if ($diff < 0) {
                     $result[$k]['status'] = 'terlambat';
                 } else {
                     $result[$k]['status'] = '-';
                 }
             } else {
-                $result[$k]['status'] = 'selesai';
+                if ($diff < 0) {
+                    $result[$k]['status'] = 'terlambat';
+                } else {
+                    $result[$k]['status'] = 'selesai';
+                }
             }
         }
         return $result;
