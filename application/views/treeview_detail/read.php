@@ -59,11 +59,10 @@ $role = $this->session->userdata['user']['role'];
         idStandar = $(this).val();
         if (idStandar) {
             $('#root span').text($('#standar option:selected').text());
-            getTab('pasal');
+            getTab('pemenuhan');
         }
     });
     function getTab(tab) {
-        console.log('getTab');
         $.post('<?php echo site_url($module); ?>/tabs', {'idPerusahaan': idPerusahaan, 'idStandar': idStandar}, function (data) {
             $('#container').html(data);
             $('#tab-'+tab).addClass('active');

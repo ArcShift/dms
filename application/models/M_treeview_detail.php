@@ -32,6 +32,26 @@ class M_treeview_detail extends CI_Model {
         return $this->db->get('users u')->result_array();
     }
 
+    function reads_pemenuhan() {
+        $this->db->select('p.name, COUNT(s.id) AS total');
+        $this->db->select('SUM(CASE WHEN s.date < CURDATE() AND s.file IS NULL THEN 1 ELSE 0 END) AS terlambat');//UNFIX
+        $this->db->select('SUM(CASE WHEN s.file IS NOT NULL AND s.date < s.upload_date THEN 1 ELSE 0 END) AS terlambat2');//UNFIX
+        $this->db->select('SUM(CASE WHEN s.upload_date IS NULL AND s.date >= CURDATE() THEN 1 ELSE 0 END) AS unfinised');
+        $this->db->select('SUM(CASE WHEN s.file IS NOT NULL AND s.date >= s.upload_date THEN 1 ELSE 0 END) AS finish');
+        $this->db->join('form2 f', 'f.id_pasal = p.id');
+        $this->db->join('schedule s', 's.id_form2 = f.id');
+        $this->db->group_by('p.id');
+        $result = $this->db->get('pasal p')->result_array();
+        foreach ($result as $k => $r) {
+            $r['terlambat']+= $r['terlambat2'];
+            unset($r['terlambat2']);
+            $r['p_finish']= number_format($r['finish']/$r['total']*100, 0); 
+            $r['p_terlambat']= number_format($r['terlambat']/$r['total']*100, 0); 
+            $result[$k]= $r;
+        }
+        return $result; 
+    }
+
     function reads() {
         $input = $this->input->post();
         $this->db->select('p.*, f.description, f.id AS id_form');
@@ -77,7 +97,7 @@ class M_treeview_detail extends CI_Model {
     }
 
     function reads_schedule() {
-        $this->db->select("s.id, p.name AS pasal,DATE_FORMAT(s.date,'%e %M %Y') AS date, s.date AS deadline, u.username AS name, uk.name AS division, s.file");
+        $this->db->select("s.id, p.name AS pasal,DATE_FORMAT(s.date,'%e %M %Y') AS date, s.date AS deadline, u.username AS name, uk.name AS division, s.file, p.id AS id_pasal");
         $this->db->join('form2 f', 'f.id = s.id_form2');
         $this->db->join('pasal p', 'p.id = f.id_pasal');
         $this->db->join('standard st', 'st.id = p.id_standard AND st.id = ' . $this->input->post('idStandar'));

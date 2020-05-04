@@ -21,6 +21,16 @@ class Treeview_detail extends MY_Controller {
         }
         $this->data['data'] = $this->model->reads();
         $this->data['schedule'] = $this->model->reads_schedule();
+        $pasal = 0;
+//        foreach ($this->data['schedule'] as $k => $s) {
+//            if ($pasal != $s['id_pasal']) {
+//                $pasal= $s['id_pasal'];
+//                $p = array();
+//            }
+//            
+//        }
+        $this->data['pemenuhan'] = $this->model->reads_pemenuhan();
+//        $this->data['pemenuhan'] = $this->db->last_query();
 //        die($this->db->last_query());
         $this->render('tab', TRUE, TRUE);
     }

@@ -21,7 +21,7 @@ $role = $this->session->userdata['user']['role'];
             <input class="filename d-none" name="desc" value="">
             <span class="parent d-none"><?php echo empty($d['parent']) ? 'root' : 'pasal' . $d['parent'] ?></span>
             <span class="title"><?php echo $d['name'] ?></span>
-            <?php if ($activeModule['acc_update']) { ?>
+            <?php if ($activeModule['acc_update']) { ?> 
                 <?php if ($role == 'pic' || $role = 'admin') { ?>
                     <span class="fa fa-info-circle text-primary" onclick="form1(<?php echo $k ?>)" title="Open Form 1">&nbsp;</span>
                 <?php } ?>
@@ -41,7 +41,30 @@ $role = $this->session->userdata['user']['role'];
     <!--PEMENUHAN-->
     <div class="tab-pane" id="tab-pemenuhan" role="tabpanel">
         <ul class="list-group">
+            <?php foreach ($pemenuhan as $k => $p) { ?>
+                <li class="list-group-item" id="template-pemenuhan">
+                    <div class="row">
+                        <div class="col-sm-5 title">
+                            <?php echo $p['name'] ?>
+                        </div>
+                        <div class="col-sm-7">
+                            <div class="progress">
+                                <?php if (!empty($p['finish'])) { ?>
+                                    <div class="progress-bar bg-success" role="progressbar" aria-valuenow="<?php echo $p['p_finish'] ?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $p['p_finish'] ?>%"><?php echo $p['p_finish'] ?>%</div>
+                                <?php } ?>
+                                <?php if (!empty($p['terlambat'])) { ?>
+                                    <div class="progress-bar bg-danger" role="progressbar" aria-valuenow="<?php echo $p['p_terlambat'] ?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $p['p_terlambat'] ?>%"><?php echo $p['p_terlambat'] ?>%</div>
+                                <?php } ?>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            <?php } ?>
         </ul>
+        <pre>
+            <?php print_r($pemenuhan) ?>
+            <?php // print_r($this->db->last_query()) ?>
+        </pre>
     </div>
     <!--PASAL-->
     <div class="tab-pane" id="tab-pasal" role="tabpanel">
@@ -134,9 +157,9 @@ $role = $this->session->userdata['user']['role'];
                         <td class="item-tgl"><?php echo $s['date'] ?></td>
                         <td class="col-sm-6"><?php echo $s['name'] . ' - ' . $s['division'] ?></td>
                         <td>
-                            <?php if($s['status']=='-') { ?>
+                            <?php if ($s['status'] == '-') { ?>
                                 <button class="btn btn-success item-upload-penerapan" type="submit" name="uploadPenerapan" value="<?php echo $s['id'] ?>">Upload</button>
-                            <?php }else{ ?>
+                            <?php } else { ?>
                                 <span class="btn btn-danger">Upload</span>
                             <?php } ?>
                         </td>
@@ -179,7 +202,7 @@ $role = $this->session->userdata['user']['role'];
                     <input class="d-none input-schedule" name="jadwal">
                     <div class="form-group">
                         <input class="form-control" type="file" name="doc" required="">
-                        <span><?php // echo $data['file']      ?></span>
+                        <span><?php // echo $data['file']            ?></span>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -256,16 +279,16 @@ $role = $this->session->userdata['user']['role'];
             }
         });
     });
-    $('#treeview-list li .title').each(function (index) {
+//    $('#treeview-list li .title').each(function (index) {
 //        PEMENUHAN
-        var r = Math.floor(Math.random() * 101);
-        var clone = $('#template-pemenuhan').clone();
-        clone.attr('id', 'pemenuhan-' + index);
-        clone.find('.title').text($(this).text());
-        var bar = '<div class="progress-bar bg-success" role="progressbar" aria-valuenow="' + r + '" aria-valuemin="0" aria-valuemax="100" style="width: ' + r + '%">' + r + '%</div>';
-        clone.find('.progress').append(bar);
-        $('#tab-pemenuhan .list-group').append(clone);
-    });
+//        var r = Math.floor(Math.random() * 101);
+//        var clone = $('#template-pemenuhan').clone();
+//        clone.attr('id', 'pemenuhan-' + index);
+//        clone.find('.title').text($(this).text());
+//        var bar = '<div class="progress-bar bg-success" role="progressbar" aria-valuenow="' + r + '" aria-valuemin="0" aria-valuemax="100" style="width: ' + r + '%">' + r + '%</div>';
+//        clone.find('.progress').append(bar);
+//        $('#tab-pemenuhan .list-group').append(clone);
+//    });
     $('.item-upload-penerapan').click(function () {
         $('.input-schedule').val($(this).val());
         $('#modalContainer').append($('#modalUploadPenerapan'));
