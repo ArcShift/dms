@@ -20,8 +20,11 @@ $role = $this->session->userdata['user']['role'];
             <input class="desc d-none" name="desc" value="">
             <input class="filename d-none" name="desc" value="">
             <span class="parent d-none"><?php echo empty($d['parent']) ? 'root' : 'pasal' . $d['parent'] ?></span>
+            <?php if (!empty($d['child'])) { ?>
+                <span class="fa fa-angle-double-right text-success" onclick="collapse(this)"></span>
+            <?php } ?>
             <span class="title"><?php echo $d['name'] ?></span>
-            <?php if ($activeModule['acc_update']) { ?> 
+            <?php if ($activeModule['acc_update'] & empty($d['child'])) { ?> 
                 <?php if ($role == 'pic' || $role = 'admin') { ?>
                     <span class="fa fa-info-circle text-primary" onclick="form1(<?php echo $k ?>)" title="Open Form 1">&nbsp;</span>
                 <?php } ?>
@@ -202,7 +205,7 @@ $role = $this->session->userdata['user']['role'];
                     <input class="d-none input-schedule" name="jadwal">
                     <div class="form-group">
                         <input class="form-control" type="file" name="doc" required="">
-                        <span><?php // echo $data['file']            ?></span>
+                        <span><?php // echo $data['file']              ?></span>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -234,6 +237,9 @@ $role = $this->session->userdata['user']['role'];
             }
         }
     }
+    $('#treeview-list').addClass('collapse');
+    $('#treeview-list').collapse('toggle');
+    $('#treeview-list').collapse('toggle');
     function form1(i) {
         var d = data[i];
         closeForm();
@@ -279,16 +285,9 @@ $role = $this->session->userdata['user']['role'];
             }
         });
     });
-//    $('#treeview-list li .title').each(function (index) {
-//        PEMENUHAN
-//        var r = Math.floor(Math.random() * 101);
-//        var clone = $('#template-pemenuhan').clone();
-//        clone.attr('id', 'pemenuhan-' + index);
-//        clone.find('.title').text($(this).text());
-//        var bar = '<div class="progress-bar bg-success" role="progressbar" aria-valuenow="' + r + '" aria-valuemin="0" aria-valuemax="100" style="width: ' + r + '%">' + r + '%</div>';
-//        clone.find('.progress').append(bar);
-//        $('#tab-pemenuhan .list-group').append(clone);
-//    });
+    function collapse(item) {
+        $(item).parent('li').children('ul').collapse('toggle');
+    }
     $('.item-upload-penerapan').click(function () {
         $('.input-schedule').val($(this).val());
         $('#modalContainer').append($('#modalUploadPenerapan'));

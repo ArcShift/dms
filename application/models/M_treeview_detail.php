@@ -56,12 +56,14 @@ class M_treeview_detail extends CI_Model {
 
     function reads() {
         $input = $this->input->post();
-        $this->db->select('p.*, f.description, f.id AS id_form');
+        $this->db->select('p.*, f.description, f.id AS id_form, p2.id AS child');
         if (isset($input['idPasal'])) {
             $this->db->where('p.id', $input['idPasal']);
         }
+        $this->db->join('pasal p2', 'p2.parent= p.id', 'LEFT');
         $this->db->join('form2 f', 'f.id_pasal= p.id AND f.id_company=' . $input['idPerusahaan'], 'LEFT');
         $this->db->where('p.id_standard', $input['idStandar']);
+        $this->db->group_by('p.id');
         $result = $this->db->get($this->table . ' p');
         if (isset($input['idPasal'])) {
             return $result->row_array();
@@ -89,6 +91,7 @@ class M_treeview_detail extends CI_Model {
             if ($this->db->insert('form2')) {
                 $idForm = $this->db->insert_id();
             } else {
+                die('error: ');
                 return FALSE;
             }
             $this->db->set('id_form2', $idForm);
@@ -128,10 +131,7 @@ class M_treeview_detail extends CI_Model {
                 }
             }
         }
-        return $result;
-
-        //TODO: compare date ; set late, ok, null
-//        die($this->db->last_query());
+        return $result;;
     }
 
     function delete_schedule() {
@@ -170,6 +170,8 @@ class M_treeview_detail extends CI_Model {
                 $this->db->set('id_company', $in['idPerusahaan']);
                 return $this->db->insert('form2');
             }
+        }else{
+            //TODO: error msg: tdk ada data yg disimpan
         }
     }
 

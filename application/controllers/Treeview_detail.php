@@ -20,6 +20,7 @@ class Treeview_detail extends MY_Controller {
             die('NO ACCESS');
         }
         $this->data['data'] = $this->model->reads();
+//        die($this->db->last_query());
         $this->data['schedule'] = $this->model->reads_schedule();
         $pasal = 0;
 //        foreach ($this->data['schedule'] as $k => $s) {
@@ -89,16 +90,20 @@ class Treeview_detail extends MY_Controller {
                 }
             }
         } elseif ($this->input->post('tambah')) {
-            $this->form_validation->set_rules('jadwal', 'Jadwal', 'required');
-            $this->form_validation->set_rules('anggota', 'Anggota', 'required');
-            if ($this->form_validation->run()) {
-                if ($this->model->add_schedule()) {
-                    $this->data['msgSuccess'] = 'Jadwal berhasil ditambahkan';
+            if ($this->input->post('idForm')) {
+                $this->form_validation->set_rules('jadwal', 'Jadwal', 'required');
+                $this->form_validation->set_rules('anggota', 'Anggota', 'required');
+                if ($this->form_validation->run()) {
+                    if ($this->model->add_schedule()) {
+                        $this->data['msgSuccess'] = 'Jadwal berhasil ditambahkan';
+                    } else {
+                        $this->data['msgError'] = $this->db->error()['message'];
+                    }
                 } else {
-                    $this->data['msgError'] = $this->db->error()['message'];
+                    $this->data['msgError'] = validation_errors();
                 }
             } else {
-                $this->data['msgError'] = validation_errors();
+                $this->data['msgError'] = 'Form belum disimpan';
             }
         } elseif ($this->input->post('hapus')) {
             if ($this->model->delete_schedule()) {
