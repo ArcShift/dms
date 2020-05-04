@@ -62,7 +62,7 @@ $role = $this->session->userdata['user']['role'];
             <?php } ?>
         </ul>
         <pre>
-            <?php print_r($pemenuhan) ?>
+            <?php // print_r($pemenuhan) ?>
             <?php // print_r($this->db->last_query()) ?>
         </pre>
     </div>

@@ -38,9 +38,10 @@ class M_treeview_detail extends CI_Model {
         $this->db->select('SUM(CASE WHEN s.file IS NOT NULL AND s.date < s.upload_date THEN 1 ELSE 0 END) AS terlambat2');//UNFIX
         $this->db->select('SUM(CASE WHEN s.upload_date IS NULL AND s.date >= CURDATE() THEN 1 ELSE 0 END) AS unfinised');
         $this->db->select('SUM(CASE WHEN s.file IS NOT NULL AND s.date >= s.upload_date THEN 1 ELSE 0 END) AS finish');
-        $this->db->join('form2 f', 'f.id_pasal = p.id');
+        $this->db->join('form2 f', 'f.id_pasal = p.id AND f.id_company = '.$this->input->post('idPerusahaan'));
         $this->db->join('schedule s', 's.id_form2 = f.id');
         $this->db->group_by('p.id');
+        $this->db->where('p.id_standard', $this->input->post('idStandar'));
         $result = $this->db->get('pasal p')->result_array();
         foreach ($result as $k => $r) {
             $r['terlambat']+= $r['terlambat2'];
