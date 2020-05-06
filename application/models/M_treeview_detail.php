@@ -132,6 +132,11 @@ class M_treeview_detail extends CI_Model {
                     $result[$k]['status'] = 'selesai';
                 }
             }
+            if ($diff < 0) {
+                $result[$k]['deadline'] = true;
+            } else {
+                $result[$k]['deadline'] = false;
+            }
             //PASAL FULLNAME
             if ($idPasal != $r['id_pasal']) {
                 $idPasal = $r['id_pasal'];
@@ -154,9 +159,9 @@ class M_treeview_detail extends CI_Model {
             $this->db->where('id', $id);
             $r = $this->db->get('pasal')->row_array();
             $fullname = $r['name'] . ' - ' . $fullname;
-            if(empty($r['parent'])){
-                $parent_exist= false;
-            }else{
+            if (empty($r['parent'])) {
+                $parent_exist = false;
+            } else {
                 $id = $r['parent'];
             }
         }
