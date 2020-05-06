@@ -251,6 +251,11 @@
                 </div>
             </div>
         </div>
+        <footer class="footer ">
+            <div class="container">
+                <span class="text-muted">Place sticky footer content here.</span>
+            </div>
+        </footer>
         <script>
             var module = <?php echo json_encode($this->session->userdata('module')) ?>;
             for (var i = 0; i < module.length; i++) {
@@ -278,27 +283,31 @@
                 }
                 $('#modalNotif').modal('show');
             }
+            function closeAlert(obj) {
+                $(obj).parent().addClass('d-none');
+            }
         </script>
     </body>
 </html>
 <div id="modalContainer">
     <div class="modal fade" id="modalNotif" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">     
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Message</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body modal-message">
+            <form>
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Message</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body modal-message">
 
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                        <button type="submit" class="btn btn-primary" data-dismiss="modal">Tutup</button>
+                    </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-                    <button type="submit" class="btn btn-primary" data-dismiss="modal">Tutup</button>
-                </div>
-            </div>
             </form>
         </div>
     </div>

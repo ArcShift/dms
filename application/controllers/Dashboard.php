@@ -17,7 +17,7 @@ class Dashboard extends MY_Controller {
             array('name' => 'standard', 'title' => 'Standar', 'color' => 'sunny-morning', 'value' => $this->model->count('standard')),
             array('name' => 'standard_aktif', 'title' => 'Standar Aktif', 'color' => 'arielle-smile', 'value' => $this->model->standard_active()),
             array('name' => 'program_selesai', 'title' => 'Program Selesai', 'color' => 'grow-early', 'value' => '-'),
-            array('name' => 'terlambat', 'title' => 'Terlambat','subtitle'=>'Dokumen Belum Diupload', 'color' => 'warm-flame', 'value' => '-'),
+            array('name' => 'terlambat', 'title' => 'Terlambat','subtitle'=>'Dokumen Belum Diupload', 'color' => 'warm-flame', 'value' => $this->model->terlambat()),
             array('name' => 'diterapkan', 'title' => 'Diterapkan', 'subtitle'=>'Dokumen Sudah Diupload','color' => 'happy-green', 'value' => '-'),
             array('name' => 'progress', 'title' => 'Progress','subtitle'=>'Pemenuhan Total', 'color' => 'malibu-beach', 'value' => '- %'),
         );

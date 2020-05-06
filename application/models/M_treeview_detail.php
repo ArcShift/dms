@@ -73,7 +73,7 @@ class M_treeview_detail extends CI_Model {
     }
 
     function read_schedule() {
-        $this->db->select('s.id, s.date ,u.username');
+        $this->db->select('s.id, s.date ,u.username, s.file');
         $this->db->join('form2 f', 'f.id = s.id_form2 AND f.id_pasal = ' . $this->input->post('idPasal') . ' AND f.id_company = ' . $this->input->post('idPerusahaan'));
         $this->db->join('users u', 'u.id= s.id_user');
         $this->db->order_by('s.id');
@@ -102,7 +102,7 @@ class M_treeview_detail extends CI_Model {
     }
 
     function reads_schedule() {
-        $this->db->select("s.id, p.name AS pasal,DATE_FORMAT(s.date,'%e %M %Y') AS date, s.date AS deadline, u.username AS name, uk.name AS division, s.file, p.id AS id_pasal");
+        $this->db->select("s.id,DATE_FORMAT(s.date,'%e %M %Y') AS date, s.date AS deadline, u.username AS name, uk.name AS division, s.file, p.id AS id_pasal");
         $this->db->join('form2 f', 'f.id = s.id_form2');
         $this->db->join('pasal p', 'p.id = f.id_pasal');
         $this->db->join('standard st', 'st.id = p.id_standard AND st.id = ' . $this->input->post('idStandar'));
@@ -111,7 +111,9 @@ class M_treeview_detail extends CI_Model {
         $this->db->join('company c', 'c.id = uk.id_company AND c.id = ' . $this->input->post('idPerusahaan'));
         $this->db->order_by('p.id, s.date');
         $result = $this->db->get('schedule s')->result_array();
+        $idPasal = 0;
         foreach ($result as $k => $r) {
+            //STATUS UPLOAD
             $date1 = new DateTime($r['deadline']);
             $date2 = new DateTime('now');
             $interval = date_diff($date2, $date1);
@@ -130,8 +132,35 @@ class M_treeview_detail extends CI_Model {
                     $result[$k]['status'] = 'selesai';
                 }
             }
+            //PASAL FULLNAME
+            if ($idPasal != $r['id_pasal']) {
+                $idPasal = $r['id_pasal'];
+                //TODO: fullname pasal
+
+                $result[$k]['pasal'] = $this->pasal_fullname($r['id_pasal']);
+            } else {
+                $result[$k]['pasal'] = '';
+            }
         }
-        return $result;;
+        return $result;
+        ;
+    }
+
+    private function pasal_fullname($id) {
+        $fullname = '';
+        $parent_exist = true;
+        while ($parent_exist) {
+            $this->db->select('id, name, parent');
+            $this->db->where('id', $id);
+            $r = $this->db->get('pasal')->row_array();
+            $fullname = $r['name'] . ' - ' . $fullname;
+            if(empty($r['parent'])){
+                $parent_exist= false;
+            }else{
+                $id = $r['parent'];
+            }
+        }
+        return substr($fullname, 0, -3);
     }
 
     function delete_schedule() {
@@ -170,9 +199,13 @@ class M_treeview_detail extends CI_Model {
                 $this->db->set('id_company', $in['idPerusahaan']);
                 return $this->db->insert('form2');
             }
-        }else{
+        } else {
             //TODO: error msg: tdk ada data yg disimpan
         }
+    }
+
+    function form2_upload() {
+        
     }
 
 }

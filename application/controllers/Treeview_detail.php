@@ -50,7 +50,32 @@ class Treeview_detail extends MY_Controller {
     }
 
     function form2_edit2() {
-        $this->render('form2_edit2', TRUE, TRUE);
+        if ($this->input->post('simpan')) {
+//            $this->load->library('form_validation');
+            $step = true;
+            $config['upload_path'] = './upload/form2';
+            $config['allowed_types'] = '*';
+            $this->load->library('upload', $config);
+            if ($_FILES['dokumen']['name']) {
+                if (!$this->upload->do_upload('dokumen')) {
+                    $step = false;
+                    $this->data['msgError'] = $this->upload->display_errors();
+                }
+            }
+            if ($step) {
+                if ($this->model->form2_save()) {
+                    $this->data['msgSuccess'] = 'Data berhasil diubah';
+//                    $this->session->set_flashdata('msgSuccess', 'Data berhasil diubah');
+//                    redirect($this->module);
+                } else {
+                    $this->data['msgError'] = $this->db->error()['message'];
+                }
+            }
+        }
+            $this->data['member'] = $this->model->member();
+            $this->data['schedule'] = $this->model->read_schedule();
+            $this->data['data'] = $this->model->reads();
+            $this->render('form2_edit2', TRUE, TRUE);
     }
 
 //    function form2_send() {
@@ -121,7 +146,7 @@ class Treeview_detail extends MY_Controller {
         if (!empty($this->data))
             $this->render('form2_edit');
     }
-
+    
     function upload_bukti_penerapan() {
         $config['upload_path'] = "./upload/penerapan";
         $config['allowed_types'] = '*';
@@ -147,5 +172,4 @@ class Treeview_detail extends MY_Controller {
         }
         echo json_encode($status);
     }
-
 }

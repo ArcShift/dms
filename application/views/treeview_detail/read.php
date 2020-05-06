@@ -27,6 +27,8 @@ $role = $this->session->userdata['user']['role'];
     </div>
 </div>
 <script>
+    $(document).ready(function () {
+    });
     var idPerusahaan;
     var idStandar;
     var post = null;
@@ -59,13 +61,13 @@ $role = $this->session->userdata['user']['role'];
         idStandar = $(this).val();
         if (idStandar) {
             $('#root span').text($('#standar option:selected').text());
-            getTab('pemenuhan');
+            getTab('pasal');
         }
     });
     function getTab(tab) {
         $.post('<?php echo site_url($module); ?>/tabs', {'idPerusahaan': idPerusahaan, 'idStandar': idStandar}, function (data) {
             $('#container').html(data);
-            $('#tab-'+tab).addClass('active');
+            $('#tab-' + tab).addClass('active');
         });
     }
 </script>

@@ -11,4 +11,8 @@ class M_dashboard extends CI_Model {
         $this->db->group_by('s.id');
         return $this->db->count_all_results('standard s');
     }
+    function terlambat() {
+        $this->db->where('(date < CURDATE() AND file IS NULL) OR (file IS NOT NULL AND date < upload_date)');
+        return $this->db->count_all_results('schedule');
+    }
 }

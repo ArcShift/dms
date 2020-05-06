@@ -55,9 +55,9 @@ $role = $this->session->userdata['user']['role'];
                                 <?php if (!empty($p['finish'])) { ?>
                                     <div class="progress-bar bg-success" role="progressbar" aria-valuenow="<?php echo $p['p_finish'] ?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $p['p_finish'] ?>%"><?php echo $p['p_finish'] ?>%</div>
                                 <?php } ?>
-                                <?php if (!empty($p['terlambat'])) { ?>
-                                    <div class="progress-bar bg-danger" role="progressbar" aria-valuenow="<?php echo $p['p_terlambat'] ?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $p['p_terlambat'] ?>%"><?php echo $p['p_terlambat'] ?>%</div>
-                                <?php } ?>
+                                <?php // if (!empty($p['terlambat'])) { ?>
+    <!--<div class="progress-bar bg-danger" role="progressbar" aria-valuenow="<?php // echo $p['p_terlambat']              ?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php // echo $p['p_terlambat']              ?>%"><?php // echo $p['p_terlambat']              ?>%</div>-->
+                                <?php // } ?>
                             </div>
                         </div>
                     </div>
@@ -134,14 +134,7 @@ $role = $this->session->userdata['user']['role'];
                 <?php $txtPasal = ''; ?>
                 <?php foreach ($schedule as $k => $s) { ?>
                     <tr>
-                        <td>
-                            <?php
-                            if ($txtPasal != $s['pasal']) {
-                                echo $s['pasal'];
-                                $txtPasal = $s['pasal'];
-                            }
-                            ?>
-                        </td>
+                        <td><?php echo $s['pasal']; ?></td>
                         <td class="item-tgl"><?php echo $s['date'] ?></td>
                         <td class="col-sm-6"><?php echo $s['name'] . ' - ' . $s['division'] ?></td>
                         <td><?php echo $s['status'] ?></td>
@@ -165,21 +158,22 @@ $role = $this->session->userdata['user']['role'];
                 <?php $txtPasal = ''; ?>
                 <?php foreach ($schedule as $k => $s) { ?>
                     <tr>
-                        <td>
-                            <?php
-                            if ($txtPasal != $s['pasal']) {
-                                echo $s['pasal'];
-                                $txtPasal = $s['pasal'];
-                            }
-                            ?>
-                        </td>
+                        <td><?php echo $s['pasal']; ?></td>
                         <td class="item-tgl"><?php echo $s['date'] ?></td>
                         <td class="col-sm-6"><?php echo $s['name'] . ' - ' . $s['division'] ?></td>
                         <td>
-                            <?php if ($s['status'] == '-') { ?>
-                                <button class="btn btn-success item-upload-penerapan" type="submit" name="uploadPenerapan" value="<?php echo $s['id'] ?>">Upload</button>
-                            <?php } else { ?>
-                                <span class="btn btn-danger">Upload</span>
+                            <?php if ($s['status'] == '-' | !empty($s['file'])) { ?>
+                                <div class="dropdown d-inline-block">
+                                    <button type="button" aria-haspopup="true" aria-expanded="false" data-toggle="dropdown" class="dropdown-toggle btn btn-primary btn-sm">Aksi</button>
+                                    <div tabindex="-1" role="menu" aria-hidden="true" class="dropdown-menu">
+                                        <?php if ($s['status'] == '-') { ?>
+                                            <button type="button" class="dropdown-item item-upload-penerapan" name="uploadPenerapan" value="<?php echo $s['id'] ?>">Upload</button>
+                                        <?php } ?>
+                                        <?php if (!empty($s['file'])) { ?>
+                                            <a class="dropdown-item" href="<?php echo base_url('upload/penerapan/' . $s['file']) ?>">Download</a>
+                                        <?php } ?>
+                                    </div>
+                                </div>
                             <?php } ?>
                         </td>
                         <td><?php echo $s['status'] ?></td>
@@ -221,7 +215,7 @@ $role = $this->session->userdata['user']['role'];
                     <input class="d-none input-schedule" name="jadwal">
                     <div class="form-group">
                         <input class="form-control" type="file" name="doc" required="">
-                        <span><?php // echo $data['file']                 ?></span>
+                        <span><?php // echo $data['file']                              ?></span>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -292,7 +286,7 @@ $role = $this->session->userdata['user']['role'];
     }
     $('#form2').on('submit', function (e) {
         e.preventDefault();
-        $.post('<?php echo site_url($module); ?>/form2_send', $(this).serializeArray(), function (data) {
+        $.post('<?php echo site_url($module); ?>/form2_edit2', $(this).serializeArray(), function (data) {
             if (data == 'success') {
                 $('#standar').change();
             } else {
