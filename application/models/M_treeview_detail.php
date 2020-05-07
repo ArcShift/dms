@@ -102,7 +102,7 @@ class M_treeview_detail extends CI_Model {
     }
 
     function reads_schedule() {
-        $this->db->select("s.id,DATE_FORMAT(s.date,'%e %M %Y') AS date, s.date AS deadline, u.username AS name, uk.name AS division, s.file, p.id AS id_pasal");
+        $this->db->select("s.id, s.date, s.upload_date, u.username AS name, uk.name AS division, s.file, p.id AS id_pasal");
         $this->db->join('form2 f', 'f.id = s.id_form2');
         $this->db->join('pasal p', 'p.id = f.id_pasal');
         $this->db->join('standard st', 'st.id = p.id_standard AND st.id = ' . $this->input->post('idStandar'));
@@ -113,42 +113,29 @@ class M_treeview_detail extends CI_Model {
         $result = $this->db->get('schedule s')->result_array();
         $idPasal = 0;
         foreach ($result as $k => $r) {
-            //STATUS UPLOAD
-            $date1 = new DateTime($r['deadline']);
-            $date2 = new DateTime('now');
-            $interval = date_diff($date2, $date1);
-            $result[$k]['dt'] = $interval->format('%R%a');
-            $diff = $interval->format('%R%a');
-            if (empty($r['file'])) {
-                if ($diff < 0) {
-                    $result[$k]['status'] = 'terlambat';
-                } else {
-                    $result[$k]['status'] = '-';
-                }
-            } else {
-                if ($diff < 0) {
-                    $result[$k]['status'] = 'terlambat';
-                } else {
-                    $result[$k]['status'] = 'selesai';
-                }
-            }
-            if ($diff < 0) {
+            if ($r['date'] < date('Y-m-d')) {
                 $result[$k]['deadline'] = true;
             } else {
                 $result[$k]['deadline'] = false;
             }
+//            $this->db->select('SUM(CASE WHEN s.date < CURDATE() AND s.file IS NULL THEN 1 ELSE 0 END) AS terlambat'); //UNFIX
+//            $this->db->select('SUM(CASE WHEN s.file IS NOT NULL AND s.date < s.upload_date THEN 1 ELSE 0 END) AS terlambat2'); //UNFIX
+            if (!empty($r['file']) & !empty($r['date']) & $r['date'] >= $r['upload_date']) {
+                $result[$k]['status'] = 'selesai';
+            }else if(empty ($r['upload_date']) & $r['date'] >= date('Y-m-d')){
+                $result[$k]['status'] = '-';
+            }else{
+                $result[$k]['status'] = 'terlambat';    
+            }
             //PASAL FULLNAME
             if ($idPasal != $r['id_pasal']) {
                 $idPasal = $r['id_pasal'];
-                //TODO: fullname pasal
-
                 $result[$k]['pasal'] = $this->pasal_fullname($r['id_pasal']);
             } else {
                 $result[$k]['pasal'] = '';
             }
         }
         return $result;
-        ;
     }
 
     private function pasal_fullname($id) {

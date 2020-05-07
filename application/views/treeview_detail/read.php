@@ -1,10 +1,10 @@
 <?php
 $role = $this->session->userdata['user']['role'];
 ?>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment-with-locales.min.js" integrity="sha256-AdQN98MVZs44Eq2yTwtoKufhnU+uZ7v2kXnD5vqzZVo=" crossorigin="anonymous"></script>
-<script src="https://blueimp.github.io/jQuery-File-Upload/js/vendor/jquery.ui.widget.js"></script>
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment-with-locales.min.js" integrity="sha256-AdQN98MVZs44Eq2yTwtoKufhnU+uZ7v2kXnD5vqzZVo=" crossorigin="anonymous"></script>-->
+<!--<script src="https://blueimp.github.io/jQuery-File-Upload/js/vendor/jquery.ui.widget.js"></script>-->
 <!--<script src="js/jquery.iframe-transport.js"></script>-->
-<script src="https://blueimp.github.io/jQuery-File-Upload/js/jquery.fileupload.js"></script>
+<!--<script src="https://blueimp.github.io/jQuery-File-Upload/js/jquery.fileupload.js"></script>-->
 <div class="main-card mb-3 card">
     <div class="card-body">
         <div class="form-group">

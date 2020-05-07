@@ -56,7 +56,7 @@ $role = $this->session->userdata['user']['role'];
                                     <div class="progress-bar bg-success" role="progressbar" aria-valuenow="<?php echo $p['p_finish'] ?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $p['p_finish'] ?>%"><?php echo $p['p_finish'] ?>%</div>
                                 <?php } ?>
                                 <?php // if (!empty($p['terlambat'])) { ?>
-    <!--<div class="progress-bar bg-danger" role="progressbar" aria-valuenow="<?php // echo $p['p_terlambat']               ?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php // echo $p['p_terlambat']               ?>%"><?php // echo $p['p_terlambat']               ?>%</div>-->
+    <!--<div class="progress-bar bg-danger" role="progressbar" aria-valuenow="<?php // echo $p['p_terlambat']                ?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php // echo $p['p_terlambat']                ?>%"><?php // echo $p['p_terlambat']                ?>%</div>-->
                                 <?php // } ?>
                             </div>
                         </div>
@@ -135,8 +135,8 @@ $role = $this->session->userdata['user']['role'];
                 <?php foreach ($schedule as $k => $s) { ?>
                     <tr>
                         <td><?php echo $s['pasal']; ?></td>
-                        <td class="item-tgl"><?php echo $s['date'] ?></td>
-                        <td class="col-sm-6"><?php echo $s['name'] . ' - ' . $s['division'] ?></td>
+                        <td><?php echo $s['date'] ?></td>
+                        <td><?php echo $s['name'] . ' - ' . $s['division'] ?></td>
                         <td><?php echo $s['status'] ?></td>
                     </tr>
                 <?php } ?>
@@ -144,7 +144,7 @@ $role = $this->session->userdata['user']['role'];
         </table>
     </div>
     <div class="tab-pane" id="tab-penerapan" role="tabpanel">
-        <table class="table">
+        <table class="table" id="table-penerapan">
             <thead>
                 <tr>
                     <th>Pasal</th>
@@ -159,8 +159,8 @@ $role = $this->session->userdata['user']['role'];
                 <?php foreach ($schedule as $k => $s) { ?>
                     <tr>
                         <td><?php echo $s['pasal']; ?></td>
-                        <td class="item-tgl"><?php echo $s['date'] ?></td>
-                        <td class="col-sm-6"><?php echo $s['name'] . ' - ' . $s['division'] ?></td>
+                        <td><?php echo $s['date'] ?></td>
+                        <td><?php echo $s['name'] . ' - ' . $s['division'] ?></td>
                         <td>
                             <?php if (!$s['deadline'] | !empty($s['file'])) { ?>
                                 <div class="dropdown d-inline-block">
@@ -215,7 +215,7 @@ $role = $this->session->userdata['user']['role'];
                     <input class="d-none input-schedule" name="jadwal">
                     <div class="form-group">
                         <input class="form-control" type="file" name="doc" required="">
-                        <span><?php // echo $data['file']                               ?></span>
+                        <span><?php // echo $data['file']                                ?></span>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -230,14 +230,12 @@ $role = $this->session->userdata['user']['role'];
     var data = JSON.parse('<?php echo json_encode($data) ?>');
     var pasal = $('.list-pasal');
     var formIndex = null;
+//    $(document).ready(function () {
+//        $('#table-penerapan').DataTable();
+//    });
     for (var p, i = 0; i < data.length; i++) {
-//        var parent = l.parent == null ? 'root' : l.parent;
-//        parent = $('#' + parent);
         p = pasal[i];
         $('#' + $(p).children('.parent').text()).children('ul').append(p);
-//        if (parent.children('.fa-angle-double-right').length == 0) {
-//            parent.children('.title').before('<span class="fa fa-angle-double-right text-success" onclick="collapse(this)"></span>');
-//            parent.children('.ctrl-form1').remove();
 //        }
         if (post != null) {
             if (post.idForm != null) {

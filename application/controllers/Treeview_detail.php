@@ -52,7 +52,6 @@ class Treeview_detail extends MY_Controller {
     function form2_edit2() {
         $this->load->library('form_validation');
         if ($this->input->post('simpan')) {
-//            $this->load->library('form_validation');
             $step = true;
             $config['upload_path'] = './upload/form2';
             $config['allowed_types'] = '*';
@@ -93,29 +92,6 @@ class Treeview_detail extends MY_Controller {
         $this->data['schedule'] = $this->model->read_schedule();
         $this->data['data'] = $this->model->reads();
         $this->render('form2_edit2', TRUE, TRUE);
-    }
-
-    function form2_edit() {
-        $this->load->library('form_validation');
-        if ($this->input->post('simpan')) {
-            
-        } elseif ($this->input->post('tambah')) {
-            
-        } elseif ($this->input->post('hapus')) {
-            if ($this->model->delete_schedule()) {
-                $this->data['msgSuccess'] = 'Jadwal berhasil dihapus';
-            } else {
-                $this->data['msgError'] = $this->db->error()['message'];
-            }
-        } else {
-            redirect($this->module);
-        }
-        $this->subTitle = 'Dokumen Perusahaan: Edit';
-        $this->data['member'] = $this->model->member();
-        $this->data['schedule'] = $this->model->read_schedule();
-        $this->data['data'] = $this->model->reads();
-        if (!empty($this->data))
-            $this->render('form2_edit');
     }
 
     function upload_bukti_penerapan() {
