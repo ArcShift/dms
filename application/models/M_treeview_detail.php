@@ -56,7 +56,7 @@ class M_treeview_detail extends CI_Model {
 
     function reads() {
         $input = $this->input->post();
-        $this->db->select('p.*, f.description, f.id AS id_form, p2.id AS child');
+        $this->db->select('p.*, f.description, f.id AS id_form, p2.id AS child, f.file');
         if (isset($input['idPasal'])) {
             $this->db->where('p.id', $input['idPasal']);
         }
@@ -183,9 +183,6 @@ class M_treeview_detail extends CI_Model {
     function form2_save() {
         $mod = false;
         $in = $this->input->post();
-        $this->db->where('id_pasal', $in['idPasal']);
-        $this->db->where('id_company', $in['idPerusahaan']);
-        $count = $this->db->count_all_results('form2');
         if (!empty($in['deskripsi'])) {
             $this->db->set('description', $in['deskripsi']);
             $mod = true;
@@ -195,6 +192,9 @@ class M_treeview_detail extends CI_Model {
             $mod = true;
         }
         if ($mod) {
+            $this->db->where('id_pasal', $in['idPasal']);
+            $this->db->where('id_company', $in['idPerusahaan']);
+            $count = $this->db->count_all_results('form2');
             if ($count) {
                 $this->db->where('id_pasal', $in['idPasal']);
                 $this->db->where('id_company', $in['idPerusahaan']);
