@@ -2,7 +2,7 @@
     <form method="post">
         <!--<div class="card-header"></div>-->
         <div class="card-body">
-            <table class="table table-borderless table-striped table-hover">
+            <table class="table table-borderless table-striped table-hover data-table">
                 <thead>
                     <tr>
                         <th>No</th>
