@@ -31,5 +31,11 @@ class M_unit_kerja extends CI_Model {
         $this->db->where('id', $id);
         return $this->db->get($this->table)->row_array();
     }
+    function update() {
+        $this->db->set('name', $this->input->post('nama'));
+        $this->db->set('jenis', $this->input->post('jenis'));
+        $this->db->where('id', $this->input->post('id'));
+        return $this->db->update('unit_kerja');
+    }
 
 }
