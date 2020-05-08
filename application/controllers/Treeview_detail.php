@@ -87,6 +87,12 @@ class Treeview_detail extends MY_Controller {
             } else {
                 $this->data['msgError'] = 'Form belum disimpan';
             }
+        } elseif ($this->input->post('hapus')) {
+            if ($this->model->delete_schedule()) {
+                $this->data['msgSuccess'] = 'Jadwal berhasil dihapus';
+            } else {
+                $this->data['msgError'] = $this->db->error()['message'];
+            }
         }
         $this->data['member'] = $this->model->member();
         $this->data['schedule'] = $this->model->read_schedule();

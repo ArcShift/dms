@@ -10,17 +10,17 @@
             <button type="button" class="close" aria-label="Close" onclick="closeAlert(this)"><span aria-hidden="true">×</span></button>
             Menyimpan data
         </div>
-        <?php if(isset($msgError)){?>
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            <button type="button" class="close" aria-label="Close" onclick="closeAlert(this)"><span aria-hidden="true">×</span></button>
-            <?php echo $msgError ?>
-        </div>
+        <?php if (isset($msgError)) { ?>
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <button type="button" class="close" aria-label="Close" onclick="closeAlert(this)"><span aria-hidden="true">×</span></button>
+                <?php echo $msgError ?>
+            </div>
         <?php } ?>
-        <?php if(isset($msgSuccess)){?>
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            <button type="button" class="close" aria-label="Close" onclick="closeAlert(this)"><span aria-hidden="true">×</span></button>
-            <?php echo $msgSuccess ?>
-        </div>
+        <?php if (isset($msgSuccess)) { ?>
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <button type="button" class="close" aria-label="Close" onclick="closeAlert(this)"><span aria-hidden="true">×</span></button>
+                <?php echo $msgSuccess ?>
+            </div>
         <?php } ?>
         <input class="d-none" name="idPerusahaan" value="<?php echo $this->input->post('idPerusahaan') ?>">
         <input class="d-none" name="idPasal" value="<?php echo $this->input->post('idPasal') ?>">
@@ -56,11 +56,11 @@
         </div>
         <div>
             <?php foreach ($schedule as $k => $s) { ?>
-                <div class="row">
+                <div class="row mb-2">
                     <div class="col-sm-5"><?php echo $s['date'] ?></div>
                     <div class="col-sm-5"><?php echo $s['username'] ?></div>
                     <div class="col-sm-2">
-                        <button type="button" class="btn btn-danger fa fa-trash item-hapus" value="<?php echo $s['id'] ?>"></button>
+                        <button type="button" class="btn btn-danger fa fa-trash form2-hapus" value="<?php echo $s['id'] ?>"></button>
                     </div>
                 </div>
             <?php } ?>
@@ -72,22 +72,6 @@
     </div>
 </div>
 <script>
-    $('#form2-tambah').click(function () {
-//        var data = {
-//            idPerusahaan: <?php // echo $this->input->post('idPerusahaan') ?>,
-//            jadwal: $('#form2-jadwal').val(),
-//            anggota: $('#form2-anggota').val(),
-//            tambah: 'ok'
-//        }
-        var data= $('#form2').serializeArray();
-        data[data.length] = { name: "tambah", value: "ok" }
-//        console.log($('#form2').serializeArray());
-//        var formData = new FormData($('#form2')[0]);
-//        formData.append('simpan', 'ok');
-        $.post('<?php echo site_url($module . '/form2_edit2') ?>', data, function (resp) {
-            $('#form2').html(resp);
-        });
-    });
     $('#form2Simpan').click(function () {
         $('#form2UploadNotif').removeClass('d-none');
         $(this).prop('disabled', true);
@@ -105,6 +89,20 @@
                 $('#form2').html(data);
                 console.log('success');
             }
+        });
+    });
+    $('#form2-tambah').click(function () {
+        var data = $('#form2').serializeArray();
+        data[data.length] = {name: "tambah", value: "ok"}
+        $.post('<?php echo site_url($module . '/form2_edit2') ?>', data, function (resp) {
+            $('#form2').html(resp);
+        });
+    });
+    $('.form2-hapus').click(function () {
+        var data = $('#form2').serializeArray();
+        data.push({name: "hapus",value: $(this).val()});
+        $.post('<?php echo site_url($module . '/form2_edit2') ?>', data, function (resp) {
+            $('#form2').html(resp);
         });
     });
 </script>
