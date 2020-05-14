@@ -19,6 +19,7 @@ class Treeview_detail extends MY_Controller {
         if (empty($this->input->post('idStandar'))) {
             die('NO ACCESS');
         }
+        $this->data['pemenuhan1']= $this->model->pemenuhan1();
         $this->data['data'] = $this->model->reads();
 //        die($this->db->last_query());
         $this->data['schedule'] = $this->model->reads_schedule();

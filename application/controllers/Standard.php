@@ -44,23 +44,10 @@ class Standard extends MY_Controller {
             } else if ($this->input->post('remove')) {
                 $this->models->delete();
             } else if ($this->input->post('form1')) {
-                if ($this->input->post('desc')) {
-                    $this->models->update_desc();
-                }
-                if (!empty($_FILES['file']['name'])) {
-                    $config['upload_path'] = './upload/form1';
-                    $config['allowed_types'] = '*';
-//                    $config['max_size'] = 100000;
-                    $this->load->library('upload', $config);
-                    if ($this->upload->do_upload('file')) {
-                        if ($this->models->update_file()) {
-                            $this->data['msgSuccess'] = 'File berhasil diupload';
-                        } else {
-                            $this->data['msgError'] = $this->db->error()['message'];
-                        }
-                    } else {
-                        $this->data['msgError'] = $this->upload->display_errors();
-                    }
+                if ($this->models->update_desc()) {
+                    $this->data['msgSuccess'] = 'Deskripsi berhasil diubah';
+                } else {
+                    $this->data['msgError'] = $this->db->error()['message'];
                 }
             }
         }

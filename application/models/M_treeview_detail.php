@@ -4,15 +4,21 @@ class M_treeview_detail extends CI_Model {
 
     private $table = 'pasal';
 
-    function treeview() {
-        $this->db->where('id', $this->session->userdata('treeview'));
-        return $this->db->get('standard')->row_array();
-    }
+//    function treeview() {
+//        $this->db->where('id', $this->session->userdata('treeview'));
+//        return $this->db->get('standard')->row_array();
+//    }
 
     function standard() {
         $this->db->select('s.id, s.name');
         $this->db->join('company_standard cs', 'cs.id_standard = s.id AND cs.id_company=' . $this->input->post('id'));
         return $this->db->get('standard s')->result_array();
+    }
+
+    function pemenuhan1() {
+        $this->db->where('p.id_standard', $this->input->post('idStandar'));
+        $result = $this->db->get('pasal p')->result_array();
+        return $result;
     }
 
     function detail() {
@@ -122,10 +128,10 @@ class M_treeview_detail extends CI_Model {
 //            $this->db->select('SUM(CASE WHEN s.file IS NOT NULL AND s.date < s.upload_date THEN 1 ELSE 0 END) AS terlambat2'); //UNFIX
             if (!empty($r['file']) & !empty($r['date']) & $r['date'] >= $r['upload_date']) {
                 $result[$k]['status'] = 'selesai';
-            }else if(empty ($r['upload_date']) & $r['date'] >= date('Y-m-d')){
+            } else if (empty($r['upload_date']) & $r['date'] >= date('Y-m-d')) {
                 $result[$k]['status'] = '-';
-            }else{
-                $result[$k]['status'] = 'terlambat';    
+            } else {
+                $result[$k]['status'] = 'terlambat';
             }
             //PASAL FULLNAME
             if ($idPasal != $r['id_pasal']) {

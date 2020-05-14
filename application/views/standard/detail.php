@@ -110,12 +110,12 @@
                             <input class="form-control item-name" name="nama" placeholder="Nama" required="" readonly="">
                         </div>
                         <div class="form-group">
-                            <label for="namaModule">Description</label>
-                            <input class="form-control item-desc" name="desc" placeholder="Description">
+                            <label for="namaModule">Topik</label>
+                            <input class="form-control item-sort-desc" name="sort-desc" placeholder="Tuliskan deskripsi">
                         </div>
                         <div class="form-group">
-                            <label for="namaModule">File</label>
-                            <input class="form-control item-file" name="file" type="file">
+                            <label for="namaModule">Isi</label>
+                            <textarea class="form-control item-long-desc" name="long-desc" placeholder="Tuliskan deskripsi"></textarea>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -135,6 +135,7 @@
     <ul class="-list-group">
         <li id="tree" class="-list-group-item">
             <span class="title"></span>
+            <span class="index d-none"></span>
             <span class="desc d-none"></span>
             <?php if ($activeModule['acc_create']) { ?>
                 <span class="fa fa-plus text-primary" onclick="add(this)" title="Tambah"></span>
@@ -155,12 +156,15 @@
 </div>
 <script>
     list = <?php echo $list ?>;
-    for (var l of list) {
+//    for (var l of list) {
+        for (var i = 0; i < list.length; i++) {
+        var l= list[i];    
         var parent = l.parent == null ? 'root' : l.parent;
         parent = $('#' + parent);
         var clone = $('#tree').clone();
         clone.attr('id', l.id);
         clone.children('.title').text(' ' + l.name);
+        clone.children('.index').text(i);
         if (l.description != null) {
             clone.children('.desc').text(' ' + l.description);
         }
@@ -207,9 +211,11 @@
     function form1(item) {
         closeForm();
         showCrud('#form1');
+        var id= $(item).parent().children('.index').text()
         $('.item-id').val($(item).parent().attr('id'));
         $('.item-name').val($(item).parent().children('.title').text());
-        $('.item-desc').val($(item).parent().children('.desc').text().trimLeft());
+        $('.item-sort-desc').val(list[id].sort_desc);
+        $('.item-long-desc').val(list[id].long_desc);
     }
     function closeForm() {
         $('#treeview-list').removeClass('col-sm-6');

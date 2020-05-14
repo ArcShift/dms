@@ -26,8 +26,37 @@ $role = $this->session->userdata['user']['role'];
         </div>
     </div>
 </div>
+<!--MODAL DETAIL PASAL-->
+<div class="modal fade" id="modalDetailPasal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">     
+        <form>
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Detail Pasal</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body modal-message">
+                    <div class="form-group">
+                        <label for="namaModule">Topik</label>
+                        <input class="form-control item-sort-desc" name="sort-desc" readonly="">
+                    </div>
+                    <div class="form-group">
+                        <label for="namaModule">Isi</label>
+                        <textarea class="form-control item-long-desc" name="long-desc" readonly=""></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary" data-dismiss="modal">Tutup</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
 <script>
     $(document).ready(function () {
+        $('#modalContainer').append($('#modalDetailPasal'));
     });
     var idPerusahaan;
     var idStandar;
