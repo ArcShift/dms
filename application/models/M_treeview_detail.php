@@ -15,12 +15,6 @@ class M_treeview_detail extends CI_Model {
         return $this->db->get('standard s')->result_array();
     }
 
-    function pemenuhan1() {
-        $this->db->where('p.id_standard', $this->input->post('idStandar'));
-        $result = $this->db->get('pasal p')->result_array();
-        return $result;
-    }
-
     function detail() {
         $input = $this->input->post();
         $this->db->select('p.*, f.description');
@@ -30,53 +24,78 @@ class M_treeview_detail extends CI_Model {
     }
 
     function member() {
-        $input = $this->input->post();
-        $this->db->select('u.id, u.username');
+        $this->db->select('u.id, u.username, CONCAT(u.username, " - ", uk.name) AS fullname');
         $this->db->join('unit_kerja uk', 'uk.id=u.id_unit_kerja');
-        $this->db->join('role r', 'r.id=u.id_role AND r.name = "anggota"');
+//        $this->db->join('role r', 'r.id=u.id_role AND r.name = "anggota"');
 //        $this->db->join('schedule s', 's.id_user=u.id AND m.id_pasal=' . $input['idPasal'], 'LEFT');
-        $this->db->where('uk.id_company', $input['idPerusahaan']);
+        $this->db->where('uk.id_company', $this->input->post('perusahaan'));
         return $this->db->get('users u')->result_array();
     }
 
-    function reads_pemenuhan() {
-        $this->db->select('p.name, COUNT(s.id) AS total');
-        $this->db->select('SUM(CASE WHEN s.date < CURDATE() AND s.file IS NULL THEN 1 ELSE 0 END) AS terlambat'); //UNFIX
-        $this->db->select('SUM(CASE WHEN s.file IS NOT NULL AND s.date < s.upload_date THEN 1 ELSE 0 END) AS terlambat2'); //UNFIX
-        $this->db->select('SUM(CASE WHEN s.upload_date IS NULL AND s.date >= CURDATE() THEN 1 ELSE 0 END) AS unfinised');
-        $this->db->select('SUM(CASE WHEN s.file IS NOT NULL AND s.date >= s.upload_date THEN 1 ELSE 0 END) AS finish');
-        $this->db->join('form2 f', 'f.id_pasal = p.id AND f.id_company = ' . $this->input->post('idPerusahaan'));
-        $this->db->join('schedule s', 's.id_form2 = f.id');
+//    function reads_pemenuhan() {
+//        $this->db->select('p.name, COUNT(s.id) AS total');
+//        $this->db->select('SUM(CASE WHEN s.date < CURDATE() AND s.file IS NULL THEN 1 ELSE 0 END) AS terlambat'); //UNFIX
+//        $this->db->select('SUM(CASE WHEN s.file IS NOT NULL AND s.date < s.upload_date THEN 1 ELSE 0 END) AS terlambat2'); //UNFIX
+//        $this->db->select('SUM(CASE WHEN s.upload_date IS NULL AND s.date >= CURDATE() THEN 1 ELSE 0 END) AS unfinised');
+//        $this->db->select('SUM(CASE WHEN s.file IS NOT NULL AND s.date >= s.upload_date THEN 1 ELSE 0 END) AS finish');
+//        $this->db->join('form2 f', 'f.id_pasal = p.id AND f.id_company = ' . $this->input->post('idPerusahaan'));
+//        $this->db->join('schedule s', 's.id_form2 = f.id');
+//        $this->db->group_by('p.id');
+//        $this->db->where('p.id_standard', $this->input->post('idStandar'));
+//        $result = $this->db->get('pasal p')->result_array();
+//        foreach ($result as $k => $r) {
+//            $r['terlambat'] += $r['terlambat2'];
+//            unset($r['terlambat2']);
+//            $r['p_finish'] = number_format($r['finish'] / $r['total'] * 100, 0);
+//            $r['p_terlambat'] = number_format($r['terlambat'] / $r['total'] * 100, 0);
+//            $result[$k] = $r;
+//        }
+//        return $result;
+//    }
+    function pasal() {
+        $this->db->select('p.*');
+        $this->db->where('p.id_standard', $this->input->get('standar'));
         $this->db->group_by('p.id');
-        $this->db->where('p.id_standard', $this->input->post('idStandar'));
-        $result = $this->db->get('pasal p')->result_array();
-        foreach ($result as $k => $r) {
-            $r['terlambat'] += $r['terlambat2'];
-            unset($r['terlambat2']);
-            $r['p_finish'] = number_format($r['finish'] / $r['total'] * 100, 0);
-            $r['p_terlambat'] = number_format($r['terlambat'] / $r['total'] * 100, 0);
-            $result[$k] = $r;
-        }
-        return $result;
+        return $this->db->get('pasal p')->result_array();
     }
-
-    function reads() {
-        $input = $this->input->post();
-        $this->db->select('p.*, f.description, f.id AS id_form, p2.id AS child, f.file');
-        if (isset($input['idPasal'])) {
-            $this->db->where('p.id', $input['idPasal']);
-        }
-        $this->db->join('pasal p2', 'p2.parent= p.id', 'LEFT');
-        $this->db->join('form2 f', 'f.id_pasal= p.id AND f.id_company=' . $input['idPerusahaan'], 'LEFT');
-        $this->db->where('p.id_standard', $input['idStandar']);
-        $this->db->group_by('p.id');
-        $result = $this->db->get($this->table . ' p');
-        if (isset($input['idPasal'])) {
-            return $result->row_array();
-        } else {
-            return $result->result_array();
-        }
+    function create_document() {
+        $this->db->set('id_pasal', $this->input->post('pasal'));
+        $this->db->set('nomor', $this->input->post('nomor'));
+        $this->db->set('judul', $this->input->post('judul'));
+        $this->db->set('creator', $this->input->post('creator'));
+        $this->db->set('jenis', $this->input->post('jenis'));
+        $this->db->set('klasifikasi', $this->input->post('klasifikasi'));
+        $this->db->set('deskripsi', $this->input->post('deskripsi'));
+        $this->db->set('versi', $this->input->post('versi'));
+        $this->db->set('contoh', $this->input->post('dokumen_terkait'));
+        $this->db->set('type_doc', $this->input->post('type_dokumen'));
+        $this->db->set('file', $this->upload->data()['file_name']);
+//        $this->db->set('url', $this->input->post(''));
+        return $this->db->insert('document');
     }
+    function read_document() {
+        //TODO: param standard & company
+        
+        $this->db->order_by('d.id');
+        return $this->db->get('document d')->result_array();
+    }
+//    function reads() {
+//        $input = $this->input->post();
+//        $this->db->select('p.*, f.description, f.id AS id_form, p2.id AS child, f.file');
+//        if (isset($input['idPasal'])) {
+//            $this->db->where('p.id', $input['idPasal']);
+//        }
+//        $this->db->join('pasal p2', 'p2.parent= p.id', 'LEFT');
+//        $this->db->join('form2 f', 'f.id_pasal= p.id AND f.id_company=' . $input['idPerusahaan'], 'LEFT');
+//        $this->db->where('p.id_standard', $input['idStandar']);
+//        $this->db->group_by('p.id');
+//        $result = $this->db->get($this->table . ' p');
+//        if (isset($input['idPasal'])) {
+//            return $result->row_array();
+//        } else {
+//            return $result->result_array();
+//        }
+//    }
 
     function read_schedule() {
         $this->db->select('s.id, s.date ,u.username, s.file');

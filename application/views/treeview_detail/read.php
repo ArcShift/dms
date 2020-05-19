@@ -54,17 +54,123 @@ $role = $this->session->userdata['user']['role'];
         </form>
     </div>
 </div>
+<!--MODAL DOKUMEN-->
+<div class="modal fade" id="modalDokumen" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">     
+        <form method="post" id="formDokumen">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Dokumen</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body modal-message">
+                    <table class="table">
+                        <tbody>
+                            <tr>
+                                <td>Pasal</td>
+                                <td>
+                                    <select name="pasal" class="form-control select-pasal" required=""></select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Nomor</td>
+                                <td>
+                                    <input class="form-control input-nomor" name="nomor" required="">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Judul</td>
+                                <td>
+                                    <input class="form-control input-judul" name="judul" required="">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Pembuat Dokumen</td>
+                                <td>
+                                    <select class="form-control select-anggota" name="creator" required=""></select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Jenis Dokumen</td>
+                                <td>
+                                    <select class="form-control select-jenis" name="jenis" required="">
+                                        <option value="1">Level I</option>
+                                        <option value="2">Level II</option>
+                                        <option value="3">Level III</option>
+                                        <option value="4">Level IV</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Klasifikasi</td>
+                                <td>
+                                    <select class="form-control select-klasifikasi" name="klasifikasi" required="">
+                                        <option value="UMUM">Umum</option>
+                                        <option value="INTERNAL">Internal</option>
+                                        <option value="RAHASIA">Rahasia</option>
+                                        <option value="SANGAT RAHASIA">Sangat Rahasia</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Deskripsi</td>
+                                <td>
+                                    <textarea class="form-control textarea-deskripsi" name="deskripsi"></textarea>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Versi Dokumen</td>
+                                <td>
+                                    <input class="form-control input-versi" name="versi" required="">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Dokumen terkait</td>
+                                <td>
+                                    <select class="form-control" name="dokumen_terkait">
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Dokumen</td>
+                                <td>
+                                    <input class="radio-type-dokumen" type="radio" name="type_dokumen" value="FILE" required="">
+                                    <label>File</label>
+                                    <input class="radio-type-dokumen" type="radio" name="type_dokumen" value="URL">
+                                    <label>Url</label>
+                                    <input type="file" class="form-control" name="dokumen" required="">
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary" data-dismiss="modal">Batal</button>
+                    <button id="dokumenSubmit" type="submit" class="btn btn-primary btn-submit" name="submit">Simpan</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
 <script>
     $(document).ready(function () {
         $('#modalContainer').append($('#modalDetailPasal'));
+        $('#modalContainer').append($('#modalDokumen'));
+        var clone = $('#modalDokumen').clone();
+        clone.attr("id", "modalDokumenRead");
+        clone.find('.btn-submit').remove();
+        clone.find('.modal-title').text('Detail Dokumen');
+        clone.find('input').attr('disabled', true);
+        clone.find('select').attr('disabled', true);
+        clone.find('textarea').attr('disabled', true);
+        $('#modalContainer').append(clone);
     });
     var idPerusahaan;
     var idStandar;
-    var post = null;
-<?php if ($this->input->post()) { ?>
-        var post = JSON.parse('<?php echo json_encode($this->input->post()) ?>');
-<?php } ?>
-    console.log(post);
+    var anggota;
+    var dokumen;
     $('#perusahaan').change(function (s) {
         if ($(this).val()) {
             $.post('<?php echo site_url($module); ?>/standard', {'id': $(this).val()}, function (data) {
@@ -74,29 +180,100 @@ $role = $this->session->userdata['user']['role'];
                 for (var i = 0; i < d.length; i++) {
                     $('#standar').append('<option value="' + d[i].id + '">' + d[i].name + '</option>');
                 }
-                if (post != null) {
-                    $('#standar').val(post.idStandar);
-                    $('#standar').change();
+            });
+            $.post('<?php echo site_url($module); ?>/anggota', {'perusahaan': $(this).val()}, function (data) {
+                anggota = JSON.parse(data);
+                $('.select-anggota').empty();
+                $('.select-anggota').append('<option value="">-- pilih anggota --</option>');
+                for (var i = 0; i < anggota.length; i++) {
+                    var a = anggota[i];
+                    $('.select-anggota').append('<option value="' + a.id + '">' + a.fullname + '</option>');
                 }
             });
-            idPerusahaan = $(this).val();
+            perusahaan = $(this).val();
         }
     });
-    if (post != null) {
-        $('#perusahaan').val(post.idPerusahaan);
-        $('#perusahaan').change();
-    }
     $('#standar').change(function (s) {
-        idStandar = $(this).val();
-        if (idStandar) {
+        standar = $(this).val();
+        if (standar) {
             $('#root span').text($('#standar option:selected').text());
-            getTab('pasal');
+            getTab('dokumen');
         }
     });
     function getTab(tab) {
-        $.post('<?php echo site_url($module); ?>/tabs', {'idPerusahaan': idPerusahaan, 'idStandar': idStandar}, function (data) {
+        $.post('<?php echo site_url($module); ?>/tabs', {'idPerusahaan': perusahaan, 'idStandar': standar}, function (data) {
             $('#container').html(data);
             $('#tab-' + tab).addClass('active');
+            getDokumen();
         });
+    }
+    $('#formDokumen').on("submit", function (e) {
+        e.preventDefault();
+        var status = 'Undefined';
+        $('#modalDokumen').modal('hide');
+        $('#modalNotif .modal-title').text('Uploading...');
+        $('#modalNotif').modal('show');
+        $.ajax({
+            url: '<?php echo site_url($module . '/create_dokumen') ?>',
+            type: "post",
+            data: new FormData(this),
+            processData: false,
+            contentType: false,
+            cache: false,
+            async: false,
+            success: function (data) {
+                data = JSON.parse(data);
+                if (data.status == 'success') {
+                    status = 'Success';
+                    $(this).trigger("reset");
+                } else if (data.status == 'error') {
+                    status = 'Error';
+                    $('#modalNotif .modal-message').html(data.message);
+                }
+            },
+            error: function (data) {
+                status = 'Error';
+                $('#modalNotif .modal-message').text('Error 500');
+            },
+            complete: function () {
+                $('#modalNotif .modal-title').text(status);
+            }
+        });
+    });
+    function getDokumen() {
+        $.post('<?php echo site_url($module); ?>/get_dokumen', {'idPerusahaan': perusahaan, 'idStandar': standar}, function (data) {
+            dokumen = JSON.parse(data);
+            for (var i = 0; i < dokumen.length; i++) {
+                var d = dokumen[i];
+                $('#table-dokumen').append('<tr><td>' + d.nomor + '</td><td>' + d.judul + '</td><td>Level ' + d.jenis + '</td><td><span class="fa fa-info-circle text-primary" onclick="detailDokumen(' + i + ')" title="Detail"></span></td></tr>');
+            }
+        });
+    }
+    function tambahDokumen() {
+        var m = $('#modalDokumen');
+        m.find('.modal-title').text('Tambah Dokumen');
+        m.find('.btn-submit').val('tambah');
+//        dokumenLoadData();
+//        formDokumenReset();
+        m.modal('show');
+    }
+    $('.radio-type-dokumen').change(function () {
+        console.log($(this).val());
+    });
+    function detailDokumen(index) {
+        var m = $('#modalDokumenRead');
+        var d = dokumen[index];
+        m.modal('show');
+        m.find('.select-pasal').val(d.id_pasal);
+        m.find('.input-nomor').val(d.nomor);
+        m.find('.input-judul').val(d.judul);
+        m.find('.select-anggota').val(d.creator);
+        m.find('.select-jenis').val(d.jenis);
+        m.find('.select-klasifikasi').val(d.klasifikasi);
+        m.find('.textarea-deskripsi').val(d.deskripsi);
+        m.find('.input-versi').val(d.versi);        
+//        JENIS DOKUMEN
+//        KLASIFIKASI
+
     }
 </script>

@@ -1,82 +1,27 @@
 <?php
 $role = $this->session->userdata['user']['role'];
 ?>
-<style>
-    #root ul {
-        list-style-type: none;
-        padding-left: 15px;
-    }
-</style>
-<ul>
-    <?php foreach ($data as $k => $d) { ?>
-        <?php
-        if ($this->input->post('pasal')) {
-            if ($this->input->post('pasal') == $d['id']) {
-                $activePasal = $k;
-            }
-        }
-        ?>
-        <li id="pasal<?php echo $d['id'] ?>" class="-list-group-item list-pasal">
-            <input class="desc d-none" name="desc" value="">
-            <input class="filename d-none" name="desc" value="">
-            <span class="parent d-none"><?php echo empty($d['parent']) ? 'root' : 'pasal' . $d['parent'] ?></span>
-            <?php if (!empty($d['child'])) { ?>
-                <span class="fa fa-angle-double-right text-success" onclick="collapse(this)"></span>
-            <?php } ?>
-            <span class="title"><?php echo $d['name'] ?></span>
-            <?php if ($activeModule['acc_update'] & empty($d['child'])) { ?> 
-                <?php if ($role == 'pic' || $role = 'admin') { ?>
-                    <span class="fa fa-info-circle text-primary" onclick="form1(<?php echo $k ?>)" title="Open Form 1">&nbsp;</span>
-                <?php } ?>
-                <span class="fa fa-bars text-success" onclick="form2(<?php echo $k ?>)" title="Open Form 2">&nbsp;</span>
-            <?php } ?>
-            <ul></ul>
-        </li>
-    <?php } ?>
-</ul>
-<!--DATA-->
-<div class="d-none">            
-    <?php foreach ($pemenuhan1 as $k => $p) { ?>
-        <div class="item-pemenuhan" <?php echo 'id="item-pemenuhan' . $p['id'] . '"' ?>>            
-            <div class="pasal card bg-heavy-rain mb-1">
-                <div class="index"><?php echo $k ?></div>
-                <div class="row m-1" >
-                    <div class="col-sm-6 title">
-                        <?php echo $p['name'] ?>
-                    </div>
-                    <div class="col-sm-3">
-                        100 %
-                    </div>
-                    <div class="col-sm-3">
-                        100 %
-                    </div>
-                </div>
-            </div>
-            <div class="child"></div>
-        </div>
-    <?php } ?>
-</div>
+<!--TAB-->
 <ul class="nav nav-tabs">
     <li class="nav-item"><a data-toggle="tab" href="#tab-pemenuhan1" class="nav-link">Pemenuhan</a></li>
     <li class="nav-item"><a data-toggle="tab" href="#tab-pasal" class="nav-link">Pasal</a></li>
     <li class="nav-item"><a data-toggle="tab" href="#tab-dokumen" class="nav-link">Dokumen</a></li>
+    <li class="nav-item"><a data-toggle="tab" href="#tab-distribusi" class="nav-link">Distribusi</a></li>
     <li class="nav-item"><a data-toggle="tab" href="#tab-jadwal" class="nav-link">Jadwal</a></li>
     <li class="nav-item"><a data-toggle="tab" href="#tab-penerapan" class="nav-link">Penerapan</a></li>
 </ul>
 <div class="tab-content">
     <!--PEMENUHAN-->
     <div class="tab-pane" id="tab-pemenuhan1" role="tabpanel">
-        <table class="table">
+        <table class="table table-striped">
             <thead>
                 <tr>
-                    <th></th>
+                    <th>Pasal</th>
                     <th>Dokumen</th>
                     <th>Implementasi</th>
                 </tr>
             </thead>
-            <tbody id="table-pemenuhan">
-
-            </tbody>
+            <tbody id="table-pemenuhan"></tbody>
         </table>
     </div>
     <!--PASAL-->
@@ -91,30 +36,38 @@ $role = $this->session->userdata['user']['role'];
             </thead>
             <tbody id="table-pasal"></tbody>
         </table>
-        <div class="row">
-            <div class="col-sm-6" id="treeview-list">
-                <ul class="list-group">
-                    <li id="root" class="list-group-item">
-                        <span class="-title">ROOT</span>
-                        <ul></ul>
-                    </li>
-                </ul>
-            </div>
-        </div>
     </div>
     <!--DOKUMEN-->
     <div class="tab-pane" id="tab-dokumen" role="tabpanel">
-        <button class="btn btn-primary fa fa-plus"></button>
+        <div class="text-right mb-2">
+            <label>Tambah Dokumen</label>
+            <button class="btn btn-outline-primary fa fa-plus" onclick="tambahDokumen()"></button>
+        </div>
         <table class="table table-striped">
-            <thead></thead>
-            <tbody>
+            <thead>
                 <tr>
-                    <td>No Dokumen</td>
-                    <td>Keterangan</td>
-                    <td>Level</td>
-                    <td>detail</td>
+                    <th>No</th>
+                    <th>Judul</th>
+                    <th>Jenis</th>
+                    <th>detail</th>
                 </tr>
+            </thead>
+            <tbody id="table-dokumen">
             </tbody>
+        </table>
+    </div>
+    <div class="tab-pane" id="tab-distribusi" role="tabpanel">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Pasal</th>
+                    <th>Judul Dokumen</th>
+                    <th>Pembuat dokumen</th>
+                    <th>Distribusi</th>
+                    <th>Aksi</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
         </table>
     </div>
     <!--JADWAL-->
@@ -180,21 +133,7 @@ $role = $this->session->userdata['user']['role'];
             </tbody>
         </table>
     </div>
-</div>
-<div class="d-none">
-    <ul>
-        <li class="list-group-item" id="template-pemenuhan">
-            <div class="row">
-                <div class="col-sm-5 title">
-                    Pasal
-                </div>
-                <div class="col-sm-7">
-                    <div class="progress">
-                    </div>
-                </div>
-            </div>
-        </li>
-    </ul>
+    <div class="tab-pane" id="tab-base" role="tabpanel">Base</div>
 </div>
 <!--MODAL-->
 <div class="modal fade" id="modalUploadPenerapan" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -213,7 +152,7 @@ $role = $this->session->userdata['user']['role'];
                     <input class="d-none input-schedule" name="jadwal">
                     <div class="form-group">
                         <input class="form-control" type="file" name="doc" required="">
-                        <span><?php // echo $data['file']                                              ?></span>
+                        <span><?php // echo $data['file']                                                                      ?></span>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -225,99 +164,58 @@ $role = $this->session->userdata['user']['role'];
     </div>
 </div>
 <script>
-    var dataPemenuhan = JSON.parse('<?php echo json_encode($pemenuhan1) ?>');
-    for (var i = 0; i < dataPemenuhan.length; i++) {
-        if (dataPemenuhan[i].parent != null) {
-            var parent = $('#item-pemenuhan' + dataPemenuhan[i].parent);
-            var element = $('#item-pemenuhan' + dataPemenuhan[i].id);
-            parent.children('.child').append(element);
-            dataPemenuhan[i].fullname = parent.find('.title:first').text() + ' - ' + element.find('.title').text();
-            element.find('.title').text(dataPemenuhan[i].fullname);
-        } else {
-            dataPemenuhan[i].fullname = dataPemenuhan[i].name;
-        }
-    }
-    var listPasal = $('.pasal');
-    var pasalSort = [];
-    for (var i = 0; i < listPasal.length; i++) {
-        var n = parseInt($(listPasal[i]).find('.index').text());
-        if (Number.isInteger(n)) {
-            pasalSort.push(n);
-        } else {
-            console.log('Error parsing: ' + n);
-        }
-    }
-    for (var i = 0; i < pasalSort.length; i++) {
-        var data = dataPemenuhan[pasalSort[i]];
-        $('#table-pemenuhan').append('<tr><td>' + data.fullname + '</td><td>10%</td><td>10%</td></tr>');
-        $('#table-pasal').append('<tr><td>' + data.fullname + '</td><td>' + data.sort_desc + '</td><td><span class="fa fa-info-circle text-primary" onclick="detailPasal(' + i + ')" title="Detail"></span></td></tr>');
-    }
+    var sortData = [];
+    $(document).ready(function () {
+        $.get('<?php echo site_url($module); ?>/pasal', {perusahaan: perusahaan, standar: standar}, function (data) {
+            data = JSON.parse(data);
+            for (var i = 0; i < data.length; i++) {
+                var d = data[i];
+                var element = '<div class="item-base" id="item-base' + d.id + '"><span>' + d.name + '</span><span class="index">' + i + '</span><div class="child"></div></div>';
+                var parent = null;
+                if (d.parent == null) {
+                    $('#tab-base').append(element);
+                } else {
+                    $('#item-base' + d.parent).children('.child').append(element);
+                }
+                data[i] = d;
+            }
+            var element = $('.item-base').children('.index').get();
+            for (var i = 0; i < element.length; i++) {
+                var e = element[i];
+                var index = $(e).text();
+                sortData.push(data[index]);
+                $(e).text(i);
+            }
+            for (var i = 0; i < sortData.length; i++) {
+                var s = sortData[i];
+                if (s.parent == null) {
+                    s.parentIndex = null;
+                    s.fullname = s.name;
+                } else {
+                    s.parentIndex = $('#item-base' + s.parent).children('.index').text();
+                    s.fullname = sortData[s.parentIndex].fullname + ' - ' + s.name;
+                }
+                sortData[i] = s;
+            }
+            $('.select-pasal').empty();
+            $('.select-pasal').append('<option value="">-- pilih pasal --</option>');
+            for (var i = 0; i < sortData.length; i++) {
+                var d = sortData[i];
+                $('#table-pemenuhan').append('<tr><td>' + d.fullname + '</td><td>10%</td><td>10%</td></tr>');
+                $('#table-pasal').append('<tr><td>' + d.fullname + '</td><td>' + d.sort_desc + '</td><td><span class="fa fa-info-circle text-primary" onclick="detailPasal(' + i + ')" title="Detail"></span></td></tr>');
+                $('.select-pasal').append('<option value="' + d.id + '">' + d.fullname + '</option>');
+            }
+        });
+    });
     function detailPasal(index) {
         var m = $('#modalDetailPasal');
-        var d = dataPemenuhan[pasalSort[index]];
+        var d = sortData[index];
         m.modal('show');
         m.find('.modal-title').text(d.fullname);
         m.find('.item-sort-desc').val(d.sort_desc);
         m.find('.item-long-desc').text(d.long_desc);
     }
-//    console.log(item-pasal);
-
-//    console.log(pemenuhan[0]);
-    var data = JSON.parse('<?php echo json_encode($data) ?>');
-    var pasal = $('.list-pasal');
-    var formIndex = null;
-//    $(document).ready(function () {
-//        $('#table-penerapan').DataTable();
-//    });
-    for (var p, i = 0; i < data.length; i++) {
-        p = pasal[i];
-        $('#' + $(p).children('.parent').text()).children('ul').append(p);
-//        }
-        if (post != null) {
-            if (post.idForm != null) {
-                if (post.idForm == data[i].id) {
-                    formIndex = i;
-                }
-            }
-        }
-    }
-    $('#treeview-list').addClass('collapse');
-    $('#treeview-list').collapse('toggle');
-    $('#treeview-list').collapse('toggle');
-    function form1(i) {
-        var d = data[i];
-//        closeForm();
-//        showCrud('#form1');
-        $('.item-name').text(d.name);
-        $('.item-desc').text(d.description);
-        if (d.file != null) {
-            $('.item-file').attr('href', '<?php echo base_url('upload/form1/') ?>' + d.file);
-            $('.item-file').removeClass('d-none');
-        } else {
-            $('.item-file').addClass('d-none');
-        }
-    }
-    function form2(i) {
-        closeForm();
-        $.post('<?php echo site_url($module); ?>/form2', {'idPasal': data[i].id, 'idPerusahaan': idPerusahaan, 'idStandar': idStandar}, function (data) {
-            $('#form2').empty();
-            $('#form2').append(data);
-            showCrud('#form2');
-        });
-    }
-
-    function closeForm() {
-        $('#treeview-list').removeClass('col-sm-6');
-        $('#treeview-list').addClass('col-sm-12');
-        $('#treeview-crud').hide();
-        $('form').addClass('d-none');
-    }
-    function showCrud(item) {
-        $('#treeview-list').removeClass('col-sm-12');
-        $('#treeview-list').addClass('col-sm-6');
-        $('#treeview-crud').show();
-        $(item).removeClass('d-none');
-    }
+//    ====================================
     $('#form2').on('submit', function (e) {
         e.preventDefault();
         $.post('<?php echo site_url($module); ?>/form2_edit2', $(this).serializeArray(), function (data) {
@@ -329,9 +227,6 @@ $role = $this->session->userdata['user']['role'];
             }
         });
     });
-    function collapse(item) {
-        $(item).parent('li').children('ul').collapse('toggle');
-    }
     $('.item-upload-penerapan').click(function () {
         $('.input-schedule').val($(this).val());
         $('#modalContainer').append($('#modalUploadPenerapan'));
@@ -355,8 +250,4 @@ $role = $this->session->userdata['user']['role'];
             }
         });
     });
-    if (post != null) {
-        form2(formIndex);
-        post = null;
-    }
 </script>
