@@ -155,5 +155,7 @@ class Treeview_detail extends MY_Controller {
         }
         echo json_encode($status);
     }
-
+    function get_distribusi() {
+        
+    }
 }

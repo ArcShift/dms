@@ -75,8 +75,13 @@ class M_treeview_detail extends CI_Model {
     }
     function read_document() {
         //TODO: param standard & company
-        
-        $this->db->order_by('d.id');
+        $this->db->select('d.*');
+        $this->db->join('pasal p', 'p.id = d.id_pasal');
+        $this->db->join('users u', 'u.id = d.creator');
+        $this->db->join('unit_kerja uk', 'uk.id = u.id_unit_kerja');
+        $this->db->where('uk.id_company = '.$this->input->post('perusahaan'));
+        $this->db->where('p.id_standard = '.$this->input->post('standar'));
+        $this->db->order_by('p.id');
         return $this->db->get('document d')->result_array();
     }
 //    function reads() {
