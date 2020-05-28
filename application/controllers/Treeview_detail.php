@@ -15,18 +15,6 @@ class Treeview_detail extends MY_Controller {
         $this->render('read');
     }
 
-    function tabs() {
-        if (empty($this->input->post('idStandar'))) {
-            die('NO ACCESS');
-        }
-//        $this->data['data'] = $this->model->reads();
-        $this->data['schedule'] = $this->model->reads_schedule();
-//        $this->data['pemenuhan'] = $this->model->reads_pemenuhan();
-//        $this->data['pemenuhan'] = $this->db->last_query();
-//        die($this->db->last_query());
-        $this->render('tab', TRUE, TRUE);
-    }
-
     function standard() {
         if (!$this->input->is_ajax_request()) {
             redirect('404');
@@ -57,78 +45,54 @@ class Treeview_detail extends MY_Controller {
         $this->form_validation->set_rules('nomor', 'Nomor', 'required');
         $result['status'] = 'error';
         if ($this->form_validation->run()) {
-            //TODO: LOAD FILE & QUERY DOCUMENT
-            $config['upload_path'] = './upload/dokumen';
-            $config['allowed_types'] = '*';
-            $this->load->library('upload', $config);
-            if ($this->upload->do_upload('dokumen')) {
+            $step = true;
+            if ($this->input->post('type_dokumen') == 'FILE') {
+                $config['upload_path'] = './upload/dokumen';
+                $config['allowed_types'] = '*';
+                $this->load->library('upload', $config);
+                if (!$this->upload->do_upload('dokumen')) {
+                    $result['message'] = $this->upload->display_errors();
+                    $step = false;
+                }
+            }
+            if ($step = true) {
                 if ($this->model->create_document()) {
                     $result['status'] = 'success';
                 } else {
                     $result['message'] = $this->db->error()['message'];
                 }
-            } else {
-                $result['message'] = $this->upload->display_errors();
             }
         } else {
             $result['message'] = validation_errors();
         }
         echo json_encode($result);
-//        print_r($this->input->post());
     }
+
     function get_dokumen() {
         echo json_encode($this->model->read_document());
     }
-//    function form2_edit2() {
-//        $this->load->library('form_validation');
-//        if ($this->input->post('simpan')) {
-//            $step = true;
-//            $config['upload_path'] = './upload/form2';
-//            $config['allowed_types'] = '*';
-//            $this->load->library('upload', $config);
-//            if ($_FILES['dokumen']['name']) {
-//                if (!$this->upload->do_upload('dokumen')) {
-//                    $step = false;
-//                    $this->data['msgError'] = $this->upload->display_errors();
-//                }
-//            }
-//            if ($step) {
-//                if ($this->model->form2_save()) {
-//                    $this->data['msgSuccess'] = 'Data berhasil diubah';
-////                    $this->session->set_flashdata('msgSuccess', 'Data berhasil diubah');
-////                    redirect($this->module);
-//                } else {
-//                    $this->data['msgError'] = $this->db->error()['message'];
-//                }
-//            }
-//        } elseif ($this->input->post('tambah')) {
-//            if ($this->input->post('idForm')) {
-//                $this->form_validation->set_rules('jadwal', 'Jadwal', 'required');
-//                $this->form_validation->set_rules('anggota', 'Anggota', 'required');
-//                if ($this->form_validation->run()) {
-//                    if ($this->model->add_schedule()) {
-//                        $this->data['msgSuccess'] = 'Jadwal berhasil ditambahkan';
-//                    } else {
-//                        $this->data['msgError'] = $this->db->error()['message'];
-//                    }
-//                } else {
-//                    $this->data['msgError'] = validation_errors();
-//                }
-//            } else {
-//                $this->data['msgError'] = 'Form belum disimpan';
-//            }
-//        } elseif ($this->input->post('hapus')) {
-//            if ($this->model->delete_schedule()) {
-//                $this->data['msgSuccess'] = 'Jadwal berhasil dihapus';
-//            } else {
-//                $this->data['msgError'] = $this->db->error()['message'];
-//            }
-//        }
-//        $this->data['member'] = $this->model->member();
-//        $this->data['schedule'] = $this->model->read_schedule();
-//        $this->data['data'] = $this->model->reads();
-//        $this->render('form2_edit2', TRUE, TRUE);
-//    }
+
+    function get_distribusi() {
+        echo json_encode($this->model->read_distribusi());
+    }
+
+    function set_distribusi() {
+        if ($this->model->insert_distribusi()) {
+            echo 'success';
+        } else {
+            echo 'error';
+        }
+        print_r($this->input->post());
+    }
+
+    function set_jadwal() {
+//        print_r($this->input->post());
+        if ($this->model->create_jadwal()) {
+            echo 'success';
+        } else {
+            echo 'error';
+        }
+    }
 
     function upload_bukti_penerapan() {
         $config['upload_path'] = "./upload/penerapan";
@@ -155,7 +119,5 @@ class Treeview_detail extends MY_Controller {
         }
         echo json_encode($status);
     }
-    function get_distribusi() {
-        
-    }
+
 }

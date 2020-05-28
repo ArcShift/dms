@@ -58,6 +58,7 @@ class M_treeview_detail extends CI_Model {
         $this->db->group_by('p.id');
         return $this->db->get('pasal p')->result_array();
     }
+
     function create_document() {
         $this->db->set('id_pasal', $this->input->post('pasal'));
         $this->db->set('nomor', $this->input->post('nomor'));
@@ -68,67 +69,56 @@ class M_treeview_detail extends CI_Model {
         $this->db->set('deskripsi', $this->input->post('deskripsi'));
         $this->db->set('versi', $this->input->post('versi'));
         $this->db->set('contoh', $this->input->post('dokumen_terkait'));
-        $this->db->set('type_doc', $this->input->post('type_dokumen'));
-        $this->db->set('file', $this->upload->data()['file_name']);
-//        $this->db->set('url', $this->input->post(''));
+        $type = $this->input->post('type_dokumen');
+        $this->db->set('type_doc', $type);
+        if ($type == 'FILE') {
+            $this->db->set('file', $this->upload->data()['file_name']);
+        } else if ($type == 'URL') {
+            $this->db->set('url', $this->input->post('url'));
+        }
         return $this->db->insert('document');
     }
+
     function read_document() {
-        //TODO: param standard & company
-        $this->db->select('d.*');
+        $this->db->select("d.*, GROUP_CONCAT(ds.id) AS distribusi, GROUP_CONCAT(CONCAT(ud.username,' - ', ukd.name)) AS user_distribusi");
         $this->db->join('pasal p', 'p.id = d.id_pasal');
         $this->db->join('users u', 'u.id = d.creator');
         $this->db->join('unit_kerja uk', 'uk.id = u.id_unit_kerja');
-        $this->db->where('uk.id_company = '.$this->input->post('perusahaan'));
-        $this->db->where('p.id_standard = '.$this->input->post('standar'));
+        $this->db->join('distribusi ds', 'd.id = ds.id_document', 'LEFT');
+        $this->db->join('users ud', 'ud.id = ds.id_users', 'LEFT');
+        $this->db->join('unit_kerja ukd', 'ukd.id = ud.id_unit_kerja', 'LEFT');
+        $this->db->where('uk.id_company = ' . $this->input->post('perusahaan'));
+        $this->db->where('p.id_standard = ' . $this->input->post('standar'));
         $this->db->order_by('p.id');
-        return $this->db->get('document d')->result_array();
-    }
-//    function reads() {
-//        $input = $this->input->post();
-//        $this->db->select('p.*, f.description, f.id AS id_form, p2.id AS child, f.file');
-//        if (isset($input['idPasal'])) {
-//            $this->db->where('p.id', $input['idPasal']);
-//        }
-//        $this->db->join('pasal p2', 'p2.parent= p.id', 'LEFT');
-//        $this->db->join('form2 f', 'f.id_pasal= p.id AND f.id_company=' . $input['idPerusahaan'], 'LEFT');
-//        $this->db->where('p.id_standard', $input['idStandar']);
-//        $this->db->group_by('p.id');
-//        $result = $this->db->get($this->table . ' p');
-//        if (isset($input['idPasal'])) {
-//            return $result->row_array();
-//        } else {
-//            return $result->result_array();
-//        }
-//    }
-
-    function read_schedule() {
-        $this->db->select('s.id, s.date ,u.username, s.file');
-        $this->db->join('form2 f', 'f.id = s.id_form2 AND f.id_pasal = ' . $this->input->post('idPasal') . ' AND f.id_company = ' . $this->input->post('idPerusahaan'));
-        $this->db->join('users u', 'u.id= s.id_user');
-        $this->db->order_by('s.id');
-        return $this->db->get('schedule s')->result_array();
-    }
-
-    function add_schedule() {
-        $in = $this->input->post();
-        if (isset($in['idForm'])) {
-            $this->db->set('id_form2', $in['idForm']);
-        } else {
-            $this->db->set('id_pasal', $in['idPasal']);
-            $this->db->set('id_company', $in['idPerusahaan']);
-            $this->db->set('description', $in['deskripsi']);
-            if ($this->db->insert('form2')) {
-                $idForm = $this->db->insert_id();
-            } else {
-                die('error: ');
-                return FALSE;
-            }
-            $this->db->set('id_form2', $idForm);
+        $this->db->group_by('d.id');
+        $result = $this->db->get('document d')->result_array();
+        for ($i = 0; $i < count($result); $i++) {
+            $result[$i]['distribusi'] = explode(',', $result[$i]['distribusi']);
+            $result[$i]['user_distribusi'] = explode(',', $result[$i]['user_distribusi']);
         }
-        $this->db->set('date', $in['jadwal']);
-        $this->db->set('id_user', $in['anggota']);
-        return $this->db->insert('schedule');
+        return $result;
+    }
+
+    function read_distribusi() {
+        //TODO: filter company, standard
+        return $this->db->get('distribusi')->result_array();
+    }
+
+    function insert_distribusi() {
+        $in = $this->input->post();
+        foreach ($in['anggota'] as $k => $a) {
+            $this->db->where('id_document', $in['dokumen']);
+            $this->db->where('id_users', $a);
+            $count = $this->db->count_all_results('distribusi');
+            if ($count == 0) {
+                $this->db->set('id_document', $in['dokumen']);
+                $this->db->set('id_users', $a);
+                if (!$this->db->insert('distribusi')) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     function reads_schedule() {
@@ -226,8 +216,21 @@ class M_treeview_detail extends CI_Model {
         }
     }
 
-    function form2_upload() {
-        
+    function create_jadwal() {
+        $day = array('senin', 'selasa', 'rabu', 'kamis', 'jumat', 'sabtu', 'minggu');
+        foreach ($day as $d) {
+            $dy = 'TIDAK';
+            if($this->input->post('hari')){
+                if(in_array(strtoupper($d), $this->input->post('hari'))){
+                    $dy = 'YA';
+                }
+            }
+            $this->db->set($d, $dy);
+        }        
+        $this->db->set('start_date', $this->input->post('tanggal'));
+        $this->db->set('repeat', $this->input->post('ulangi'));
+        $this->db->where('id', $this->input->post('id'));
+        return $this->db->update('distribusi');
     }
 
 }

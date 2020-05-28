@@ -29,7 +29,7 @@ $role = $this->session->userdata['user']['role'];
                     <li class="nav-item"><a data-toggle="tab" href="#tab-dokumen" class="nav-link">Dokumen</a></li>
                     <li class="nav-item"><a data-toggle="tab" href="#tab-distribusi" class="nav-link">Distribusi</a></li>
                     <li class="nav-item"><a data-toggle="tab" href="#tab-jadwal" class="nav-link">Jadwal</a></li>
-                    <li class="nav-item"><a data-toggle="tab" href="#tab-penerapan" class="nav-link">Penerapan</a></li>
+                    <li class="nav-item"><a data-toggle="tab" href="#tab-implementasi" class="nav-link">Implementasi</a></li>
                     <!--<li class="nav-item"><a data-toggle="tab" href="#tab-base" class="nav-link">Base</a></li>-->
                 </ul>
                 <div class="tab-content">
@@ -98,60 +98,30 @@ $role = $this->session->userdata['user']['role'];
                             <thead>
                                 <tr>
                                     <th>Pasal</th>
-                                    <th>Tanggal</th>
+                                    <th>Judul Dokumen</th>
+                                    <th>Jadwal</th>
                                     <th>Distribusi</th>
-                                    <th>Status</th>
+                                    <th>Aksi</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                <?php $txtPasal = ''; ?>
-                                <?php foreach ($schedule as $k => $s) { ?>
-                                    <tr>
-                                        <td><?php echo $s['pasal']; ?></td>
-                                        <td><?php echo $s['date'] ?></td>
-                                        <td><?php echo $s['name'] . ' - ' . $s['division'] ?></td>
-                                        <td><?php echo $s['status'] ?></td>
-                                    </tr>
-                                <?php } ?>
-                            </tbody>
+                            <tbody id="table-jadwal"></tbody>
                         </table>
                     </div>
-                    <div class="tab-pane" id="tab-penerapan" role="tabpanel">
-                        <table class="table" id="table-penerapan">
+                    <!--IMPLEMENTASI-->
+                    <div class="tab-pane" id="tab-implementasi" role="tabpanel">
+                        <table class="table" id="table-implementasi">
                             <thead>
                                 <tr>
                                     <th>Pasal</th>
-                                    <th>Tanggal</th>
+                                    <th>Judul Dokumen</th>
+                                    <th>Jadwal</th>
                                     <th>Distribusi</th>
                                     <th>Bukti</th>
                                     <th>Status</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php $txtPasal = ''; ?>
-                                <?php foreach ($schedule as $k => $s) { ?>
-                                    <tr>
-                                        <td><?php echo $s['pasal']; ?></td>
-                                        <td><?php echo $s['date'] ?></td>
-                                        <td><?php echo $s['name'] . ' - ' . $s['division'] ?></td>
-                                        <td>
-                                            <?php if (!$s['deadline'] | !empty($s['file'])) { ?>
-                                                <div class="dropdown d-inline-block">
-                                                    <button type="button" aria-haspopup="true" aria-expanded="false" data-toggle="dropdown" class="dropdown-toggle btn btn-primary btn-sm">Aksi</button>
-                                                    <div tabindex="-1" role="menu" aria-hidden="true" class="dropdown-menu">
-                                                        <?php if (!$s['deadline']) { ?>
-                                                            <button type="button" class="dropdown-item item-upload-penerapan" name="uploadPenerapan" value="<?php echo $s['id'] ?>">Upload</button>
-                                                        <?php } ?>
-                                                        <?php if (!empty($s['file'])) { ?>
-                                                            <a class="dropdown-item" href="<?php echo base_url('upload/penerapan/' . $s['file']) ?>">Download</a>
-                                                        <?php } ?>
-                                                    </div>
-                                                </div>
-                                            <?php } ?>
-                                        </td>
-                                        <td><?php echo $s['status'] ?></td>
-                                    </tr>
-                                <?php } ?>
+
                             </tbody>
                         </table>
                     </div>
@@ -275,7 +245,8 @@ $role = $this->session->userdata['user']['role'];
                                     <label>File</label>
                                     <input class="radio-type-dokumen" type="radio" name="type_dokumen" value="URL">
                                     <label>Url</label>
-                                    <input type="file" class="form-control" name="dokumen" required="">
+                                    <input class="form-control input-file d-none" type="file" class="form-control" name="dokumen" required="">
+                                    <input class="form-control input-url d-none" type="url" class="form-control" name="url" required="">
                                 </td>
                             </tr>
                         </tbody>
@@ -295,7 +266,7 @@ $role = $this->session->userdata['user']['role'];
         <form method="post" id="formDistribusi">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Dokumen</h5>
+                    <h5 class="modal-title">Distribusi</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -330,14 +301,17 @@ $role = $this->session->userdata['user']['role'];
                             <tr>
                                 <td>Dokumen Terkait</td>
                                 <td>
+                                    <input class="input-dokumen-id d-none" name="dokumen">
                                     <label class="label-dokumen-terkait"></label>
                                 </td>
                             </tr>
                             <tr>
                                 <td>Distribusi</td>
                                 <td>
-                                    <input class="input-dokumen-id" name="dokumen">
-                                    <select class="form-control select-anggota" name="anggota[]" multiple="" required=""></select>
+                                    <div class="row">
+                                        <select class="form-control select-anggota select-2" multiple="multiple" name="anggota[]" required="">
+                                        </select>
+                                    </div>
                                 </td>
                             </tr>
                         </tbody>
@@ -351,25 +325,154 @@ $role = $this->session->userdata['user']['role'];
         </form>
     </div>
 </div>
-<!--MODAL UPLOAD PENERAPAN-->
-<div class="modal fade" id="modalUploadPenerapan" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<!--MODAL JADWAL-->
+<div class="modal fade" id="modalJadwal" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
-        <form method="post" id="formUploadBuktiPenerapan" enctype="multipart/form-data">            
+        <form id="formJadwal">            
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Upload Bukti</h5>
+                    <h5 class="modal-title">Tambah Jadwal</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    <!--<input name="idPerusahaan" class="inputPerusahaan" value=""/>-->
-                    <!--<input name="idPasal" class="inputPasal" value=""/>-->
-                    <input class="d-none input-schedule" name="jadwal">
-                    <div class="form-group">
-                        <input class="form-control" type="file" name="doc" required="">
-                        <span><?php // echo $data['file']                                                                                   ?></span>
-                    </div>
+                    <form id="formJadwal">
+                        <input class="input-id d-none" name="id"/>
+                        <table class="table">
+                            <tbody>
+                                <tr>
+                                    <td>Pasal</td>
+                                    <td>
+                                        <input class="form-control input-pasal" disabled=""/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Judul Dokumen</td>
+                                    <td>
+                                        <input class="form-control input-judul" disabled=""/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Penjadwalan</td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td>Tanggal</td>
+                                    <td>
+                                        <input class="form-control" name="tanggal" type="date" required="">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Ulangi</td>
+                                    <td>
+                                        <input class="radio-ulangi-jadwal" type="radio" name="ulangi" value="YA" required="">
+                                        <label>Ya</label>
+                                        <input class="radio-ulangi-jadwal" type="radio" name="ulangi" value="TIDAK">
+                                        <label>Tidak</label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td>
+                                        <div id="group-input-hari">
+                                            <div class="row group-input-hari">
+                                                <div class="col-sm-4">
+                                                    <input type="checkbox" name="hari[]" value="SENIN">
+                                                    <label for="vehicle1"> Senin</label>
+                                                </div>
+                                                <div class="col-sm-4">
+                                                    <input type="checkbox" name="hari[]" value="SELASA">
+                                                    <label for="vehicle1"> Selasa</label>
+                                                </div>
+                                                <div class="col-sm-4">
+                                                    <input type="checkbox" name="hari[]" value="RABU">
+                                                    <label for="vehicle1"> Rabu</label>
+                                                </div>
+                                            </div>
+                                            <div class="row group-input-hari">
+                                                <div class="col-sm-4">
+                                                    <input type="checkbox" name="hari[]" value="KAMIS">
+                                                    <label for="vehicle1"> Kamis</label>
+                                                </div>
+                                                <div class="col-sm-4">
+                                                    <input type="checkbox" name="hari[]" value="JUMAT">
+                                                    <label for="vehicle1"> Jumat</label>
+                                                </div>
+                                                <div class="col-sm-4">
+                                                    <input type="checkbox" name="hari[]" value="SABTU">
+                                                    <label for="vehicle1"> Sabtu</label>
+                                                </div>
+                                            </div>
+                                            <div class="row group-input-hari">
+                                                <div class="col-sm-4">
+                                                    <input type="checkbox" name="hari[]" value="MINGGU">
+                                                    <label for="vehicle1"> Minggu</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-primary">Simpan</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<!--MODAL UPLOAD BUKTI-->
+<div class="modal fade" id="modalUploadBukti">
+    <div class="modal-dialog" role="document">
+        <form id="formUploadBukti">            
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Upload Bukti</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="formUploadBukti">
+                        <input class="input-id d-none" name="id"/>
+                        <table class="table">
+                            <tbody>
+                                <tr>
+                                    <td>Judul Dokumen</td>
+                                    <td>
+                                        <input class="form-control input-judul" disabled=""/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Jadwal</td>
+                                    <td>
+                                        <input class="form-control input-jadwal" disabled=""/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Jadwal</td>
+                                    <td>
+                                        <input class="form-control" name="tanggal" type="date" required="">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Dokumen</td>
+                                    <td>
+                                        <input class="radio-type-dokumen" type="radio" name="type_dokumen" value="FILE" required="">
+                                        <label>File</label>
+                                        <input class="radio-type-dokumen" type="radio" name="type_dokumen" value="URL">
+                                        <label>Url</label>
+                                        <input class="form-control input-file d-none" type="file" class="form-control" name="dokumen" required="">
+                                        <input class="form-control input-url d-none" type="url" class="form-control" name="url" required="">
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </form>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
@@ -390,7 +493,7 @@ $role = $this->session->userdata['user']['role'];
         clone.find('select').attr('disabled', true);
         clone.find('textarea').attr('disabled', true);
         $('#modalContainer').append(clone);
-        $('#tab-distribusi').addClass('active');
+        $('#tab-implementasi').addClass('active');
     });
     var idPerusahaan;
     var idStandar;
@@ -410,12 +513,12 @@ $role = $this->session->userdata['user']['role'];
             $.post('<?php echo site_url($module); ?>/anggota', {'perusahaan': $(this).val()}, function (data) {
                 anggota = JSON.parse(data);
                 $('.select-anggota').empty();
-                $('.select-anggota').append('<option value="">-- pilih anggota --</option>');
                 for (var i = 0; i < anggota.length; i++) {
                     var a = anggota[i];
                     $('.select-anggota').append('<option value="' + a.id + '">' + a.fullname + '</option>');
                 }
             });
+//        $('.select-2').select2();
             perusahaan = $(this).val();
         }
     });
@@ -433,7 +536,7 @@ $role = $this->session->userdata['user']['role'];
                 var d = data[i];
                 var element = '<div class="item-base" id="item-base' + d.id + '"><span>' + d.name + '</span><span class="index">' + i + '</span><div class="child"></div></div>';
                 var parent = null;
-                if (d.parent == null) {
+                if (d.parent === null) {
                     $('#tab-base').append(element);
                 } else {
                     $('#item-base' + d.parent).children('.child').append(element);
@@ -450,7 +553,7 @@ $role = $this->session->userdata['user']['role'];
             }
             for (var i = 0; i < sortData.length; i++) {
                 var s = sortData[i];
-                if (s.parent == null) {
+                if (s.parent === null) {
                     s.parentIndex = null;
                     s.fullname = s.name;
                 } else {
@@ -497,11 +600,11 @@ $role = $this->session->userdata['user']['role'];
             async: false,
             success: function (data) {
                 data = JSON.parse(data);
-                if (data.status == 'success') {
+                if (data.status === 'success') {
                     status = 'Success';
                     $(this).trigger("reset");
                     getDokumen();
-                } else if (data.status == 'error') {
+                } else if (data.status === 'error') {
                     status = 'Error';
                     $('#modalNotif .modal-message').html(data.message);
                 }
@@ -535,7 +638,21 @@ $role = $this->session->userdata['user']['role'];
         m.modal('show');
     }
     $('.radio-type-dokumen').change(function () {
-        console.log($(this).val());
+        var m = $('.modal');
+        var type = $(this).val();
+        if (type === 'FILE') {
+            m.find('.input-file').val('');
+            m.find('.input-file').removeClass('d-none');
+            m.find('.input-file').add('required');
+            m.find('.input-url').addClass('d-none');
+            m.find('.input-url').removeAttr('required');
+        } else if (type === 'URL') {
+            m.find('.input-url').val('');
+            m.find('.input-file').addClass('d-none');
+            m.find('.input-file').removeAttr('required');
+            m.find('.input-url').removeClass('d-none');
+            m.find('.input-url').add('required');
+        }
     });
     function detailDokumen(index) {
         var m = $('#modalDokumenRead');
@@ -549,16 +666,40 @@ $role = $this->session->userdata['user']['role'];
         m.find('.select-klasifikasi').val(d.klasifikasi);
         m.find('.textarea-deskripsi').val(d.deskripsi);
         m.find('.input-versi').val(d.versi);
-//        JENIS DOKUMEN
-//        KLASIFIKASI
+        m.find('.radio-type-dokumen').filter('[value=' + d.type_doc + ']').prop('checked', true);
     }
+    var listJadwal = [];
     function getDistribusi() {
+        sortDokumen = [];
         $('#table-distribusi').empty();
+        $('#table-jadwal').empty();
+        var indexJadwal = 0;
         for (var i = 0; i < sortData.length; i++) {
             for (var j = 0; j < dokumen.length; j++) {
-                if (dokumen[j].id_pasal == sortData[i].id) {
-                    dokumen[j].index_pasal = i;
-                    $('#table-distribusi').append('<tr><td>' + sortData[i].fullname + '</td><td>' + dokumen[j].judul + '</td><td></td><td></td><td><button class="btn btn-primary fa fa-edit" onclick="editDistribusi(' + j + ')"></botton></td></tr>');
+                for (var k = 0; k < anggota.length; k++) {
+                    if (dokumen[j].id_pasal === sortData[i].id) {
+                        if (dokumen[j].creator === anggota[k].id) {
+                            dokumen[j].index_pasal = i;
+                            sortDokumen.push(dokumen[j]);
+                            var userDis = dokumen[j].user_distribusi;
+                            var strUserDis = '';
+                            for (var l = 0; l < userDis.length; l++) {
+                                strUserDis += '<span>' + userDis[l] + '</span><br/>';
+                                if (userDis[l] !== '') {
+                                    var jd = new Object();
+                                    jd.id = dokumen[j].distribusi[l];
+                                    jd.id_pasal = i;
+                                    jd.id_doc = j;
+                                    jd.username = userDis[l];
+                                    listJadwal.push(jd);
+                                    $('#table-jadwal').append('<tr><td>' + sortData[i].fullname + '</td><td>' + dokumen[j].judul + '</td><td>' + '00:00' + '</td><td>' + userDis[l] + '</td><td><button class="btn btn-primary fa fa-edit" onclick="jadwal(' + indexJadwal + ')"></botton></td></tr>');
+                                    $('#table-implementasi').append('<tr><td>' + sortData[i].fullname + '</td><td>' + dokumen[j].judul + '</td><td>' + '00:00' + '</td><td>' + userDis[l] + '</td><td><button class="btn btn-primary fa fa-upload" onclick="openModalUploadBukti(' + indexJadwal + ')"></botton></td></tr>');
+                                    indexJadwal++;
+                                }
+                            }
+                            $('#table-distribusi').append('<tr><td>' + sortData[i].fullname + '</td><td>' + dokumen[j].judul + '</td><td>' + anggota[k].fullname + '</td><td>' + strUserDis + '</td><td><button class="btn btn-primary fa fa-edit" onclick="editDistribusi(' + j + ')"></botton></td></tr>');
+                        }
+                    }
                 }
             }
         }
@@ -574,29 +715,41 @@ $role = $this->session->userdata['user']['role'];
         m.find('.label-klasifikasi').text(d.klasifikasi);
         m.find('.input-dokumen-id').val(d.id);
     }
-
     $('#formDistribusi').submit(function (e) {
         e.preventDefault();
-        console.log($(this).serialize());
-//        $.post('<?php // echo site_url($module); ?>/set_distribusi', $(this).serialize(), function (data) {
-
-//        });
-    });
-    $('#formUploadBuktiPenerapan').submit(function (e) {
-        e.preventDefault();
-        $.ajax({
-            url: '<?php echo site_url($module . '/upload_bukti_penerapan') ?>',
-            type: "post",
-            data: new FormData(this),
-            processData: false,
-            contentType: false,
-            cache: false,
-            async: false,
-            success: function (data) {
-                $('#modalUploadPenerapan').modal('hide');
-                modalStatus(data);
-                getTab('penerapan');
-            }
+        $.post('<?php echo site_url($module); ?>/set_distribusi', $(this).serialize(), function (data) {
+            $('#modalDistribusi').modal('hide');
+            $('#standar').change();
         });
     });
+    function jadwal(index) {
+        var l = listJadwal[index];
+        var m = $('#modalJadwal');
+        m.modal('show');
+        m.find('.input-id').val(l.id);
+        m.find('.input-pasal').val(sortData[l.id_pasal].fullname);
+        m.find('.input-judul').val(dokumen[l.id_doc].judul);
+    }
+    $('.radio-ulangi-jadwal').change(function () {
+        var ulangi = $(this).val();
+        if (ulangi === 'YA') {
+            $('#group-input-hari').removeClass('d-none');
+        } else if (ulangi === 'TIDAK') {
+            $('#group-input-hari').addClass('d-none');
+        }
+    });
+    $('#formJadwal').submit(function (e) {
+        e.preventDefault();
+        console.log($(this).serialize());
+        $.post('<?php echo site_url($module); ?>/set_jadwal', $(this).serialize(), function (data) {
+            console.log(JSON.parse(data));
+        });
+    });
+    function openModalUploadBukti(index) {
+        var l = listJadwal[index];
+        var m = $('#modalUploadBukti');
+        m.modal('show');
+        m.find('.input-id').val(l.id);
+        m.find('.input-judul').val(dokumen[l.id_doc].judul);
+    }
 </script>

@@ -12,7 +12,8 @@ class M_dashboard extends CI_Model {
         return $this->db->count_all_results('standard s');
     }
     function terlambat() {
-        $this->db->where('(date < CURDATE() AND file IS NULL) OR (file IS NOT NULL AND date < upload_date)');
-        return $this->db->count_all_results('schedule');
+//        $this->db->where('(date < CURDATE() AND file IS NULL) OR (file IS NOT NULL AND date < upload_date)');
+//        return $this->db->count_all_results('schedule');
+        return 0;
     }
 }
