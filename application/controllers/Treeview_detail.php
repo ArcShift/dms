@@ -55,7 +55,7 @@ class Treeview_detail extends MY_Controller {
                     $step = false;
                 }
             }
-            if ($step = true) {
+            if ($step) {
                 if ($this->model->create_document()) {
                     $result['status'] = 'success';
                 } else {
@@ -86,12 +86,36 @@ class Treeview_detail extends MY_Controller {
     }
 
     function set_jadwal() {
-//        print_r($this->input->post());
         if ($this->model->create_jadwal()) {
             echo 'success';
         } else {
             echo 'error';
         }
+    }
+
+    function upload_bukti() {
+        if (!$this->input->is_ajax_request()) {
+            redirect('404');
+        }
+        //TODO: form validation
+        $step = true;
+        if ($this->input->post('type_dokumen') == 'FILE') {
+            $config['upload_path'] = './upload/implementasi';
+            $config['allowed_types'] = '*';
+            $this->load->library('upload', $config);
+            if (!$this->upload->do_upload('dokumen')) {
+                $result['message'] = $this->upload->display_errors();
+                $step = false;
+            }
+        }
+        if ($step) {
+            if ($this->model->upload_bukti()) {
+                $result['status'] = 'success';
+            } else {
+                $result['message'] = $this->db->error()['message'];
+            }
+        }
+        echo json_encode($result);
     }
 
     function upload_bukti_penerapan() {

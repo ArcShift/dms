@@ -5,9 +5,12 @@ class M_account extends CI_Model {
     private $table = 'users';
 
     function get() {
-        $this->db->select('u.username, u.fullname,u.photo, r.name AS role');
+        $this->db->select('u.username, p.fullname, u.photo, r.title AS role, u.id_role, uk.name AS unit_kerja, uk.jenis, c.name AS perusahaan');
         $this->db->where('u.id', $this->session->userdata('user')['id']);
         $this->db->join('role r', 'r.id=u.id_role');
+        $this->db->join('personil p', 'p.id=u.id_personil', 'LEFT');
+        $this->db->join('unit_kerja uk', 'uk.id=p.id_unit_kerja', 'LEFT');
+        $this->db->join('company c', 'c.id=uk.id_company', 'LEFT');
         return $this->db->get($this->table . ' u')->row_array();
     }
 

@@ -52,8 +52,10 @@ class M_treeview_detail extends CI_Model {
 //        }
 //        return $result;
 //    }
+
     function pasal() {
-        $this->db->select('p.*');
+        $this->db->select('p.*, COUNT(p2.id) AS child');
+        $this->db->join('pasal p2', 'p2.parent = p.id', 'LEFT');
         $this->db->where('p.id_standard', $this->input->get('standar'));
         $this->db->group_by('p.id');
         return $this->db->get('pasal p')->result_array();
@@ -68,7 +70,9 @@ class M_treeview_detail extends CI_Model {
         $this->db->set('klasifikasi', $this->input->post('klasifikasi'));
         $this->db->set('deskripsi', $this->input->post('deskripsi'));
         $this->db->set('versi', $this->input->post('versi'));
-        $this->db->set('contoh', $this->input->post('dokumen_terkait'));
+        if(!empty($this->input->post('dokumen_terkait'))) {
+            $this->db->set('contoh', $this->input->post('dokumen_terkait'));
+        }
         $type = $this->input->post('type_dokumen');
         $this->db->set('type_doc', $type);
         if ($type == 'FILE') {
@@ -100,8 +104,14 @@ class M_treeview_detail extends CI_Model {
     }
 
     function read_distribusi() {
-        //TODO: filter company, standard
-        return $this->db->get('distribusi')->result_array();
+        $this->db->select('ds.*');
+        $this->db->join('document dc', 'dc.id = ds.id_document');
+        $this->db->join('pasal p', 'p.id = dc.id_pasal');
+        $this->db->join('users u', 'u.id = ds.id_users');
+        $this->db->join('unit_kerja uk', 'uk.id = u.id_unit_kerja', 'LEFT');
+        $this->db->where('uk.id_company = ' . $this->input->post('perusahaan'));
+        $this->db->where('p.id_standard = ' . $this->input->post('standar'));
+        return $this->db->get('distribusi ds')->result_array();
     }
 
     function insert_distribusi() {
@@ -158,34 +168,32 @@ class M_treeview_detail extends CI_Model {
         return $result;
     }
 
-    private function pasal_fullname($id) {
-        $fullname = '';
-        $parent_exist = true;
-        while ($parent_exist) {
-            $this->db->select('id, name, parent');
-            $this->db->where('id', $id);
-            $r = $this->db->get('pasal')->row_array();
-            $fullname = $r['name'] . ' - ' . $fullname;
-            if (empty($r['parent'])) {
-                $parent_exist = false;
-            } else {
-                $id = $r['parent'];
-            }
-        }
-        return substr($fullname, 0, -3);
-    }
-
-    function delete_schedule() {
-        $this->db->where('id', $this->input->post('hapus'));
-        return $this->db->delete('schedule');
-    }
-
-    function upload_bukti_penerapan() {
-        $this->db->set('file', $this->upload->data()['file_name']);
-        $this->db->set('upload_date', date("Y-m-d", time()));
-        $this->db->where('id', $this->input->post('jadwal'));
-        return $this->db->update('schedule');
-    }
+//    private function pasal_fullname($id) {
+//        $fullname = '';
+//        $parent_exist = true;
+//        while ($parent_exist) {
+//            $this->db->select('id, name, parent');
+//            $this->db->where('id', $id);
+//            $r = $this->db->get('pasal')->row_array();
+//            $fullname = $r['name'] . ' - ' . $fullname;
+//            if (empty($r['parent'])) {
+//                $parent_exist = false;
+//            } else {
+//                $id = $r['parent'];
+//            }
+//        }
+//        return substr($fullname, 0, -3);
+//    }
+//    function delete_schedule() {
+//        $this->db->where('id', $this->input->post('hapus'));
+//        return $this->db->delete('schedule');
+//    }
+//    function upload_bukti_penerapan() {
+//        $this->db->set('file', $this->upload->data()['file_name']);
+//        $this->db->set('upload_date', date("Y-m-d", time()));
+//        $this->db->where('id', $this->input->post('jadwal'));
+//        return $this->db->update('schedule');
+//    }
 
     function form2_save() {
         $mod = false;
@@ -220,17 +228,30 @@ class M_treeview_detail extends CI_Model {
         $day = array('senin', 'selasa', 'rabu', 'kamis', 'jumat', 'sabtu', 'minggu');
         foreach ($day as $d) {
             $dy = 'TIDAK';
-            if($this->input->post('hari')){
-                if(in_array(strtoupper($d), $this->input->post('hari'))){
+            if ($this->input->post('hari')) {
+                if (in_array(strtoupper($d), $this->input->post('hari'))) {
                     $dy = 'YA';
                 }
             }
             $this->db->set($d, $dy);
-        }        
-        $this->db->set('start_date', $this->input->post('tanggal'));
+        }
+        $this->db->set('date', $this->input->post('tanggal'));
         $this->db->set('repeat', $this->input->post('ulangi'));
         $this->db->where('id', $this->input->post('id'));
         return $this->db->update('distribusi');
+    }
+
+    function upload_bukti() {
+        $this->db->set('id_distribusi', $this->input->post('id'));
+        $type = $this->input->post('type_dokumen');
+        $this->db->set('type_doc', $type);
+        if ($type == 'FILE') {
+            $url = $this->upload->data()['file_name'];
+            $this->db->set('url', $this->upload->data()['file_name']);
+        } else if ($type == 'URL') {
+            $this->db->set('url', $this->input->post('url'));
+        }
+        return $this->db->insert('upload_bukti');
     }
 
 }

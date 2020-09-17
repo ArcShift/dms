@@ -234,7 +234,7 @@ $role = $this->session->userdata['user']['role'];
                             <tr>
                                 <td>Dokumen terkait</td>
                                 <td>
-                                    <select class="form-control" name="dokumen_terkait">
+                                    <select class="form-control select-dokumen-terkait" name="dokumen_terkait">
                                     </select>
                                 </td>
                             </tr>
@@ -245,8 +245,8 @@ $role = $this->session->userdata['user']['role'];
                                     <label>File</label>
                                     <input class="radio-type-dokumen" type="radio" name="type_dokumen" value="URL">
                                     <label>Url</label>
-                                    <input class="form-control input-file d-none" type="file" class="form-control" name="dokumen" required="">
-                                    <input class="form-control input-url d-none" type="url" class="form-control" name="url" required="">
+                                    <input class="form-control input-file d-none" type="file" name="dokumen" required="">
+                                    <input class="form-control input-url d-none" type="url" name="url" required="">
                                 </td>
                             </tr>
                         </tbody>
@@ -360,13 +360,13 @@ $role = $this->session->userdata['user']['role'];
                                 <tr>
                                     <td>Tanggal</td>
                                     <td>
-                                        <input class="form-control" name="tanggal" type="date" required="">
+                                        <input class="form-control input-tanggal" name="tanggal" type="date" required="">
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>Ulangi</td>
                                     <td>
-                                        <input class="radio-ulangi-jadwal" type="radio" name="ulangi" value="YA" required="">
+                                        <input class="radio-ulangi-jadwal" type="radio" name="ulangi" value="YA" required="" checked="">
                                         <label>Ya</label>
                                         <input class="radio-ulangi-jadwal" type="radio" name="ulangi" value="TIDAK">
                                         <label>Tidak</label>
@@ -451,12 +451,6 @@ $role = $this->session->userdata['user']['role'];
                                     <td>Jadwal</td>
                                     <td>
                                         <input class="form-control input-jadwal" disabled=""/>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Jadwal</td>
-                                    <td>
-                                        <input class="form-control" name="tanggal" type="date" required="">
                                     </td>
                                 </tr>
                                 <tr>
@@ -571,7 +565,9 @@ $role = $this->session->userdata['user']['role'];
                 var d = sortData[i];
                 $('#table-pemenuhan').append('<tr><td>' + d.fullname + '</td><td>10%</td><td>10%</td></tr>');
                 $('#table-pasal').append('<tr><td>' + d.fullname + '</td><td>' + d.sort_desc + '</td><td><span class="fa fa-info-circle text-primary" onclick="detailPasal(' + i + ')" title="Detail"></span></td></tr>');
-                $('.select-pasal').append('<option value="' + d.id + '">' + d.fullname + '</option>');
+                if (d.child == 0) {
+                    $('.select-pasal').append('<option value="' + d.id + '">' + d.fullname + '</option>');
+                }
             }
             getDokumen();
         });
@@ -604,6 +600,7 @@ $role = $this->session->userdata['user']['role'];
                     status = 'Success';
                     $(this).trigger("reset");
                     getDokumen();
+                    $('#modalNotif .modal-message').html('Data Berhasil Disimpan');
                 } else if (data.status === 'error') {
                     status = 'Error';
                     $('#modalNotif .modal-message').html(data.message);
@@ -621,10 +618,13 @@ $role = $this->session->userdata['user']['role'];
     function getDokumen() {
         $.post('<?php echo site_url($module); ?>/get_dokumen', {'perusahaan': perusahaan, 'standar': standar}, function (data) {
             $('#table-dokumen').empty();
+            $('.select-dokumen-terkait').empty();
+            $('.select-dokumen-terkait').append('<option value="">-- dokumen terkait--</option>');
             dokumen = JSON.parse(data);
             for (var i = 0; i < dokumen.length; i++) {
                 var d = dokumen[i];
                 $('#table-dokumen').append('<tr><td>' + d.nomor + '</td><td>' + d.judul + '</td><td>Level ' + d.jenis + '</td><td><span class="fa fa-info-circle text-primary" onclick="detailDokumen(' + i + ')" title="Detail"></span></td></tr>');
+                $('.select-dokumen-terkait').append('<option value="' + d.id + '">' + d.judul + '</option>');
             }
             getDistribusi();
         });
@@ -640,14 +640,14 @@ $role = $this->session->userdata['user']['role'];
     $('.radio-type-dokumen').change(function () {
         var m = $('.modal');
         var type = $(this).val();
+        m.find('.input-url').val('');
+        m.find('.input-file').val('');
         if (type === 'FILE') {
-            m.find('.input-file').val('');
             m.find('.input-file').removeClass('d-none');
             m.find('.input-file').add('required');
             m.find('.input-url').addClass('d-none');
             m.find('.input-url').removeAttr('required');
         } else if (type === 'URL') {
-            m.find('.input-url').val('');
             m.find('.input-file').addClass('d-none');
             m.find('.input-file').removeAttr('required');
             m.find('.input-url').removeClass('d-none');
@@ -670,39 +670,57 @@ $role = $this->session->userdata['user']['role'];
     }
     var listJadwal = [];
     function getDistribusi() {
-        sortDokumen = [];
-        $('#table-distribusi').empty();
-        $('#table-jadwal').empty();
-        var indexJadwal = 0;
-        for (var i = 0; i < sortData.length; i++) {
-            for (var j = 0; j < dokumen.length; j++) {
-                for (var k = 0; k < anggota.length; k++) {
-                    if (dokumen[j].id_pasal === sortData[i].id) {
-                        if (dokumen[j].creator === anggota[k].id) {
-                            dokumen[j].index_pasal = i;
-                            sortDokumen.push(dokumen[j]);
-                            var userDis = dokumen[j].user_distribusi;
-                            var strUserDis = '';
-                            for (var l = 0; l < userDis.length; l++) {
-                                strUserDis += '<span>' + userDis[l] + '</span><br/>';
-                                if (userDis[l] !== '') {
-                                    var jd = new Object();
-                                    jd.id = dokumen[j].distribusi[l];
-                                    jd.id_pasal = i;
-                                    jd.id_doc = j;
-                                    jd.username = userDis[l];
-                                    listJadwal.push(jd);
-                                    $('#table-jadwal').append('<tr><td>' + sortData[i].fullname + '</td><td>' + dokumen[j].judul + '</td><td>' + '00:00' + '</td><td>' + userDis[l] + '</td><td><button class="btn btn-primary fa fa-edit" onclick="jadwal(' + indexJadwal + ')"></botton></td></tr>');
-                                    $('#table-implementasi').append('<tr><td>' + sortData[i].fullname + '</td><td>' + dokumen[j].judul + '</td><td>' + '00:00' + '</td><td>' + userDis[l] + '</td><td><button class="btn btn-primary fa fa-upload" onclick="openModalUploadBukti(' + indexJadwal + ')"></botton></td></tr>');
-                                    indexJadwal++;
+        $.post('<?php echo site_url($module); ?>/get_distribusi', {'perusahaan': perusahaan, 'standar': standar}, function (data) {
+            data = JSON.parse(data);
+            sortDokumen = [];
+            distribusi = [];
+            $('#table-distribusi').empty();
+            $('#table-jadwal').empty();
+            var indexJadwal = 0;
+            for (var i = 0; i < sortData.length; i++) {
+                for (var j = 0; j < dokumen.length; j++) {
+                    for (var k = 0; k < anggota.length; k++) {
+                        if (dokumen[j].id_pasal === sortData[i].id) {
+                            if (dokumen[j].creator === anggota[k].id) {
+                                dokumen[j].index_pasal = i;
+                                sortDokumen.push(dokumen[j]);
+                                var userDis = dokumen[j].user_distribusi;
+                                var strUserDis = '';
+                                for (var l = 0; l < userDis.length; l++) {
+                                    strUserDis += '<span>' + userDis[l] + '</span><br/>';
+                                    if (userDis[l] !== '') {
+                                        for (var m = 0; m < data.length; m++) {
+                                            if (dokumen[j].distribusi[l] == data[m].id) {
+                                                distribusi.push(data[m]);
+                                                break;
+                                            }
+                                        }
+                                        var jd = new Object();
+                                        jd.id = dokumen[j].distribusi[l];
+                                        jd.id_pasal = i;
+                                        jd.id_doc = j;
+                                        jd.username = userDis[l];
+                                        listJadwal.push(jd);
+                                        var aksiDistribusi;
+                                        if (distribusi[indexJadwal].date == '0000-00-00' & distribusi[indexJadwal].repeat == null) {
+                                            aksiDistribusi = '<button class="btn btn-primary fa fa-edit" title="Edit" onclick="jadwal(' + indexJadwal + ',\'create\')"></botton>';
+                                        } else {
+                                            aksiDistribusi = '<button class="btn btn-primary fa fa-search" title="Detail    " onclick="jadwal(' + indexJadwal + ',\'detail\')"></botton>';
+                                        }
+                                        $('#table-jadwal').append('<tr><td>' + sortData[i].fullname + '</td><td>' + dokumen[j].judul + '</td><td>' + '00:00' + '</td><td>' + userDis[l] + '</td><td>' + aksiDistribusi + '</td></tr>');
+                                        $('#table-implementasi').append('<tr><td>' + sortData[i].fullname + '</td><td>' + dokumen[j].judul + '</td><td>' + '00:00' + '</td><td>' + userDis[l] + '</td><td><button class="btn btn-primary fa fa-upload" onclick="openModalUploadBukti(' + indexJadwal + ')"></botton></td></tr>');
+                                        indexJadwal++;
+//                                        break;
+                                    }
                                 }
+                                $('#table-distribusi').append('<tr><td>' + sortData[i].fullname + '</td><td>' + dokumen[j].judul + '</td><td>' + anggota[k].fullname + '</td><td>' + strUserDis + '</td><td><button class="btn btn-primary fa fa-edit" onclick="editDistribusi(' + j + ')"></botton></td></tr>');
                             }
-                            $('#table-distribusi').append('<tr><td>' + sortData[i].fullname + '</td><td>' + dokumen[j].judul + '</td><td>' + anggota[k].fullname + '</td><td>' + strUserDis + '</td><td><button class="btn btn-primary fa fa-edit" onclick="editDistribusi(' + j + ')"></botton></td></tr>');
                         }
                     }
                 }
             }
-        }
+            console.log(distribusi);
+        });
     }
     function editDistribusi(index) {
         var m = $('#modalDistribusi');
@@ -722,13 +740,23 @@ $role = $this->session->userdata['user']['role'];
             $('#standar').change();
         });
     });
-    function jadwal(index) {
+    function jadwal(index, mode) {
         var l = listJadwal[index];
         var m = $('#modalJadwal');
         m.modal('show');
         m.find('.input-id').val(l.id);
         m.find('.input-pasal').val(sortData[l.id_pasal].fullname);
         m.find('.input-judul').val(dokumen[l.id_doc].judul);
+        if (mode == 'create') {
+            console.log('create');
+            m.find('.modal-footer').removeClass('d-none');
+//            m.find('.input-tanggal, .input-hari').prop('disable', true);
+        } else {
+            m.find('.input-tanggal').val(distribusi[index].date);
+            m.find('input').prop('disable', true);
+            m.find('.modal-footer').addClass('d-none');
+            console.log('detail');
+        }
     }
     $('.radio-ulangi-jadwal').change(function () {
         var ulangi = $(this).val();
@@ -752,4 +780,36 @@ $role = $this->session->userdata['user']['role'];
         m.find('.input-id').val(l.id);
         m.find('.input-judul').val(dokumen[l.id_doc].judul);
     }
+    $('#formUploadBukti').submit(function (e) {
+        $('#modalUploadBukti').modal('hide');
+        e.preventDefault();
+        $.ajax({
+            url: '<?php echo site_url($module . '/upload_bukti') ?>',
+            type: "post",
+            data: new FormData(this),
+            processData: false,
+            contentType: false,
+            cache: false,
+            async: false,
+            success: function (data) {
+//                data = JSON.parse(data);
+//                if (data.status === 'success') {
+//                    status = 'Success';
+//                    $(this).trigger("reset");
+//                    getDokumen();
+//                } else if (data.status === 'error') {
+//                    status = 'Error';
+//                    $('#modalNotif .modal-message').html(data.message);
+//                }
+                status = 'Success';
+            },
+            error: function (data) {
+                status = 'Error';
+                $('#modalNotif .modal-message').text('Error 500');
+            },
+            complete: function () {
+                $('#modalNotif .modal-title').text(status);
+            }
+        });
+    });
 </script>

@@ -19,8 +19,7 @@
         <script src="//cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
         <script type="text/javascript" src="https://demo.dashboardpack.com/architectui-html-free/assets/scripts/main.js"></script>       
-
-
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-dateFormat/1.0/jquery.dateFormat.min.js"></script>
         <script>
             function closeAlert(item) {
                 console.log($(item).parent().remove());
@@ -104,7 +103,7 @@
                                     </div>
                                     <div class="widget-content-left  ml-3 header-user-info">
                                         <div class="widget-heading">
-                                            <?php echo $this->session->userdata('user')['fullname'] ?>
+                                            <?php echo $this->session->userdata('user')['username'] ?>
                                         </div>
                                         <div class="widget-subheading">
                                             <?php echo $this->session->userdata('user')['title'] ?>                                            
@@ -156,8 +155,12 @@
                                 <li class="app-sidebar__heading">MANAJEMEN PENGGUNA</li>
                                 <li id="menu-company">-</li>
                                 <li id="menu-unit_kerja">-</li>
+                                <li id="menu-personil">-</li>
                                 <li id="menu-user">-</li>
-                                <li class="app-sidebar__heading">STANDAR</li>                                
+                                <li class="app-sidebar__heading">STANDAR</li>
+                                <li id="menu-standard">-</li>
+                                <li id="menu-document_search">-</li>
+                                <li id="menu-company_standard">-</li>
                                 <?php foreach ($this->session->userdata('module') as $key => $m) { ?>
                                     <?php if ($m['on_menu'] == 'YES') { ?>
                                         <li id="module-<?php echo $m['name'] ?>" class="menu-item">
@@ -217,7 +220,7 @@
                         <?php } ?>
                         <?php $this->load->view($view) ?>
                     </div>
-                    <div class="app-wrapper-footer">
+                    <div class="app-wrapper-footer d-none">
                         <div class="app-footer">
                             <div class="app-footer__inner">
                                 <div class="app-footer-left">
@@ -257,14 +260,10 @@
                 </div>
             </div>
         </div>
-        <footer class="footer ">
-            <div class="container">
-                <span class="text-muted">Place sticky footer content here.</span>
-            </div>
-        </footer>
         <script>
             $(document).ready(function () {
                 $('.data-table').DataTable();
+                afterReady();
             });
             var module = <?php echo json_encode($this->session->userdata('module')) ?>;
             for (var i = 0; i < module.length; i++) {
@@ -300,7 +299,7 @@
 </html>
 <div id="modalContainer">
     <div class="modal fade" id="modalNotif" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">     
+        <div class="modal-dialog" role="document">
             <form>
                 <div class="modal-content">
                     <div class="modal-header">
@@ -310,7 +309,6 @@
                         </button>
                     </div>
                     <div class="modal-body modal-message">
-
                     </div>
                     <div class="modal-footer">
                         <button type="submit" class="btn btn-primary" data-dismiss="modal">Tutup</button>
