@@ -11,8 +11,8 @@
                     <tr>
                         <th>No</th>
                         <th>Nama</th>
-                        <th>Sub</th>
-                        <th>Used</th>
+                        <th class="text-center">Pasal & Ayat</th>
+                        <th class="text-center">Perusahaan</th>
                         <th>Created by</th>
                         <th>aksi</th>
                     </tr>
@@ -22,8 +22,8 @@
                         <tr>
                             <td><?php echo $k + 1 ?></td>
                             <td><?php echo $d['name'] ?></td>
-                            <td><?php echo $d['detail'] ?></td>
-                            <td><?php echo $d['used'] ?></td>
+                            <td class="text-center"><span class="badge badge-info"><?php echo $d['detail'] ?></span></td>
+                            <td class="text-center"><div class="badge badge-info"><?php echo $d['used'] ?></div></td>
                             <td><?php echo $d['user'] ?></td>
                             <td>
                                 <button class="btn btn-primary fa fa-search" title="Detail" name="detail" value="<?php echo $d['id'] ?>" formaction="<?php echo site_url($module . '/detail') ?>"></button>
