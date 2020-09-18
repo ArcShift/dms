@@ -62,14 +62,16 @@
                             </span>
                         </button>
                     </span>
-                </div>    
+                </div>
                 <div class="app-header__content">
                     <div class="app-header-left">
                         <div class="search-wrapper">
+                            <!--<form action="<?= site_url('document_search') ?>">-->
                             <div class="input-holder">
-                                <input type="text" class="search-input" placeholder="Type to search">
-                                <button class="search-icon"><span></span></button>
+                                <input name="judul" class="search-input" placeholder="Cari judul dokumen">
+                                <button type="button" class="search-icon"><span></span></button>
                             </div>
+                            <!--</form>-->
                             <button class="close"></button>
                         </div>
                         <ul class="header-menu nav">
@@ -318,3 +320,15 @@
         </div>
     </div>
 </div>
+<script>
+    $('.search-wrapper .search-icon').click(function () {
+        if ($('.search-wrapper').hasClass('active')) {
+            window.location.href = "<?= site_url('document_search') ?>?judul=" + $('.search-input').val();
+        }
+    });
+    $('.search-input').keypress(function (e) {
+        if (e.which == 13) {
+            window.location.href = "<?= site_url('document_search') ?>?judul=" + $('.search-input').val();
+        }
+    });
+</script>
