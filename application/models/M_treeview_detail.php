@@ -4,11 +4,6 @@ class M_treeview_detail extends CI_Model {
 
     private $table = 'pasal';
 
-//    function treeview() {
-//        $this->db->where('id', $this->session->userdata('treeview'));
-//        return $this->db->get('standard')->row_array();
-//    }
-
     function standard() {
         $this->db->select('s.id, s.name');
         $this->db->join('company_standard cs', 'cs.id_standard = s.id AND cs.id_company=' . $this->input->post('id'));
@@ -25,7 +20,8 @@ class M_treeview_detail extends CI_Model {
 
     function member() {
         $this->db->select('u.id, u.username, CONCAT(u.username, " - ", uk.name) AS fullname');
-        $this->db->join('unit_kerja uk', 'uk.id=u.id_unit_kerja');
+        $this->db->join('personil p', 'p.id=u.id_personil');
+        $this->db->join('unit_kerja uk', 'uk.id=p.id_unit_kerja');
 //        $this->db->join('role r', 'r.id=u.id_role AND r.name = "anggota"');
 //        $this->db->join('schedule s', 's.id_user=u.id AND m.id_pasal=' . $input['idPasal'], 'LEFT');
         $this->db->where('uk.id_company', $this->input->post('perusahaan'));
@@ -87,10 +83,12 @@ class M_treeview_detail extends CI_Model {
         $this->db->select("d.*, GROUP_CONCAT(ds.id) AS distribusi, GROUP_CONCAT(CONCAT(ud.username,' - ', ukd.name)) AS user_distribusi");
         $this->db->join('pasal p', 'p.id = d.id_pasal');
         $this->db->join('users u', 'u.id = d.creator');
-        $this->db->join('unit_kerja uk', 'uk.id = u.id_unit_kerja');
+        $this->db->join('personil pl', 'pl.id = u.id_personil');
+        $this->db->join('unit_kerja uk', 'uk.id = pl.id_unit_kerja');
         $this->db->join('distribusi ds', 'd.id = ds.id_document', 'LEFT');
         $this->db->join('users ud', 'ud.id = ds.id_users', 'LEFT');
-        $this->db->join('unit_kerja ukd', 'ukd.id = ud.id_unit_kerja', 'LEFT');
+        $this->db->join('personil pld', 'pld.id = ud.id_personil', 'LEFT');
+        $this->db->join('unit_kerja ukd', 'ukd.id = pld.id_unit_kerja', 'LEFT');
         $this->db->where('uk.id_company = ' . $this->input->post('perusahaan'));
         $this->db->where('p.id_standard = ' . $this->input->post('standar'));
         $this->db->order_by('p.id');
@@ -108,7 +106,8 @@ class M_treeview_detail extends CI_Model {
         $this->db->join('document dc', 'dc.id = ds.id_document');
         $this->db->join('pasal p', 'p.id = dc.id_pasal');
         $this->db->join('users u', 'u.id = ds.id_users');
-        $this->db->join('unit_kerja uk', 'uk.id = u.id_unit_kerja', 'LEFT');
+        $this->db->join('personil ps', 'ps.id = u.id_personil', 'LEFT');
+        $this->db->join('unit_kerja uk', 'uk.id = ps.id_unit_kerja', 'LEFT');
         $this->db->where('uk.id_company = ' . $this->input->post('perusahaan'));
         $this->db->where('p.id_standard = ' . $this->input->post('standar'));
         return $this->db->get('distribusi ds')->result_array();

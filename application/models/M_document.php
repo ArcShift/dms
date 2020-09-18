@@ -26,12 +26,21 @@ class M_document extends CI_Model {
         return $this->db->get($this->table . ' d')->result_array();
     }
 
+    function get($id) {
+        $this->db->select('d.*, u.username AS pembuat, d2.judul AS dokumen_terkait');
+        $this->db->where('d.id', $id);
+        $this->db->join('users u', 'u.id = d.creator', 'LEFT');
+        $this->db->join($this->table . ' d2', 'd.contoh = d2.id', 'LEFT');
+        return $this->db->get($this->table . ' d')->row_array();
+    }
+
     function creator() {
         $this->db->select('u.id, u.username');
         $this->db->join($this->table . ' d', 'd.creator = u.id');
         $this->db->group_by('u.id');
         return $this->db->get('users u')->result_array();
     }
+
     function standar() {
         $this->db->select('s.id, s.name');
         $this->db->join('pasal p', 's.id = p.id_standard');
@@ -39,6 +48,7 @@ class M_document extends CI_Model {
         $this->db->group_by('s.id');
         return $this->db->get('standard s')->result_array();
     }
+
     function distribusi() {
         $this->db->select('u.id, u.username');
         $this->db->join('distribusi d', 'u.id = d.id_users');

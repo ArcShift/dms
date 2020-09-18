@@ -61,7 +61,7 @@
                                 <th class="text-center <?= $this->input->get('distribusi')?'d-none':''?>">Distribusi</th>
                                 <!--<th>-</th>-->
                                 <!--<th>-</th>-->
-                                <!--<th>*</th>-->
+                                <th>*</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -71,9 +71,9 @@
                                     <td><?php echo $r['judul'] ?></td>
                                     <td><?php echo $r['username'] ?></td>
                                     <td class="text-center <?= $this->input->get('distribusi')?'d-none':''?>"><div class="badge badge-<?= $r['distribusi']==0?'danger':'success' ?>"><?= $r['distribusi'] ?></div></td>
-<!--                                    <td>
-                                        <a class="btn btn-primary fa fa-eye" href="" title="Lihat Detail" name="detail"></a>
-                                    </td>-->
+                                    <td>
+                                        <a class="btn btn-primary fa fa-eye" href="<?= site_url('document_search/detail/'.$r['id']) ?>" title="Lihat Detail" name="detail"></a>
+                                    </td>
                                 </tr>
                             <?php } ?>
                         </tbody>

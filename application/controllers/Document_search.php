@@ -1,16 +1,5 @@
 <?php
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/**
- * Description of Document_search
- *
- * @author Jelajah Tekno Indone
- */
 class Document_search extends MY_Controller {
 
     protected $module = "document_search";
@@ -28,7 +17,13 @@ class Document_search extends MY_Controller {
         $this->data['creator'] = $this->model->creator();
         $this->data['standar'] = $this->model->standar();
         $this->data['distribusi'] = $this->model->distribusi();
-        $this->render('index');
+        $this->render('search');
+    }
+
+    function detail($id) {
+        $this->subTitle = 'detail';
+        $this->data['data']= $this->model->get($id);
+        $this->render('detail');
     }
 
 }
