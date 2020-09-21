@@ -13,7 +13,7 @@
                         <th>Nama</th>
                         <th>Username</th>
                         <th>Unit Kerja</th>
-                        <th>Company</th>
+                        <th>Perusahaan</th>
                         <th>Aksi</th>
                     </tr>
                 </thead>
