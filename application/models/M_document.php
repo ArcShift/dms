@@ -19,6 +19,12 @@ class M_document extends CI_Model {
         if ($this->input->get('judul')) {
             $this->db->like('d.judul', $this->input->get('judul'));
         }
+        if ($this->input->get('unit_kerja_distribusi')) {
+            $this->db->join('users uds', 'uds.id = ds.id_users');
+            $this->db->join('personil pds', 'pds.id = uds.id_personil');
+            $this->db->join('unit_kerja ukds', 'ukds.id = pds.id_unit_kerja');
+            $this->db->where('ukds.id', $this->input->get('unit_kerja_distribusi'));
+        }
         if ($this->input->get('distribusi')) {
             $this->db->where('ds.id_users', $this->input->get('distribusi'));
         }
@@ -49,11 +55,25 @@ class M_document extends CI_Model {
         return $this->db->get('standard s')->result_array();
     }
 
-    function distribusi() {
+    function distribusi($unit_kerja = null) {
         $this->db->select('u.id, u.username');
         $this->db->join('distribusi d', 'u.id = d.id_users');
         $this->db->group_by('u.id');
+        if(!empty($unit_kerja)){
+            $this->db->join('personil p', 'p.id = u.id_personil');
+            $this->db->join('unit_kerja uk', 'uk.id = p.id_unit_kerja');
+            $this->db->where('uk.id', $unit_kerja);
+        }
         return $this->db->get('users u')->result_array();
+    }
+
+    function unit_kerja_distribusi() {
+        $this->db->select('uk.id, uk.name');
+        $this->db->join('personil p', 'p.id_unit_kerja = uk.id');
+        $this->db->join('users u', 'u.id_personil = p.id');
+        $this->db->join('distribusi d', 'd.id_users = u.id');
+        $this->db->group_by('uk.id');
+        return $this->db->get('unit_kerja uk')->result_array();
     }
 
 }

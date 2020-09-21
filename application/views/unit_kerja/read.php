@@ -10,11 +10,11 @@
                 <thead>
                     <tr>
                         <th>No</th>
-                        <th>Nama</th>
+                        <th>Unit Kerja</th>
                         <th>Perusahaan</th>
                         <th>Jenis</th>
-                        <th>Personil</th>
-                        <th>aksi</th>
+                        <th class="text-center">Jumlah Personil</th>
+                        <th>Aksi</th>
                     </tr>
                 </thead>
                 <tbody>

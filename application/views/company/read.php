@@ -10,10 +10,10 @@
                 <thead>
                     <tr>
                         <th>No</th>
-                        <th>Nama</th>
+                        <th>Perusahaan</th>
                         <th>Kota / Kab</th>
-                        <th>Unit Kerja</th>
-                        <th>Standard</th>
+                        <th class="text-center">Jumlah Unit Kerja</th>
+                        <th class="text-center">Standard Aktif</th>
                         <th>Aksi</th>
                     </tr>
                 </thead>
@@ -23,8 +23,8 @@
                             <td><?php echo $k + 1 ?></td>
                             <td><?php echo $r['name'] ?></td>
                             <td><?php echo $r['city'] ?></td>
-                            <td><?php echo $r['count'] ?></td>
-                            <td><?php echo $r['standard'] ?></td>
+                            <td class="text-center"><span class="badge badge-<?= $r['count']==0?'danger':'info'?>"><?php echo $r['count'] ?></span></td>
+                            <td class="text-center"><span class="badge badge-<?= $r['standard']==0?'danger':'info'?>"><?php echo $r['standard'] ?></span></td>
                             <td>
                                 <?php if ($activeModule['acc_update']) { ?>
                                     <button class="btn btn-primary fa fa-edit" title="Edit" name="initEdit" value="<?php echo $r['id'] ?>" formaction="<?php echo site_url($module . '/edit') ?>"></button>

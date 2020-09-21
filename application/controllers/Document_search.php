@@ -16,7 +16,8 @@ class Document_search extends MY_Controller {
         $this->data['data'] = $this->model->search();
         $this->data['creator'] = $this->model->creator();
         $this->data['standar'] = $this->model->standar();
-        $this->data['distribusi'] = $this->model->distribusi();
+        $this->data['unit_kerja_distribusi'] = $this->model->unit_kerja_distribusi();
+        $this->data['distribusi'] = $this->model->distribusi($this->input->get('unit_kerja_distribusi'));
         $this->render('search');
     }
 

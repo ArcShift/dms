@@ -4,14 +4,14 @@
 <div class="row">
     <div class="col-sm-3">
         <div class="main-card card">
-            <form>                
+            <form id="form-search">                
                 <div class="card-body">
                     <div class="form-group">
                         <label>Standar</label>
                         <select class="form-control" name="standar">
                             <option value="">-- -- --</option>
                             <?php foreach ($standar as $s) { ?>
-                            <option value="<?= $s['id']?>" <?= $this->input->get('standar')==$s['id']?'selected':'' ?>><?= $s['name']?></option>
+                                <option value="<?= $s['id'] ?>" <?= $this->input->get('standar') == $s['id'] ? 'selected' : '' ?>><?= $s['name'] ?></option>
                             <?php } ?>
                         </select>
                     </div>
@@ -24,7 +24,16 @@
                         <select class="form-control" name="creator">
                             <option value="">-- -- --</option>
                             <?php foreach ($creator as $c) { ?>
-                            <option value="<?= $c['id']?>" <?= $this->input->get('creator')==$c['id']?'selected':'' ?>><?= $c['username']?></option>
+                                <option value="<?= $c['id'] ?>" <?= $this->input->get('creator') == $c['id'] ? 'selected' : '' ?>><?= $c['username'] ?></option>
+                            <?php } ?>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Unit Kerja</label>
+                        <select class="form-control active-change" name="unit_kerja_distribusi">
+                            <option value="">-- -- --</option>
+                            <?php foreach ($unit_kerja_distribusi as $u) { ?>
+                                <option value="<?= $u['id'] ?>" <?= $this->input->get('unit_kerja_distribusi') == $u['id'] ? 'selected' : '' ?>><?= $u['name'] ?></option>
                             <?php } ?>
                         </select>
                     </div>
@@ -33,7 +42,7 @@
                         <select class="form-control" name="distribusi">
                             <option value="">-- -- --</option>
                             <?php foreach ($distribusi as $d) { ?>
-                            <option value="<?= $d['id']?>" <?= $this->input->get('distribusi')==$d['id']?'selected':'' ?>><?= $d['username']?></option>
+                                <option value="<?= $d['id'] ?>" <?= $this->input->get('distribusi') == $d['id'] ? 'selected' : '' ?>><?= $d['username'] ?></option>
                             <?php } ?>
                         </select>
                     </div>
@@ -58,7 +67,7 @@
                                 <th>No</th>
                                 <th>Judul</th>
                                 <th>Creator</th>
-                                <th class="text-center <?= $this->input->get('distribusi')?'d-none':''?>">Distribusi</th>
+                                <th class="text-center <?= $this->input->get('distribusi') ? 'd-none' : '' ?>">Distribusi</th>
                                 <!--<th>-</th>-->
                                 <!--<th>-</th>-->
                                 <th>*</th>
@@ -70,9 +79,9 @@
                                     <td><?php echo $k + 1 ?></td>
                                     <td><?php echo $r['judul'] ?></td>
                                     <td><?php echo $r['username'] ?></td>
-                                    <td class="text-center <?= $this->input->get('distribusi')?'d-none':''?>"><div class="badge badge-<?= $r['distribusi']==0?'danger':'success' ?>"><?= $r['distribusi'] ?></div></td>
+                                    <td class="text-center <?= $this->input->get('distribusi') ? 'd-none' : '' ?>"><div class="badge badge-<?= $r['distribusi'] == 0 ? 'danger' : 'success' ?>"><?= $r['distribusi'] ?></div></td>
                                     <td>
-                                        <a class="btn btn-primary fa fa-eye" href="<?= site_url('document_search/detail/'.$r['id']) ?>" title="Lihat Detail" name="detail"></a>
+                                        <a class="btn btn-primary fa fa-eye" href="<?= site_url('document_search/detail/' . $r['id']) ?>" title="Lihat Detail" name="detail"></a>
                                     </td>
                                 </tr>
                             <?php } ?>
@@ -87,4 +96,7 @@
     function afterReady() {
         $('.dataTables_filter').addClass('d-none');
     }
+    $('.active-change').change(function () {
+        $('#form-search').submit();
+    });
 </script>
