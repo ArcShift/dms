@@ -41,7 +41,7 @@ class M_personil extends CI_Model {
     function updateData() {
         $input = $this->input->post();
         $this->db->where('id', $input['id']);
-        $this->db->set('username', $input['username']);
+        $this->db->set('fullname', $input['fullname']);
         return $this->db->update($this->table);
     }
 

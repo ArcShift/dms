@@ -9,9 +9,9 @@
             </div>
             <div class="form-group">
                 <label>Nama Lengkap</label>
-                <input class="form-control <?php echo form_error('namaLengkap') != "" ? "is-invalid" : "" ?>" name="namaLengkap" placeholder="Nama Lengkap" required="" value="<?php echo $data['fullname'] ?>">
+                <input class="form-control <?php echo form_error('fullname') != "" ? "is-invalid" : "" ?>" name="fullname" placeholder="Nama Lengkap" required="" value="<?php echo $data['fullname'] ?>">
                 <div class="error invalid-feedback">
-                    <?php echo form_error('nama'); ?>
+                    <?php echo form_error('fullname'); ?>
                 </div>
             </div>
         </div>
