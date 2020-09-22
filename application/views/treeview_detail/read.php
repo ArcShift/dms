@@ -118,7 +118,7 @@ $role = $this->session->userdata['user']['role'];
                     </div>
                     <!--IMPLEMENTASI-->
                     <div class="tab-pane" id="tab-implementasi" role="tabpanel">
-                        <table class="table" id="table-implementasi">
+                        <table class="table">
                             <thead>
                                 <tr>
                                     <th>Pasal</th>
@@ -129,9 +129,7 @@ $role = $this->session->userdata['user']['role'];
                                     <th>Status</th>
                                 </tr>
                             </thead>
-                            <tbody>
-
-                            </tbody>
+                            <tbody id="table-implementasi"></tbody>
                         </table>
                     </div>
                     <div class="tab-pane" id="tab-base" role="tabpanel">Base</div>
@@ -684,6 +682,7 @@ $role = $this->session->userdata['user']['role'];
             distribusi = [];
             $('#table-distribusi').empty();
             $('#table-jadwal').empty();
+            $('#table-implementasi').empty();
             var indexJadwal = 0;
             for (var i = 0; i < sortData.length; i++) {
                 for (var j = 0; j < dokumen.length; j++) {
@@ -710,18 +709,17 @@ $role = $this->session->userdata['user']['role'];
                                         jd.username = userDis[l];
                                         listJadwal.push(jd);
                                         var aksiDistribusi;
-                                        var txtJadwal = 'Unset';
+                                        var txtJadwal = '-';
                                         if (distribusi[indexJadwal].date == '0000-00-00' & distribusi[indexJadwal].repeat == null) {
                                             aksiDistribusi = '<button class="btn btn-primary fa fa-edit" title="Edit" onclick="jadwal(' + indexJadwal + ',\'create\')"></botton>';
                                         } else {
                                             aksiDistribusi = '<button class="btn btn-primary fa fa-search" title="Detail    " onclick="jadwal(' + indexJadwal + ',\'detail\')"></botton>';
                                             if (distribusi[indexJadwal].repeat == 'YA') {
-                                                txtJadwal = 'Ulangi';
+                                                txtJadwal = 'Mingguan';
                                             } else {
                                                 txtJadwal = distribusi[indexJadwal].date;
                                             }
                                         }
-
                                         $('#table-jadwal').append('<tr><td>' + sortData[i].fullname + '</td><td>' + dokumen[j].judul + '</td><td>' + txtJadwal + '</td><td>' + userDis[l] + '</td><td>' + aksiDistribusi + '</td></tr>');
                                         $('#table-implementasi').append('<tr><td>' + sortData[i].fullname + '</td><td>' + dokumen[j].judul + '</td><td>' + txtJadwal + '</td><td>' + userDis[l] + '</td><td><button class="btn btn-primary fa fa-upload" onclick="openModalUploadBukti(' + indexJadwal + ')"></botton></td></tr>');
                                         indexJadwal++;
@@ -763,19 +761,24 @@ $role = $this->session->userdata['user']['role'];
         m.find('.input-pasal').val(sortData[l.id_pasal].fullname);
         m.find('.input-judul').val(dokumen[l.id_doc].judul);
         m.find('.input-tanggal').val(distribusi[index].date);
-        m.find('.input-tanggal').val(distribusi[index].date);
-        m.find('.radio-ulangi-jadwal [value="TIDAK"]').prop('checked', true);
-//        m.find('.radio-ulangi-jadwal [value="'+distribusi[index].repeat+'"]').prop('checked', true);
-        
+        m.find('.radio-ulangi-jadwal[value="' + distribusi[index].repeat + '"]').prop('checked', true);
+        var harian = ['senin', 'selasa', 'rabu', 'kamis', 'jumat', 'sabtu', 'minggu'];
+        for (var item of harian) {
+            console.log(item+' = '+distribusi[index][item]);
+            var status= distribusi[index][item];
+            if(status=='YA'){
+                m.find('input[type=checkbox][value='+item.toUpperCase()+']').prop('checked',true);
+            }else{
+                m.find('input[type=checkbox][value='+item.toUpperCase()+']').prop('checked',false);   
+            }
+        }
         if (mode == 'create') {
-            console.log('create');
             m.find('.modal-footer').removeClass('d-none');
 //            m.find('.input-tanggal, .input-hari').prop('disable', true);
         } else {
             m.find('.input-tanggal').val(distribusi[index].date);
             m.find('input').prop('disable', true);
             m.find('.modal-footer').addClass('d-none');
-            console.log('detail');
         }
     }
     $('.radio-ulangi-jadwal').change(function () {

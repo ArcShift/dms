@@ -147,7 +147,7 @@
                 <span class="fa fa-trash text-danger" onclick="remove(this)" title="Hapus"></span>
             <?php } ?>
             <?php if ($activeModule['acc_update']) { ?>
-                <span class="fa fa-list-alt text-primary ctrl-form1" onclick="form1(this)" title="Form1"></span>
+                <span class="fa fa-list-alt text-primary ctrl-form1" onclick="form1(this)" title="Detail"></span>
             <?php } ?>
                 <a class="fa fa-download text-primary"></a>
             <ul></ul>
