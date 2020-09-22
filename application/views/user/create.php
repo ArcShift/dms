@@ -16,7 +16,7 @@
             <div class="form-group  input-set-corp d-none">
                 <label>Personil</label>
                 <select class="form-control <?php echo form_error('company') != "" ? "is-invalid" : "" ?>" name="personil">
-                    <option value="">-- Unit Kerja --</option>
+                    <option value="">-- Personil --</option>
                     <?php foreach ($freePersonil as $p) { ?>
                         <option value="<?= $p['id'] ?>" <?= $p['id'] == $this->input->post('personil') ? 'selected' : ''; ?>><?= $p['fullname'] ?></option>
                     <?php } ?>

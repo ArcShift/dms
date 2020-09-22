@@ -8,11 +8,11 @@ $role = $this->session->userdata['user']['role'];
 <!--<script src="js/jquery.iframe-transport.js"></script>-->
 <!--<script src="https://blueimp.github.io/jQuery-File-Upload/js/jquery.fileupload.js"></script>-->
 <style>
-        .select-2{
-            width: 300px !important;
-            /*min-width: 100% !important;*/
-            /*max-width: 100% !important;*/
-        }
+    .select-2{
+        width: 300px !important;
+        /*min-width: 100% !important;*/
+        /*max-width: 100% !important;*/
+    }
 </style>
 <div class="main-card mb-3 card">
     <div class="card-body">
@@ -710,13 +710,20 @@ $role = $this->session->userdata['user']['role'];
                                         jd.username = userDis[l];
                                         listJadwal.push(jd);
                                         var aksiDistribusi;
+                                        var txtJadwal = 'Unset';
                                         if (distribusi[indexJadwal].date == '0000-00-00' & distribusi[indexJadwal].repeat == null) {
                                             aksiDistribusi = '<button class="btn btn-primary fa fa-edit" title="Edit" onclick="jadwal(' + indexJadwal + ',\'create\')"></botton>';
                                         } else {
                                             aksiDistribusi = '<button class="btn btn-primary fa fa-search" title="Detail    " onclick="jadwal(' + indexJadwal + ',\'detail\')"></botton>';
+                                            if (distribusi[indexJadwal].repeat == 'YA') {
+                                                txtJadwal = 'Ulangi';
+                                            } else {
+                                                txtJadwal = distribusi[indexJadwal].date;
+                                            }
                                         }
-                                        $('#table-jadwal').append('<tr><td>' + sortData[i].fullname + '</td><td>' + dokumen[j].judul + '</td><td>' + '00:00' + '</td><td>' + userDis[l] + '</td><td>' + aksiDistribusi + '</td></tr>');
-                                        $('#table-implementasi').append('<tr><td>' + sortData[i].fullname + '</td><td>' + dokumen[j].judul + '</td><td>' + '00:00' + '</td><td>' + userDis[l] + '</td><td><button class="btn btn-primary fa fa-upload" onclick="openModalUploadBukti(' + indexJadwal + ')"></botton></td></tr>');
+
+                                        $('#table-jadwal').append('<tr><td>' + sortData[i].fullname + '</td><td>' + dokumen[j].judul + '</td><td>' + txtJadwal + '</td><td>' + userDis[l] + '</td><td>' + aksiDistribusi + '</td></tr>');
+                                        $('#table-implementasi').append('<tr><td>' + sortData[i].fullname + '</td><td>' + dokumen[j].judul + '</td><td>' + txtJadwal + '</td><td>' + userDis[l] + '</td><td><button class="btn btn-primary fa fa-upload" onclick="openModalUploadBukti(' + indexJadwal + ')"></botton></td></tr>');
                                         indexJadwal++;
 //                                        break;
                                     }
@@ -755,6 +762,11 @@ $role = $this->session->userdata['user']['role'];
         m.find('.input-id').val(l.id);
         m.find('.input-pasal').val(sortData[l.id_pasal].fullname);
         m.find('.input-judul').val(dokumen[l.id_doc].judul);
+        m.find('.input-tanggal').val(distribusi[index].date);
+        m.find('.input-tanggal').val(distribusi[index].date);
+        m.find('.radio-ulangi-jadwal [value="TIDAK"]').prop('checked', true);
+//        m.find('.radio-ulangi-jadwal [value="'+distribusi[index].repeat+'"]').prop('checked', true);
+        
         if (mode == 'create') {
             console.log('create');
             m.find('.modal-footer').removeClass('d-none');
@@ -776,9 +788,9 @@ $role = $this->session->userdata['user']['role'];
     });
     $('#formJadwal').submit(function (e) {
         e.preventDefault();
-        console.log($(this).serialize());
         $.post('<?php echo site_url($module); ?>/set_jadwal', $(this).serialize(), function (data) {
-            console.log(JSON.parse(data));
+            $('#modalJadwal').modal('hide');
+            getDistribusi();
         });
     });
     function openModalUploadBukti(index) {
