@@ -1,10 +1,19 @@
 <?php
 $role = $this->session->userdata['user']['role'];
 ?>
+<!--<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />-->
+<!--<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>-->
 <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment-with-locales.min.js" integrity="sha256-AdQN98MVZs44Eq2yTwtoKufhnU+uZ7v2kXnD5vqzZVo=" crossorigin="anonymous"></script>-->
 <!--<script src="https://blueimp.github.io/jQuery-File-Upload/js/vendor/jquery.ui.widget.js"></script>-->
 <!--<script src="js/jquery.iframe-transport.js"></script>-->
 <!--<script src="https://blueimp.github.io/jQuery-File-Upload/js/jquery.fileupload.js"></script>-->
+<style>
+        .select-2{
+            width: 300px !important;
+            /*min-width: 100% !important;*/
+            /*max-width: 100% !important;*/
+        }
+</style>
 <div class="main-card mb-3 card">
     <div class="card-body">
         <div class="form-group">
@@ -308,10 +317,8 @@ $role = $this->session->userdata['user']['role'];
                             <tr>
                                 <td>Distribusi</td>
                                 <td>
-                                    <div class="row">
-                                        <select class="form-control select-anggota select-2" multiple="multiple" name="anggota[]" required="">
-                                        </select>
-                                    </div>
+                                    <select class="form-control select-anggota select-2 multiselect-dropdown" multiple="multiple" name="anggota[]" required="" style="min-width: 100px">
+                                    </select>
                                 </td>
                             </tr>
                         </tbody>
@@ -488,6 +495,7 @@ $role = $this->session->userdata['user']['role'];
         clone.find('textarea').attr('disabled', true);
         $('#modalContainer').append(clone);
         $('#tab-implementasi').addClass('active');
+        $('.select-2').select2();
     });
     var idPerusahaan;
     var idStandar;
@@ -624,7 +632,7 @@ $role = $this->session->userdata['user']['role'];
             for (var i = 0; i < dokumen.length; i++) {
                 var d = dokumen[i];
                 $('#table-dokumen').append('<tr><td>' + d.nomor + '</td><td>' + d.judul + '</td><td>Level ' + d.jenis + '</td><td><span class="fa fa-info-circle text-primary" onclick="detailDokumen(' + i + ')" title="Detail"></span></td></tr>');
-                $('.select-dokumen-terkait').append('<option value="' + d.id + '">' + d.judul + '</option>');
+//                $('.select-dokumen-terkait').append('<option value="' + d.id + '">' + d.judul + '</option>');
             }
             getDistribusi();
         });
