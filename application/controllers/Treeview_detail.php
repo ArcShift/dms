@@ -28,6 +28,12 @@ class Treeview_detail extends MY_Controller {
         }
         echo json_encode($this->model->member());
     }
+    function personil() {
+        if (!$this->input->is_ajax_request()) {
+            redirect('404');
+        }
+        echo json_encode($this->model->personil());
+    }
 
     function pasal() {
         if (!$this->input->is_ajax_request()) {

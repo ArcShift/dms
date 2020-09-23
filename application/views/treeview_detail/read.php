@@ -315,7 +315,7 @@ $role = $this->session->userdata['user']['role'];
                             <tr>
                                 <td>Distribusi</td>
                                 <td>
-                                    <select class="form-control select-anggota select-2 multiselect-dropdown" multiple="multiple" name="anggota[]" required="" style="min-width: 100px">
+                                    <select class="form-control select-personil select-2 multiselect-dropdown" multiple="multiple" name="personil[]" required="" style="min-width: 100px">
                                     </select>
                                 </td>
                             </tr>
@@ -333,7 +333,7 @@ $role = $this->session->userdata['user']['role'];
 <!--MODAL JADWAL-->
 <div class="modal fade" id="modalJadwal" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
-        <form id="formJadwal">            
+        <form id="formJadwal">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Tambah Jadwal</h5>
@@ -498,6 +498,7 @@ $role = $this->session->userdata['user']['role'];
     var idPerusahaan;
     var idStandar;
     var anggota;
+    var pesonil;
     var sortData = [];
     var dokumen;
     $('#perusahaan').change(function (s) {
@@ -518,7 +519,14 @@ $role = $this->session->userdata['user']['role'];
                     $('.select-anggota').append('<option value="' + a.id + '">' + a.fullname + '</option>');
                 }
             });
-//        $('.select-2').select2();
+            $.post('<?php echo site_url($module); ?>/personil', {'perusahaan': $(this).val()}, function (data) {
+                personil = JSON.parse(data);
+                $('.select-personil').empty();
+                for (var i = 0; i < personil.length; i++) {
+                    var p = personil[i];
+                    $('.select-personil').append('<option value="' + p.id + '">' + p.fullname + '</option>');
+                }
+            });
             perusahaan = $(this).val();
         }
     });

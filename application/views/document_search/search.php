@@ -42,7 +42,7 @@
                         <select class="form-control" name="distribusi">
                             <option value="">-- -- --</option>
                             <?php foreach ($distribusi as $d) { ?>
-                                <option value="<?= $d['id'] ?>" <?= $this->input->get('distribusi') == $d['id'] ? 'selected' : '' ?>><?= $d['username'] ?></option>
+                                <option value="<?= $d['id'] ?>" <?= $this->input->get('distribusi') == $d['id'] ? 'selected' : '' ?>><?= $d['fullname'] ?></option>
                             <?php } ?>
                         </select>
                     </div>
