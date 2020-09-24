@@ -28,6 +28,7 @@ class Treeview_detail extends MY_Controller {
         }
         echo json_encode($this->model->member());
     }
+
     function personil() {
         if (!$this->input->is_ajax_request()) {
             redirect('404');
@@ -40,6 +41,13 @@ class Treeview_detail extends MY_Controller {
             redirect('404');
         }
         echo json_encode($this->model->pasal());
+    }
+
+    function unit_kerja() {
+        if (!$this->input->is_ajax_request()) {
+            redirect('404');
+        }
+        echo json_encode($this->model->unit_kerja());
     }
 
     function create_dokumen() {

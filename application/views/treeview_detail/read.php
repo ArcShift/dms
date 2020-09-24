@@ -9,9 +9,7 @@ $role = $this->session->userdata['user']['role'];
 <!--<script src="https://blueimp.github.io/jQuery-File-Upload/js/jquery.fileupload.js"></script>-->
 <style>
     .select-2{
-        width: 300px !important;
-        /*min-width: 100% !important;*/
-        /*max-width: 100% !important;*/
+        width: 325px !important;
     }
 </style>
 <div class="main-card mb-3 card">
@@ -315,8 +313,8 @@ $role = $this->session->userdata['user']['role'];
                             <tr>
                                 <td>Distribusi</td>
                                 <td>
-                                    <select class="form-control select-personil select-2 multiselect-dropdown" multiple="multiple" name="personil[]" required="" style="min-width: 100px">
-                                    </select>
+                                    <select class="form-control select-unit-kerja" id="distribusi-unit-kerja"></select>
+                                    <select class="form-control select-personil select-2 multiselect-dropdown" multiple="multiple" name="personil[]" required=""></select>
                                 </td>
                             </tr>
                         </tbody>
@@ -517,6 +515,15 @@ $role = $this->session->userdata['user']['role'];
                 for (var i = 0; i < anggota.length; i++) {
                     var a = anggota[i];
                     $('.select-anggota').append('<option value="' + a.id + '">' + a.fullname + '</option>');
+                }
+            });
+            $.post('<?php echo site_url($module); ?>/unit_kerja', {'perusahaan': $(this).val()}, function (data) {
+                unitKerja = JSON.parse(data);
+                $('.select-unit-kerja').empty();
+                $('.select-unit-kerja').append('<option value="">-- UNIT KERJA --</option>');
+                for (var i = 0; i < unitKerja.length; i++) {
+                    var uk = unitKerja[i];
+                    $('.select-unit-kerja').append('<option value="' + uk.id + '">' + uk.name + '</option>');
                 }
             });
             $.post('<?php echo site_url($module); ?>/personil', {'perusahaan': $(this).val()}, function (data) {
@@ -754,11 +761,24 @@ $role = $this->session->userdata['user']['role'];
         m.find('.label-klasifikasi').text(d.klasifikasi);
         m.find('.input-dokumen-id').val(d.id);
     }
+    $('#distribusi-unit-kerja').change(function () {
+        console.log($(this).val());
+        console.log(personil);
+        var slct = $('#modalDistribusi').find('.select-personil');
+        slct.val(null).trigger('change');
+        var selected = [];
+        for (var i = 0; i < personil.length; i++) {
+            if (personil[i].id_unit_kerja == $(this).val()) {
+                selected.push(personil[i].id);
+            }
+            slct.val(selected).trigger('change');
+        }
+    });
     $('#formDistribusi').submit(function (e) {
         e.preventDefault();
         $.post('<?php echo site_url($module); ?>/set_distribusi', $(this).serialize(), function (data) {
             $('#modalDistribusi').modal('hide');
-            $('#standar').change();
+            $('#standar').chasnge();
         });
     });
     function jadwal(index, mode) {
@@ -772,12 +792,12 @@ $role = $this->session->userdata['user']['role'];
         m.find('.radio-ulangi-jadwal[value="' + distribusi[index].repeat + '"]').prop('checked', true);
         var harian = ['senin', 'selasa', 'rabu', 'kamis', 'jumat', 'sabtu', 'minggu'];
         for (var item of harian) {
-            console.log(item+' = '+distribusi[index][item]);
-            var status= distribusi[index][item];
-            if(status=='YA'){
-                m.find('input[type=checkbox][value='+item.toUpperCase()+']').prop('checked',true);
-            }else{
-                m.find('input[type=checkbox][value='+item.toUpperCase()+']').prop('checked',false);   
+            console.log(item + ' = ' + distribusi[index][item]);
+            var status = distribusi[index][item];
+            if (status == 'YA') {
+                m.find('input[type=checkbox][value=' + item.toUpperCase() + ']').prop('checked', true);
+            } else {
+                m.find('input[type=checkbox][value=' + item.toUpperCase() + ']').prop('checked', false);
             }
         }
         if (mode == 'create') {

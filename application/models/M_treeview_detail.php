@@ -28,11 +28,18 @@ class M_treeview_detail extends CI_Model {
         $this->db->where('uk.id_company', $this->input->post('perusahaan'));
         return $this->db->get('users u')->result_array();
     }
+
     function personil() {
-        $this->db->select('p.id, CONCAT(p.fullname, " - ", uk.name) AS fullname');
+        $this->db->select('p.id, p.id_unit_kerja, CONCAT(p.fullname, " - ", uk.name) AS fullname');
         $this->db->join('unit_kerja uk', 'uk.id=p.id_unit_kerja');
         $this->db->where('uk.id_company', $this->input->post('perusahaan'));
         return $this->db->get('personil p')->result_array();
+    }
+
+    function unit_kerja() {
+        $this->db->select('uk.id, uk.name');
+        $this->db->where('uk.id_company', $this->input->post('perusahaan'));
+        return $this->db->get('unit_kerja uk')->result_array();
     }
 
 //    function reads_pemenuhan() {
@@ -73,7 +80,7 @@ class M_treeview_detail extends CI_Model {
         $this->db->set('klasifikasi', $this->input->post('klasifikasi'));
         $this->db->set('deskripsi', $this->input->post('deskripsi'));
         $this->db->set('versi', $this->input->post('versi'));
-        if(!empty($this->input->post('dokumen_terkait'))) {
+        if (!empty($this->input->post('dokumen_terkait'))) {
             $this->db->set('contoh', $this->input->post('dokumen_terkait'));
         }
         $type = $this->input->post('type_dokumen');
