@@ -7,11 +7,6 @@ $role = $this->session->userdata['user']['role'];
 <!--<script src="https://blueimp.github.io/jQuery-File-Upload/js/vendor/jquery.ui.widget.js"></script>-->
 <!--<script src="js/jquery.iframe-transport.js"></script>-->
 <!--<script src="https://blueimp.github.io/jQuery-File-Upload/js/jquery.fileupload.js"></script>-->
-<style>
-    .select-2{
-        width: 325px !important;
-    }
-</style>
 <div class="main-card mb-3 card">
     <div class="card-body">
         <div class="form-group">
@@ -280,7 +275,7 @@ $role = $this->session->userdata['user']['role'];
                     <table class="table">
                         <tbody>
                             <tr>
-                                <td>Pasal</td>
+                                <td style="width: 120px">Pasal</td>
                                 <td>
                                     <label class="label-pasal"></label>
                                 </td>
@@ -314,7 +309,12 @@ $role = $this->session->userdata['user']['role'];
                                 <td>Distribusi</td>
                                 <td>
                                     <select class="form-control select-unit-kerja" id="distribusi-unit-kerja"></select>
-                                    <select class="form-control select-personil select-2 multiselect-dropdown" multiple="multiple" name="personil[]" required=""></select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td>
+                                    <select class="form-control select-personil select-2 multiselect-dropdown" multiple="multiple" name="personil[]" required="" style="width: 330px !important;"></select>
                                 </td>
                             </tr>
                         </tbody>
@@ -493,6 +493,9 @@ $role = $this->session->userdata['user']['role'];
         $('#tab-implementasi').addClass('active');
         $('.select-2').select2();
     });
+    function afterReady() {
+        
+    }
     var idPerusahaan;
     var idStandar;
     var anggota;
@@ -520,7 +523,7 @@ $role = $this->session->userdata['user']['role'];
             $.post('<?php echo site_url($module); ?>/unit_kerja', {'perusahaan': $(this).val()}, function (data) {
                 unitKerja = JSON.parse(data);
                 $('.select-unit-kerja').empty();
-                $('.select-unit-kerja').append('<option value="">-- UNIT KERJA --</option>');
+                $('.select-unit-kerja').append('<option value="">-- Pilih Unit Kerja --</option>');
                 for (var i = 0; i < unitKerja.length; i++) {
                     var uk = unitKerja[i];
                     $('.select-unit-kerja').append('<option value="' + uk.id + '">' + uk.name + '</option>');
@@ -709,7 +712,8 @@ $role = $this->session->userdata['user']['role'];
                                 var userDis = dokumen[j].user_distribusi;
                                 var strUserDis = '';
                                 for (var l = 0; l < userDis.length; l++) {
-                                    strUserDis += '<span>' + userDis[l] + '</span><br/>';
+                                    strUserDis += '<div>' + userDis[l] + '</div>';
+//                                    strUserDis += '<div><button class="btn btn-danger fa fa-trash"></button>' + userDis[l] + '</div>';
                                     if (userDis[l] !== '') {
                                         for (var m = 0; m < data.length; m++) {
                                             if (dokumen[j].distribusi[l] == data[m].id) {
@@ -778,7 +782,7 @@ $role = $this->session->userdata['user']['role'];
         e.preventDefault();
         $.post('<?php echo site_url($module); ?>/set_distribusi', $(this).serialize(), function (data) {
             $('#modalDistribusi').modal('hide');
-            $('#standar').chasnge();
+            $('#standar').change();
         });
     });
     function jadwal(index, mode) {
