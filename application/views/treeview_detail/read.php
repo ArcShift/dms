@@ -494,7 +494,7 @@ $role = $this->session->userdata['user']['role'];
         $('.select-2').select2();
     });
     function afterReady() {
-        
+
     }
     var idPerusahaan;
     var idStandar;
@@ -647,6 +647,10 @@ $role = $this->session->userdata['user']['role'];
             dokumen = JSON.parse(data);
             for (var i = 0; i < dokumen.length; i++) {
                 var d = dokumen[i];
+                if (dokumen[i].distribusi[0] == "") {
+                    dokumen[i].distribusi = [];
+                    dokumen[i].user_distribusi = [];
+                }
                 $('#table-dokumen').append('<tr><td>' + d.nomor + '</td><td>' + d.judul + '</td><td>Level ' + d.jenis + '</td><td><span class="fa fa-info-circle text-primary" onclick="detailDokumen(' + i + ')" title="Detail"></span></td></tr>');
 //                $('.select-dokumen-terkait').append('<option value="' + d.id + '">' + d.judul + '</option>');
             }
@@ -710,10 +714,10 @@ $role = $this->session->userdata['user']['role'];
                                 dokumen[j].index_pasal = i;
                                 sortDokumen.push(dokumen[j]);
                                 var userDis = dokumen[j].user_distribusi;
+                                var idDis = dokumen[j].distribusi;
                                 var strUserDis = '';
                                 for (var l = 0; l < userDis.length; l++) {
-                                    strUserDis += '<div>' + userDis[l] + '</div>';
-//                                    strUserDis += '<div><button class="btn btn-danger fa fa-trash"></button>' + userDis[l] + '</div>';
+                                    strUserDis += '<div><button class="btn btn-danger btn-sm fa fa-trash" onclick="deleteUserDistribusi(' + idDis[l] + ')"></button>&nbsp' + userDis[l] + '</div>';
                                     if (userDis[l] !== '') {
                                         for (var m = 0; m < data.length; m++) {
                                             if (dokumen[j].distribusi[l] == data[m].id) {
@@ -785,6 +789,12 @@ $role = $this->session->userdata['user']['role'];
             $('#standar').change();
         });
     });
+    function deleteUserDistribusi(id) {
+        //TODO: check child: upload_bukti
+        $.post('<?php echo site_url($module); ?>/delete_distribusi', {id: id}, function (data) {
+            getDokumen()
+        });
+    }
     function jadwal(index, mode) {
         var l = listJadwal[index];
         var m = $('#modalJadwal');

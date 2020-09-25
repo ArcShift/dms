@@ -130,7 +130,7 @@ class M_treeview_detail extends CI_Model {
 
     function insert_distribusi() {
         $in = $this->input->post();
-        foreach ($in['personil'] as $k => $p) {
+        foreach ($in['personil'] as $p) {
             $this->db->where('id_document', $in['dokumen']);
             $this->db->where('id_personil', $p);
             $count = $this->db->count_all_results('distribusi');
@@ -143,6 +143,11 @@ class M_treeview_detail extends CI_Model {
             }
         }
         return true;
+    }
+
+    function delete_distribusi() {
+        $this->db->where('id', $this->input->post('id'));
+        return $this->db->delete('distribusi');
     }
 
     function reads_schedule() {

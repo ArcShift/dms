@@ -98,7 +98,13 @@ class Treeview_detail extends MY_Controller {
         }
         print_r($this->input->post());
     }
-
+    function delete_distribusi() {
+        if ($this->model->delete_distribusi()) {
+            echo 'success';
+        } else {
+            echo 'error';
+        }
+    }
     function set_jadwal() {
         if ($this->model->create_jadwal()) {
             echo 'success';
