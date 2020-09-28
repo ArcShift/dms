@@ -56,6 +56,7 @@ $role = $this->session->userdata['user']['role'];
                                     <th>Pasal</th>
                                     <th>Judul</th>
                                     <th>Deskripsi</th>
+                                    <th>Doc</th>
                                     <th>Detail</th>
                                 </tr>
                             </thead>
@@ -152,6 +153,18 @@ $role = $this->session->userdata['user']['role'];
                         <label for="namaModule">Deskripsi</label>
                         <textarea class="form-control item-long-desc" name="long-desc" readonly=""></textarea>
                     </div>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th colspan="2">Dokumen</th>
+                            </tr>
+                            <tr>
+                                <th>Judul</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody class="files"></tbody>
+                    </table>
                 </div>
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-primary" data-dismiss="modal">Tutup</button>
@@ -590,7 +603,7 @@ $role = $this->session->userdata['user']['role'];
             for (var i = 0; i < sortData.length; i++) {
                 var d = sortData[i];
                 $('#table-pemenuhan').append('<tr><td>' + d.fullname + '</td><td>' + (d.doc == '0' ? '-' : d.doc) + '</td></tr>');
-                $('#table-pasal').append('<tr><td>' + d.fullname + '</td><td>' + (d.sort_desc == null ? '-' : d.sort_desc) + '</td><td>' + (d.long_desc == null ? '-' : d.long_desc) + '</td><td><span class="fa fa-info-circle text-primary" onclick="detailPasal(' + i + ')" title="Detail"></span></td></tr>');
+                $('#table-pasal').append('<tr><td>' + d.fullname + '</td><td>' + (d.sort_desc == null ? '-' : d.sort_desc) + '</td><td>' + (d.long_desc == null ? '-' : d.long_desc) + '</td><td>' + d.doc + '</td><td><span class="fa fa-info-circle text-primary" onclick="detailPasal(' + i + ')" title="Detail"></span></td></tr>');
                 if (d.child == 0) {
                     $('.select-pasal').append('<option value="' + d.id + '">' + d.fullname + '</option>');
                 }
@@ -605,6 +618,22 @@ $role = $this->session->userdata['user']['role'];
         m.find('.modal-title').text(d.fullname);
         m.find('.item-sort-desc').val(d.sort_desc);
         m.find('.item-long-desc').text(d.long_desc);
+        m.find('.files').empty();
+        if (d.doc != 0) {
+            for (var doc of dokumen) {
+                console.log(d);
+                console.log(doc);
+                if (d.id == doc.id_pasal) {
+                    var link;
+                    if(doc.type_doc=='file'){
+                        link = '<a class="btn btn-primary btn-sm fa fa-download" href="<?= base_url('upload/dokumen')?>/'+doc.file +'"></a>';
+                    }else{
+                        link = '<a class="btn btn-primary btn-sm fa fa-search" target="_blank" href="'+doc.url +'"></a>';
+                    }
+                    m.find('.files').append('<tr><td>' + doc.judul + '</td><td>'+ doc.type_doc +'</td><td>'+link+'</td></tr>');
+                }
+            }
+        }
     }
     $('#formDokumen').on("submit", function (e) {
         e.preventDefault();
