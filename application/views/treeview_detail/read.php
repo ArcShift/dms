@@ -134,7 +134,7 @@ $role = $this->session->userdata['user']['role'];
 </div>
 <!--MODAL DETAIL PASAL-->
 <div class="modal fade" id="modalDetailPasal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">     
+    <div class="modal-dialog" role="document">
         <form>
             <div class="modal-content">
                 <div class="modal-header">
@@ -145,11 +145,11 @@ $role = $this->session->userdata['user']['role'];
                 </div>
                 <div class="modal-body modal-message">
                     <div class="form-group">
-                        <label for="namaModule">Topik</label>
+                        <label for="namaModule">Judul</label>
                         <input class="form-control item-sort-desc" name="sort-desc" readonly="">
                     </div>
                     <div class="form-group">
-                        <label for="namaModule">Isi</label>
+                        <label for="namaModule">Deskripsi</label>
                         <textarea class="form-control item-long-desc" name="long-desc" readonly=""></textarea>
                     </div>
                 </div>
@@ -757,7 +757,6 @@ $role = $this->session->userdata['user']['role'];
                     }
                 }
             }
-            console.log(distribusi);
         });
     }
     function editDistribusi(index) {
@@ -772,8 +771,6 @@ $role = $this->session->userdata['user']['role'];
         m.find('.input-dokumen-id').val(d.id);
     }
     $('#distribusi-unit-kerja').change(function () {
-        console.log($(this).val());
-        console.log(personil);
         var slct = $('#modalDistribusi').find('.select-personil');
         slct.val(null).trigger('change');
         var selected = [];
@@ -808,7 +805,6 @@ $role = $this->session->userdata['user']['role'];
         m.find('.radio-ulangi-jadwal[value="' + distribusi[index].repeat + '"]').prop('checked', true);
         var harian = ['senin', 'selasa', 'rabu', 'kamis', 'jumat', 'sabtu', 'minggu'];
         for (var item of harian) {
-            console.log(item + ' = ' + distribusi[index][item]);
             var status = distribusi[index][item];
             if (status == 'YA') {
                 m.find('input[type=checkbox][value=' + item.toUpperCase() + ']').prop('checked', true);
