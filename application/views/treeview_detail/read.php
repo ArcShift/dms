@@ -26,7 +26,7 @@ $role = $this->session->userdata['user']['role'];
             <div id="container" class="card-body">
                 <!--TAB-->
                 <ul class="nav nav-tabs">
-                    <li class="nav-item"><a data-toggle="tab" href="#tab-pemenuhan1" class="nav-link">Pemenuhan</a></li>
+                    <li class="nav-item"><a data-toggle="tab" href="#tab-pemenuhan" class="nav-link">Pemenuhan</a></li>
                     <li class="nav-item"><a data-toggle="tab" href="#tab-pasal" class="nav-link">Pasal</a></li>
                     <li class="nav-item"><a data-toggle="tab" href="#tab-dokumen" class="nav-link">Dokumen</a></li>
                     <li class="nav-item"><a data-toggle="tab" href="#tab-distribusi" class="nav-link">Distribusi</a></li>
@@ -36,13 +36,13 @@ $role = $this->session->userdata['user']['role'];
                 </ul>
                 <div class="tab-content">
                     <!--PEMENUHAN-->
-                    <div class="tab-pane" id="tab-pemenuhan1" role="tabpanel">
+                    <div class="tab-pane" id="tab-pemenuhan" role="tabpanel">
                         <table class="table table-striped">
                             <thead>
                                 <tr>
                                     <th>Pasal</th>
                                     <th>Dokumen</th>
-                                    <th>Implementasi</th>
+                                    <!--<th>Implementasi</th>-->
                                 </tr>
                             </thead>
                             <tbody id="table-pemenuhan"></tbody>
@@ -54,7 +54,8 @@ $role = $this->session->userdata['user']['role'];
                             <thead>
                                 <tr>
                                     <th>Pasal</th>
-                                    <th>Topik</th>
+                                    <th>Judul</th>
+                                    <th>Deskripsi</th>
                                     <th>Detail</th>
                                 </tr>
                             </thead>
@@ -490,8 +491,7 @@ $role = $this->session->userdata['user']['role'];
         clone.find('select').attr('disabled', true);
         clone.find('textarea').attr('disabled', true);
         $('#modalContainer').append(clone);
-        $('#tab-pasal').addClass('active');
-        $('#tab-pasal').addClass('active');
+        $('#tab-pemenuhan').addClass('active');
         $('.select-2').select2();
     });
     function afterReady() {
@@ -503,6 +503,7 @@ $role = $this->session->userdata['user']['role'];
     var pesonil;
     var sortData = [];
     var dokumen;
+    var listJadwal
     $('#perusahaan').change(function (s) {
         if ($(this).val()) {
             $.post('<?php echo site_url($module); ?>/standard', {'id': $(this).val()}, function (data) {
@@ -588,8 +589,8 @@ $role = $this->session->userdata['user']['role'];
             $('.select-pasal').append('<option value="">-- pilih pasal --</option>');
             for (var i = 0; i < sortData.length; i++) {
                 var d = sortData[i];
-                $('#table-pemenuhan').append('<tr><td>' + d.fullname + '</td><td>10%</td><td>10%</td></tr>');
-                $('#table-pasal').append('<tr><td>' + d.fullname + '</td><td>' + d.sort_desc + '</td><td><span class="fa fa-info-circle text-primary" onclick="detailPasal(' + i + ')" title="Detail"></span></td></tr>');
+                $('#table-pemenuhan').append('<tr><td>' + d.fullname + '</td><td>' + (d.doc == '0' ? '-' : d.doc) + '</td></tr>');
+                $('#table-pasal').append('<tr><td>' + d.fullname + '</td><td>' + (d.sort_desc == null ? '-' : d.sort_desc) + '</td><td>' + (d.long_desc == null ? '-' : d.long_desc) + '</td><td><span class="fa fa-info-circle text-primary" onclick="detailPasal(' + i + ')" title="Detail"></span></td></tr>');
                 if (d.child == 0) {
                     $('.select-pasal').append('<option value="' + d.id + '">' + d.fullname + '</option>');
                 }
@@ -697,10 +698,10 @@ $role = $this->session->userdata['user']['role'];
         m.find('.input-versi').val(d.versi);
         m.find('.radio-type-dokumen').filter('[value=' + d.type_doc + ']').prop('checked', true);
     }
-    var listJadwal = [];
     function getDistribusi() {
         $.post('<?php echo site_url($module); ?>/get_distribusi', {'perusahaan': perusahaan, 'standar': standar}, function (data) {
             data = JSON.parse(data);
+            listJadwal = [];
             sortDokumen = [];
             distribusi = [];
             $('#table-distribusi').empty();

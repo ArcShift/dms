@@ -37,8 +37,8 @@
                             <input class="form-control" id="parent" required="" readonly="">
                         </div>
                         <div class="form-group">
-                            <label for="namaModule">Nama</label>
-                            <input class="form-control" id="namaModule" name="nama" placeholder="Nama" required="">
+                            <label for="namaModule">Pasal</label>
+                            <input class="form-control" id="namaModule" name="nama" placeholder="Nama Pasal" required="">
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -60,8 +60,8 @@
                             <input class="form-control item-id" name="id" required="" readonly="">
                         </div>
                         <div class="form-group">
-                            <label>Nama</label>
-                            <input class="form-control item-name" name="nama" placeholder="Nama" required="">
+                            <label>Pasal</label>
+                            <input class="form-control item-name" name="nama" placeholder="Nama Pasal" required="">
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -83,8 +83,8 @@
                             <input class="form-control item-id" name="id" required="" readonly="">
                         </div>
                         <div class="form-group">
-                            <label for="namaModule">Nama</label>
-                            <input class="form-control item-name" name="nama" placeholder="Nama" required="" readonly="">
+                            <label for="namaModule">Pasal</label>
+                            <input class="form-control item-name" name="nama" placeholder="Nama Pasal" required="" readonly="">
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -106,15 +106,15 @@
                             <input class="form-control item-id" name="id" required="" readonly="">
                         </div>
                         <div class="form-group">
-                            <label for="namaModule">Nama</label>
-                            <input class="form-control item-name" name="nama" placeholder="Nama" required="" readonly="">
+                            <label for="namaModule">Pasal</label>
+                            <input class="form-control item-name" name="nama" placeholder="Nama Pasal" required="" readonly="">
                         </div>
                         <div class="form-group">
-                            <label for="namaModule">Topik</label>
-                            <input class="form-control item-sort-desc" name="sort-desc" placeholder="Tuliskan deskripsi">
+                            <label for="namaModule">Judul</label>
+                            <input class="form-control item-sort-desc" name="sort-desc" placeholder="Judul">
                         </div>
                         <div class="form-group">
-                            <label for="namaModule">Isi</label>
+                            <label for="namaModule">Deskripsi</label>
                             <textarea class="form-control item-long-desc" name="long-desc" placeholder="Tuliskan deskripsi"></textarea>
                         </div>
                     </div>

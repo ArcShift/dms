@@ -168,7 +168,9 @@
                                         <li id="module-<?php echo $m['name'] ?>" class="menu-item">
                                             <a href="<?php echo site_url($m['name']) ?>" class="<?php echo $m['name'] == $this->uri->segment(1) ? 'mm-active' : '' ?>">
                                                 <i class="metismenu-icon fa fa-<?php echo $m['icon'] ?>"></i>
-                                                <?php echo isset($m['title']) ? $m['title'] : ucwords(str_replace('_', ' ', $m['name'])); ?>
+                                                <b>
+                                                    <?= isset($m['title']) ? $m['title'] : ucwords(str_replace('_', ' ', $m['name'])); ?>
+                                                </b>
                                             </a>
                                         </li>
                                     <?php } ?>
@@ -187,7 +189,7 @@
                                         </i>
                                     </div>
                                     <div>
-                                        <?php echo empty($activeModule['title']) ? ucfirst($module) : $activeModule['title']; ?>
+                                        <?= empty($activeModule['title']) ? ucfirst($module) : $activeModule['title']; ?>
                                         <div class="page-title-subheading">
                                             <?php echo $subTitle ?>
                                         </div>
@@ -296,6 +298,16 @@
             function closeAlert(obj) {
                 $(obj).parent().addClass('d-none');
             }
+            $('.search-wrapper .search-icon').click(function () {
+                if ($('.search-wrapper').hasClass('active')) {
+                    window.location.href = "<?= site_url('document_search') ?>?judul=" + $('.search-input').val();
+                }
+            });
+            $('.search-input').keypress(function (e) {
+                if (e.which == 13) {
+                    window.location.href = "<?= site_url('document_search') ?>?judul=" + $('.search-input').val();
+                }
+            });
         </script>
     </body>
 </html>
@@ -320,15 +332,3 @@
         </div>
     </div>
 </div>
-<script>
-    $('.search-wrapper .search-icon').click(function () {
-        if ($('.search-wrapper').hasClass('active')) {
-            window.location.href = "<?= site_url('document_search') ?>?judul=" + $('.search-input').val();
-        }
-    });
-    $('.search-input').keypress(function (e) {
-        if (e.which == 13) {
-            window.location.href = "<?= site_url('document_search') ?>?judul=" + $('.search-input').val();
-        }
-    });
-</script>

@@ -5,7 +5,7 @@
         <?php } ?>
     </div>
     <div class="card-body">
-        <form method="post">  
+        <form method="post">
             <table class="table data-table">
                 <thead>
                     <tr>
@@ -14,7 +14,7 @@
                         <th class="text-center">Pasal & Ayat</th>
                         <th class="text-center">Perusahaan</th>
                         <th>Created by</th>
-                        <th>aksi</th>
+                        <th>Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
