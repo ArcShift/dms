@@ -42,6 +42,7 @@ $role = $this->session->userdata['user']['role'];
                                 <tr>
                                     <th>Pasal</th>
                                     <th>Dokumen</th>
+                                    <th>Pemenuhan<br/>Dokumen</th>
                                     <!--<th>Implementasi</th>-->
                                 </tr>
                             </thead>
@@ -574,6 +575,15 @@ $role = $this->session->userdata['user']['role'];
                 } else {
                     $('#item-base' + d.parent).children('.child').append(element);
                 }
+                if (d.child == 0) {
+                    if (d.doc == 0) {
+                        d.pemenuhan_doc = 0;
+                    } else {
+                        d.pemenuhan_doc = 100;
+                    }
+                } else {
+                    d.pemenuhan_doc = -1;
+                }
                 data[i] = d;
             }
             var element = $('.item-base').children('.index').get();
@@ -586,15 +596,18 @@ $role = $this->session->userdata['user']['role'];
             }
             for (var i = 0; i < sortData.length; i++) {
                 var s = sortData[i];
+                s.childsIndex = [];
                 if (s.parent === null) {
                     s.parentIndex = null;
                     s.fullname = s.name;
                 } else {
                     s.parentIndex = $('#item-base' + s.parent).children('.index').text();
                     s.fullname = sortData[s.parentIndex].fullname + ' - ' + s.name;
+                    sortData[s.parentIndex].childsIndex.push(i);
                 }
                 sortData[i] = s;
             }
+            pemenuhanDokumen(0);
             $('#tab-base').empty();
             $('#table-pemenuhan').empty();
             $('#table-pasal').empty();
@@ -602,7 +615,7 @@ $role = $this->session->userdata['user']['role'];
             $('.select-pasal').append('<option value="">-- pilih pasal --</option>');
             for (var i = 0; i < sortData.length; i++) {
                 var d = sortData[i];
-                $('#table-pemenuhan').append('<tr><td>' + d.fullname + '</td><td>' + (d.doc == '0' ? '-' : d.doc) + '</td></tr>');
+                $('#table-pemenuhan').append('<tr><td>' + d.fullname + '</td><td>' + (d.doc == '0' ? '-' : d.doc) + '</td><td>' + d.pemenuhan_doc + '%</td></tr>');
                 $('#table-pasal').append('<tr><td>' + d.fullname + '</td><td>' + (d.sort_desc == null ? '-' : d.sort_desc) + '</td><td>' + (d.long_desc == null ? '-' : d.long_desc) + '</td><td>' + d.doc + '</td><td><span class="fa fa-info-circle text-primary" onclick="detailPasal(' + i + ')" title="Detail"></span></td></tr>');
                 if (d.child == 0) {
                     $('.select-pasal').append('<option value="' + d.id + '">' + d.fullname + '</option>');
@@ -610,6 +623,22 @@ $role = $this->session->userdata['user']['role'];
             }
             getDokumen();
         });
+    }
+    function pemenuhanDokumen(index) {
+        console.log(index);
+        var listPemenuhan = [];
+        var d = sortData[index];
+        for (var i = 0; i < d.childsIndex.length; i++) {
+            if (sortData[d.childsIndex[i]].pemenuhan_doc == -1) {
+                pemenuhanDokumen(d.childsIndex[i]);
+            }
+            listPemenuhan.push(sortData[d.childsIndex[i]].pemenuhan_doc);
+        }
+        var total = 0;
+        for (var i = 0; i < listPemenuhan.length; i++) {
+            total += listPemenuhan[i];
+        }
+        sortData[index].pemenuhan_doc = total / listPemenuhan.length;
     }
     function detailPasal(index) {
         var m = $('#modalDetailPasal');
@@ -625,12 +654,12 @@ $role = $this->session->userdata['user']['role'];
                 console.log(doc);
                 if (d.id == doc.id_pasal) {
                     var link;
-                    if(doc.type_doc=='file'){
-                        link = '<a class="btn btn-primary btn-sm fa fa-download" href="<?= base_url('upload/dokumen')?>/'+doc.file +'"></a>';
-                    }else{
-                        link = '<a class="btn btn-primary btn-sm fa fa-search" target="_blank" href="'+doc.url +'"></a>';
+                    if (doc.type_doc == 'file') {
+                        link = '<a class="btn btn-primary btn-sm fa fa-download" href="<?= base_url('upload/dokumen') ?>/' + doc.file + '"></a>';
+                    } else {
+                        link = '<a class="btn btn-primary btn-sm fa fa-search" target="_blank" href="' + doc.url + '"></a>';
                     }
-                    m.find('.files').append('<tr><td>' + doc.judul + '</td><td>'+ doc.type_doc +'</td><td>'+link+'</td></tr>');
+                    m.find('.files').append('<tr><td>' + doc.judul + '</td><td>' + doc.type_doc + '</td><td>' + link + '</td></tr>');
                 }
             }
         }
