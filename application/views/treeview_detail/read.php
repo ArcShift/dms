@@ -610,7 +610,11 @@ $role = $this->session->userdata['user']['role'];
             }
             for (var i = 0; i < sortData.length; i++) {
                 if (sortData[i].parent === null) {
-                    pemenuhanDokumen(i);
+                    if (sortData[i].child != 0) {
+                        pemenuhanDokumen(i);
+                    } else {
+                        sortData[i].pemenuhan_doc = 0;
+                    }
                 }
             }
             $('#tab-base').empty();
@@ -641,11 +645,10 @@ $role = $this->session->userdata['user']['role'];
         });
     }
     function pemenuhanDokumen(index) {
-        console.log(index);
         var listPemenuhan = [];
         var d = sortData[index];
         for (var i = 0; i < d.childsIndex.length; i++) {
-            if (sortData[d.childsIndex[i]].pemenuhan_doc == -1) {
+            if (sortData[d.childsIndex[i]].pemenuhan_doc === -1) {
                 pemenuhanDokumen(d.childsIndex[i]);
             }
             listPemenuhan.push(sortData[d.childsIndex[i]].pemenuhan_doc);
@@ -666,8 +669,6 @@ $role = $this->session->userdata['user']['role'];
         m.find('.files').empty();
         if (d.doc != 0) {
             for (var doc of dokumen) {
-                console.log(d);
-                console.log(doc);
                 if (d.id == doc.id_pasal) {
                     var link;
                     if (doc.type_doc == 'file') {
@@ -865,7 +866,7 @@ $role = $this->session->userdata['user']['role'];
     function deleteUserDistribusi(id) {
         //TODO: check child: upload_bukti
         $.post('<?php echo site_url($module); ?>/delete_distribusi', {id: id}, function (data) {
-            getDokumen()
+            getPasal();
         });
     }
     function jadwal(index, mode) {
@@ -907,7 +908,7 @@ $role = $this->session->userdata['user']['role'];
         e.preventDefault();
         $.post('<?php echo site_url($module); ?>/set_jadwal', $(this).serialize(), function (data) {
             $('#modalJadwal').modal('hide');
-            getDistribusi();
+            getPasal();
         });
     });
     function openModalUploadBukti(index) {
