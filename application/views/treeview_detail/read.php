@@ -41,8 +41,8 @@ $role = $this->session->userdata['user']['role'];
                             <thead>
                                 <tr>
                                     <th>Pasal</th>
-                                    <th>Dokumen</th>
-                                    <th>Pemenuhan<br/>Dokumen</th>
+                                    <th class="col-sm-2 text-center">Jumlah<br/>Dokumen</th>
+                                    <th class="col-sm-2 text-center">Pemenuhan<br/>Dokumen</th>
                                     <!--<th>Implementasi</th>-->
                                 </tr>
                             </thead>
@@ -157,10 +157,11 @@ $role = $this->session->userdata['user']['role'];
                     <table class="table">
                         <thead>
                             <tr>
-                                <th colspan="2">Dokumen</th>
+                                <th colspan="3">Dokumen</th>
                             </tr>
                             <tr>
                                 <th>Judul</th>
+                                <th>Jenis</th>
                                 <th>Aksi</th>
                             </tr>
                         </thead>
@@ -630,7 +631,7 @@ $role = $this->session->userdata['user']['role'];
                     default :
                         pCol = 'warning';
                 }
-                $('#table-pemenuhan').append('<tr><td>' + d.fullname + '</td><td>' + (d.doc == '0' ? '-' : d.doc) + '</td><td><span class="badge badge-' + pCol + '">' + d.pemenuhan_doc + '%</span></td></tr>');
+                $('#table-pemenuhan').append('<tr><td>' + d.fullname + '</td><td class="text-center">' + (d.doc == '0' ? '-' : d.doc) + '</td><td class="text-center"><span class="badge badge-' + pCol + '">' + d.pemenuhan_doc + '%</span></td></tr>');
                 $('#table-pasal').append('<tr><td>' + d.fullname + '</td><td>' + (d.sort_desc == null ? '-' : d.sort_desc) + '</td><td>' + (d.long_desc == null ? '-' : d.long_desc) + '</td><td>' + d.doc + '</td><td><span class="fa fa-info-circle text-primary" onclick="detailPasal(' + i + ')" title="Detail"></span></td></tr>');
                 if (d.child == 0) {
                     $('.select-pasal').append('<option value="' + d.id + '">' + d.fullname + '</option>');
