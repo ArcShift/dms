@@ -607,7 +607,11 @@ $role = $this->session->userdata['user']['role'];
                 }
                 sortData[i] = s;
             }
-            pemenuhanDokumen(0);
+            for (var i = 0; i < sortData.length; i++) {
+                if (sortData[i].parent === null) {
+                    pemenuhanDokumen(i);
+                }
+            }
             $('#tab-base').empty();
             $('#table-pemenuhan').empty();
             $('#table-pasal').empty();
@@ -626,7 +630,7 @@ $role = $this->session->userdata['user']['role'];
                     default :
                         pCol = 'warning';
                 }
-                $('#table-pemenuhan').append('<tr><td>' + d.fullname + '</td><td>' + (d.doc == '0' ? '-' : d.doc) + '</td><td><span class="badge badge-'+ pCol +'">' + d.pemenuhan_doc + '%</span></td></tr>');
+                $('#table-pemenuhan').append('<tr><td>' + d.fullname + '</td><td>' + (d.doc == '0' ? '-' : d.doc) + '</td><td><span class="badge badge-' + pCol + '">' + d.pemenuhan_doc + '%</span></td></tr>');
                 $('#table-pasal').append('<tr><td>' + d.fullname + '</td><td>' + (d.sort_desc == null ? '-' : d.sort_desc) + '</td><td>' + (d.long_desc == null ? '-' : d.long_desc) + '</td><td>' + d.doc + '</td><td><span class="fa fa-info-circle text-primary" onclick="detailPasal(' + i + ')" title="Detail"></span></td></tr>');
                 if (d.child == 0) {
                     $('.select-pasal').append('<option value="' + d.id + '">' + d.fullname + '</option>');
