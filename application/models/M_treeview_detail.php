@@ -42,27 +42,6 @@ class M_treeview_detail extends CI_Model {
         return $this->db->get('unit_kerja uk')->result_array();
     }
 
-//    function reads_pemenuhan() {
-//        $this->db->select('p.name, COUNT(s.id) AS total');
-//        $this->db->select('SUM(CASE WHEN s.date < CURDATE() AND s.file IS NULL THEN 1 ELSE 0 END) AS terlambat'); //UNFIX
-//        $this->db->select('SUM(CASE WHEN s.file IS NOT NULL AND s.date < s.upload_date THEN 1 ELSE 0 END) AS terlambat2'); //UNFIX
-//        $this->db->select('SUM(CASE WHEN s.upload_date IS NULL AND s.date >= CURDATE() THEN 1 ELSE 0 END) AS unfinised');
-//        $this->db->select('SUM(CASE WHEN s.file IS NOT NULL AND s.date >= s.upload_date THEN 1 ELSE 0 END) AS finish');
-//        $this->db->join('form2 f', 'f.id_pasal = p.id AND f.id_company = ' . $this->input->post('idPerusahaan'));
-//        $this->db->join('schedule s', 's.id_form2 = f.id');
-//        $this->db->group_by('p.id');
-//        $this->db->where('p.id_standard', $this->input->post('idStandar'));
-//        $result = $this->db->get('pasal p')->result_array();
-//        foreach ($result as $k => $r) {
-//            $r['terlambat'] += $r['terlambat2'];
-//            unset($r['terlambat2']);
-//            $r['p_finish'] = number_format($r['finish'] / $r['total'] * 100, 0);
-//            $r['p_terlambat'] = number_format($r['terlambat'] / $r['total'] * 100, 0);
-//            $result[$k] = $r;
-//        }
-//        return $result;
-//    }
-
     function pasal() {
         $this->db->select('p.*, COUNT(p2.id) AS child, COUNT(d.id) AS doc');
         $this->db->join('pasal p2', 'p2.parent = p.id', 'LEFT');
@@ -101,8 +80,6 @@ class M_treeview_detail extends CI_Model {
         $this->db->join('personil pl', 'pl.id = u.id_personil');
         $this->db->join('unit_kerja uk', 'uk.id = pl.id_unit_kerja');
         $this->db->join('distribusi ds', 'd.id = ds.id_document', 'LEFT');
-//        $this->db->join('users ud', 'ud.id = ds.id_users', 'LEFT');
-//        $this->db->join('personil pld', 'pld.id = ud.id_personil', 'LEFT');
         $this->db->join('personil pld', 'pld.id = ds.id_personil', 'LEFT');
         $this->db->join('unit_kerja ukd', 'ukd.id = pld.id_unit_kerja', 'LEFT');
         $this->db->where('uk.id_company = ' . $this->input->post('perusahaan'));
@@ -117,11 +94,21 @@ class M_treeview_detail extends CI_Model {
         return $result;
     }
 
+    function delete_document() {
+        $this->db->where('id', $this->input->post('id'));
+        $result = $this->db->get('document')->row_array();        
+        $this->db->where('id', $this->input->post('id'));
+        if ($this->db->delete('document') & !empty($result['file'])) {
+            unlink(FCPATH . 'upload\\dokumen\\' . $result['file']);
+            return true;
+        }
+        return false;
+    }
+
     function read_distribusi() {
         $this->db->select('ds.*');
         $this->db->join('document dc', 'dc.id = ds.id_document');
         $this->db->join('pasal p', 'p.id = dc.id_pasal');
-//        $this->db->join('users u', 'u.id = ds.id_users');
         $this->db->join('personil ps', 'ps.id = ds.id_personil', 'LEFT');
         $this->db->join('unit_kerja uk', 'uk.id = ps.id_unit_kerja', 'LEFT');
         $this->db->where('uk.id_company = ' . $this->input->post('perusahaan'));

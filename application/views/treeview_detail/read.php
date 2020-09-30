@@ -76,7 +76,7 @@ $role = $this->session->userdata['user']['role'];
                                     <th>No</th>
                                     <th>Judul</th>
                                     <th>Jenis</th>
-                                    <th>detail</th>
+                                    <th>Detail</th>
                                 </tr>
                             </thead>
                             <tbody id="table-dokumen">
@@ -157,10 +157,7 @@ $role = $this->session->userdata['user']['role'];
                     <table class="table">
                         <thead>
                             <tr>
-                                <th colspan="3">Dokumen</th>
-                            </tr>
-                            <tr>
-                                <th>Judul</th>
+                                <th>Dokumen</th>
                                 <th>Jenis</th>
                                 <th>Aksi</th>
                             </tr>
@@ -274,6 +271,26 @@ $role = $this->session->userdata['user']['role'];
                 </div>
             </div>
         </form>
+    </div>
+</div>
+<!--MODAL DELETE DOKUMEN-->
+<div class="modal fade" id="modalDeleteDokumen" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Hapus Dokumen</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body modal-message">
+                <input class="form-control" disabled=""/>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" data-dismiss="modal">Batal</button>
+                <button class="btn btn-danger" onclick="hapusDokumen(deleteId)">Hapus</button>
+            </div>
+        </div>
     </div>
 </div>
 <!-- MODAL DISTRIBUSI -->
@@ -728,8 +745,7 @@ $role = $this->session->userdata['user']['role'];
                     dokumen[i].distribusi = [];
                     dokumen[i].user_distribusi = [];
                 }
-                $('#table-dokumen').append('<tr><td>' + d.nomor + '</td><td>' + d.judul + '</td><td>Level ' + d.jenis + '</td><td><span class="fa fa-info-circle text-primary" onclick="detailDokumen(' + i + ')" title="Detail"></span></td></tr>');
-//                $('.select-dokumen-terkait').append('<option value="' + d.id + '">' + d.judul + '</option>');
+                $('#table-dokumen').append('<tr><td>' + d.nomor + '</td><td>' + d.judul + '</td><td>Level ' + d.jenis + '</td><td><span></span><span class="fa fa-info-circle text-primary" onclick="detailDokumen(' + i + ')" title="Detail"></span><span class="fa fa-trash text-danger" onclick="initHapusDokumen(' + i + ')"></span></td></tr>');
             }
             getDistribusi();
         });
@@ -772,6 +788,19 @@ $role = $this->session->userdata['user']['role'];
         m.find('.textarea-deskripsi').val(d.deskripsi);
         m.find('.input-versi').val(d.versi);
         m.find('.radio-type-dokumen').filter('[value=' + d.type_doc + ']').prop('checked', true);
+    }
+    function initHapusDokumen(index) {
+        var m = $('#modalDeleteDokumen');
+        m.modal('show');
+        m.find('input').val(dokumen[index].judul);
+        deleteId = index;
+    }
+    function hapusDokumen(index) {
+        $.post('<?php echo site_url($module); ?>/hapus_dokumen', {id: dokumen[index].id}, function (data) {
+            console.log(data);
+            getPasal();
+            $('#modalDeleteDokumen').modal('show');
+        });
     }
     function getDistribusi() {
         $.post('<?php echo site_url($module); ?>/get_distribusi', {'perusahaan': perusahaan, 'standar': standar}, function (data) {

@@ -86,6 +86,16 @@ class Treeview_detail extends MY_Controller {
         echo json_encode($this->model->read_document());
     }
 
+    function hapus_dokumen() {
+        if (!$this->input->is_ajax_request()) {
+            redirect('404');
+        }
+        if ($this->model->delete_document()) {
+            $result['status'] = 'success';
+        }
+        return $result;
+    }
+
     function get_distribusi() {
         echo json_encode($this->model->read_distribusi());
     }
@@ -98,6 +108,7 @@ class Treeview_detail extends MY_Controller {
         }
         print_r($this->input->post());
     }
+
     function delete_distribusi() {
         if ($this->model->delete_distribusi()) {
             echo 'success';
@@ -105,6 +116,7 @@ class Treeview_detail extends MY_Controller {
             echo 'error';
         }
     }
+
     function set_jadwal() {
         if ($this->model->create_jadwal()) {
             echo 'success';
