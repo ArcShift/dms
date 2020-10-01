@@ -5,13 +5,19 @@ class M_document extends CI_Model {
     private $table = 'document';
 
     function search() {
-        $this->db->select('d.*, u.username, COUNT(ds.id) AS distribusi');
-        $this->db->join('users u', 'u.id = d.creator', 'LEFT');
+        $this->db->select('d.*, uc.username, COUNT(ds.id) AS distribusi');
+        $this->db->join('users uc', 'uc.id = d.creator', 'LEFT');
         $this->db->join('pasal p', 'd.id_pasal = p.id');
         $this->db->join('standard s', 's.id = p.id_standard');
         $this->db->join('distribusi ds', 'd.id = ds.id_document', 'LEFT');
+        if ($this->input->get('perusahaan')) {
+            $this->db->join('personil pc', 'pc.id = uc.id_personil');
+            $this->db->join('unit_kerja ukc', 'ukc.id = pc.id_unit_kerja');
+            $this->db->join('company cc', 'cc.id = ukc.id_company');
+            $this->db->where('cc.id', $this->input->get('perusahaan'));
+        }
         if ($this->input->get('creator')) {
-            $this->db->where('u.id', $this->input->get('creator'));
+            $this->db->where('uc.id', $this->input->get('creator'));
         }
         if ($this->input->get('standar')) {
             $this->db->where('s.id', $this->input->get('standar'));
@@ -41,9 +47,23 @@ class M_document extends CI_Model {
         return $this->db->get($this->table . ' d')->row_array();
     }
 
+    function perusahaan() {
+        $this->db->select('c.id, c.name');
+        $this->db->join('unit_kerja uk', 'uk.id_company=c.id');
+        $this->db->join('personil p', 'p.id_unit_kerja=p.id');
+        $this->db->join('users u', 'u.id_personil=p.id');
+        $this->db->join($this->table . ' d', 'd.creator = u.id');
+        $this->db->group_by('c.id');
+        return $this->db->get('company c')->result_array();
+    }
+
     function creator() {
         $this->db->select('u.id, u.username');
         $this->db->join($this->table . ' d', 'd.creator = u.id');
+        if ($this->input->get('perusahaan')) {
+            $this->db->join('personil p', 'u.id_personil = p.id');
+            $this->db->join('unit_kerja uk', 'p.id_unit_kerja = uk.id AND uk.id_company='.$this->input->get('perusahaan'));
+        }
         $this->db->group_by('u.id');
         return $this->db->get('users u')->result_array();
     }
@@ -60,7 +80,7 @@ class M_document extends CI_Model {
         $this->db->select('p.id, p.fullname');
         $this->db->join('distribusi d', 'p.id = d.id_personil');
         $this->db->group_by('p.id');
-        if(!empty($unit_kerja)){
+        if (!empty($unit_kerja)) {
             $this->db->join('unit_kerja uk', 'uk.id = p.id_unit_kerja');
             $this->db->where('uk.id', $unit_kerja);
         }

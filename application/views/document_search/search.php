@@ -15,6 +15,15 @@
                             <?php } ?>
                         </select>
                     </div>
+                    <div class="form-group">
+                        <label>Perusahaan</label>
+                        <select class="form-control" name="perusahaan">
+                            <option value="">-- -- --</option>
+                            <?php foreach ($perusahaan as $p) { ?>
+                                <option value="<?= $p['id'] ?>" <?= $this->input->get('perusahaan') == $p['id'] ? 'selected' : '' ?>><?= $p['name'] ?></option>
+                            <?php } ?>
+                        </select>
+                    </div>
                     <div class="form-group d-none">
                         <label>Pasal</label>
                         <input class="form-control" name="pasal" value="<?php echo $this->input->get('pasal') ?>">
