@@ -747,6 +747,7 @@ $role = $this->session->userdata['user']['role'];
                     dokumen[i].user_distribusi = [];
                 }
                 $('#table-dokumen').append('<tr><td>' + d.nomor + '</td><td>' + d.judul + '</td><td>Level ' + d.jenis + '</td><td><button class="btn btn-sm btn-primary fa fa-info-circle" onclick="detailDokumen(' + i + ')" title="Detail"></button>&nbsp<button class="btn btn-sm btn-primary fa fa-edit" onclick="editDokumen(' + i + ')"></button>&nbsp<button class="btn btn-sm btn-danger fa fa-trash" onclick="initHapusDokumen(' + i + ')"></button></td></tr>');
+            $('.select-dokumen-terkait').append('<option value="'+d.id+'">'+ d.judul +'</option>');
             }
             getDistribusi();
         });
@@ -787,6 +788,7 @@ $role = $this->session->userdata['user']['role'];
         m.find('.select-anggota').val(d.creator);
         m.find('.select-jenis').val(d.jenis);
         m.find('.select-klasifikasi').val(d.klasifikasi);
+        m.find('.select-dokumen-terkait').val(d.contoh);
         m.find('.textarea-deskripsi').val(d.deskripsi);
         m.find('.input-versi').val(d.versi);
         m.find('.radio-type-dokumen').filter('[value=' + d.type_doc + ']').prop('checked', true);
