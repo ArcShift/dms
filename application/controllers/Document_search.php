@@ -7,8 +7,6 @@ class Document_search extends MY_Controller {
     function __construct() {
         parent::__construct();
         $this->load->model("m_document", "model");
-//        $this->load->library('form_validation');
-//        $this->data['role'] = $this->model->role();
     }
 
     function index() {
