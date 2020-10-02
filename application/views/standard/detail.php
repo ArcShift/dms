@@ -3,6 +3,10 @@
     #root ul {
         list-style-type: none;
     }
+    #treeview-crud form{
+        position: sticky;
+        top: 70px;
+    }
 </style>
 <div class="main-card mb-3 card">
     <div class="card-body">
