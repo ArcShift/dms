@@ -60,7 +60,7 @@ class Treeview_detail extends MY_Controller {
         $result['status'] = 'error';
         if ($this->form_validation->run()) {
             $step = true;
-            if ($this->input->post('type_dokumen') == 'FILE') {
+            if ($this->input->post('type_dokumen') == 'FILE' & !$this->input->post('id')) {
                 $config['upload_path'] = './upload/dokumen';
                 $config['allowed_types'] = '*';
                 $this->load->library('upload', $config);

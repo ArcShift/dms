@@ -63,14 +63,19 @@ class M_treeview_detail extends CI_Model {
         if (!empty($this->input->post('dokumen_terkait'))) {
             $this->db->set('contoh', $this->input->post('dokumen_terkait'));
         }
-        $type = $this->input->post('type_dokumen');
-        $this->db->set('type_doc', $type);
-        if ($type == 'FILE') {
-            $this->db->set('file', $this->upload->data()['file_name']);
-        } else if ($type == 'URL') {
-            $this->db->set('url', $this->input->post('url'));
+        if ($this->input->post('id')) {
+            $this->db->where('id', $this->input->post('id'));
+            return $this->db->update('document');
+        } else {
+            $type = $this->input->post('type_dokumen');
+            $this->db->set('type_doc', $type);
+            if ($type == 'FILE') {
+                $this->db->set('file', $this->upload->data()['file_name']);
+            } else if ($type == 'URL') {
+                $this->db->set('url', $this->input->post('url'));
+            }
+            return $this->db->insert('document');
         }
-        return $this->db->insert('document');
     }
 
     function read_document() {
@@ -96,7 +101,7 @@ class M_treeview_detail extends CI_Model {
 
     function delete_document() {
         $this->db->where('id', $this->input->post('id'));
-        $result = $this->db->get('document')->row_array();        
+        $result = $this->db->get('document')->row_array();
         $this->db->where('id', $this->input->post('id'));
         if ($this->db->delete('document') & !empty($result['file'])) {
             unlink(FCPATH . 'upload\\dokumen\\' . $result['file']);

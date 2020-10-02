@@ -76,11 +76,10 @@ $role = $this->session->userdata['user']['role'];
                                     <th>No</th>
                                     <th>Judul</th>
                                     <th>Jenis</th>
-                                    <th>Detail</th>
+                                    <th class="col-sm-2">Aksi</th>
                                 </tr>
                             </thead>
-                            <tbody id="table-dokumen">
-                            </tbody>
+                            <tbody id="table-dokumen"></tbody>
                         </table>
                     </div>
                     <div class="tab-pane" id="tab-distribusi" role="tabpanel">
@@ -175,7 +174,8 @@ $role = $this->session->userdata['user']['role'];
 <!--MODAL DOKUMEN-->
 <div class="modal fade" id="modalDokumen" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
-        <form method="post" id="formDokumen">
+        <form method="post" class="formDokumen">
+            <input class="input-id" name="id" hidden="">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Form Dokumen</h5>
@@ -266,8 +266,8 @@ $role = $this->session->userdata['user']['role'];
                     </table>
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary" data-dismiss="modal">Batal</button>
-                    <button id="dokumenSubmit" type="submit" class="btn btn-primary btn-submit" name="submit">Simpan</button>
+                    <button class="btn btn-primary" data-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-primary btn-submit" name="submit">Simpan</button>
                 </div>
             </div>
         </form>
@@ -517,7 +517,6 @@ $role = $this->session->userdata['user']['role'];
         $('#modalContainer').append($('.modal'));
         var clone = $('#modalDokumen').clone();
         clone.attr("id", "modalDokumenRead");
-        clone.find('.btn-submit').remove();
         clone.find('.modal-title').text('Detail Dokumen');
         clone.find('input').attr('disabled', true);
         clone.find('select').attr('disabled', true);
@@ -525,9 +524,9 @@ $role = $this->session->userdata['user']['role'];
         $('#modalContainer').append(clone);
         $('#tab-pemenuhan').addClass('active');
         $('.select-2').select2();
+        formSubmit();
     });
     function afterReady() {
-
     }
     var idPerusahaan;
     var idStandar;
@@ -698,41 +697,43 @@ $role = $this->session->userdata['user']['role'];
             }
         }
     }
-    $('#formDokumen').on("submit", function (e) {
-        e.preventDefault();
-        var status = 'Undefined';
-        $('#modalDokumen').modal('hide');
-        $('#modalNotif .modal-title').text('Uploading...');
-        $('#modalNotif').modal('show');
-        $.ajax({
-            url: '<?php echo site_url($module . '/create_dokumen') ?>',
-            type: "post",
-            data: new FormData(this),
-            processData: false,
-            contentType: false,
-            cache: false,
-            async: false,
-            success: function (data) {
-                data = JSON.parse(data);
-                if (data.status === 'success') {
-                    status = 'Success';
-                    $(this).trigger("reset");
-                    getDokumen();
-                    $('#modalNotif .modal-message').html('Data Berhasil Disimpan');
-                } else if (data.status === 'error') {
+    function formSubmit() {
+        $('.formDokumen').on("submit", function (e) {
+            e.preventDefault();
+            var status = 'Undefined';
+            $('.modal').modal('hide');
+            $('#modalNotif .modal-title').text('Uploading...');
+            $('#modalNotif').modal('show');
+            $.ajax({
+                url: '<?php echo site_url($module . '/create_dokumen') ?>',
+                type: "post",
+                data: new FormData(this),
+                processData: false,
+                contentType: false,
+                cache: false,
+                async: false,
+                success: function (data) {
+                    data = JSON.parse(data);
+                    if (data.status === 'success') {
+                        status = 'Success';
+                        $(this).trigger("reset");
+                        getDokumen();
+                        $('#modalNotif .modal-message').html('Data Berhasil Disimpan');
+                    } else if (data.status === 'error') {
+                        status = 'Error';
+                        $('#modalNotif .modal-message').html(data.message);
+                    }
+                },
+                error: function (data) {
                     status = 'Error';
-                    $('#modalNotif .modal-message').html(data.message);
+                    $('#modalNotif .modal-message').text('Error 500');
+                },
+                complete: function () {
+                    $('#modalNotif .modal-title').text(status);
                 }
-            },
-            error: function (data) {
-                status = 'Error';
-                $('#modalNotif .modal-message').text('Error 500');
-            },
-            complete: function () {
-                $('#modalNotif .modal-title').text(status);
-            }
+            });
         });
-    });
+    }
     function getDokumen() {
         $.post('<?php echo site_url($module); ?>/get_dokumen', {'perusahaan': perusahaan, 'standar': standar}, function (data) {
             $('#table-dokumen').empty();
@@ -745,7 +746,7 @@ $role = $this->session->userdata['user']['role'];
                     dokumen[i].distribusi = [];
                     dokumen[i].user_distribusi = [];
                 }
-                $('#table-dokumen').append('<tr><td>' + d.nomor + '</td><td>' + d.judul + '</td><td>Level ' + d.jenis + '</td><td><span></span><span class="fa fa-info-circle text-primary" onclick="detailDokumen(' + i + ')" title="Detail"></span><span class="fa fa-trash text-danger" onclick="initHapusDokumen(' + i + ')"></span></td></tr>');
+                $('#table-dokumen').append('<tr><td>' + d.nomor + '</td><td>' + d.judul + '</td><td>Level ' + d.jenis + '</td><td><button class="btn btn-sm btn-primary fa fa-info-circle" onclick="detailDokumen(' + i + ')" title="Detail"></button>&nbsp<button class="btn btn-sm btn-primary fa fa-edit" onclick="editDokumen(' + i + ')"></button>&nbsp<button class="btn btn-sm btn-danger fa fa-trash" onclick="initHapusDokumen(' + i + ')"></button></td></tr>');
             }
             getDistribusi();
         });
@@ -779,6 +780,7 @@ $role = $this->session->userdata['user']['role'];
         var m = $('#modalDokumenRead');
         var d = dokumen[index];
         m.modal('show');
+        m.find('.btn-submit').hide();
         m.find('.select-pasal').val(d.id_pasal);
         m.find('.input-nomor').val(d.nomor);
         m.find('.input-judul').val(d.judul);
@@ -788,6 +790,22 @@ $role = $this->session->userdata['user']['role'];
         m.find('.textarea-deskripsi').val(d.deskripsi);
         m.find('.input-versi').val(d.versi);
         m.find('.radio-type-dokumen').filter('[value=' + d.type_doc + ']').prop('checked', true);
+        m.find('input').prop('disabled', true);
+        m.find('select').prop('disabled', true);
+        m.find('textarea').prop('disabled', true);
+    }
+    function editDokumen(index) {
+        detailDokumen(index);
+        var m = $('#modalDokumenRead');
+        m.find('.modal-title').text('Edit Dokumen');
+        m.find('.btn-submit').show();
+        m.find('.input-id').val(dokumen[index].id);
+        m.find('input').prop('disabled', false);
+        m.find('select').prop('disabled', false);
+        m.find('textarea').prop('disabled', false);
+        m.find('.input-file').prop('required', false);
+        m.find('.input-url').prop('required', false);
+        console.log(dokumen[index].id);
     }
     function initHapusDokumen(index) {
         var m = $('#modalDeleteDokumen');
@@ -799,7 +817,7 @@ $role = $this->session->userdata['user']['role'];
         $.post('<?php echo site_url($module); ?>/hapus_dokumen', {id: dokumen[index].id}, function (data) {
             console.log(data);
             getPasal();
-            $('#modalDeleteDokumen').modal('show');
+            $('#modalDeleteDokumen').modal('hide');
         });
     }
     function getDistribusi() {
