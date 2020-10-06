@@ -22,8 +22,14 @@ class M_document extends CI_Model {
         if ($this->input->get('standar')) {
             $this->db->where('s.id', $this->input->get('standar'));
         }
+        if ($this->input->get('pasal')) {
+            $this->db->where('d.id_pasal', $this->input->get('pasal'));
+        }
         if ($this->input->get('judul')) {
             $this->db->like('d.judul', $this->input->get('judul'));
+        }
+        if ($this->input->get('nomor')) {
+            $this->db->like('d.nomor', $this->input->get('nomor'));
         }
         if ($this->input->get('unit_kerja_distribusi')) {
 //            $this->db->join('users uds', 'uds.id = ds.id_users');
@@ -74,6 +80,11 @@ class M_document extends CI_Model {
         $this->db->join($this->table . ' d', 'd.id_pasal = p.id');
         $this->db->group_by('s.id');
         return $this->db->get('standard s')->result_array();
+    }
+    
+    function pasal($standar) {
+        $this->db->where('p.id_standard', $standar);
+        return $this->db->get('pasal p')->result_array();
     }
 
     function distribusi($unit_kerja = null) {

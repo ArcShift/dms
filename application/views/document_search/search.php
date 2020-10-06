@@ -8,11 +8,17 @@
                 <div class="card-body">
                     <div class="form-group">
                         <label>Standar</label>
-                        <select class="form-control" name="standar">
+                        <select class="form-control active-change" name="standar">
                             <option value="">-- -- --</option>
                             <?php foreach ($standar as $s) { ?>
                                 <option value="<?= $s['id'] ?>" <?= $this->input->get('standar') == $s['id'] ? 'selected' : '' ?>><?= $s['name'] ?></option>
                             <?php } ?>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Pasal</label>
+                        <select id="select-pasal" class="form-control active-change" name="pasal">
+                            <option value="">-- -- --</option>
                         </select>
                     </div>
                     <div class="form-group">
@@ -24,10 +30,7 @@
                             <?php } ?>
                         </select>
                     </div>
-                    <div class="form-group d-none">
-                        <label>Pasal</label>
-                        <input class="form-control" name="pasal" value="<?php echo $this->input->get('pasal') ?>">
-                    </div>
+
                     <div class="form-group">
                         <label>Pembuat Dokumen</label>
                         <select class="form-control" name="creator">
@@ -58,6 +61,10 @@
                     <div class="form-group">
                         <label>Judul Dokumen</label>
                         <input class="form-control" name="judul" value="<?php echo $this->input->get('judul') ?>">
+                    </div>
+                    <div class="form-group">
+                        <label>Nomor Dokumen</label>
+                        <input class="form-control" name="nomor" value="<?php echo $this->input->get('nomor') ?>">
                     </div>
                 </div>
                 <div class="card-footer ">
@@ -97,6 +104,7 @@
                 </form>
             </div>
         </div>
+        <div class="d-none" id="list-pasal"></div>
     </div>
 </div>
 <script>
@@ -106,4 +114,22 @@
     $('.active-change').change(function () {
         $('#form-search').submit();
     });
+<?php if (!empty($pasal)) { ?>
+        var pasal = <?= json_encode($pasal) ?>;
+        for (var i = 0; i < pasal.length; i++) {
+            var p = pasal[i];
+            $('#list-pasal').append('<div id="pasal' + p.id + '"><b><span class="pasal-id">' + p.id + '</span><span class="pasal-name">' + p.name + '</span></b></div>');
+            if (p.parent != null) {
+                var item = $('#pasal' + p.id + ' .pasal-name');
+                var fullname = $('#pasal' + p.parent + ' .pasal-name').text() + ' - ' + item.text();
+                item.text(fullname);
+                pasal[i].fullname = fullname;
+            } else {
+                pasal[i].fullname = p.name;
+            }
+        }
+        $('#list-pasal').find('b').each(function (index) {
+            $('#select-pasal').append('<option value="' + $(this).find('.pasal-id').text() + '">' + $(this).find('.pasal-name').text() + '</option');
+        });
+<?php } ?>
 </script>
