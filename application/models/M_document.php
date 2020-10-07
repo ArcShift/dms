@@ -15,31 +15,32 @@ class M_document extends CI_Model {
             $this->db->join('unit_kerja ukc', 'ukc.id = pc.id_unit_kerja');
             $this->db->join('company cc', 'cc.id = ukc.id_company');
             $this->db->where('cc.id', $this->input->get('perusahaan'));
-        }
-        if ($this->input->get('creator')) {
-            $cr = explode('_', $this->input->get('creator'));
-            if ($cr[0] == 'uk') {
-                $this->db->where('ukc.id', $cr[1]);
-            } else if ($cr[0] == 'p') {
-                $this->db->where('pc.id', $cr[1]);
+            if ($this->input->get('creator')) {
+                $cr = explode('_', $this->input->get('creator'));
+                if ($cr[0] == 'uk') {
+                    $this->db->where('ukc.id', $cr[1]);
+                } else if ($cr[0] == 'p') {
+                    $this->db->where('pc.id', $cr[1]);
+                }
             }
-        }
-        if ($this->input->get('penerima')) {
-            $this->db->join('personil pds', 'pds.id = ds.id_personil');
-            $this->db->join('unit_kerja ukds', 'ukds.id = pds.id_unit_kerja');
-            $cr = explode('_', $this->input->get('penerima'));
-            if ($cr[0] == 'uk') {
-                $this->db->where('ukds.id', $cr[1]);
-            } else if ($cr[0] == 'p') {
-                $this->db->where('pds.id', $cr[1]);
+            if ($this->input->get('penerima')) {
+                $this->db->join('personil pds', 'pds.id = ds.id_personil');
+                $this->db->join('unit_kerja ukds', 'ukds.id = pds.id_unit_kerja');
+                $cr = explode('_', $this->input->get('penerima'));
+                if ($cr[0] == 'uk') {
+                    $this->db->where('ukds.id', $cr[1]);
+                } else if ($cr[0] == 'p') {
+                    $this->db->where('pds.id', $cr[1]);
+                }
             }
         }
         if ($this->input->get('standar')) {
             $this->db->where('s.id', $this->input->get('standar'));
+            if ($this->input->get('pasal')) {
+                $this->db->where('d.id_pasal', $this->input->get('pasal'));
+            }
         }
-        if ($this->input->get('pasal')) {
-            $this->db->where('d.id_pasal', $this->input->get('pasal'));
-        }
+
         if ($this->input->get('judul')) {
             $this->db->like('d.judul', $this->input->get('judul'));
         }

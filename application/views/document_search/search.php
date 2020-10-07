@@ -19,7 +19,7 @@
                     </div>
                     <div class="form-group">
                         <label>Pasal</label>
-                        <select id="select-pasal" class="form-control active-change" name="pasal">
+                        <select id="select-pasal" class="form-control" name="pasal">
                             <option value="">-- -- --</option>
                         </select>
                     </div>
@@ -34,7 +34,7 @@
                     </div>
                     <div class="form-group">
                         <label>Pembuat Dokumen</label>
-                        <select class="form-control active-change" name="creator">
+                        <select class="form-control" name="creator">
                             <option value="">-- -- --</option>
                             <?php
                             $id_uk = null;
@@ -55,7 +55,7 @@
                     </div>
                     <div class="form-group">
                         <label>Penerima Dokumen</label>
-                        <select class="form-control active-change" name="penerima"></select>
+                        <select class="form-control" name="penerima"></select>
                     </div>
                     <div class="form-group">
                         <label>Judul Dokumen</label>
@@ -67,7 +67,7 @@
                     </div>
                     <div class="form-group">
                         <label>Jenis Dokumen</label>
-                        <select class="form-control active-change" name="level">
+                        <select class="form-control" name="level">
                             <option value="">-- -- --</option>
                             <option value="1">Level I</option>
                             <option value="2">Level II</option>
@@ -77,7 +77,7 @@
                     </div>
                     <div class="form-group">
                         <label>Klasifikasi Dokumen</label>
-                        <select class="form-control active-change" name="klasifikasi">
+                        <select class="form-control" name="klasifikasi">
                             <option value="">-- -- --</option>
                             <option value="UMUM">Umum</option>
                             <option value="INTERNAL">Internal</option>
