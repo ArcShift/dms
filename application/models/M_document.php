@@ -17,7 +17,22 @@ class M_document extends CI_Model {
             $this->db->where('cc.id', $this->input->get('perusahaan'));
         }
         if ($this->input->get('creator')) {
-            $this->db->where('uc.id', $this->input->get('creator'));
+            $cr = explode('_', $this->input->get('creator'));
+            if ($cr[0] == 'uk') {
+                $this->db->where('ukc.id', $cr[1]);
+            } else if ($cr[0] == 'p') {
+                $this->db->where('pc.id', $cr[1]);
+            }
+        }
+        if ($this->input->get('penerima')) {
+            $this->db->join('personil pds', 'pds.id = ds.id_personil');
+            $this->db->join('unit_kerja ukds', 'ukds.id = pds.id_unit_kerja');
+            $cr = explode('_', $this->input->get('penerima'));
+            if ($cr[0] == 'uk') {
+                $this->db->where('ukds.id', $cr[1]);
+            } else if ($cr[0] == 'p') {
+                $this->db->where('pds.id', $cr[1]);
+            }
         }
         if ($this->input->get('standar')) {
             $this->db->where('s.id', $this->input->get('standar'));
@@ -31,15 +46,11 @@ class M_document extends CI_Model {
         if ($this->input->get('nomor')) {
             $this->db->like('d.nomor', $this->input->get('nomor'));
         }
-        if ($this->input->get('unit_kerja_distribusi')) {
-//            $this->db->join('users uds', 'uds.id = ds.id_users');
-//            $this->db->join('personil pds', 'pds.id = uds.id_personil');
-            $this->db->join('personil pds', 'pds.id = ds.id_personil');
-            $this->db->join('unit_kerja ukds', 'ukds.id = pds.id_unit_kerja');
-            $this->db->where('ukds.id', $this->input->get('unit_kerja_distribusi'));
+        if ($this->input->get('level')) {
+            $this->db->where('d.jenis', $this->input->get('level'));
         }
-        if ($this->input->get('distribusi')) {
-            $this->db->where('ds.id_users', $this->input->get('distribusi'));
+        if ($this->input->get('klasifikasi')) {
+            $this->db->where('d.klasifikasi', $this->input->get('klasifikasi'));
         }
         $this->db->group_by('d.id');
         return $this->db->get($this->table . ' d')->result_array();
@@ -53,6 +64,19 @@ class M_document extends CI_Model {
         return $this->db->get($this->table . ' d')->row_array();
     }
 
+    function standar() {
+        $this->db->select('s.id, s.name');
+        $this->db->join('pasal p', 's.id = p.id_standard');
+        $this->db->join($this->table . ' d', 'd.id_pasal = p.id');
+        $this->db->group_by('s.id');
+        return $this->db->get('standard s')->result_array();
+    }
+
+    function pasal($standar) {
+        $this->db->where('p.id_standard', $standar);
+        return $this->db->get('pasal p')->result_array();
+    }
+
     function perusahaan() {
         $this->db->select('c.id, c.name');
         $this->db->join('unit_kerja uk', 'uk.id_company = c.id');
@@ -63,47 +87,12 @@ class M_document extends CI_Model {
         return $this->db->get('company c')->result_array();
     }
 
-    function creator() {
-        $this->db->select('u.id, u.username');
-        $this->db->join($this->table . ' d', 'd.creator = u.id');
-        if ($this->input->get('perusahaan')) {
-            $this->db->join('personil p', 'u.id_personil = p.id');
-            $this->db->join('unit_kerja uk', 'p.id_unit_kerja = uk.id AND uk.id_company='.$this->input->get('perusahaan'));
-        }
-        $this->db->group_by('u.id');
-        return $this->db->get('users u')->result_array();
-    }
-
-    function standar() {
-        $this->db->select('s.id, s.name');
-        $this->db->join('pasal p', 's.id = p.id_standard');
-        $this->db->join($this->table . ' d', 'd.id_pasal = p.id');
-        $this->db->group_by('s.id');
-        return $this->db->get('standard s')->result_array();
-    }
-    
-    function pasal($standar) {
-        $this->db->where('p.id_standard', $standar);
-        return $this->db->get('pasal p')->result_array();
-    }
-
-    function distribusi($unit_kerja = null) {
-        $this->db->select('p.id, p.fullname');
-        $this->db->join('distribusi d', 'p.id = d.id_personil');
-        $this->db->group_by('p.id');
-        if (!empty($unit_kerja)) {
-            $this->db->join('unit_kerja uk', 'uk.id = p.id_unit_kerja');
-            $this->db->where('uk.id', $unit_kerja);
-        }
+    function creator($perusahaan) {
+        $this->db->select('p.id_unit_kerja, uk.name AS unit_kerja, p.id, p.fullname');
+        $this->db->join('unit_kerja uk', 'uk.id = p.id_unit_kerja');
+        $this->db->where('uk.id_company', $perusahaan);
+        $this->db->order_by('p.id_unit_kerja');
         return $this->db->get('personil p')->result_array();
-    }
-
-    function unit_kerja_distribusi() {
-        $this->db->select('uk.id, uk.name');
-        $this->db->join('personil p', 'p.id_unit_kerja = uk.id');
-        $this->db->join('distribusi d', 'd.id_personil = p.id');
-        $this->db->group_by('uk.id');
-        return $this->db->get('unit_kerja uk')->result_array();
     }
 
 }

@@ -1,10 +1,12 @@
-<?php
-//$data = [];
-?>
+<style>
+    .select-head{
+        background-color: lightgray;
+    }
+</style>
 <div class="row">
     <div class="col-sm-3">
         <div class="main-card card">
-            <form id="form-search">                
+            <form id="form-search">
                 <div class="card-body">
                     <div class="form-group">
                         <label>Standar</label>
@@ -23,40 +25,37 @@
                     </div>
                     <div class="form-group">
                         <label>Perusahaan</label>
-                        <select class="form-control" name="perusahaan">
+                        <select class="form-control active-change" name="perusahaan">
                             <option value="">-- -- --</option>
                             <?php foreach ($perusahaan as $p) { ?>
                                 <option value="<?= $p['id'] ?>" <?= $this->input->get('perusahaan') == $p['id'] ? 'selected' : '' ?>><?= $p['name'] ?></option>
                             <?php } ?>
                         </select>
                     </div>
-
                     <div class="form-group">
                         <label>Pembuat Dokumen</label>
-                        <select class="form-control" name="creator">
+                        <select class="form-control active-change" name="creator">
                             <option value="">-- -- --</option>
-                            <?php foreach ($creator as $c) { ?>
-                                <option value="<?= $c['id'] ?>" <?= $this->input->get('creator') == $c['id'] ? 'selected' : '' ?>><?= $c['username'] ?></option>
+                            <?php
+                            $id_uk = null;
+                            for ($i = 0; $i < count($creator); $i++) {
+                                $c = $creator[$i];
+                                if ($id_uk != $c['id_unit_kerja']) {
+                                    ?>
+                                    <option class="select-head" value="uk_<?= $c['id_unit_kerja'] ?>" <?= $this->input->get('creator') == 'uk_' . $c['id_unit_kerja'] ? 'selected' : '' ?>><b><?= strtoupper($c['unit_kerja']) ?></b></option>
+                                    <?php
+                                    $id_uk = $c['id_unit_kerja'];
+                                    $i--;
+                                } else {
+                                    ?>
+                                    <option value="p_<?= $c['id'] ?>" <?= $this->input->get('creator') == 'p_' . $c['id'] ? 'selected' : '' ?>><?= $c['fullname'] ?></option>
+                                <?php } ?>
                             <?php } ?>
                         </select>
                     </div>
                     <div class="form-group">
-                        <label>Unit Kerja</label>
-                        <select class="form-control active-change" name="unit_kerja_distribusi">
-                            <option value="">-- -- --</option>
-                            <?php foreach ($unit_kerja_distribusi as $u) { ?>
-                                <option value="<?= $u['id'] ?>" <?= $this->input->get('unit_kerja_distribusi') == $u['id'] ? 'selected' : '' ?>><?= $u['name'] ?></option>
-                            <?php } ?>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Distribusi</label>
-                        <select class="form-control" name="distribusi">
-                            <option value="">-- -- --</option>
-                            <?php foreach ($distribusi as $d) { ?>
-                                <option value="<?= $d['id'] ?>" <?= $this->input->get('distribusi') == $d['id'] ? 'selected' : '' ?>><?= $d['fullname'] ?></option>
-                            <?php } ?>
-                        </select>
+                        <label>Penerima Dokumen</label>
+                        <select class="form-control active-change" name="penerima"></select>
                     </div>
                     <div class="form-group">
                         <label>Judul Dokumen</label>
@@ -65,6 +64,26 @@
                     <div class="form-group">
                         <label>Nomor Dokumen</label>
                         <input class="form-control" name="nomor" value="<?php echo $this->input->get('nomor') ?>">
+                    </div>
+                    <div class="form-group">
+                        <label>Jenis Dokumen</label>
+                        <select class="form-control active-change" name="level">
+                            <option value="">-- -- --</option>
+                            <option value="1">Level I</option>
+                            <option value="2">Level II</option>
+                            <option value="3">Level III</option>
+                            <option value="4">Level IV</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Klasifikasi Dokumen</label>
+                        <select class="form-control active-change" name="klasifikasi">
+                            <option value="">-- -- --</option>
+                            <option value="UMUM">Umum</option>
+                            <option value="INTERNAL">Internal</option>
+                            <option value="RAHASIA">Rahasia</option>
+                            <option value="SANGAT RAHASIA">Sangat Rahasia</option>
+                        </select>
                     </div>
                 </div>
                 <div class="card-footer ">
@@ -110,6 +129,17 @@
 <script>
     function afterReady() {
         $('.dataTables_filter').addClass('d-none');
+        $('select[name=penerima]').append($('select[name=creator]').html());
+        $('select[name=penerima]').val('');
+<?php if ($this->input->get('penerima')) { ?>
+            $('select[name=penerima]').val('<?= $this->input->get('penerima') ?>');
+<?php } ?>
+<?php if ($this->input->get('level')) { ?>
+            $('select[name=level]').val('<?= $this->input->get('level') ?>');
+<?php } ?>
+<?php if ($this->input->get('klasifikasi')) { ?>
+            $('select[name=klasifikasi]').val('<?= $this->input->get('klasifikasi') ?>');
+<?php } ?>
     }
     $('.active-change').change(function () {
         $('#form-search').submit();
@@ -131,5 +161,8 @@
         $('#list-pasal').find('b').each(function (index) {
             $('#select-pasal').append('<option value="' + $(this).find('.pasal-id').text() + '">' + $(this).find('.pasal-name').text() + '</option');
         });
+    <?php if ($this->input->get('pasal')) { ?>
+            $('#select-pasal').val(<?= $this->input->get('pasal') ?>);
+    <?php } ?>
 <?php } ?>
 </script>

@@ -11,15 +11,15 @@ class Document_search extends MY_Controller {
 
     function index() {
         $this->subTitle = 'Search';
-        $this->data['data'] = $this->model->search();
-        $this->data['creator'] = $this->model->creator();
-        $this->data['perusahaan'] = $this->model->perusahaan();
         $this->data['standar'] = $this->model->standar();
         if ($this->input->get('standar')) {
             $this->data['pasal'] = $this->model->pasal($this->input->get('standar'));
         }
-        $this->data['unit_kerja_distribusi'] = $this->model->unit_kerja_distribusi();
-        $this->data['distribusi'] = $this->model->distribusi($this->input->get('unit_kerja_distribusi'));
+        $this->data['perusahaan'] = $this->model->perusahaan();
+        if ($this->input->get('perusahaan')) {
+            $this->data['creator'] = $this->model->creator($this->input->get('perusahaan'));
+        }
+        $this->data['data'] = $this->model->search();
         $this->render('search');
     }
 
