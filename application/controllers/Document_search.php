@@ -12,13 +12,7 @@ class Document_search extends MY_Controller {
     function index() {
         $this->subTitle = 'Search';
         $this->data['standar'] = $this->model->standar();
-        if ($this->input->get('standar')) {
-            $this->data['pasal'] = $this->model->pasal($this->input->get('standar'));
-        }
         $this->data['perusahaan'] = $this->model->perusahaan();
-        if ($this->input->get('perusahaan')) {
-            $this->data['creator'] = $this->model->creator($this->input->get('perusahaan'));
-        }
         $this->data['data'] = $this->model->search();
         $this->render('search');
     }
@@ -44,6 +38,11 @@ class Document_search extends MY_Controller {
             }
         }
         echo json_encode($sort);
+    }
+
+    function get_pasal() {//AJAX
+        $data = $this->model->pasal($this->input->get('id'));
+        echo json_encode($data);
     }
 
 }

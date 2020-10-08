@@ -10,7 +10,7 @@
                 <div class="card-body">
                     <div class="form-group">
                         <label>Standar</label>
-                        <select class="form-control active-change" name="standar">
+                        <select class="form-control" name="standar" id="selectStandar">
                             <option value="">-- -- --</option>
                             <?php foreach ($standar as $s) { ?>
                                 <option value="<?= $s['id'] ?>" <?= $this->input->get('standar') == $s['id'] ? 'selected' : '' ?>><?= $s['name'] ?></option>
@@ -113,37 +113,13 @@
     function afterReady() {
         $('.dataTables_filter').addClass('d-none');
         $('#selectPerusahaan').change();
-<?php if ($this->input->get('level')) { ?>
-            $('select[name=level]').val('<?= $this->input->get('level') ?>');
-<?php } ?>
-<?php if ($this->input->get('klasifikasi')) { ?>
-            $('select[name=klasifikasi]').val('<?= $this->input->get('klasifikasi') ?>');
-<?php } ?>
+        $('#selectStandar').change();
+        $('select[name=level]').val('<?= $this->input->get('level') ?>');
+        $('select[name=klasifikasi]').val('<?= $this->input->get('klasifikasi') ?>');
     }
     $('.active-change').change(function () {
         $('#form-search').submit();
     });
-<?php if (!empty($pasal)) { ?>
-        var pasal = <?= json_encode($pasal) ?>;
-        for (var i = 0; i < pasal.length; i++) {
-            var p = pasal[i];
-            $('#list-pasal').append('<div id="pasal' + p.id + '"><b><span class="pasal-id">' + p.id + '</span><span class="pasal-name">' + p.name + '</span></b></div>');
-            if (p.parent != null) {
-                var item = $('#pasal' + p.id + ' .pasal-name');
-                var fullname = $('#pasal' + p.parent + ' .pasal-name').text() + ' - ' + item.text();
-                item.text(fullname);
-                pasal[i].fullname = fullname;
-            } else {
-                pasal[i].fullname = p.name;
-            }
-        }
-        $('#list-pasal').find('b').each(function (index) {
-            $('#select-pasal').append('<option value="' + $(this).find('.pasal-id').text() + '">' + $(this).find('.pasal-name').text() + '</option');
-        });
-    <?php if ($this->input->get('pasal')) { ?>
-            $('#select-pasal').val(<?= $this->input->get('pasal') ?>);
-    <?php } ?>
-<?php } ?>
     $('#selectPerusahaan').change(function () {
         $.getJSON('<?php echo site_url($module); ?>/company', {'id': $(this).val()}, function (data) {
             $('.select-ukp').empty();
@@ -157,6 +133,31 @@
             }
             $('select[name=creator]').val('<?= $this->input->get('creator') ?>');
             $('select[name=penerima]').val('<?= $this->input->get('penerima') ?>');
+        });
+    });
+    $('#selectStandar').change(function () {
+        $.getJSON('<?php echo site_url($module); ?>/get_pasal', {'id': $(this).val()}, function (data) {
+            $('#list-pasal').empty();
+            $('#select-pasal').empty();
+            $('#select-pasal').append('<option value="">-- -- --</option>');
+            if (data.length != 0) {
+                for (var i = 0; i < data.length; i++) {
+                    var p = data[i];
+                    $('#list-pasal').append('<div id="pasal' + p.id + '"><b><span class="pasal-id">' + p.id + '</span><span class="pasal-name">' + p.name + '</span></b></div>');
+                    if (p.parent != null) {
+                        var item = $('#pasal' + p.id + ' .pasal-name');
+                        var fullname = $('#pasal' + p.parent + ' .pasal-name').text() + ' - ' + item.text();
+                        item.text(fullname);
+                        data[i].fullname = fullname;
+                    } else {
+                        data[i].fullname = p.name;
+                    }
+                }
+                $('#list-pasal').find('b').each(function (index) {
+                    $('#select-pasal').append('<option value="' + $(this).find('.pasal-id').text() + '">' + $(this).find('.pasal-name').text() + '</option');
+                });
+            }
+            $('#select-pasal').val(<?= $this->input->get('pasal') ?>);
         });
     });
 </script>
