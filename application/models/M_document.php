@@ -5,13 +5,13 @@ class M_document extends CI_Model {
     private $table = 'document';
 
     function search() {
-        $this->db->select('d.*, uc.username, COUNT(ds.id) AS distribusi');
+        $this->db->select('d.*, pc.fullname, COUNT(ds.id) AS distribusi');
         $this->db->join('users uc', 'uc.id = d.creator', 'LEFT');
+        $this->db->join('personil pc', 'pc.id = uc.id_personil');
         $this->db->join('pasal p', 'd.id_pasal = p.id');
         $this->db->join('standard s', 's.id = p.id_standard');
         $this->db->join('distribusi ds', 'd.id = ds.id_document', 'LEFT');
         if ($this->input->get('perusahaan')) {
-            $this->db->join('personil pc', 'pc.id = uc.id_personil');
             $this->db->join('unit_kerja ukc', 'ukc.id = pc.id_unit_kerja');
             $this->db->join('company cc', 'cc.id = ukc.id_company');
             $this->db->where('cc.id', $this->input->get('perusahaan'));
@@ -57,7 +57,7 @@ class M_document extends CI_Model {
         return $this->db->get($this->table . ' d')->result_array();
     }
 
-    function get($id) {
+    function get($id) {//detail dokumen
         $this->db->select('d.*, u.username AS pembuat, d2.judul AS dokumen_terkait');
         $this->db->where('d.id', $id);
         $this->db->join('users u', 'u.id = d.creator', 'LEFT');

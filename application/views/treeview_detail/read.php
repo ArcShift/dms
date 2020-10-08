@@ -295,7 +295,7 @@ $role = $this->session->userdata['user']['role'];
 </div>
 <!-- MODAL DISTRIBUSI -->
 <div class="modal fade" id="modalDistribusi" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">     
+    <div class="modal-dialog" role="document">
         <form method="post" id="formDistribusi">
             <div class="modal-content">
                 <div class="modal-header">
@@ -526,15 +526,14 @@ $role = $this->session->userdata['user']['role'];
         $('.select-2').select2();
         formSubmit();
     });
-    function afterReady() {
-    }
+    function afterReady() {}
     var idPerusahaan;
     var idStandar;
     var anggota;
     var pesonil;
     var sortData = [];
     var dokumen;
-    var listJadwal
+    var listJadwal;
     $('#perusahaan').change(function (s) {
         if ($(this).val()) {
             $.post('<?php echo site_url($module); ?>/standard', {'id': $(this).val()}, function (data) {

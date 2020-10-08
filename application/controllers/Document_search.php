@@ -29,4 +29,21 @@ class Document_search extends MY_Controller {
         $this->render('detail');
     }
 
+    function company() {//AJAX
+        $data = $this->model->creator($this->input->get('id'));
+        $id_uk = null;
+        $sort = [];
+        for ($i = 0; $i < count($data); $i++) {
+            $d = $data[$i];
+            if ($id_uk != $d['id_unit_kerja']) {
+                $id_uk = $d['id_unit_kerja'];
+                array_push($sort, ['type' => 'uk', 'id' => $id_uk, 'name' => $d['unit_kerja']]);
+                $i--;
+            } else {
+                array_push($sort, ['type' => 'p', 'id' => $d['id'], 'name' => $d['fullname']]);
+            }
+        }
+        echo json_encode($sort);
+    }
+
 }

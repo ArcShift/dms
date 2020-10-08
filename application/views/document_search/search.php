@@ -1,5 +1,5 @@
 <style>
-    .select-head{
+    .select-parent{
         background-color: lightgray;
     }
 </style>
@@ -25,7 +25,7 @@
                     </div>
                     <div class="form-group">
                         <label>Perusahaan</label>
-                        <select class="form-control active-change" name="perusahaan">
+                        <select class="form-control" name="perusahaan" id="selectPerusahaan">
                             <option value="">-- -- --</option>
                             <?php foreach ($perusahaan as $p) { ?>
                                 <option value="<?= $p['id'] ?>" <?= $this->input->get('perusahaan') == $p['id'] ? 'selected' : '' ?>><?= $p['name'] ?></option>
@@ -34,28 +34,11 @@
                     </div>
                     <div class="form-group">
                         <label>Pembuat Dokumen</label>
-                        <select class="form-control" name="creator">
-                            <option value="">-- -- --</option>
-                            <?php
-                            $id_uk = null;
-                            for ($i = 0; $i < count($creator); $i++) {
-                                $c = $creator[$i];
-                                if ($id_uk != $c['id_unit_kerja']) {
-                                    ?>
-                                    <option class="select-head" value="uk_<?= $c['id_unit_kerja'] ?>" <?= $this->input->get('creator') == 'uk_' . $c['id_unit_kerja'] ? 'selected' : '' ?>><b><?= strtoupper($c['unit_kerja']) ?></b></option>
-                                    <?php
-                                    $id_uk = $c['id_unit_kerja'];
-                                    $i--;
-                                } else {
-                                    ?>
-                                    <option value="p_<?= $c['id'] ?>" <?= $this->input->get('creator') == 'p_' . $c['id'] ? 'selected' : '' ?>><?= $c['fullname'] ?></option>
-                                <?php } ?>
-                            <?php } ?>
-                        </select>
+                        <select class="form-control select-ukp" name="creator"></select>
                     </div>
                     <div class="form-group">
                         <label>Penerima Dokumen</label>
-                        <select class="form-control" name="penerima"></select>
+                        <select class="form-control select-ukp" name="penerima"></select>
                     </div>
                     <div class="form-group">
                         <label>Judul Dokumen</label>
@@ -111,7 +94,7 @@
                                 <tr>
                                     <td><?php echo $k + 1 ?></td>
                                     <td><?php echo $r['judul'] ?></td>
-                                    <td><?php echo $r['username'] ?></td>
+                                    <td><?php echo $r['fullname'] ?></td>
                                     <td class="text-center <?= $this->input->get('distribusi') | $this->input->get('unit_kerja_distribusi') ? 'd-none' : '' ?>"><div class="badge badge-<?= $r['distribusi'] == 0 ? 'danger' : 'success' ?>"><?= $r['distribusi'] ?></div></td>
                                     <td>
                                         <a class="btn btn-primary fa fa-eye" href="<?= site_url('document_search/detail/' . $r['id']) ?>" title="Lihat Detail" name="detail"></a>
@@ -129,11 +112,7 @@
 <script>
     function afterReady() {
         $('.dataTables_filter').addClass('d-none');
-        $('select[name=penerima]').append($('select[name=creator]').html());
-        $('select[name=penerima]').val('');
-<?php if ($this->input->get('penerima')) { ?>
-            $('select[name=penerima]').val('<?= $this->input->get('penerima') ?>');
-<?php } ?>
+        $('#selectPerusahaan').change();
 <?php if ($this->input->get('level')) { ?>
             $('select[name=level]').val('<?= $this->input->get('level') ?>');
 <?php } ?>
@@ -165,4 +144,19 @@
             $('#select-pasal').val(<?= $this->input->get('pasal') ?>);
     <?php } ?>
 <?php } ?>
+    $('#selectPerusahaan').change(function () {
+        $.getJSON('<?php echo site_url($module); ?>/company', {'id': $(this).val()}, function (data) {
+            $('.select-ukp').empty();
+            $('.select-ukp').append('<option value="">-- -- --</option>');
+            for (var d of data) {
+                if (d.type == 'uk') {
+                    $('.select-ukp').append('<option class="select-parent"  value="' + d.type + '_' + d.id + '"><b>' + d.name.toUpperCase() + '</b></option>');
+                } else {
+                    $('.select-ukp').append('<option value="' + d.type + '_' + d.id + '">' + d.name + '</option>');
+                }
+            }
+            $('select[name=creator]').val('<?= $this->input->get('creator') ?>');
+            $('select[name=penerima]').val('<?= $this->input->get('penerima') ?>');
+        });
+    });
 </script>
