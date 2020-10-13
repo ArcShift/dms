@@ -83,6 +83,9 @@ class Treeview_detail extends MY_Controller {
     }
 
     function get_dokumen() {
+        if (!$this->input->is_ajax_request()) {
+            redirect('404');
+        }
         echo json_encode($this->model->read_document());
     }
 
@@ -116,7 +119,12 @@ class Treeview_detail extends MY_Controller {
             echo 'error';
         }
     }
-
+    function get_jadwal() {
+        if (!$this->input->is_ajax_request()) {
+            redirect('404');
+        }
+        echo json_encode($this->model->getJadwal());
+    }
     function set_jadwal() {
         if ($this->model->create_jadwal()) {
             echo 'success';

@@ -79,7 +79,7 @@ class M_treeview_detail extends CI_Model {
     }
 
     function read_document() {
-        $this->db->select("d.*, GROUP_CONCAT(ds.id) AS distribusi, GROUP_CONCAT(CONCAT(pld.fullname,' - ', ukd.name)) AS user_distribusi");
+        $this->db->select("d.*, GROUP_CONCAT(ds.id) AS distribusi, GROUP_CONCAT(pld.id) AS personil_distribusi_id, GROUP_CONCAT(CONCAT(pld.fullname,' - ', ukd.name)) AS user_distribusi");
         $this->db->join('pasal p', 'p.id = d.id_pasal');
         $this->db->join('users u', 'u.id = d.creator');
         $this->db->join('personil pl', 'pl.id = u.id_personil');
@@ -95,6 +95,7 @@ class M_treeview_detail extends CI_Model {
         for ($i = 0; $i < count($result); $i++) {
             $result[$i]['distribusi'] = explode(',', $result[$i]['distribusi']);
             $result[$i]['user_distribusi'] = explode(',', $result[$i]['user_distribusi']);
+            $result[$i]['personil_distribusi_id'] = explode(',', $result[$i]['personil_distribusi_id']);
         }
         return $result;
     }
@@ -207,50 +208,47 @@ class M_treeview_detail extends CI_Model {
 //        return $this->db->update('schedule');
 //    }
 
-    function form2_save() {
-        $mod = false;
-        $in = $this->input->post();
-        if (!empty($in['deskripsi'])) {
-            $this->db->set('description', $in['deskripsi']);
-            $mod = true;
-        }
-        if ($this->upload->data('file_name')) {
-            $this->db->set('file', $this->upload->data('file_name'));
-            $mod = true;
-        }
-        if ($mod) {
-            $this->db->where('id_pasal', $in['idPasal']);
-            $this->db->where('id_company', $in['idPerusahaan']);
-            $count = $this->db->count_all_results('form2');
-            if ($count) {
-                $this->db->where('id_pasal', $in['idPasal']);
-                $this->db->where('id_company', $in['idPerusahaan']);
-                return $this->db->update('form2');
-            } else {
-                $this->db->set('id_pasal', $in['idPasal']);
-                $this->db->set('id_company', $in['idPerusahaan']);
-                return $this->db->insert('form2');
+    function getJadwal() {
+        return $this->db->get('jadwal')->result_array();
+    }
+    function create_jadwal() {
+        $data = [];
+        $data['repeat'] = $this->input->post('ulangi');
+        $data['desc'] = $this->input->post('desc');
+        if ($dist = $this->input->post('dist')) {
+            foreach ($dist as $d) {
+                $data['id_distribusi'] = $d;
+                $this->create_jadwal_data($data);
             }
         } else {
-            //TODO: error msg: tdk ada data yg disimpan
+            $data['id_document'] = $this->input->post('dokumen_id');
+            $this->create_jadwal_data($data);
         }
+        return true;
     }
 
-    function create_jadwal() {
-        $day = array('senin', 'selasa', 'rabu', 'kamis', 'jumat', 'sabtu', 'minggu');
-        foreach ($day as $d) {
-            $dy = 'TIDAK';
-            if ($this->input->post('hari')) {
-                if (in_array(strtoupper($d), $this->input->post('hari'))) {
-                    $dy = 'YA';
+    private function create_jadwal_data($data) {
+        if ($this->input->post('ulangi') == 'YA') {
+            $day = array('senin', 'selasa', 'rabu', 'kamis', 'jumat', 'sabtu', 'minggu');
+            foreach ($day as $d) {
+                $dy = 'TIDAK';
+                if ($this->input->post('hari')) {
+                    if (in_array(strtoupper($d), $this->input->post('hari'))) {
+                        $dy = 'YA';
+                    }
                 }
+                $data[$d] = $dy;
             }
-            $this->db->set($d, $dy);
+            $data['date'] = $this->input->post('tanggal')[0];
+            $data['date_end'] = $this->input->post('tanggal_selesai');
+            $this->db->insert('jadwal', $data);
+        } else if ($this->input->post('ulangi') == 'TIDAK') {
+            foreach ($this->input->post('tanggal') as $tgl) {
+                $data['date'] = $tgl;
+                $this->db->insert('jadwal', $data);
+            }
         }
-        $this->db->set('date', $this->input->post('tanggal'));
-        $this->db->set('repeat', $this->input->post('ulangi'));
-        $this->db->where('id', $this->input->post('id'));
-        return $this->db->update('distribusi');
+        return true;
     }
 
     function upload_bukti() {

@@ -30,7 +30,7 @@ $role = $this->session->userdata['user']['role'];
                     <li class="nav-item"><a data-toggle="tab" href="#tab-pasal" class="nav-link">Pasal</a></li>
                     <li class="nav-item"><a data-toggle="tab" href="#tab-dokumen" class="nav-link">Dokumen</a></li>
                     <li class="nav-item"><a data-toggle="tab" href="#tab-distribusi" class="nav-link">Distribusi</a></li>
-                    <li class="nav-item d-none"><a data-toggle="tab" href="#tab-jadwal" class="nav-link">Jadwal</a></li>
+                    <li class="nav-item"><a data-toggle="tab" href="#tab-jadwal" class="nav-link">Jadwal</a></li>
                     <li class="nav-item d-none"><a data-toggle="tab" href="#tab-implementasi" class="nav-link">Implementasi</a></li>
                     <!--<li class="nav-item"><a data-toggle="tab" href="#tab-base" class="nav-link">Base</a></li>-->
                 </ul>
@@ -383,13 +383,14 @@ $role = $this->session->userdata['user']['role'];
                                 <tr>
                                     <td>Pasal</td>
                                     <td>
-                                        <select name="pasal" class="form-control select-pasal" required=""></select>
+                                        <select name="pasal" class="form-control select-pasal-has-dokumen" required=""></select>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>Judul Dokumen</td>
                                     <td>
-                                        <select name="judul" class="form-control select-dokumen" required=""></select>
+                                        <input name="dokumen_id" class="input-dokumen-id d-none">
+                                        <select name="dokumen" class="form-control select-dokumen-pasal" required=""></select>
                                     </td>
                                 </tr>
                                 <tr>
@@ -401,7 +402,7 @@ $role = $this->session->userdata['user']['role'];
                                 <tr>
                                     <td>Distribusi</td>
                                     <td>
-                                        <select name="dist" class="form-control select-personil select-2 multiselect-dropdown" multiple="" required="" style="width: 330px !important;"></select>
+                                        <select name="dist[]" class="form-control select-personil-distribusi select-2 multiselect-dropdown" multiple="" style="width: 330px !important;"></select>
                                     </td>
                                 </tr>
                                 <tr>
@@ -664,7 +665,9 @@ $role = $this->session->userdata['user']['role'];
             $('#table-pemenuhan').empty();
             $('#table-pasal').empty();
             $('.select-pasal').empty();
+            $('.select-pasal-has-dokumen').empty();
             $('.select-pasal').append('<option value="">-- pilih pasal --</option>');
+            $('.select-pasal-has-dokumen').append('<option value="">-- pilih pasal --</option>');
             for (var i = 0; i < sortData.length; i++) {
                 var d = sortData[i];
                 var pCol;
@@ -682,6 +685,9 @@ $role = $this->session->userdata['user']['role'];
                 $('#table-pasal').append('<tr><td>' + d.fullname + '</td><td>' + (d.sort_desc == null ? '-' : d.sort_desc) + '</td><td>' + (d.long_desc == null ? '-' : d.long_desc) + '</td><td>' + d.doc + '</td><td><span class="fa fa-info-circle text-primary" onclick="detailPasal(' + i + ')" title="Detail"></span></td></tr>');
                 if (d.child == 0) {
                     $('.select-pasal').append('<option value="' + d.id + '">' + d.fullname + '</option>');
+                }
+                if (d.doc != 0) {
+                    $('.select-pasal-has-dokumen').append('<option value="' + i + '">' + d.fullname + '</option>');
                 }
             }
             getDokumen();
@@ -801,7 +807,7 @@ $role = $this->session->userdata['user']['role'];
             m.find('.input-file').addClass('d-none');
             m.find('.input-file').removeAttr('required');
             m.find('.input-url').removeClass('d-none');
-            m.find('.input-url').add('required');
+            m.find('.input-url').attr('required');
         }
     });
     function detailDokumen(index) {
@@ -834,7 +840,6 @@ $role = $this->session->userdata['user']['role'];
         m.find('textarea').prop('disabled', false);
         m.find('.input-file').prop('required', false);
         m.find('.input-url').prop('required', false);
-        console.log(dokumen[index].id);
     }
     function initHapusDokumen(index) {
         var m = $('#modalDeleteDokumen');
@@ -844,7 +849,6 @@ $role = $this->session->userdata['user']['role'];
     }
     function hapusDokumen(index) {
         $.post('<?php echo site_url($module); ?>/hapus_dokumen', {id: dokumen[index].id}, function (data) {
-            console.log(data);
             getPasal();
             $('#modalDeleteDokumen').modal('hide');
         });
@@ -853,19 +857,20 @@ $role = $this->session->userdata['user']['role'];
         $.post('<?php echo site_url($module); ?>/get_distribusi', {'perusahaan': perusahaan, 'standar': standar}, function (data) {
             data = JSON.parse(data);
             listJadwal = [];
-            sortDokumen = [];
             distribusi = [];
+            sortDokumen = [];
             $('#table-distribusi').empty();
             $('#table-jadwal').empty();
             $('#table-implementasi').empty();
             var indexJadwal = 0;
             for (var i = 0; i < sortData.length; i++) {
+                sortData[i].dokumens = [];
                 for (var j = 0; j < dokumen.length; j++) {
                     for (var k = 0; k < anggota.length; k++) {
                         if (dokumen[j].id_pasal === sortData[i].id) {
                             if (dokumen[j].creator === anggota[k].id) {
                                 dokumen[j].index_pasal = i;
-                                sortDokumen.push(dokumen[j]);
+                                sortData[i].dokumens.push(j);
                                 var userDis = dokumen[j].user_distribusi;
                                 var idDis = dokumen[j].distribusi;
                                 var strUserDis = '';
@@ -904,10 +909,12 @@ $role = $this->session->userdata['user']['role'];
                                 }
                                 $('#table-distribusi').append('<tr><td>' + sortData[i].fullname + '</td><td>' + dokumen[j].judul + '</td><td>' + anggota[k].fullname + '</td><td>' + strUserDis + '</td><td><button class="btn btn-primary fa fa-edit" onclick="editDistribusi(' + j + ')"></botton></td></tr>');
                             }
+                            sortDokumen.push(dokumen[j]);
                         }
                     }
                 }
             }
+            getJadwal();
         });
     }
     function editDistribusi(index) {
@@ -945,15 +952,22 @@ $role = $this->session->userdata['user']['role'];
             getPasal();
         });
     }
-
+    function getJadwal() {
+        $.getJSON('<?php echo site_url($module); ?>/get_jadwal', {'perusahaan': perusahaan, 'standar': standar}, function (data) {
+            console.log(data);
+        });
+    }
     function jadwal() {
         var m = $('#modalJadwal');
         m.modal('show');
     }
-
     function tambahTanggal() {
-        console.log('tambah tanggal');
-        $('').insertBefore('.group-add-date')
+        $('<tr class="addictional-date group-input-unrepeat"><td><button type="button" class="btn btn-sm btn-danger fa fa-trash" onclick="hapusJadwal(this)"></button></td><td>' +
+                '<input class="form-control input-tanggal" name="tanggal[]" type="date" required="">' +
+                '</td></tr>').insertBefore('#group-add-date');
+    }
+    function hapusJadwal(item) {
+        $(item).parents('tr').remove();
     }
 //    function jadwal(index, mode) {
 //        var l = listJadwal[index];
@@ -982,21 +996,47 @@ $role = $this->session->userdata['user']['role'];
 //            m.find('.modal-footer').addClass('d-none');
 //        }
 //    }
+    $('.select-pasal-has-dokumen').change(function () {
+        var index = $(this).val();
+        $('.select-dokumen-pasal').empty();
+        $('.select-dokumen-pasal').append('<option value="">-- -- --</option>');
+        if (index != '') {
+            var docs = sortData[index].dokumens;
+            for (var i = 0; i < docs.length; i++) {
+                var d = dokumen[docs[i]];
+                $('.select-dokumen-pasal').append('<option value="' + docs[i] + '">' + d.judul + '</option>');
+            }
+        }
+    });
+    $('.select-dokumen-pasal').change(function () {
+        var doc = dokumen[$(this).val()];
+        $('.input-dokumen-id').val(doc.id);
+        $('.select-personil-distribusi').empty();
+        for (var i = 0; i < doc.distribusi.length; i++) {
+            $('.select-personil-distribusi').append(new Option(doc.user_distribusi[i], doc.distribusi[i], true, true)).trigger('change');
+        }
+    });
     $('.radio-ulangi-jadwal').change(function () {
         var ulangi = $(this).val();
         if (ulangi === 'YA') {
             $('.group-input-repeat').removeClass('d-none');
             $('.group-input-unrepeat').addClass('d-none');
+            $('input[name=tanggal_selesai]').attr('required');
         } else if (ulangi === 'TIDAK') {
             $('.group-input-repeat').addClass('d-none');
             $('.group-input-unrepeat').removeClass('d-none');
+            $('input[name=tanggal_selesai]').removeAttr('required');
         }
     });
     $('#formJadwal').submit(function (e) {
         e.preventDefault();
+        var postData = $(this).serializeArray();
         $.post('<?php echo site_url($module); ?>/set_jadwal', $(this).serialize(), function (data) {
             $('#modalJadwal').modal('hide');
             getPasal();
+            $('#formJadwal').trigger("reset");
+            $('#formJadwal').find(".addictional-date").remove();
+            $('.group-input-repeat').removeClass('d-none');
         });
     });
     function openModalUploadBukti(index) {
