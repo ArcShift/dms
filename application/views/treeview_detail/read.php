@@ -901,15 +901,14 @@ $role = $this->session->userdata['user']['role'];
                                                 txtJadwal = distribusi[indexJadwal].date;
                                             }
                                         }
-                                        $('#table-jadwal').append('<tr><td>' + sortData[i].fullname + '</td><td>' + dokumen[j].judul + '</td><td>' + txtJadwal + '</td><td>' + userDis[l] + '</td><td>' + aksiDistribusi + '</td></tr>');
                                         $('#table-implementasi').append('<tr><td>' + sortData[i].fullname + '</td><td>' + dokumen[j].judul + '</td><td>' + txtJadwal + '</td><td>' + userDis[l] + '</td><td><button class="btn btn-primary fa fa-upload" onclick="openModalUploadBukti(' + indexJadwal + ')"></botton></td></tr>');
                                         indexJadwal++;
 //                                        break;
                                     }
                                 }
                                 $('#table-distribusi').append('<tr><td>' + sortData[i].fullname + '</td><td>' + dokumen[j].judul + '</td><td>' + anggota[k].fullname + '</td><td>' + strUserDis + '</td><td><button class="btn btn-primary fa fa-edit" onclick="editDistribusi(' + j + ')"></botton></td></tr>');
+                                sortDokumen.push(dokumen[j]);
                             }
-                            sortDokumen.push(dokumen[j]);
                         }
                     }
                 }
@@ -954,7 +953,24 @@ $role = $this->session->userdata['user']['role'];
     }
     function getJadwal() {
         $.getJSON('<?php echo site_url($module); ?>/get_jadwal', {'perusahaan': perusahaan, 'standar': standar}, function (data) {
-            console.log(data);
+            sortJadwal = [];
+            for (var i = 0; i < data.length; i++) {
+                for (var j = 0; j < distribusi.length; j++) {
+                    if (data[i].id_distribusi == distribusi[j].id) {
+                        data[i].id_document = distribusi[j].id_document;
+//                        data[i].personil_distribusi = distribusi[j].id_document;
+                    }
+                }
+            }
+            for (var i = 0; i < sortDokumen.length; i++) {
+                for (var j = 0; j < data.length; j++) {
+                    if(sortDokumen[i].id == data[j].id_document){
+            $('#table-jadwal').append('<tr><td>' + sortData[sortDokumen[i].index_pasal].fullname  + '</td><td>' + sortDokumen[i].judul + '</td><td>' + data[j].date + '</td><td>' + (data[j].id_distribusi==null?'-':data[j].id_distribusi) + '</td><td><button class="btn btn-sm btn-primary fa fa-edit"></button></td></tr>');
+                    
+                    }
+                }
+
+            }
         });
     }
     function jadwal() {
