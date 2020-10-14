@@ -560,7 +560,6 @@ $role = $this->session->userdata['user']['role'];
     var idStandar;
     var anggota;
     var pesonil;
-    var sortData = [];
     var dokumen;
     var listJadwal;
     $('#perusahaan').change(function (s) {
@@ -632,32 +631,32 @@ $role = $this->session->userdata['user']['role'];
                 data[i] = d;
             }
             var element = $('.item-base').children('.index').get();
-            sortData = [];
+            sortPasal = [];
             for (var i = 0; i < element.length; i++) {
                 var e = element[i];
                 var index = $(e).text();
-                sortData.push(data[index]);
+                sortPasal.push(data[index]);
                 $(e).text(i);
             }
-            for (var i = 0; i < sortData.length; i++) {
-                var s = sortData[i];
+            for (var i = 0; i < sortPasal.length; i++) {
+                var s = sortPasal[i];
                 s.childsIndex = [];
                 if (s.parent === null) {
                     s.parentIndex = null;
                     s.fullname = s.name;
                 } else {
                     s.parentIndex = $('#item-base' + s.parent).children('.index').text();
-                    s.fullname = sortData[s.parentIndex].fullname + ' - ' + s.name;
-                    sortData[s.parentIndex].childsIndex.push(i);
+                    s.fullname = sortPasal[s.parentIndex].fullname + ' - ' + s.name;
+                    sortPasal[s.parentIndex].childsIndex.push(i);
                 }
-                sortData[i] = s;
+                sortPasal[i] = s;
             }
-            for (var i = 0; i < sortData.length; i++) {
-                if (sortData[i].parent === null) {
-                    if (sortData[i].child != 0) {
+            for (var i = 0; i < sortPasal.length; i++) {
+                if (sortPasal[i].parent === null) {
+                    if (sortPasal[i].child != 0) {
                         pemenuhanDokumen(i);
                     } else {
-                        sortData[i].pemenuhan_doc = 0;
+                        sortPasal[i].pemenuhan_doc = 0;
                     }
                 }
             }
@@ -668,8 +667,8 @@ $role = $this->session->userdata['user']['role'];
             $('.select-pasal-has-dokumen').empty();
             $('.select-pasal').append('<option value="">-- pilih pasal --</option>');
             $('.select-pasal-has-dokumen').append('<option value="">-- pilih pasal --</option>');
-            for (var i = 0; i < sortData.length; i++) {
-                var d = sortData[i];
+            for (var i = 0; i < sortPasal.length; i++) {
+                var d = sortPasal[i];
                 var pCol;
                 switch (d.pemenuhan_doc) {
                     case 100:
@@ -695,22 +694,22 @@ $role = $this->session->userdata['user']['role'];
     }
     function pemenuhanDokumen(index) {
         var listPemenuhan = [];
-        var d = sortData[index];
+        var d = sortPasal[index];
         for (var i = 0; i < d.childsIndex.length; i++) {
-            if (sortData[d.childsIndex[i]].pemenuhan_doc === -1) {
+            if (sortPasal[d.childsIndex[i]].pemenuhan_doc === -1) {
                 pemenuhanDokumen(d.childsIndex[i]);
             }
-            listPemenuhan.push(sortData[d.childsIndex[i]].pemenuhan_doc);
+            listPemenuhan.push(sortPasal[d.childsIndex[i]].pemenuhan_doc);
         }
         var total = 0;
         for (var i = 0; i < listPemenuhan.length; i++) {
             total += listPemenuhan[i];
         }
-        sortData[index].pemenuhan_doc = total / listPemenuhan.length;
+        sortPasal[index].pemenuhan_doc = total / listPemenuhan.length;
     }
     function detailPasal(index) {
         var m = $('#modalDetailPasal');
-        var d = sortData[index];
+        var d = sortPasal[index];
         m.modal('show');
         m.find('.modal-title').text(d.fullname);
         m.find('.item-sort-desc').val(d.sort_desc);
@@ -772,6 +771,7 @@ $role = $this->session->userdata['user']['role'];
             $('#table-dokumen').empty();
             $('.select-dokumen').empty();
             $('.select-dokumen').append('<option value="">-- -- --</option>');
+            sortDokumen=[];
             dokumen = JSON.parse(data);
             for (var i = 0; i < dokumen.length; i++) {
                 var d = dokumen[i];
@@ -782,6 +782,13 @@ $role = $this->session->userdata['user']['role'];
                 $('#table-dokumen').append('<tr><td>' + d.nomor + '</td><td>' + d.judul + '</td><td>Level ' + d.jenis + '</td><td><button class="btn btn-sm btn-primary fa fa-info-circle" onclick="detailDokumen(' + i + ')" title="Detail"></button>&nbsp<button class="btn btn-sm btn-primary fa fa-edit" onclick="editDokumen(' + i + ')"></button>&nbsp<button class="btn btn-sm btn-danger fa fa-trash" onclick="initHapusDokumen(' + i + ')"></button></td></tr>');
                 $('.select-dokumen').append('<option value="' + d.id + '">' + d.judul + '</option>');
             }
+//            for (var h = 0; h < sortPasal.length; h++) {
+//                for (var i = 0; i < data.length; i++) {
+//                    if(data[i].id_pasal=sortPasal[h].){
+//                        
+//                    }
+//                }
+//            }
             getDistribusi();
         });
     }
@@ -863,14 +870,14 @@ $role = $this->session->userdata['user']['role'];
             $('#table-jadwal').empty();
             $('#table-implementasi').empty();
             var indexJadwal = 0;
-            for (var i = 0; i < sortData.length; i++) {
-                sortData[i].dokumens = [];
+            for (var i = 0; i < sortPasal.length; i++) {
+                sortPasal[i].dokumens = [];
                 for (var j = 0; j < dokumen.length; j++) {
                     for (var k = 0; k < anggota.length; k++) {
-                        if (dokumen[j].id_pasal === sortData[i].id) {
+                        if (dokumen[j].id_pasal === sortPasal[i].id) {
                             if (dokumen[j].creator === anggota[k].id) {
                                 dokumen[j].index_pasal = i;
-                                sortData[i].dokumens.push(j);
+                                sortPasal[i].dokumens.push(j);
                                 var userDis = dokumen[j].user_distribusi;
                                 var idDis = dokumen[j].distribusi;
                                 var strUserDis = '';
@@ -879,6 +886,7 @@ $role = $this->session->userdata['user']['role'];
                                     if (userDis[l] !== '') {
                                         for (var m = 0; m < data.length; m++) {
                                             if (dokumen[j].distribusi[l] == data[m].id) {
+
                                                 distribusi.push(data[m]);
                                                 break;
                                             }
@@ -901,12 +909,12 @@ $role = $this->session->userdata['user']['role'];
                                                 txtJadwal = distribusi[indexJadwal].date;
                                             }
                                         }
-                                        $('#table-implementasi').append('<tr><td>' + sortData[i].fullname + '</td><td>' + dokumen[j].judul + '</td><td>' + txtJadwal + '</td><td>' + userDis[l] + '</td><td><button class="btn btn-primary fa fa-upload" onclick="openModalUploadBukti(' + indexJadwal + ')"></botton></td></tr>');
+                                        $('#table-implementasi').append('<tr><td>' + sortPasal[i].fullname + '</td><td>' + dokumen[j].judul + '</td><td>' + txtJadwal + '</td><td>' + userDis[l] + '</td><td><button class="btn btn-primary fa fa-upload" onclick="openModalUploadBukti(' + indexJadwal + ')"></botton></td></tr>');
                                         indexJadwal++;
 //                                        break;
                                     }
                                 }
-                                $('#table-distribusi').append('<tr><td>' + sortData[i].fullname + '</td><td>' + dokumen[j].judul + '</td><td>' + anggota[k].fullname + '</td><td>' + strUserDis + '</td><td><button class="btn btn-primary fa fa-edit" onclick="editDistribusi(' + j + ')"></botton></td></tr>');
+                                $('#table-distribusi').append('<tr><td>' + sortPasal[i].fullname + '</td><td>' + dokumen[j].judul + '</td><td>' + anggota[k].fullname + '</td><td>' + strUserDis + '</td><td><button class="btn btn-primary fa fa-edit" onclick="editDistribusi(' + j + ')"></botton></td></tr>');
                                 sortDokumen.push(dokumen[j]);
                             }
                         }
@@ -916,11 +924,42 @@ $role = $this->session->userdata['user']['role'];
             getJadwal();
         });
     }
+    function getJadwal() {
+        $.getJSON('<?php echo site_url($module); ?>/get_jadwal', {'perusahaan': perusahaan, 'standar': standar}, function (data) {
+            sortJadwal = [];
+            for (var i = 0; i < data.length; i++) {
+                for (var j = 0; j < distribusi.length; j++) {
+                    if (data[i].id_distribusi == distribusi[j].id) {
+                        data[i].id_document = distribusi[j].id_document;
+                        //get personil name
+//                        data[i].personil_distribusi = distribusi[j].id_document;
+                    }
+                }
+            }
+            var pasal = '';
+            var doc = '';
+            for (var i = 0; i < sortDokumen.length; i++) {
+                for (var j = 0; j < data.length; j++) {
+                    if (sortDokumen[i].id == data[j].id_document) {
+                        var p = sortPasal[sortDokumen[i].index_pasal].fullname;
+                        var d = sortDokumen[i].judul;
+                        $('#table-jadwal').append('<tr><td>' + (pasal == p ? '' : p) + '</td><td>' + (doc == d ? '' : d) + '</td><td>' + data[j].date + '</td><td>' + (data[j].fullname == null ? '-' : data[j].fullname) + '</td><td>-</td></tr>');
+//                        $('#table-jadwal').append('<tr><td>' + (pasal == p ? '' : p) + '</td><td>' + (doc == d ? '' : d) + '</td><td>' + data[j].date + '</td><td>' + (data[j].fullname == null ? '-' : data[j].fullname) + '</td><td><button class="btn btn-sm btn-primary fa fa-edit"></button></td></tr>');
+                        if (pasal != p)
+                            pasal = p;
+                        if (doc != d)
+                            doc = d;
+                        sortJadwal.push(data[j]);
+                    }
+                }
+            }
+        });
+    }
     function editDistribusi(index) {
         var m = $('#modalDistribusi');
         var d = dokumen[index];
         m.modal('show');
-        m.find('.label-pasal').text(sortData[d.index_pasal].fullname);
+        m.find('.label-pasal').text(sortPasal[d.index_pasal].fullname);
         m.find('.label-judul').text(d.judul);
         m.find('.label-jenis').text('Level ' + d.jenis);
         m.find('.label-klasifikasi').text(d.klasifikasi);
@@ -951,28 +990,6 @@ $role = $this->session->userdata['user']['role'];
             getPasal();
         });
     }
-    function getJadwal() {
-        $.getJSON('<?php echo site_url($module); ?>/get_jadwal', {'perusahaan': perusahaan, 'standar': standar}, function (data) {
-            sortJadwal = [];
-            for (var i = 0; i < data.length; i++) {
-                for (var j = 0; j < distribusi.length; j++) {
-                    if (data[i].id_distribusi == distribusi[j].id) {
-                        data[i].id_document = distribusi[j].id_document;
-//                        data[i].personil_distribusi = distribusi[j].id_document;
-                    }
-                }
-            }
-            for (var i = 0; i < sortDokumen.length; i++) {
-                for (var j = 0; j < data.length; j++) {
-                    if(sortDokumen[i].id == data[j].id_document){
-            $('#table-jadwal').append('<tr><td>' + sortData[sortDokumen[i].index_pasal].fullname  + '</td><td>' + sortDokumen[i].judul + '</td><td>' + data[j].date + '</td><td>' + (data[j].id_distribusi==null?'-':data[j].id_distribusi) + '</td><td><button class="btn btn-sm btn-primary fa fa-edit"></button></td></tr>');
-                    
-                    }
-                }
-
-            }
-        });
-    }
     function jadwal() {
         var m = $('#modalJadwal');
         m.modal('show');
@@ -990,7 +1007,7 @@ $role = $this->session->userdata['user']['role'];
 //        var m = $('#modalJadwal');
 //        m.modal('show');
 //        m.find('.input-id').val(l.id);
-//        m.find('.input-pasal').val(sortData[l.id_pasal].fullname);
+//        m.find('.input-pasal').val(sortPasal[l.id_pasal].fullname);
 //        m.find('.input-judul').val(dokumen[l.id_doc].judul);
 //        m.find('.input-tanggal').val(distribusi[index].date);
 //        m.find('.radio-ulangi-jadwal[value="' + distribusi[index].repeat + '"]').prop('checked', true);
@@ -1017,7 +1034,7 @@ $role = $this->session->userdata['user']['role'];
         $('.select-dokumen-pasal').empty();
         $('.select-dokumen-pasal').append('<option value="">-- -- --</option>');
         if (index != '') {
-            var docs = sortData[index].dokumens;
+            var docs = sortPasal[index].dokumens;
             for (var i = 0; i < docs.length; i++) {
                 var d = dokumen[docs[i]];
                 $('.select-dokumen-pasal').append('<option value="' + docs[i] + '">' + d.judul + '</option>');

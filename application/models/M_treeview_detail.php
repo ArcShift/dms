@@ -181,36 +181,13 @@ class M_treeview_detail extends CI_Model {
         return $result;
     }
 
-//    private function pasal_fullname($id) {
-//        $fullname = '';
-//        $parent_exist = true;
-//        while ($parent_exist) {
-//            $this->db->select('id, name, parent');
-//            $this->db->where('id', $id);
-//            $r = $this->db->get('pasal')->row_array();
-//            $fullname = $r['name'] . ' - ' . $fullname;
-//            if (empty($r['parent'])) {
-//                $parent_exist = false;
-//            } else {
-//                $id = $r['parent'];
-//            }
-//        }
-//        return substr($fullname, 0, -3);
-//    }
-//    function delete_schedule() {
-//        $this->db->where('id', $this->input->post('hapus'));
-//        return $this->db->delete('schedule');
-//    }
-//    function upload_bukti_penerapan() {
-//        $this->db->set('file', $this->upload->data()['file_name']);
-//        $this->db->set('upload_date', date("Y-m-d", time()));
-//        $this->db->where('id', $this->input->post('jadwal'));
-//        return $this->db->update('schedule');
-//    }
-
     function getJadwal() {
-        return $this->db->get('jadwal')->result_array();
+        $this->db->select('j.*, p.fullname');
+        $this->db->join('distribusi d','d.id= j.id_distribusi', 'LEFT');
+        $this->db->join('personil p','p.id= d.id_personil', 'LEFT');
+        return $this->db->get('jadwal j')->result_array();
     }
+
     function create_jadwal() {
         $data = [];
         $data['repeat'] = $this->input->post('ulangi');
