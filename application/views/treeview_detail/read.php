@@ -31,7 +31,7 @@ $role = $this->session->userdata['user']['role'];
                     <li class="nav-item"><a data-toggle="tab" href="#tab-dokumen" class="nav-link">Dokumen</a></li>
                     <li class="nav-item"><a data-toggle="tab" href="#tab-distribusi" class="nav-link">Distribusi</a></li>
                     <li class="nav-item"><a data-toggle="tab" href="#tab-jadwal" class="nav-link">Jadwal</a></li>
-                    <li class="nav-item"><a data-toggle="tab" href="#tab-implementasi" class="nav-link">Implementasi</a></li>
+                    <li class="nav-item d-none"><a data-toggle="tab" href="#tab-implementasi" class="nav-link">Implementasi</a></li>
                     <!--<li class="nav-item"><a data-toggle="tab" href="#tab-base" class="nav-link">Base</a></li>-->
                 </ul>
                 <div class="tab-content">
@@ -109,7 +109,6 @@ $role = $this->session->userdata['user']['role'];
                                     <th>Judul Dokumen</th>
                                     <th>Jadwal</th>
                                     <th>Distribusi</th>
-                                    <th>Aksi</th>
                                 </tr>
                             </thead>
                             <tbody id="table-jadwal"></tbody>
@@ -941,16 +940,31 @@ $role = $this->session->userdata['user']['role'];
                     if (sortDokumen[i].id == data[j].id_document) {
                         var p = sortPasal[sortDokumen[i].index_pasal].fullname;
                         var d = sortDokumen[i].judul;
-                        var row = '<td>' + (pasal == p ? '' : p) + '</td><td>' + (doc == d ? '' : d) + '</td><td>' + data[j].date + '</td><td>' + (data[j].fullname == null ? '-' : data[j].fullname) + '</td>';
-                        $('#table-jadwal').append('<tr>' + row + '</tr>');
-                        //STATUS
+                        var dist = '';
+                        for (var k = 0; k < data[j].personil_name.length; k++) {
+                            dist += '<div>' + data[j].personil_name[k] + '</div>';
+                        }
+                        dist = '<td>' + dist + '</td>';
+                        var row = '<td>' + (pasal == p ? '' : p) + '</td><td>' + (doc == d ? '' : d) + '</td>';
                         var status = '-';
-                        var control = '<button onclick="modalUploadBukti('+ j +')" class="btn btn-sm btn-primary fa fa-upload"></button>';
+                        var control = '<button onclick="modalUploadBukti(' + j + ')" class="btn btn-sm btn-primary fa fa-upload"></button>';
                         var today = new Date().getDate();
+                        var deadline = new Date(data[j].date).getDate();
+                        var days = ['minggu', 'senin', 'selasa', 'rabu', 'kamis', 'jumat', 'sabtu'];
                         if (data[j].repeat == 'YA') {
                             status = '<span class="badge badge-sm badge-secondary">Berkala</span>';
+                            var tgl = new Date(data[j].date);
+                            var endDate = new Date(data[j].date_end)
+                            while (tgl.getTime() <= endDate.getTime()) {
+                                if (data[j][days[tgl.getDay()]] == 'YA') {
+                                    console.log(tgl.getDate());
+                                    var txtDate = '<td>' + tgl.getFullYear() + '-' + ('0' + (tgl.getMonth()+1)).slice(-2) + '-' + ('0' + tgl.getDate()).slice(-2) + '</td>';
+                                    $('#table-jadwal').append('<tr>' + row + txtDate + dist + '</tr>');
+                                }
+                                tgl.setDate(tgl.getDate() + 1);
+                            }
                         } else if (data[j].repeat == 'TIDAK') {
-                            var deadline = new Date(data[j].date).getDate();
+                            $('#table-jadwal').append('<tr>' + row + '<td>' + data[j].date + '</td>' + dist + '</tr>');
                             if (deadline >= today) {
                                 //belum diupload - aktif
                                 status = '<span class="badge badge-sm badge-warning">Pending</span>';
@@ -961,10 +975,10 @@ $role = $this->session->userdata['user']['role'];
                             }
                         }
                         $('#table-implementasi').append('<tr>' + row + '<td>' + control + '</td><td class="text-center">' + status + '</td></tr>');
-                        if (pasal != p)
-                            pasal = p;
-                        if (doc != d)
-                            doc = d;
+//                        if (pasal != p)
+//                            pasal = p;
+//                        if (doc != d)
+//                            doc = d;
                         sortJadwal.push(data[j]);
                     }
                 }
@@ -1062,7 +1076,7 @@ $role = $this->session->userdata['user']['role'];
         $('.input-dokumen-id').val(doc.id);
         $('.select-personil-distribusi').empty();
         for (var i = 0; i < doc.distribusi.length; i++) {
-            $('.select-personil-distribusi').append(new Option(doc.user_distribusi[i], doc.distribusi[i], true, true)).trigger('change');
+            $('.select-personil-distribusi').append(new Option(doc.user_distribusi[i], doc.personil_distribusi_id[i], true, true)).trigger('change');
         }
     });
     $('.radio-ulangi-jadwal').change(function () {

@@ -182,9 +182,21 @@ class M_treeview_detail extends CI_Model {
     }
 
     function getJadwal() {
-        $this->db->select('j.*, p.fullname');
-        $this->db->join('distribusi d','d.id= j.id_distribusi', 'LEFT');
-        $this->db->join('personil p','p.id= d.id_personil', 'LEFT');
+        $this->db->select("j.*, GROUP_CONCAT(p.id) AS personil_id, GROUP_CONCAT(CONCAT(p.fullname,' - ',uk.name)) AS personil_name");
+        $this->db->join('personil_jadwal pj', 'pj.id_jadwal = j.id', 'LEFT');
+        $this->db->join('personil p', 'p.id= pj.id_personil', 'LEFT');
+        $this->db->join('unit_kerja uk', 'uk.id= p.id_unit_kerja', 'LEFT');
+        $this->db->group_by('j.id');
+        $result = $this->db->get('jadwal j')->result_array();
+        for ($i = 0; $i < count($result); $i++) {
+            $result[$i]['personil_id'] = explode(',', $result[$i]['personil_id']);
+            $result[$i]['personil_name'] = explode(',', $result[$i]['personil_name']);
+        }
+        return $result;
+    }
+
+    function getJadwal2() {
+        $this->db->group_by(['j.id_document', 'j.jadwal']);
         return $this->db->get('jadwal j')->result_array();
     }
 
@@ -192,19 +204,7 @@ class M_treeview_detail extends CI_Model {
         $data = [];
         $data['repeat'] = $this->input->post('ulangi');
         $data['desc'] = $this->input->post('desc');
-        if ($dist = $this->input->post('dist')) {
-            foreach ($dist as $d) {
-                $data['id_distribusi'] = $d;
-                $this->create_jadwal_data($data);
-            }
-        } else {
-            $data['id_document'] = $this->input->post('dokumen_id');
-            $this->create_jadwal_data($data);
-        }
-        return true;
-    }
-
-    private function create_jadwal_data($data) {
+        $data['id_document'] = $this->input->post('dokumen_id');
         if ($this->input->post('ulangi') == 'YA') {
             $day = array('senin', 'selasa', 'rabu', 'kamis', 'jumat', 'sabtu', 'minggu');
             foreach ($day as $d) {
@@ -219,10 +219,23 @@ class M_treeview_detail extends CI_Model {
             $data['date'] = $this->input->post('tanggal')[0];
             $data['date_end'] = $this->input->post('tanggal_selesai');
             $this->db->insert('jadwal', $data);
+            $this->insert_personil_jadwal($this->db->insert_id());
         } else if ($this->input->post('ulangi') == 'TIDAK') {
             foreach ($this->input->post('tanggal') as $tgl) {
                 $data['date'] = $tgl;
                 $this->db->insert('jadwal', $data);
+                $this->insert_personil_jadwal($this->db->insert_id());
+            }
+        }
+        return true;
+    }
+
+    private function insert_personil_jadwal($id_jadwal) {
+        $data = ['id_jadwal' => $id_jadwal];
+        if ($dist = $this->input->post('dist')) {
+            foreach ($dist as $d) {
+                $data['id_personil'] = $d;
+                $this->db->insert('personil_jadwal', $data);
             }
         }
         return true;
