@@ -26,12 +26,12 @@ $role = $this->session->userdata['user']['role'];
             <div id="container" class="card-body">
                 <!--TAB-->
                 <ul class="nav nav-tabs">
-                    <li class="nav-item"><a data-toggle="tab" href="#tab-pemenuhan" class="nav-link">Pemenuhan</a></li>
+                    <li class="nav-item"><a data-toggle="tab" href="#tab-pemenuhan" class="nav-link active">Pemenuhan</a></li>
                     <li class="nav-item"><a data-toggle="tab" href="#tab-pasal" class="nav-link">Pasal</a></li>
                     <li class="nav-item"><a data-toggle="tab" href="#tab-dokumen" class="nav-link">Dokumen</a></li>
                     <li class="nav-item"><a data-toggle="tab" href="#tab-distribusi" class="nav-link">Distribusi</a></li>
                     <li class="nav-item"><a data-toggle="tab" href="#tab-jadwal" class="nav-link">Jadwal</a></li>
-                    <li class="nav-item d-none"><a data-toggle="tab" href="#tab-implementasi" class="nav-link">Implementasi</a></li>
+                    <li class="nav-item"><a data-toggle="tab" href="#tab-implementasi" class="nav-link">Implementasi</a></li>
                     <!--<li class="nav-item"><a data-toggle="tab" href="#tab-base" class="nav-link">Base</a></li>-->
                 </ul>
                 <div class="tab-content">
@@ -125,7 +125,7 @@ $role = $this->session->userdata['user']['role'];
                                     <th>Jadwal</th>
                                     <th>Distribusi</th>
                                     <th>Bukti</th>
-                                    <th>Status</th>
+                                    <th class="text-center">Status</th>
                                 </tr>
                             </thead>
                             <tbody id="table-implementasi"></tbody>
@@ -410,15 +410,24 @@ $role = $this->session->userdata['user']['role'];
                                     <td></td>
                                 </tr>
                                 <tr>
-                                    <td>Tanggal</td>
+                                    <td id="tglMulaiJadwal">Tanggal</td>
                                     <td>
                                         <input class="form-control input-tanggal" name="tanggal[]" type="date" required="">
+                                    </td>
+                                </tr>
+                                <tr id="group-add-date" class="group-input-unrepeat d-none">
+                                    <td></td>
+                                    <td>
+                                        <div class="text-right mb-2">
+                                            <label>Tambah Tanggal</label>
+                                            <button type="button" class="btn btn-outline-primary fa fa-plus" onclick="tambahTanggal()"></button>
+                                        </div>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>Ulangi</td>
                                     <td>
-                                        <input class="radio-ulangi-jadwal" type="radio" name="ulangi" value="YA" required="" checked="">
+                                        <input class="radio-ulangi-jadwal" type="radio" name="ulangi" value="YA" required="">
                                         <label>Ya</label>
                                         <input class="radio-ulangi-jadwal" type="radio" name="ulangi" value="TIDAK">
                                         <label>Tidak</label>
@@ -469,15 +478,6 @@ $role = $this->session->userdata['user']['role'];
                                         <input class="form-control input-tanggal" name="tanggal_selesai" type="date" required="">
                                     </td>
                                 </tr>
-                                <tr id="group-add-date" class="group-input-unrepeat d-none">
-                                    <td></td>
-                                    <td>
-                                        <div class="text-right mb-2">
-                                            <label>Tambah Tanggal</label>
-                                            <button type="button" class="btn btn-outline-primary fa fa-plus" onclick="tambahTanggal()"></button>
-                                        </div>
-                                    </td>
-                                </tr>
                             </tbody>
                         </table>
                     </form>
@@ -493,7 +493,7 @@ $role = $this->session->userdata['user']['role'];
 <!--MODAL UPLOAD BUKTI-->
 <div class="modal fade" id="modalUploadBukti">
     <div class="modal-dialog" role="document">
-        <form id="formUploadBukti">            
+        <form id="formUploadBukti">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Upload Bukti</h5>
@@ -554,6 +554,7 @@ $role = $this->session->userdata['user']['role'];
         $('#tab-pemenuhan').addClass('active');
         $('.select-2').select2();
         formSubmit();
+        $('.radio-ulangi-jadwal[value=TIDAK]').click();
     });
     function afterReady() {}
     var idPerusahaan;
@@ -771,7 +772,7 @@ $role = $this->session->userdata['user']['role'];
             $('#table-dokumen').empty();
             $('.select-dokumen').empty();
             $('.select-dokumen').append('<option value="">-- -- --</option>');
-            sortDokumen=[];
+            sortDokumen = [];
             dokumen = JSON.parse(data);
             for (var i = 0; i < dokumen.length; i++) {
                 var d = dokumen[i];
@@ -909,7 +910,6 @@ $role = $this->session->userdata['user']['role'];
                                                 txtJadwal = distribusi[indexJadwal].date;
                                             }
                                         }
-                                        $('#table-implementasi').append('<tr><td>' + sortPasal[i].fullname + '</td><td>' + dokumen[j].judul + '</td><td>' + txtJadwal + '</td><td>' + userDis[l] + '</td><td><button class="btn btn-primary fa fa-upload" onclick="openModalUploadBukti(' + indexJadwal + ')"></botton></td></tr>');
                                         indexJadwal++;
 //                                        break;
                                     }
@@ -931,8 +931,6 @@ $role = $this->session->userdata['user']['role'];
                 for (var j = 0; j < distribusi.length; j++) {
                     if (data[i].id_distribusi == distribusi[j].id) {
                         data[i].id_document = distribusi[j].id_document;
-                        //get personil name
-//                        data[i].personil_distribusi = distribusi[j].id_document;
                     }
                 }
             }
@@ -943,8 +941,26 @@ $role = $this->session->userdata['user']['role'];
                     if (sortDokumen[i].id == data[j].id_document) {
                         var p = sortPasal[sortDokumen[i].index_pasal].fullname;
                         var d = sortDokumen[i].judul;
-                        $('#table-jadwal').append('<tr><td>' + (pasal == p ? '' : p) + '</td><td>' + (doc == d ? '' : d) + '</td><td>' + data[j].date + '</td><td>' + (data[j].fullname == null ? '-' : data[j].fullname) + '</td><td>-</td></tr>');
-//                        $('#table-jadwal').append('<tr><td>' + (pasal == p ? '' : p) + '</td><td>' + (doc == d ? '' : d) + '</td><td>' + data[j].date + '</td><td>' + (data[j].fullname == null ? '-' : data[j].fullname) + '</td><td><button class="btn btn-sm btn-primary fa fa-edit"></button></td></tr>');
+                        var row = '<td>' + (pasal == p ? '' : p) + '</td><td>' + (doc == d ? '' : d) + '</td><td>' + data[j].date + '</td><td>' + (data[j].fullname == null ? '-' : data[j].fullname) + '</td>';
+                        $('#table-jadwal').append('<tr>' + row + '</tr>');
+                        //STATUS
+                        var status = '-';
+                        var control = '<button onclick="modalUploadBukti('+ j +')" class="btn btn-sm btn-primary fa fa-upload"></button>';
+                        var today = new Date().getDate();
+                        if (data[j].repeat == 'YA') {
+                            status = '<span class="badge badge-sm badge-secondary">Berkala</span>';
+                        } else if (data[j].repeat == 'TIDAK') {
+                            var deadline = new Date(data[j].date).getDate();
+                            if (deadline >= today) {
+                                //belum diupload - aktif
+                                status = '<span class="badge badge-sm badge-warning">Pending</span>';
+                            } else {
+                                //terlambat - selesai
+                                status = '<span class="badge badge-sm badge-danger">Terlambat</span>';
+                                control = '';
+                            }
+                        }
+                        $('#table-implementasi').append('<tr>' + row + '<td>' + control + '</td><td class="text-center">' + status + '</td></tr>');
                         if (pasal != p)
                             pasal = p;
                         if (doc != d)
@@ -1055,10 +1071,12 @@ $role = $this->session->userdata['user']['role'];
             $('.group-input-repeat').removeClass('d-none');
             $('.group-input-unrepeat').addClass('d-none');
             $('input[name=tanggal_selesai]').attr('required');
+            $('#tglMulaiJadwal').text('Tanggal Mulai');
         } else if (ulangi === 'TIDAK') {
             $('.group-input-repeat').addClass('d-none');
             $('.group-input-unrepeat').removeClass('d-none');
             $('input[name=tanggal_selesai]').removeAttr('required');
+            $('#tglMulaiJadwal').text('Tanggal');
         }
     });
     $('#formJadwal').submit(function (e) {
@@ -1072,7 +1090,7 @@ $role = $this->session->userdata['user']['role'];
             $('.group-input-repeat').removeClass('d-none');
         });
     });
-    function openModalUploadBukti(index) {
+    function modalUploadBukti(index) {
         var l = listJadwal[index];
         var m = $('#modalUploadBukti');
         m.modal('show');
