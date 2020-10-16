@@ -31,7 +31,7 @@ $role = $this->session->userdata['user']['role'];
                     <li class="nav-item"><a data-toggle="tab" href="#tab-dokumen" class="nav-link">Dokumen</a></li>
                     <li class="nav-item"><a data-toggle="tab" href="#tab-distribusi" class="nav-link">Distribusi</a></li>
                     <li class="nav-item"><a data-toggle="tab" href="#tab-jadwal" class="nav-link">Jadwal</a></li>
-                    <li class="nav-item d-none"><a data-toggle="tab" href="#tab-implementasi" class="nav-link">Implementasi</a></li>
+                    <li class="nav-item"><a data-toggle="tab" href="#tab-implementasi" class="nav-link">Implementasi</a></li>
                     <!--<li class="nav-item"><a data-toggle="tab" href="#tab-base" class="nav-link">Base</a></li>-->
                 </ul>
                 <div class="tab-content">
@@ -948,8 +948,8 @@ $role = $this->session->userdata['user']['role'];
                         var row = '<td>' + (pasal == p ? '' : p) + '</td><td>' + (doc == d ? '' : d) + '</td>';
                         var status = '-';
                         var control = '<button onclick="modalUploadBukti(' + j + ')" class="btn btn-sm btn-primary fa fa-upload"></button>';
-                        var today = new Date().getDate();
-                        var deadline = new Date(data[j].date).getDate();
+                        var today = new Date().getTime();
+                        var deadline = new Date(data[j].date).getTime();
                         var days = ['minggu', 'senin', 'selasa', 'rabu', 'kamis', 'jumat', 'sabtu'];
                         if (data[j].repeat == 'YA') {
                             status = '<span class="badge badge-sm badge-secondary">Berkala</span>';
@@ -957,24 +957,20 @@ $role = $this->session->userdata['user']['role'];
                             var endDate = new Date(data[j].date_end)
                             while (tgl.getTime() <= endDate.getTime()) {
                                 if (data[j][days[tgl.getDay()]] == 'YA') {
-                                    console.log(tgl.getDate());
-                                    var txtDate = '<td>' + tgl.getFullYear() + '-' + ('0' + (tgl.getMonth()+1)).slice(-2) + '-' + ('0' + tgl.getDate()).slice(-2) + '</td>';
+                                    var txtDate = tgl.getFullYear() + '-' + ('0' + (tgl.getMonth() + 1)).slice(-2) + '-' + ('0' + tgl.getDate()).slice(-2);
                                     $('#table-jadwal').append('<tr>' + row + txtDate + dist + '</tr>');
+                                    var stat = getStatusUpload(txtDate);
+                                    txtDate = '<td>'+txtDate+'</td>';
+                                    $('#table-implementasi').append('<tr>' + row + txtDate + dist + '<td>' + (stat.status ? control : '') + '</td><td class="text-center">' + stat.badge + '</td></tr>');
                                 }
                                 tgl.setDate(tgl.getDate() + 1);
                             }
                         } else if (data[j].repeat == 'TIDAK') {
                             $('#table-jadwal').append('<tr>' + row + '<td>' + data[j].date + '</td>' + dist + '</tr>');
-                            if (deadline >= today) {
-                                //belum diupload - aktif
-                                status = '<span class="badge badge-sm badge-warning">Pending</span>';
-                            } else {
-                                //terlambat - selesai
-                                status = '<span class="badge badge-sm badge-danger">Terlambat</span>';
-                                control = '';
-                            }
+                            var stat = getStatusUpload(data[j].date);
+                            $('#table-implementasi').append('<tr>' + row + '<td>' + data[j].date + '</td>' + dist + '<td>' + (stat.status ? control : '') + '</td><td class="text-center">' + stat.badge + '</td></tr>');
                         }
-                        $('#table-implementasi').append('<tr>' + row + '<td>' + control + '</td><td class="text-center">' + status + '</td></tr>');
+//                        $('#table-implementasi').append('<tr>' + row + '<td>' + control + '</td><td class="text-center">' + status + '</td></tr>');
 //                        if (pasal != p)
 //                            pasal = p;
 //                        if (doc != d)
@@ -984,6 +980,20 @@ $role = $this->session->userdata['user']['role'];
                 }
             }
         });
+    }
+    function getStatusUpload(date) {
+        var badge = '';
+        var status = true;
+        console.log(date);
+        if (new Date(date).getTime() >= new Date().getTime()) {
+            //belum diupload - aktif
+            badge = '<span class="badge badge-sm badge-warning">Pending</span>';
+        } else {
+            badge = '<span class="badge badge-sm badge-danger">Terlambat</span>';
+            //terlambat - selesai
+            status = false;
+        }
+        return {status: status, badge: badge};
     }
     function editDistribusi(index) {
         var m = $('#modalDistribusi');
@@ -1101,7 +1111,7 @@ $role = $this->session->userdata['user']['role'];
             getPasal();
             $('#formJadwal').trigger("reset");
             $('#formJadwal').find(".addictional-date").remove();
-            $('.group-input-repeat').removeClass('d-none');
+            $('.radio-ulangi-jadwal[value=TIDAK]').click();
         });
     });
     function modalUploadBukti(index) {
