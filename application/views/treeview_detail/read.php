@@ -1,12 +1,6 @@
 <?php
 $role = $this->session->userdata['user']['role'];
 ?>
-<!--<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />-->
-<!--<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>-->
-<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment-with-locales.min.js" integrity="sha256-AdQN98MVZs44Eq2yTwtoKufhnU+uZ7v2kXnD5vqzZVo=" crossorigin="anonymous"></script>-->
-<!--<script src="https://blueimp.github.io/jQuery-File-Upload/js/vendor/jquery.ui.widget.js"></script>-->
-<!--<script src="js/jquery.iframe-transport.js"></script>-->
-<!--<script src="https://blueimp.github.io/jQuery-File-Upload/js/jquery.fileupload.js"></script>-->
 <div class="main-card mb-3 card">
     <div class="card-body">
         <div class="form-group">
@@ -109,6 +103,7 @@ $role = $this->session->userdata['user']['role'];
                                     <th>Judul Dokumen</th>
                                     <th>Jadwal</th>
                                     <th>Distribusi</th>
+                                    <th>Aksi</th>
                                 </tr>
                             </thead>
                             <tbody id="table-jadwal"></tbody>
@@ -363,7 +358,7 @@ $role = $this->session->userdata['user']['role'];
         </form>
     </div>
 </div>
-<!--MODAL JADWAL-->
+<!--MODAL CREATE JADWAL-->
 <div class="modal fade" id="modalJadwal" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <form id="formJadwal">
@@ -375,111 +370,109 @@ $role = $this->session->userdata['user']['role'];
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form id="formJadwal">
-                        <input class="input-id d-none" name="id"/>
-                        <table class="table">
-                            <tbody>
-                                <tr>
-                                    <td>Pasal</td>
-                                    <td>
-                                        <select name="pasal" class="form-control select-pasal-has-dokumen" required=""></select>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Judul Dokumen</td>
-                                    <td>
-                                        <input name="dokumen_id" class="input-dokumen-id d-none">
-                                        <select name="dokumen" class="form-control select-dokumen-pasal" required=""></select>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Keterangan</td>
-                                    <td>
-                                        <input name="desc" class="form-control">
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Distribusi</td>
-                                    <td>
-                                        <select name="dist[]" class="form-control select-personil-distribusi select-2 multiselect-dropdown" multiple="" style="width: 330px !important;"></select>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Penjadwalan</td>
-                                    <td></td>
-                                </tr>
-                                <tr>
-                                    <td id="tglMulaiJadwal">Tanggal</td>
-                                    <td>
-                                        <input class="form-control input-tanggal" name="tanggal[]" type="date" required="">
-                                    </td>
-                                </tr>
-                                <tr id="group-add-date" class="group-input-unrepeat d-none">
-                                    <td></td>
-                                    <td>
-                                        <div class="text-right mb-2">
-                                            <label>Tambah Tanggal</label>
-                                            <button type="button" class="btn btn-outline-primary fa fa-plus" onclick="tambahTanggal()"></button>
+                    <input class="input-id d-none" name="id"/>
+                    <table class="table">
+                        <tbody>
+                            <tr>
+                                <td>Pasal</td>
+                                <td>
+                                    <select name="pasal" class="form-control select-pasal-has-dokumen" required=""></select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Judul Dokumen</td>
+                                <td>
+                                    <input name="dokumen_id" class="input-dokumen-id d-none">
+                                    <select name="dokumen" class="form-control select-dokumen-pasal" required=""></select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Keterangan</td>
+                                <td>
+                                    <input name="desc" class="form-control">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Distribusi</td>
+                                <td>
+                                    <select name="dist[]" class="form-control select-personil-distribusi select-2 multiselect-dropdown" multiple="" style="width: 330px !important;"></select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Penjadwalan</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td id="tglMulaiJadwal">Tanggal</td>
+                                <td>
+                                    <input class="form-control input-jadwal" name="tanggal[]" required="">
+                                </td>
+                            </tr>
+                            <tr id="group-add-date" class="group-input-unrepeat d-none">
+                                <td></td>
+                                <td>
+                                    <div class="text-right mb-2">
+                                        <label>Tambah Tanggal</label>
+                                        <button type="button" class="btn btn-outline-primary fa fa-plus" onclick="tambahTanggal()"></button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Ulangi</td>
+                                <td>
+                                    <input class="radio-ulangi-jadwal" type="radio" name="ulangi" value="YA" required="">
+                                    <label>Ya</label>
+                                    <input class="radio-ulangi-jadwal" type="radio" name="ulangi" value="TIDAK">
+                                    <label>Tidak</label>
+                                </td>
+                            </tr>
+                            <tr class="group-input-repeat">
+                                <td></td>
+                                <td>
+                                    <div class="row group-input-hari">
+                                        <div class="col-sm-4">
+                                            <input type="checkbox" name="hari[]" value="SENIN">
+                                            <label for="vehicle1"> Senin</label>
                                         </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Ulangi</td>
-                                    <td>
-                                        <input class="radio-ulangi-jadwal" type="radio" name="ulangi" value="YA" required="">
-                                        <label>Ya</label>
-                                        <input class="radio-ulangi-jadwal" type="radio" name="ulangi" value="TIDAK">
-                                        <label>Tidak</label>
-                                    </td>
-                                </tr>
-                                <tr class="group-input-repeat">
-                                    <td></td>
-                                    <td>
-                                        <div class="row group-input-hari">
-                                            <div class="col-sm-4">
-                                                <input type="checkbox" name="hari[]" value="SENIN">
-                                                <label for="vehicle1"> Senin</label>
-                                            </div>
-                                            <div class="col-sm-4">
-                                                <input type="checkbox" name="hari[]" value="SELASA">
-                                                <label for="vehicle1"> Selasa</label>
-                                            </div>
-                                            <div class="col-sm-4">
-                                                <input type="checkbox" name="hari[]" value="RABU">
-                                                <label for="vehicle1"> Rabu</label>
-                                            </div>
+                                        <div class="col-sm-4">
+                                            <input type="checkbox" name="hari[]" value="SELASA">
+                                            <label for="vehicle1"> Selasa</label>
                                         </div>
-                                        <div class="row group-input-hari">
-                                            <div class="col-sm-4">
-                                                <input type="checkbox" name="hari[]" value="KAMIS">
-                                                <label for="vehicle1"> Kamis</label>
-                                            </div>
-                                            <div class="col-sm-4">
-                                                <input type="checkbox" name="hari[]" value="JUMAT">
-                                                <label for="vehicle1"> Jumat</label>
-                                            </div>
-                                            <div class="col-sm-4">
-                                                <input type="checkbox" name="hari[]" value="SABTU">
-                                                <label for="vehicle1"> Sabtu</label>
-                                            </div>
+                                        <div class="col-sm-4">
+                                            <input type="checkbox" name="hari[]" value="RABU">
+                                            <label for="vehicle1"> Rabu</label>
                                         </div>
-                                        <div class="row group-input-hari">
-                                            <div class="col-sm-4">
-                                                <input type="checkbox" name="hari[]" value="MINGGU">
-                                                <label for="vehicle1"> Minggu</label>
-                                            </div>
+                                    </div>
+                                    <div class="row group-input-hari">
+                                        <div class="col-sm-4">
+                                            <input type="checkbox" name="hari[]" value="KAMIS">
+                                            <label for="vehicle1"> Kamis</label>
                                         </div>
-                                    </td>
-                                </tr>
-                                <tr class="group-input-repeat">
-                                    <td>Tanggal Selesai</td>
-                                    <td>
-                                        <input class="form-control input-tanggal" name="tanggal_selesai" type="date" required="">
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </form>
+                                        <div class="col-sm-4">
+                                            <input type="checkbox" name="hari[]" value="JUMAT">
+                                            <label for="vehicle1"> Jumat</label>
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <input type="checkbox" name="hari[]" value="SABTU">
+                                            <label for="vehicle1"> Sabtu</label>
+                                        </div>
+                                    </div>
+                                    <div class="row group-input-hari">
+                                        <div class="col-sm-4">
+                                            <input type="checkbox" name="hari[]" value="MINGGU">
+                                            <label for="vehicle1"> Minggu</label>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr class="group-input-repeat">
+                                <td>Tanggal Selesai</td>
+                                <td>
+                                    <input class="form-control input-jadwal" name="tanggal_selesai" required="">
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
@@ -487,6 +480,26 @@ $role = $this->session->userdata['user']['role'];
                 </div>
             </div>
         </form>
+    </div>
+</div>
+<!--MODAL CREATE JADWAL-->
+<div class="modal fade" id="modalDetailJadwal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Detail Jadwal</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                DETAIL
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                <button type="submit" class="btn btn-primary">Simpan</button>
+            </div>
+        </div>
     </div>
 </div>
 <!--MODAL UPLOAD BUKTI-->
@@ -524,8 +537,8 @@ $role = $this->session->userdata['user']['role'];
                                         <label>File</label>
                                         <input class="radio-type-dokumen" type="radio" name="type_dokumen" value="URL">
                                         <label>Url</label>
-                                        <input class="form-control input-file d-none" type="file" class="form-control" name="dokumen" required="">
-                                        <input class="form-control input-url d-none" type="url" class="form-control" name="url" required="">
+                                        <input class="form-control input-file d-none" type="file" name="dokumen" required="">
+                                        <input class="form-control input-url d-none" type="url" name="url" required="">
                                     </td>
                                 </tr>
                             </tbody>
@@ -926,18 +939,13 @@ $role = $this->session->userdata['user']['role'];
     function getJadwal() {
         $.getJSON('<?php echo site_url($module); ?>/get_jadwal', {'perusahaan': perusahaan, 'standar': standar}, function (data) {
             sortJadwal = [];
-            for (var i = 0; i < data.length; i++) {
-                for (var j = 0; j < distribusi.length; j++) {
-                    if (data[i].id_distribusi == distribusi[j].id) {
-                        data[i].id_document = distribusi[j].id_document;
-                    }
-                }
-            }
             var pasal = '';
             var doc = '';
+            var n = 0;
             for (var i = 0; i < sortDokumen.length; i++) {
                 for (var j = 0; j < data.length; j++) {
                     if (sortDokumen[i].id == data[j].id_document) {
+                        data[j].index_dokumen = i;
                         var p = sortPasal[sortDokumen[i].index_pasal].fullname;
                         var d = sortDokumen[i].judul;
                         var dist = '';
@@ -950,31 +958,36 @@ $role = $this->session->userdata['user']['role'];
                         var control = '<button onclick="modalUploadBukti(' + j + ')" class="btn btn-sm btn-primary fa fa-upload"></button>';
                         var today = new Date().getTime();
                         var deadline = new Date(data[j].date).getTime();
+                        var detail = '<td><button class="btn btn-sm btn-primary fa fa-eye" title="Detail" onclick="detailJadwal(' + n + ')"></button></td>';
                         var days = ['minggu', 'senin', 'selasa', 'rabu', 'kamis', 'jumat', 'sabtu'];
+                        data[j].tgl = $.format.date(new Date(data[j].date), "dd-MMM-yyyy");
+                        data[j].tgl_selesai = $.format.date(new Date(data[j].date_end), "dd-MMM-yyyy");
                         if (data[j].repeat == 'YA') {
                             status = '<span class="badge badge-sm badge-secondary">Berkala</span>';
                             var tgl = new Date(data[j].date);
-                            var endDate = new Date(data[j].date_end)
+                            var endDate = new Date(data[j].date_end);
                             while (tgl.getTime() <= endDate.getTime()) {
                                 if (data[j][days[tgl.getDay()]] == 'YA') {
                                     var txtDate = tgl.getFullYear() + '-' + ('0' + (tgl.getMonth() + 1)).slice(-2) + '-' + ('0' + tgl.getDate()).slice(-2);
                                     var stat = getStatusUpload(txtDate);
-                                    txtDate = '<td>'+txtDate+'</td>';
-                                    $('#table-jadwal').append('<tr>' + row + txtDate + dist + '</tr>');
+                                    txtDate = $.format.date(tgl, "dd-MMM-yyyy");
+                                    txtDate = '<td>' + txtDate + '</td>';
+                                    $('#table-jadwal').append('<tr>' + row + txtDate + dist + detail + '</tr>');
                                     $('#table-implementasi').append('<tr>' + row + txtDate + dist + '<td>' + (stat.status ? control : '') + '</td><td class="text-center">' + stat.badge + '</td></tr>');
                                 }
                                 tgl.setDate(tgl.getDate() + 1);
                             }
                         } else if (data[j].repeat == 'TIDAK') {
-                            $('#table-jadwal').append('<tr>' + row + '<td>' + data[j].date + '</td>' + dist + '</tr>');
+                            $('#table-jadwal').append('<tr>' + row + '<td>' + data[j].tgl + '</td>' + dist + detail + '</tr>');
                             var stat = getStatusUpload(data[j].date);
-                            $('#table-implementasi').append('<tr>' + row + '<td>' + data[j].date + '</td>' + dist + '<td>' + (stat.status ? control : '') + '</td><td class="text-center">' + stat.badge + '</td></tr>');
+                            $('#table-implementasi').append('<tr>' + row + '<td>' + data[j].tgl + '</td>' + dist + '<td>' + (stat.status ? control : '') + '</td><td class="text-center">' + stat.badge + '</td></tr>');
                         }
 //                        $('#table-implementasi').append('<tr>' + row + '<td>' + control + '</td><td class="text-center">' + status + '</td></tr>');
 //                        if (pasal != p)
 //                            pasal = p;
 //                        if (doc != d)
 //                            doc = d;
+                        n++;
                         sortJadwal.push(data[j]);
                     }
                 }
@@ -1036,16 +1049,17 @@ $role = $this->session->userdata['user']['role'];
     }
     function tambahTanggal() {
         $('<tr class="addictional-date group-input-unrepeat"><td><button type="button" class="btn btn-sm btn-danger fa fa-trash" onclick="hapusJadwal(this)"></button></td><td>' +
-                '<input class="form-control input-tanggal" name="tanggal[]" type="date" required="">' +
+                '<input class="form-control input-jadwal" name="tanggal[]" required="">' +
                 '</td></tr>').insertBefore('#group-add-date');
+        $('.input-jadwal').datepicker({
+            format: 'dd-mm-yyyy',
+            startDate: new Date(),
+            autoclose: true,
+        });
     }
     function hapusJadwal(item) {
         $(item).parents('tr').remove();
     }
-//    function jadwal(index, mode) {
-//        var l = listJadwal[index];
-//        var m = $('#modalJadwal');
-//        m.modal('show');
 //        m.find('.input-id').val(l.id);
 //        m.find('.input-pasal').val(sortPasal[l.id_pasal].fullname);
 //        m.find('.input-judul').val(dokumen[l.id_doc].judul);
@@ -1114,6 +1128,41 @@ $role = $this->session->userdata['user']['role'];
             $('.radio-ulangi-jadwal[value=TIDAK]').click();
         });
     });
+    function detailJadwal(index) {
+        var jadwal = sortJadwal[index];
+        var m = $('#modalDetailJadwal');
+        m.modal('show');
+        m.find('.modal-body').empty();
+        var data = {
+            Dokumen: sortDokumen[jadwal.index_dokumen].judul,
+            Keterangan: jadwal.desc == "" ? '-' : jadwal.desc,
+            Ulangi: jadwal.repeat,
+        };
+        if (jadwal.repeat == 'YA') {
+            var hari = ['senin', 'selasa', 'rabu', 'kamis', 'jumat', 'sabtu', 'minggu'];
+            var txtHari = '';
+            for (var h of hari) {
+                var c = '';
+                if (jadwal[h] == 'YA') {
+                    c = 'success';
+                } else {
+                    c = 'secondary';
+                }
+                txtHari += '<span class="badge badge-' + c + '">' + h + '</span>&nbsp&nbsp';
+            }
+            data.Ulangi = '<span class="badge badge-success">YA</span>';
+            data['Tanggal Mulai'] = jadwal.tgl;
+            data['Tanggal Selesai'] = jadwal.tgl_selesai;
+            data.Hari = txtHari;
+        } else {
+            data.Ulangi = '<span class="badge badge-secondary">TIDAK</span>';
+            data.Tanggal = jadwal.tgl;
+        }
+        for (var key in data) {
+            m.find('.modal-body').append('<div class="row"><div class="col-sm-3"><label>' + key + '</label></div><div class="col-sm-9">' + data[key] + '</div></div>');
+        }
+        console.log(txtHari);
+    }
     function modalUploadBukti(index) {
         var l = listJadwal[index];
         var m = $('#modalUploadBukti');
