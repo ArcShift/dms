@@ -958,9 +958,9 @@ $role = $this->session->userdata['user']['role'];
                             while (tgl.getTime() <= endDate.getTime()) {
                                 if (data[j][days[tgl.getDay()]] == 'YA') {
                                     var txtDate = tgl.getFullYear() + '-' + ('0' + (tgl.getMonth() + 1)).slice(-2) + '-' + ('0' + tgl.getDate()).slice(-2);
-                                    $('#table-jadwal').append('<tr>' + row + txtDate + dist + '</tr>');
                                     var stat = getStatusUpload(txtDate);
                                     txtDate = '<td>'+txtDate+'</td>';
+                                    $('#table-jadwal').append('<tr>' + row + txtDate + dist + '</tr>');
                                     $('#table-implementasi').append('<tr>' + row + txtDate + dist + '<td>' + (stat.status ? control : '') + '</td><td class="text-center">' + stat.badge + '</td></tr>');
                                 }
                                 tgl.setDate(tgl.getDate() + 1);
