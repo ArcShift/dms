@@ -482,7 +482,7 @@ $role = $this->session->userdata['user']['role'];
         </form>
     </div>
 </div>
-<!--MODAL CREATE JADWAL-->
+<!--MODAL DETAIL JADWAL-->
 <div class="modal fade" id="modalDetailJadwal" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -496,10 +496,75 @@ $role = $this->session->userdata['user']['role'];
                 DETAIL
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-                <button type="submit" class="btn btn-primary">Simpan</button>
+                <button type="submit" class="btn btn-primary" data-dismiss="modal">Tutup</button>
             </div>
         </div>
+    </div>
+</div>
+<!--MODAL EDIT JADWAL-->
+<div class="modal fade" id="modalEditJadwal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <form id="formEditJadwal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Edit Jadwal</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <input class="input-id d-none" name="id"/>
+                    <table class="table">
+                        <tbody>
+                            <tr>
+                                <td>Pasal</td>
+                                <td>
+                                    <span class="form-control text-pasal"></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Judul Dokumen</td>
+                                <td>
+                                    <span class="form-control text-dokumen"></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Keterangan</td>
+                                <td>
+                                    <input name="desc" class="form-control input-keterangan">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Distribusi</td>
+                                <td>
+                                    <select name="dist[]" class="form-control select-personil-distribusi select-2 multiselect-dropdown" multiple="" style="width: 330px !important;"></select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Penjadwalan</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td id="tglMulaiJadwal">Tanggal</td>
+                                <td>
+                                    <input class="form-control input-jadwal input-tanggal-mulai" name="tanggal[]" required="">
+                                </td>
+                            </tr>
+                            <tr class="group-input-repeat">
+                                <td>Tanggal Selesai</td>
+                                <td>
+                                    <input class="form-control input-jadwal input-tanggal-selesai" name="tanggal_selesai" required="">
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-primary">Simpan</button>
+                </div>
+            </div>
+        </form>
     </div>
 </div>
 <!--MODAL UPLOAD BUKTI-->
@@ -958,7 +1023,7 @@ $role = $this->session->userdata['user']['role'];
                         var control = '<button onclick="modalUploadBukti(' + j + ')" class="btn btn-sm btn-primary fa fa-upload"></button>';
                         var today = new Date().getTime();
                         var deadline = new Date(data[j].date).getTime();
-                        var detail = '<td><button class="btn btn-sm btn-primary fa fa-eye" title="Detail" onclick="detailJadwal(' + n + ')"></button></td>';
+                        var detail = '<td><button class="btn btn-sm btn-primary fa fa-info-circle" title="Detail" onclick="detailJadwal(' + n + ')"></button>&nbsp<button class="btn btn-sm btn-primary fa fa-edit" title="Detail" onclick="editJadwal(' + n + ')"></button></td>';
                         var days = ['minggu', 'senin', 'selasa', 'rabu', 'kamis', 'jumat', 'sabtu'];
                         data[j].tgl = $.format.date(new Date(data[j].date), "dd-MMM-yyyy");
                         data[j].tgl_selesai = $.format.date(new Date(data[j].date_end), "dd-MMM-yyyy");
@@ -1060,29 +1125,6 @@ $role = $this->session->userdata['user']['role'];
     function hapusJadwal(item) {
         $(item).parents('tr').remove();
     }
-//        m.find('.input-id').val(l.id);
-//        m.find('.input-pasal').val(sortPasal[l.id_pasal].fullname);
-//        m.find('.input-judul').val(dokumen[l.id_doc].judul);
-//        m.find('.input-tanggal').val(distribusi[index].date);
-//        m.find('.radio-ulangi-jadwal[value="' + distribusi[index].repeat + '"]').prop('checked', true);
-//        var harian = ['senin', 'selasa', 'rabu', 'kamis', 'jumat', 'sabtu', 'minggu'];
-//        for (var item of harian) {
-//            var status = distribusi[index][item];
-//            if (status == 'YA') {
-//                m.find('input[type=checkbox][value=' + item.toUpperCase() + ']').prop('checked', true);
-//            } else {
-//                m.find('input[type=checkbox][value=' + item.toUpperCase() + ']').prop('checked', false);
-//            }
-//        }
-//        if (mode == 'create') {
-//            m.find('.modal-footer').removeClass('d-none');
-////            m.find('.input-tanggal, .input-hari').prop('disable', true);
-//        } else {
-//            m.find('.input-tanggal').val(distribusi[index].date);
-//            m.find('input').prop('disable', true);
-//            m.find('.modal-footer').addClass('d-none');
-//        }
-//    }
     $('.select-pasal-has-dokumen').change(function () {
         var index = $(this).val();
         $('.select-dokumen-pasal').empty();
@@ -1162,6 +1204,30 @@ $role = $this->session->userdata['user']['role'];
             m.find('.modal-body').append('<div class="row"><div class="col-sm-3"><label>' + key + '</label></div><div class="col-sm-9">' + data[key] + '</div></div>');
         }
         console.log(txtHari);
+    }
+    function editJadwal(index) {
+        var jd = sortJadwal[index];
+        var doc = sortDokumen[jd.index_dokumen];
+        console.log(jd);
+        var m = $('#modalEditJadwal');
+        m.modal('show');
+        m.find('.text-pasal').text(sortPasal[doc.index_pasal].fullname);
+        m.find('.text-dokumen').text(doc.judul);
+        m.find('.input-keterangan').val(jd.desc);
+        m.find('.input-keterangan').val(jd.desc);
+        m.find('.select-personil-distribusi').empty();
+        for (var i = 0; i < doc.distribusi.length; i++) {
+            m.find('.select-personil-distribusi').append(new Option(doc.user_distribusi[i], doc.personil_distribusi_id[i], true, true)).trigger('change');
+        }
+        m.find('.select-personil-distribusi').val(jd.personil_id).trigger('change');
+//        m.find('.select-personil-distribusi').val(jd.personil_id);
+        m.find('.input-tanggal-mulai').val($.format.date(new Date(jd.date), "dd-MM-yyyy"));
+        if (jd.repeat == 'YA') {
+            m.find('.group-input-repeat').removeClass('d-none');
+            m.find('.input-tanggal-selesai').val($.format.date(new Date(jd.date_end), "dd-MM-yyyy"));
+        } else {
+            m.find('.group-input-repeat').addClass('d-none');
+        }
     }
     function modalUploadBukti(index) {
         var l = listJadwal[index];
