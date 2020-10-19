@@ -195,11 +195,6 @@ class M_treeview_detail extends CI_Model {
         return $result;
     }
 
-    function getJadwal2() {
-        $this->db->group_by(['j.id_document', 'j.jadwal']);
-        return $this->db->get('jadwal j')->result_array();
-    }
-
     function create_jadwal() {
         $data = [];
         $data['repeat'] = $this->input->post('ulangi');
@@ -216,13 +211,13 @@ class M_treeview_detail extends CI_Model {
                 }
                 $data[$d] = $dy;
             }
-            $data['date'] = $this->input->post('tanggal')[0];
-            $data['date_end'] = $this->input->post('tanggal_selesai');
+            $data['date'] = date("Y-m-d", strtotime($this->input->post('tanggal')[0]));
+            $data['date_end'] = date("Y-m-d", strtotime($this->input->post('tanggal_selesai')));
             $this->db->insert('jadwal', $data);
             $this->insert_personil_jadwal($this->db->insert_id());
         } else if ($this->input->post('ulangi') == 'TIDAK') {
             foreach ($this->input->post('tanggal') as $tgl) {
-                $data['date'] = $tgl;
+                $data['date'] = date("Y-m-d", strtotime($tgl));
                 $this->db->insert('jadwal', $data);
                 $this->insert_personil_jadwal($this->db->insert_id());
             }
@@ -239,6 +234,18 @@ class M_treeview_detail extends CI_Model {
             }
         }
         return true;
+    }
+
+    function update_jadwal() {
+        $this->db->where('id', $this->input->post('id'));
+        $data = $this->db->get('jadwal')->row_array();
+        $this->db->set('desc', $this->input->post('desc'));
+        $this->db->set('date', date("Y-m-d", strtotime($this->input->post('tanggal')[0])));
+        if ($data['repeat'] == 'YA') {
+            $this->db->set('date_end', date("Y-m-d", strtotime($this->input->post('tanggal_selesai'))));
+        }
+        $this->db->where('id', $this->input->post('id'));
+        return $this->db->update('jadwal');
     }
 
     function upload_bukti() {

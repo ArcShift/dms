@@ -119,20 +119,29 @@ class Treeview_detail extends MY_Controller {
             echo 'error';
         }
     }
+
     function get_jadwal() {
         if (!$this->input->is_ajax_request()) {
             redirect('404');
         }
         echo json_encode($this->model->getJadwal());
     }
+
     function set_jadwal() {
         if ($this->model->create_jadwal()) {
+            echo '<br/>success';
+        } else {
+            echo 'error';
+        }
+    }
+    function edit_jadwal() {
+        if ($this->model->update_jadwal()) {
+            echo $this->db->last_query();
             echo 'success';
         } else {
             echo 'error';
         }
     }
-
     function upload_bukti() {
         if (!$this->input->is_ajax_request()) {
             redirect('404');

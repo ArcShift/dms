@@ -1062,7 +1062,6 @@ $role = $this->session->userdata['user']['role'];
     function getStatusUpload(date) {
         var badge = '';
         var status = true;
-        console.log(date);
         if (new Date(date).getTime() >= new Date().getTime()) {
             //belum diupload - aktif
             badge = '<span class="badge badge-sm badge-warning">Pending</span>';
@@ -1203,14 +1202,13 @@ $role = $this->session->userdata['user']['role'];
         for (var key in data) {
             m.find('.modal-body').append('<div class="row"><div class="col-sm-3"><label>' + key + '</label></div><div class="col-sm-9">' + data[key] + '</div></div>');
         }
-        console.log(txtHari);
     }
     function editJadwal(index) {
         var jd = sortJadwal[index];
         var doc = sortDokumen[jd.index_dokumen];
-        console.log(jd);
         var m = $('#modalEditJadwal');
         m.modal('show');
+        m.find('.input-id').val(jd.id);
         m.find('.text-pasal').text(sortPasal[doc.index_pasal].fullname);
         m.find('.text-dokumen').text(doc.judul);
         m.find('.input-keterangan').val(jd.desc);
@@ -1229,6 +1227,13 @@ $role = $this->session->userdata['user']['role'];
             m.find('.group-input-repeat').addClass('d-none');
         }
     }
+    $('#formEditJadwal').submit(function (e) {
+        e.preventDefault();
+        $.post('<?php echo site_url($module); ?>/edit_jadwal', $(this).serialize(), function (data) {
+            getDistribusi();
+            $('#modalEditJadwal').modal('hide');
+        });
+    });
     function modalUploadBukti(index) {
         var l = listJadwal[index];
         var m = $('#modalUploadBukti');
