@@ -9,6 +9,12 @@ class Treeview_detail extends MY_Controller {
         $this->load->model('m_treeview_detail', 'model');
     }
 
+    private function ajax_request() {
+        if (!$this->input->is_ajax_request()) {
+            redirect('404');
+        }
+    }
+
     function index() {
         $this->load->model('m_company');
         $this->data['company'] = $this->m_company->get();
@@ -16,44 +22,32 @@ class Treeview_detail extends MY_Controller {
     }
 
     function standard() {
-        if (!$this->input->is_ajax_request()) {
-            redirect('404');
-        }
+        $this->ajax_request();
         echo json_encode($this->model->standard());
     }
 
     function anggota() {
-        if (!$this->input->is_ajax_request()) {
-            redirect('404');
-        }
+        $this->ajax_request();
         echo json_encode($this->model->member());
     }
 
     function personil() {
-        if (!$this->input->is_ajax_request()) {
-            redirect('404');
-        }
+        $this->ajax_request();
         echo json_encode($this->model->personil());
     }
 
     function pasal() {
-        if (!$this->input->is_ajax_request()) {
-            redirect('404');
-        }
+        $this->ajax_request();
         echo json_encode($this->model->pasal());
     }
 
     function unit_kerja() {
-        if (!$this->input->is_ajax_request()) {
-            redirect('404');
-        }
+        $this->ajax_request();
         echo json_encode($this->model->unit_kerja());
     }
 
     function create_dokumen() {
-        if (!$this->input->is_ajax_request()) {
-            redirect('404');
-        }
+        $this->ajax_request();
         $this->load->library('form_validation');
         $this->form_validation->set_rules('pasal', 'Pasal', 'required');
         $this->form_validation->set_rules('nomor', 'Nomor', 'required');
@@ -83,16 +77,12 @@ class Treeview_detail extends MY_Controller {
     }
 
     function get_dokumen() {
-        if (!$this->input->is_ajax_request()) {
-            redirect('404');
-        }
+        $this->ajax_request();
         echo json_encode($this->model->read_document());
     }
 
     function hapus_dokumen() {
-        if (!$this->input->is_ajax_request()) {
-            redirect('404');
-        }
+        $this->ajax_request();
         if ($this->model->delete_document()) {
             $result['status'] = 'success';
         }
@@ -100,10 +90,12 @@ class Treeview_detail extends MY_Controller {
     }
 
     function get_distribusi() {
+        $this->ajax_request();
         echo json_encode($this->model->read_distribusi());
     }
 
     function set_distribusi() {
+        $this->ajax_request();
         if ($this->model->insert_distribusi()) {
             echo 'success';
         } else {
@@ -113,6 +105,7 @@ class Treeview_detail extends MY_Controller {
     }
 
     function delete_distribusi() {
+        $this->ajax_request();
         if ($this->model->delete_distribusi()) {
             echo 'success';
         } else {
@@ -121,31 +114,44 @@ class Treeview_detail extends MY_Controller {
     }
 
     function get_jadwal() {
-        if (!$this->input->is_ajax_request()) {
-            redirect('404');
-        }
+        $this->ajax_request();
         echo json_encode($this->model->getJadwal());
     }
 
-    function set_jadwal() {
-        if ($this->model->create_jadwal()) {
-            echo '<br/>success';
-        } else {
-            echo 'error';
-        }
+    function get_implementasi() {
+        $this->ajax_request();
+        echo json_encode($this->model->getImplementasi());
     }
-    function edit_jadwal() {
-        if ($this->model->update_jadwal()) {
-            echo $this->db->last_query();
+
+    function set_jadwal() {
+        $this->ajax_request();
+        if ($this->model->insert_jadwal()) {
             echo 'success';
         } else {
             echo 'error';
         }
     }
-    function upload_bukti() {
-        if (!$this->input->is_ajax_request()) {
-            redirect('404');
+
+    function edit_jadwal() {
+        $this->ajax_request();
+        if ($this->model->update_jadwal()) {
+            echo 'success';
+        } else {
+            echo 'error';
         }
+    }
+
+    function hapus_jadwal() {
+        $this->ajax_request();
+        if ($this->model->deleteJadwal()) {
+            echo 'success';
+        } else {
+            echo 'error';
+        }
+    }
+
+    function upload_bukti() {
+        $this->ajax_request();
         //TODO: form validation
         $step = true;
         if ($this->input->post('type_dokumen') == 'FILE') {

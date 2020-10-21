@@ -496,7 +496,8 @@ $role = $this->session->userdata['user']['role'];
                 DETAIL
             </div>
             <div class="modal-footer">
-                <button type="submit" class="btn btn-primary" data-dismiss="modal">Tutup</button>
+                <button type="submit" class="btn btn-primary btn-batal" data-dismiss="modal">Tutup</button>
+                <button type="submit" class="btn btn-danger btn-hapus" onclick="hapusJadwal()">Hapus</button>
             </div>
         </div>
     </div>
@@ -565,6 +566,35 @@ $role = $this->session->userdata['user']['role'];
                 </div>
             </div>
         </form>
+    </div>
+</div>
+<!--MODAL DELETE JADWAL-->
+<div class="modal fade" id="modalHapusJadwal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Hapus Jadwal</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body modal-message">
+                <table class="table">
+                    <tr>
+                        <td>Judul</td>
+                        <td class="text-judul"></td>
+                    </tr>
+                    <tr>
+                        <td>Tanggal</td>
+                        <td class="text-tanggal"></td>
+                    </tr>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" data-dismiss="modal">Batal</button>
+                <button class="btn btn-danger" onclick="hapusJadwal()">Hapus</button>
+            </div>
+        </div>
     </div>
 </div>
 <!--MODAL UPLOAD BUKTI-->
@@ -1011,49 +1041,83 @@ $role = $this->session->userdata['user']['role'];
                 for (var j = 0; j < data.length; j++) {
                     if (sortDokumen[i].id == data[j].id_document) {
                         data[j].index_dokumen = i;
-                        var p = sortPasal[sortDokumen[i].index_pasal].fullname;
-                        var d = sortDokumen[i].judul;
-                        var dist = '';
-                        for (var k = 0; k < data[j].personil_name.length; k++) {
-                            dist += '<div>' + data[j].personil_name[k] + '</div>';
-                        }
-                        dist = '<td>' + dist + '</td>';
-                        var row = '<td>' + (pasal == p ? '' : p) + '</td><td>' + (doc == d ? '' : d) + '</td>';
-                        var status = '-';
-                        var control = '<button onclick="modalUploadBukti(' + j + ')" class="btn btn-sm btn-primary fa fa-upload"></button>';
-                        var today = new Date().getTime();
-                        var deadline = new Date(data[j].date).getTime();
-                        var detail = '<td><button class="btn btn-sm btn-primary fa fa-info-circle" title="Detail" onclick="detailJadwal(' + n + ')"></button>&nbsp<button class="btn btn-sm btn-primary fa fa-edit" title="Detail" onclick="editJadwal(' + n + ')"></button></td>';
-                        var days = ['minggu', 'senin', 'selasa', 'rabu', 'kamis', 'jumat', 'sabtu'];
-                        data[j].tgl = $.format.date(new Date(data[j].date), "dd-MMM-yyyy");
-                        data[j].tgl_selesai = $.format.date(new Date(data[j].date_end), "dd-MMM-yyyy");
-                        if (data[j].repeat == 'YA') {
-                            status = '<span class="badge badge-sm badge-secondary">Berkala</span>';
-                            var tgl = new Date(data[j].date);
-                            var endDate = new Date(data[j].date_end);
-                            while (tgl.getTime() <= endDate.getTime()) {
-                                if (data[j][days[tgl.getDay()]] == 'YA') {
-                                    var txtDate = tgl.getFullYear() + '-' + ('0' + (tgl.getMonth() + 1)).slice(-2) + '-' + ('0' + tgl.getDate()).slice(-2);
-                                    var stat = getStatusUpload(txtDate);
-                                    txtDate = $.format.date(tgl, "dd-MMM-yyyy");
-                                    txtDate = '<td>' + txtDate + '</td>';
-                                    $('#table-jadwal').append('<tr>' + row + txtDate + dist + detail + '</tr>');
-                                    $('#table-implementasi').append('<tr>' + row + txtDate + dist + '<td>' + (stat.status ? control : '') + '</td><td class="text-center">' + stat.badge + '</td></tr>');
-                                }
-                                tgl.setDate(tgl.getDate() + 1);
-                            }
-                        } else if (data[j].repeat == 'TIDAK') {
-                            $('#table-jadwal').append('<tr>' + row + '<td>' + data[j].tgl + '</td>' + dist + detail + '</tr>');
-                            var stat = getStatusUpload(data[j].date);
-                            $('#table-implementasi').append('<tr>' + row + '<td>' + data[j].tgl + '</td>' + dist + '<td>' + (stat.status ? control : '') + '</td><td class="text-center">' + stat.badge + '</td></tr>');
-                        }
-//                        $('#table-implementasi').append('<tr>' + row + '<td>' + control + '</td><td class="text-center">' + status + '</td></tr>');
-//                        if (pasal != p)
-//                            pasal = p;
-//                        if (doc != d)
-//                            doc = d;
-                        n++;
+//                        var p = sortPasal[sortDokumen[i].index_pasal].fullname;
+//                        var d = sortDokumen[i].judul;
+//                        var dist = '';
+//                        for (var k = 0; k < data[j].personil_name.length; k++) {
+//                            dist += '<div>' + data[j].personil_name[k] + '</div>';
+//                        }
+//                        dist = '<td>' + dist + '</td>';
+//                        var row = '<td>' + (pasal == p ? '' : p) + '</td><td>' + (doc == d ? '' : d) + '</td>';
+//                        var status = '-';
+//                        var control = '<button onclick="modalUploadBukti(' + j + ')" class="btn btn-sm btn-primary fa fa-upload"></button>';
+//                        var today = new Date().getTime();
+//                        var deadline = new Date(data[j].date).getTime();
+//                        var aksi = '<td><button class="btn btn-sm btn-primary fa fa-info-circle" title="Detail" onclick="detailJadwal(' + n + ')"></button>&nbsp<button class="btn btn-sm btn-primary fa fa-edit" title="Detail" onclick="editJadwal(' + n + ')"></button>&nbsp<button class="btn btn-sm btn-danger fa fa-trash" title="Hapus" onclick="hapusJadwal(' + n + ')"></button></td>';
+//                        var days = ['minggu', 'senin', 'selasa', 'rabu', 'kamis', 'jumat', 'sabtu'];
+//                        data[j].tgl = $.format.date(new Date(data[j].date), "dd-MMM-yyyy");
+//                        data[j].tgl_selesai = $.format.date(new Date(data[j].date_end), "dd-MMM-yyyy");
+//                        if (data[j].repeat == 'YA') {
+//                            status = '<span class="badge badge-sm badge-secondary">Berkala</span>';
+//                            var tgl = new Date(data[j].date);
+//                            var endDate = new Date(data[j].date_end);
+//                            while (tgl.getTime() <= endDate.getTime()) {
+//                                if (data[j][days[tgl.getDay()]] == 'YA') {
+//                                    var txtDate = tgl.getFullYear() + '-' + ('0' + (tgl.getMonth() + 1)).slice(-2) + '-' + ('0' + tgl.getDate()).slice(-2);
+//                                    var stat = getStatusUpload(txtDate);
+//                                    txtDate = $.format.date(tgl, "dd-MMM-yyyy");
+//                                    txtDate = '<td>' + txtDate + '</td>';
+//                                    $('#table-jadwal').append('<tr>' + row + txtDate + dist + aksi + '</tr>');
+//                                    $('#table-implementasi').append('<tr>' + row + txtDate + dist + '<td>' + (stat.status ? control : '') + '</td><td class="text-center">' + stat.badge + '</td></tr>');
+//                                }
+//                                tgl.setDate(tgl.getDate() + 1);
+//                            }
+//                        } else if (data[j].repeat == 'TIDAK') {
+//                            $('#table-jadwal').append('<tr>' + row + '<td>' + data[j].tgl + '</td>' + dist + aksi + '</tr>');
+//                            var stat = getStatusUpload(data[j].date);
+//                            $('#table-implementasi').append('<tr>' + row + '<td>' + data[j].tgl + '</td>' + dist + '<td>' + (stat.status ? control : '') + '</td><td class="text-center">' + stat.badge + '</td></tr>');
+//                        }
+////                        $('#table-implementasi').append('<tr>' + row + '<td>' + control + '</td><td class="text-center">' + status + '</td></tr>');
+////                        if (pasal != p)
+////                            pasal = p;
+////                        if (doc != d)
+////                            doc = d;
+//                        n++;
                         sortJadwal.push(data[j]);
+                    }
+                }
+            }
+            getImplementasi();
+        });
+    }
+    function getImplementasi() {
+        $.getJSON('<?php echo site_url($module); ?>/get_implementasi', null, function (data) {
+            sortImplementasi = [];
+            $('#table-jadwal').empty();
+            var n = 0;
+            for (var i = 0; i < sortJadwal.length; i++) {
+                for (var j = 0; j < data.length; j++) {
+                    if (data[j].id_jadwal == sortJadwal[i].id) {
+                        data[j].index_jadwal = i;
+                        var personil = '';
+                        for (var k = 0; k < data[j].personil_id.length; k++) {
+                            if (data[j].personil_id != '') {
+                                personil += '<div><span class="text-danger fa fa-trash" title="Hapus"></span>&nbsp' + data[j].personil_name[k] + '</div>';
+                            }
+                        }
+                        $('#table-jadwal').append('<tr>'
+                                + '<td>' + sortPasal[sortDokumen[sortJadwal[i].index_dokumen].index_pasal].fullname + '</td>'
+                                + '<td>' + sortDokumen[sortJadwal[i].index_dokumen].judul + '</td>'
+                                + '<td>' + $.format.date(new Date(data[j].date_jadwal), "dd-MMM-yyyy") + '</td>'
+                                + '<td>' + personil + '</td>'
+                                + '<td>'
+                                + '<span class="btn btn-sm btn-primary fa fa-info-circle title="Detail" onclick="detailJadwal(' + n + ')"></span>&nbsp'
+                                + '<span class="btn btn-sm btn-primary fa fa-edit"></span>&nbsp'
+                                + '<span class="btn btn-sm btn-danger fa fa-trash" title="Hapus" onclick="initHapusJadwal(' + n + ')"></span>'
+                                + '</td>'
+                                + '</tr>');
+                        n++;
+                        sortImplementasi.push(data[j]);
                     }
                 }
             }
@@ -1112,7 +1176,7 @@ $role = $this->session->userdata['user']['role'];
         m.modal('show');
     }
     function tambahTanggal() {
-        $('<tr class="addictional-date group-input-unrepeat"><td><button type="button" class="btn btn-sm btn-danger fa fa-trash" onclick="hapusJadwal(this)"></button></td><td>' +
+        $('<tr class="addictional-date group-input-unrepeat"><td><button type="button" class="btn btn-sm btn-danger fa fa-trash" onclick="hapusTanggalJadwal(this)"></button></td><td>' +
                 '<input class="form-control input-jadwal" name="tanggal[]" required="">' +
                 '</td></tr>').insertBefore('#group-add-date');
         $('.input-jadwal').datepicker({
@@ -1121,7 +1185,7 @@ $role = $this->session->userdata['user']['role'];
             autoclose: true,
         });
     }
-    function hapusJadwal(item) {
+    function hapusTanggalJadwal(item) {
         $(item).parents('tr').remove();
     }
     $('.select-pasal-has-dokumen').change(function () {
@@ -1149,12 +1213,12 @@ $role = $this->session->userdata['user']['role'];
         if (ulangi === 'YA') {
             $('.group-input-repeat').removeClass('d-none');
             $('.group-input-unrepeat').addClass('d-none');
-            $('input[name=tanggal_selesai]').attr('required');
+            $('input[name=tanggal_selesai]').prop('required', true);
             $('#tglMulaiJadwal').text('Tanggal Mulai');
         } else if (ulangi === 'TIDAK') {
             $('.group-input-repeat').addClass('d-none');
             $('.group-input-unrepeat').removeClass('d-none');
-            $('input[name=tanggal_selesai]').removeAttr('required');
+            $('input[name=tanggal_selesai]').prop('required', false);
             $('#tglMulaiJadwal').text('Tanggal');
         }
     });
@@ -1170,13 +1234,18 @@ $role = $this->session->userdata['user']['role'];
         });
     });
     function detailJadwal(index) {
-        var jadwal = sortJadwal[index];
+        var imp = sortImplementasi[index];
+        var jadwal = sortJadwal[imp.index_jadwal];
         var m = $('#modalDetailJadwal');
         m.modal('show');
+        m.find('.modal-title').text('Detail Jadwal');
+        m.find('.btn-batal').text('Tutup');
+        m.find('.btn-hapus').addClass('d-none');
         m.find('.modal-body').empty();
         var data = {
             Dokumen: sortDokumen[jadwal.index_dokumen].judul,
-            Keterangan: jadwal.desc == "" ? '-' : jadwal.desc,
+            Keterangan: imp.desc == "" ? '-' : imp.desc,
+            'Tanggal Implementasi': imp.date_jadwal,
             Ulangi: jadwal.repeat,
         };
         if (jadwal.repeat == 'YA') {
@@ -1192,15 +1261,14 @@ $role = $this->session->userdata['user']['role'];
                 txtHari += '<span class="badge badge-' + c + '">' + h + '</span>&nbsp&nbsp';
             }
             data.Ulangi = '<span class="badge badge-success">YA</span>';
-            data['Tanggal Mulai'] = jadwal.tgl;
-            data['Tanggal Selesai'] = jadwal.tgl_selesai;
+            data['Tanggal Mulai'] = jadwal.start_date;
+            data['Tanggal Selesai'] = jadwal.end_date;
             data.Hari = txtHari;
         } else {
             data.Ulangi = '<span class="badge badge-secondary">TIDAK</span>';
-            data.Tanggal = jadwal.tgl;
         }
         for (var key in data) {
-            m.find('.modal-body').append('<div class="row"><div class="col-sm-3"><label>' + key + '</label></div><div class="col-sm-9">' + data[key] + '</div></div>');
+            m.find('.modal-body').append('<div class="row"><div class="col-sm-4"><label>' + key + '</label></div><div class="col-sm-8">' + data[key] + '</div></div>');
         }
     }
     function editJadwal(index) {
@@ -1234,6 +1302,20 @@ $role = $this->session->userdata['user']['role'];
             $('#modalEditJadwal').modal('hide');
         });
     });
+    function initHapusJadwal(index) {
+        deleteIndex = index;
+        detailJadwal(index);
+        var m = $('#modalDetailJadwal');
+        m.find('.modal-title').text('Hapus Jadwal');
+        m.find('.btn-batal').text('Batal');
+        m.find('.btn-hapus').removeClass('d-none');
+    }
+    function hapusJadwal() {
+        $.post('<?php echo site_url($module); ?>/hapus_jadwal', {id: sortImplementasi[deleteIndex].id}, function (data) {
+            $('#modalDetailJadwal').modal('hide');
+            getJadwal();
+        });
+    }
     function modalUploadBukti(index) {
         var l = listJadwal[index];
         var m = $('#modalUploadBukti');
