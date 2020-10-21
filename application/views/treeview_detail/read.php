@@ -520,13 +520,13 @@ $role = $this->session->userdata['user']['role'];
                             <tr>
                                 <td>Pasal</td>
                                 <td>
-                                    <span class="form-control text-pasal"></span>
+                                    <input class="form-control input-pasal" disabled="">
                                 </td>
                             </tr>
                             <tr>
                                 <td>Judul Dokumen</td>
                                 <td>
-                                    <span class="form-control text-dokumen"></span>
+                                    <input class="form-control input-dokumen" disabled="">
                                 </td>
                             </tr>
                             <tr>
@@ -536,25 +536,15 @@ $role = $this->session->userdata['user']['role'];
                                 </td>
                             </tr>
                             <tr>
+                                <td>Tanggal</td>
+                                <td>
+                                    <input class="form-control input-jadwal input-tanggal-jadwal" name="tanggal" required="">
+                                </td>
+                            </tr>
+                            <tr>
                                 <td>Distribusi</td>
                                 <td>
                                     <select name="dist[]" class="form-control select-personil-distribusi select-2 multiselect-dropdown" multiple="" style="width: 330px !important;"></select>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Penjadwalan</td>
-                                <td></td>
-                            </tr>
-                            <tr>
-                                <td id="tglMulaiJadwal">Tanggal</td>
-                                <td>
-                                    <input class="form-control input-jadwal input-tanggal-mulai" name="tanggal[]" required="">
-                                </td>
-                            </tr>
-                            <tr class="group-input-repeat">
-                                <td>Tanggal Selesai</td>
-                                <td>
-                                    <input class="form-control input-jadwal input-tanggal-selesai" name="tanggal_selesai" required="">
                                 </td>
                             </tr>
                         </tbody>
@@ -566,35 +556,6 @@ $role = $this->session->userdata['user']['role'];
                 </div>
             </div>
         </form>
-    </div>
-</div>
-<!--MODAL DELETE JADWAL-->
-<div class="modal fade" id="modalHapusJadwal" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Hapus Jadwal</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body modal-message">
-                <table class="table">
-                    <tr>
-                        <td>Judul</td>
-                        <td class="text-judul"></td>
-                    </tr>
-                    <tr>
-                        <td>Tanggal</td>
-                        <td class="text-tanggal"></td>
-                    </tr>
-                </table>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-primary" data-dismiss="modal">Batal</button>
-                <button class="btn btn-danger" onclick="hapusJadwal()">Hapus</button>
-            </div>
-        </div>
     </div>
 </div>
 <!--MODAL UPLOAD BUKTI-->
@@ -994,7 +955,6 @@ $role = $this->session->userdata['user']['role'];
                                     if (userDis[l] !== '') {
                                         for (var m = 0; m < data.length; m++) {
                                             if (dokumen[j].distribusi[l] == data[m].id) {
-
                                                 distribusi.push(data[m]);
                                                 break;
                                             }
@@ -1112,7 +1072,7 @@ $role = $this->session->userdata['user']['role'];
                                 + '<td>' + personil + '</td>'
                                 + '<td>'
                                 + '<span class="btn btn-sm btn-primary fa fa-info-circle title="Detail" onclick="detailJadwal(' + n + ')"></span>&nbsp'
-                                + '<span class="btn btn-sm btn-primary fa fa-edit"></span>&nbsp'
+                                + '<span class="btn btn-sm btn-primary fa fa-edit" title="Edit" onclick="editJadwal(' + n + ')"></span>&nbsp'
                                 + '<span class="btn btn-sm btn-danger fa fa-trash" title="Hapus" onclick="initHapusJadwal(' + n + ')"></span>'
                                 + '</td>'
                                 + '</tr>');
@@ -1272,28 +1232,22 @@ $role = $this->session->userdata['user']['role'];
         }
     }
     function editJadwal(index) {
-        var jd = sortJadwal[index];
+        var imp = sortImplementasi[index];
+        var jd = sortJadwal[imp.index_jadwal];
         var doc = sortDokumen[jd.index_dokumen];
         var m = $('#modalEditJadwal');
         m.modal('show');
         m.find('.input-id').val(jd.id);
-        m.find('.text-pasal').text(sortPasal[doc.index_pasal].fullname);
-        m.find('.text-dokumen').text(doc.judul);
-        m.find('.input-keterangan').val(jd.desc);
-        m.find('.input-keterangan').val(jd.desc);
+        m.find('.input-pasal').val(sortPasal[doc.index_pasal].fullname);
+        m.find('.input-dokumen').val(doc.judul);
+        m.find('.input-keterangan').val(imp.desc);
         m.find('.select-personil-distribusi').empty();
+//        m.find('.input-tanggal-jadwal').val($.format.date(new Date(imp.date_jadwal), "dd-MM-yyyy"));
+        m.find('.input-tanggal-jadwal').datepicker("setDate", new Date(imp.date_jadwal) );
         for (var i = 0; i < doc.distribusi.length; i++) {
             m.find('.select-personil-distribusi').append(new Option(doc.user_distribusi[i], doc.personil_distribusi_id[i], true, true)).trigger('change');
         }
-        m.find('.select-personil-distribusi').val(jd.personil_id).trigger('change');
-//        m.find('.select-personil-distribusi').val(jd.personil_id);
-        m.find('.input-tanggal-mulai').val($.format.date(new Date(jd.date), "dd-MM-yyyy"));
-        if (jd.repeat == 'YA') {
-            m.find('.group-input-repeat').removeClass('d-none');
-            m.find('.input-tanggal-selesai').val($.format.date(new Date(jd.date_end), "dd-MM-yyyy"));
-        } else {
-            m.find('.group-input-repeat').addClass('d-none');
-        }
+        m.find('.select-personil-distribusi').val(imp.personil_id).trigger('change');
     }
     $('#formEditJadwal').submit(function (e) {
         e.preventDefault();
