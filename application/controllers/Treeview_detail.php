@@ -149,6 +149,14 @@ class Treeview_detail extends MY_Controller {
             echo 'error';
         }
     }
+    function hapus_personil_jadwal() {
+        $this->ajax_request();
+        if ($this->model->deletePersonilImplementasi()) {
+            echo 'success';
+        } else {
+            echo 'error';
+        }
+    }
 
     function upload_bukti() {
         $this->ajax_request();

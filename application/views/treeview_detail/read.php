@@ -558,6 +558,26 @@ $role = $this->session->userdata['user']['role'];
         </form>
     </div>
 </div>
+<!--MODAL DELETE PERSONIL JADWAL-->
+<div class="modal fade" id="modalDeletePersonilJadwal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Hapus Personil Jadwal</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body modal-message">
+                <input class="form-control" disabled=""/>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" data-dismiss="modal">Batal</button>
+                <button class="btn btn-danger" onclick="hapusPersonilJadwal(deleteId)">Hapus</button>
+            </div>
+        </div>
+    </div>
+</div>
 <!--MODAL UPLOAD BUKTI-->
 <div class="modal fade" id="modalUploadBukti">
     <div class="modal-dialog" role="document">
@@ -1062,7 +1082,7 @@ $role = $this->session->userdata['user']['role'];
                         var personil = '';
                         for (var k = 0; k < data[j].personil_id.length; k++) {
                             if (data[j].personil_id != '') {
-                                personil += '<div><span class="text-danger fa fa-trash" title="Hapus"></span>&nbsp' + data[j].personil_name[k] + '</div>';
+                                personil += '<div><span class="text-danger fa fa-trash" title="Hapus" onclick="initHapusPersonilJadwal(' + data[j].personil_implementasi_id[k] + ')"></span>&nbsp' + data[j].personil_name[k] + '</div>';
                             }
                         }
                         $('#table-jadwal').append('<tr>'
@@ -1071,7 +1091,7 @@ $role = $this->session->userdata['user']['role'];
                                 + '<td>' + $.format.date(new Date(data[j].date_jadwal), "dd-MMM-yyyy") + '</td>'
                                 + '<td>' + personil + '</td>'
                                 + '<td>'
-                                + '<span class="btn btn-sm btn-primary fa fa-info-circle title="Detail" onclick="detailJadwal(' + n + ')"></span>&nbsp'
+                                + '<span class="btn btn-sm btn-primary fa fa-info-circle" title="Detail" onclick="detailJadwal(' + n + ')"></span>&nbsp'
                                 + '<span class="btn btn-sm btn-primary fa fa-edit" title="Edit" onclick="editJadwal(' + n + ')"></span>&nbsp'
                                 + '<span class="btn btn-sm btn-danger fa fa-trash" title="Hapus" onclick="initHapusJadwal(' + n + ')"></span>'
                                 + '</td>'
@@ -1237,13 +1257,12 @@ $role = $this->session->userdata['user']['role'];
         var doc = sortDokumen[jd.index_dokumen];
         var m = $('#modalEditJadwal');
         m.modal('show');
-        m.find('.input-id').val(jd.id);
+        m.find('.input-id').val(imp.id);
         m.find('.input-pasal').val(sortPasal[doc.index_pasal].fullname);
         m.find('.input-dokumen').val(doc.judul);
         m.find('.input-keterangan').val(imp.desc);
         m.find('.select-personil-distribusi').empty();
-//        m.find('.input-tanggal-jadwal').val($.format.date(new Date(imp.date_jadwal), "dd-MM-yyyy"));
-        m.find('.input-tanggal-jadwal').datepicker("setDate", new Date(imp.date_jadwal) );
+        m.find('.input-tanggal-jadwal').datepicker("setDate", new Date(imp.date_jadwal));
         for (var i = 0; i < doc.distribusi.length; i++) {
             m.find('.select-personil-distribusi').append(new Option(doc.user_distribusi[i], doc.personil_distribusi_id[i], true, true)).trigger('change');
         }
@@ -1267,6 +1286,12 @@ $role = $this->session->userdata['user']['role'];
     function hapusJadwal() {
         $.post('<?php echo site_url($module); ?>/hapus_jadwal', {id: sortImplementasi[deleteIndex].id}, function (data) {
             $('#modalDetailJadwal').modal('hide');
+            getJadwal();
+        });
+    }
+    function initHapusPersonilJadwal(id) {
+        deleteId = id;
+        $.post('<?php echo site_url($module); ?>/hapus_personil_jadwal', {id: deleteId}, function (data) {
             getJadwal();
         });
     }
