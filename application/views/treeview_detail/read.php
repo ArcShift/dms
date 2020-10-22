@@ -25,7 +25,7 @@ $role = $this->session->userdata['user']['role'];
                     <li class="nav-item"><a data-toggle="tab" href="#tab-dokumen" class="nav-link">Dokumen</a></li>
                     <li class="nav-item"><a data-toggle="tab" href="#tab-distribusi" class="nav-link">Distribusi</a></li>
                     <li class="nav-item"><a data-toggle="tab" href="#tab-jadwal" class="nav-link">Jadwal</a></li>
-                    <li class="nav-item"><a data-toggle="tab" href="#tab-implementasi" class="nav-link">Implementasi</a></li>
+                    <li class="nav-item d-none"><a data-toggle="tab" href="#tab-implementasi" class="nav-link">Implementasi</a></li>
                     <!--<li class="nav-item"><a data-toggle="tab" href="#tab-base" class="nav-link">Base</a></li>-->
                 </ul>
                 <div class="tab-content">
@@ -76,11 +76,11 @@ $role = $this->session->userdata['user']['role'];
                             <tbody id="table-dokumen"></tbody>
                         </table>
                     </div>
+                    <!--DISTRIBUSI-->
                     <div class="tab-pane" id="tab-distribusi" role="tabpanel">
                         <table class="table table-striped">
                             <thead>
                                 <tr>
-                                    <th>Pasal</th>
                                     <th>Judul Dokumen</th>
                                     <th>Pembuat dokumen</th>
                                     <th>Distribusi</th>
@@ -99,10 +99,10 @@ $role = $this->session->userdata['user']['role'];
                         <table class="table table-striped">
                             <thead>
                                 <tr>
-                                    <th>Pasal</th>
                                     <th>Judul Dokumen</th>
                                     <th>Jadwal</th>
-                                    <th>Distribusi</th>
+                                    <th>Tugas</th>
+                                    <!--<th>Distribusi</th>-->
                                     <th>Aksi</th>
                                 </tr>
                             </thead>
@@ -114,7 +114,6 @@ $role = $this->session->userdata['user']['role'];
                         <table class="table">
                             <thead>
                                 <tr>
-                                    <th>Pasal</th>
                                     <th>Judul Dokumen</th>
                                     <th>Jadwal</th>
                                     <th>Distribusi</th>
@@ -579,7 +578,7 @@ $role = $this->session->userdata['user']['role'];
     </div>
 </div>
 <!--MODAL UPLOAD BUKTI-->
-<div class="modal fade" id="modalUploadBukti">
+<div class="modal fade" id="modalUploadImplementasi">
     <div class="modal-dialog" role="document">
         <form id="formUploadBukti">
             <div class="modal-content">
@@ -649,8 +648,8 @@ $role = $this->session->userdata['user']['role'];
     var idStandar;
     var anggota;
     var pesonil;
-    var dokumen;
-    var listJadwal;
+    var sortDokumen;
+//    var listJadwal;
     $('#perusahaan').change(function (s) {
         if ($(this).val()) {
             $.post('<?php echo site_url($module); ?>/standard', {'id': $(this).val()}, function (data) {
@@ -781,6 +780,128 @@ $role = $this->session->userdata['user']['role'];
             getDokumen();
         });
     }
+    function getDokumen() {
+        $.post('<?php echo site_url($module); ?>/get_dokumen', {'perusahaan': perusahaan, 'standar': standar}, function (data) {
+            $('#table-dokumen').empty();
+            $('.select-dokumen').empty();
+            $('.select-dokumen').append('<option value="">-- -- --</option>');
+            sortDokumen = [];
+            data = JSON.parse(data);
+            for (var h = 0; h < sortPasal.length; h++) {
+                for (var i = 0; i < data.length; i++) {
+                    if (data[i].id_pasal == sortPasal[h].id) {
+                        sortDokumen.push(data[i]);
+                        var d = data[i];
+                        data[i].index_pasal = h;
+                        if (d.distribusi[0] == "") {
+                            data[i].distribusi = [];
+                            data[i].user_distribusi = [];
+                        }
+                        $('#table-dokumen').append('<tr><td>' + d.nomor + '</td><td>' + d.judul + '</td><td>Level ' + d.jenis + '</td><td><span class="text-primary fa fa-info-circle" onclick="detailDokumen(' + i + ')" title="Detail"></span>&nbsp<span class="text-primary fa fa-edit" onclick="editDokumen(' + i + ')"></span>&nbsp<span class="text-danger fa fa-trash" onclick="initHapusDokumen(' + i + ')"></span></td></tr>');
+                        $('.select-dokumen').append('<option value="' + d.id + '">' + d.judul + '</option>');
+                    }
+                }
+            }
+            getDistribusi();
+        });
+    }
+    function getDistribusi() {
+        $.post('<?php echo site_url($module); ?>/get_distribusi', {'perusahaan': perusahaan, 'standar': standar}, function (data) {
+            data = JSON.parse(data);
+            distribusi = [];
+            $('#table-distribusi').empty();
+            $('#table-jadwal').empty();
+            $('#table-implementasi').empty();
+            var indexJadwal = 0;
+            for (var i = 0; i < sortPasal.length; i++) {
+                sortPasal[i].dokumens = [];
+                for (var j = 0; j < sortDokumen.length; j++) {
+                    for (var k = 0; k < anggota.length; k++) {
+                        if (sortDokumen[j].id_pasal === sortPasal[i].id) {
+                            if (sortDokumen[j].creator === anggota[k].id) {
+                                sortDokumen[j].index_pasal = i;
+                                sortPasal[i].dokumens.push(j);
+                                var userDis = sortDokumen[j].user_distribusi;
+                                var idDis = sortDokumen[j].distribusi;
+                                var strUserDis = '';
+                                for (var l = 0; l < userDis.length; l++) {
+                                    strUserDis += '<div><span class="text-danger fa fa-trash" title="Hapus" onclick="deleteUserDistribusi(' + idDis[l] + ')"></span>&nbsp' + userDis[l] + '</div>';
+                                    if (userDis[l] !== '') {
+                                        for (var m = 0; m < data.length; m++) {
+                                            if (sortDokumen[j].distribusi[l] == data[m].id) {
+                                                distribusi.push(data[m]);
+                                                break;
+                                            }
+                                        }
+                                    }
+                                }
+                                $('#table-distribusi').append('<tr><td>' + sortDokumen[j].judul + '</td><td>' + anggota[k].fullname + '</td><td>' + strUserDis + '</td><td><span class="text-primary fa fa-edit" title="Edit" onclick="editDistribusi(' + j + ')"></span></td></tr>');
+                            }
+                        }
+                    }
+                }
+            }
+            getJadwal();
+        });
+    }
+    function getJadwal() {
+        $.getJSON('<?php echo site_url($module); ?>/get_jadwal', {'perusahaan': perusahaan, 'standar': standar}, function (data) {
+            sortJadwal = [];
+            var pasal = '';
+            var doc = '';
+            var n = 0;
+            for (var i = 0; i < sortDokumen.length; i++) {
+                for (var j = 0; j < data.length; j++) {
+                    if (sortDokumen[i].id == data[j].id_document) {
+                        data[j].index_dokumen = i;
+                        sortJadwal.push(data[j]);
+                    }
+                }
+            }
+            getImplementasi();
+        });
+    }
+    function getImplementasi() {
+        $.getJSON('<?php echo site_url($module); ?>/get_implementasi', null, function (data) {
+            sortImplementasi = [];
+            $('#table-jadwal').empty();
+            var n = 0;
+            for (var i = 0; i < sortJadwal.length; i++) {
+                for (var j = 0; j < data.length; j++) {
+                    if (data[j].id_jadwal == sortJadwal[i].id) {
+                        data[j].index_jadwal = i;
+                        var personil = '';
+                        var personil2 = '';
+                        for (var k = 0; k < data[j].personil_id.length; k++) {
+                            if (data[j].personil_id != '') {
+                                personil += '<div><span class="text-danger fa fa-trash" title="Hapus" onclick="initHapusPersonilJadwal(' + data[j].personil_implementasi_id[k] + ')"></span>&nbsp' + data[j].personil_name[k] + '</div>';
+                                personil2 += '<div>' + data[j].personil_name[k] + '</div>';
+                            }
+                        }
+                        $('#table-jadwal').append('<tr>'
+                                + '<td>' + sortDokumen[sortJadwal[i].index_dokumen].judul + '</td>'
+                                + '<td>' + $.format.date(new Date(data[j].date_jadwal), "dd-MMM-yyyy") + '</td>'
+                                + '<td>' + data[j].desc + '</td>'
+//                                + '<td>' + personil + '</td>'
+                                + '<td>'
+                                + '<span class="text-primary fa fa-info-circle" title="Detail" onclick="detailJadwal(' + n + ')"></span>&nbsp'
+                                + '<span class="text-primary fa fa-edit" title="Edit" onclick="editJadwal(' + n + ')"></span>&nbsp'
+                                + '<span class="text-danger fa fa-trash" title="Hapus" onclick="initHapusJadwal(' + n + ')"></span>'
+                                + '</td>'
+                                + '</tr>');
+                        $('#table-implementasi').append('<tr>'
+                                + '<td>' + sortDokumen[sortJadwal[i].index_dokumen].judul + '</td>'
+                                + '<td>' + $.format.date(new Date(data[j].date_jadwal), "dd-MMM-yyyy") + '</td>'
+                                + '<td>' + personil2 + '</td>'
+                                + '<td>' + '<span class="text-primary fa fa-upload" title="Upload" onclick="initUploadImplementasi(' + n + ')"></span>&nbsp' + '</td>'
+                                + '</tr>');
+                        n++;
+                        sortImplementasi.push(data[j]);
+                    }
+                }
+            }
+        });
+    }
     function pemenuhanDokumen(index) {
         var listPemenuhan = [];
         var d = sortPasal[index];
@@ -794,7 +915,7 @@ $role = $this->session->userdata['user']['role'];
         for (var i = 0; i < listPemenuhan.length; i++) {
             total += listPemenuhan[i];
         }
-        sortPasal[index].pemenuhan_doc = total / listPemenuhan.length;
+        sortPasal[index].pemenuhan_doc = Math.round(total / listPemenuhan.length);
     }
     function detailPasal(index) {
         var m = $('#modalDetailPasal');
@@ -805,7 +926,7 @@ $role = $this->session->userdata['user']['role'];
         m.find('.item-long-desc').text(d.long_desc);
         m.find('.files').empty();
         if (d.doc != 0) {
-            for (var doc of dokumen) {
+            for (var doc of sortDokumen) {
                 if (d.id == doc.id_pasal) {
                     var link;
                     if (doc.type_doc == 'file') {
@@ -855,32 +976,6 @@ $role = $this->session->userdata['user']['role'];
             });
         });
     }
-    function getDokumen() {
-        $.post('<?php echo site_url($module); ?>/get_dokumen', {'perusahaan': perusahaan, 'standar': standar}, function (data) {
-            $('#table-dokumen').empty();
-            $('.select-dokumen').empty();
-            $('.select-dokumen').append('<option value="">-- -- --</option>');
-            sortDokumen = [];
-            dokumen = JSON.parse(data);
-            for (var i = 0; i < dokumen.length; i++) {
-                var d = dokumen[i];
-                if (dokumen[i].distribusi[0] == "") {
-                    dokumen[i].distribusi = [];
-                    dokumen[i].user_distribusi = [];
-                }
-                $('#table-dokumen').append('<tr><td>' + d.nomor + '</td><td>' + d.judul + '</td><td>Level ' + d.jenis + '</td><td><button class="btn btn-sm btn-primary fa fa-info-circle" onclick="detailDokumen(' + i + ')" title="Detail"></button>&nbsp<button class="btn btn-sm btn-primary fa fa-edit" onclick="editDokumen(' + i + ')"></button>&nbsp<button class="btn btn-sm btn-danger fa fa-trash" onclick="initHapusDokumen(' + i + ')"></button></td></tr>');
-                $('.select-dokumen').append('<option value="' + d.id + '">' + d.judul + '</option>');
-            }
-//            for (var h = 0; h < sortPasal.length; h++) {
-//                for (var i = 0; i < data.length; i++) {
-//                    if(data[i].id_pasal=sortPasal[h].){
-//                        
-//                    }
-//                }
-//            }
-            getDistribusi();
-        });
-    }
     function tambahDokumen() {
         var m = $('#modalDokumen');
         m.find('.modal-title').text('Tambah Dokumen');
@@ -908,7 +1003,7 @@ $role = $this->session->userdata['user']['role'];
     });
     function detailDokumen(index) {
         var m = $('#modalDokumenRead');
-        var d = dokumen[index];
+        var d = sortDokumen[index];
         m.modal('show');
         m.find('.btn-submit').hide();
         m.find('.select-pasal').val(d.id_pasal);
@@ -930,7 +1025,7 @@ $role = $this->session->userdata['user']['role'];
         var m = $('#modalDokumenRead');
         m.find('.modal-title').text('Edit Dokumen');
         m.find('.btn-submit').show();
-        m.find('.input-id').val(dokumen[index].id);
+        m.find('.input-id').val(sortDokumen[index].id);
         m.find('input').prop('disabled', false);
         m.find('select').prop('disabled', false);
         m.find('textarea').prop('disabled', false);
@@ -940,167 +1035,13 @@ $role = $this->session->userdata['user']['role'];
     function initHapusDokumen(index) {
         var m = $('#modalDeleteDokumen');
         m.modal('show');
-        m.find('input').val(dokumen[index].judul);
+        m.find('input').val(sortDokumen[index].judul);
         deleteId = index;
     }
     function hapusDokumen(index) {
-        $.post('<?php echo site_url($module); ?>/hapus_dokumen', {id: dokumen[index].id}, function (data) {
+        $.post('<?php echo site_url($module); ?>/hapus_dokumen', {id: sortDokumen[index].id}, function (data) {
             getPasal();
             $('#modalDeleteDokumen').modal('hide');
-        });
-    }
-    function getDistribusi() {
-        $.post('<?php echo site_url($module); ?>/get_distribusi', {'perusahaan': perusahaan, 'standar': standar}, function (data) {
-            data = JSON.parse(data);
-            listJadwal = [];
-            distribusi = [];
-            sortDokumen = [];
-            $('#table-distribusi').empty();
-            $('#table-jadwal').empty();
-            $('#table-implementasi').empty();
-            var indexJadwal = 0;
-            for (var i = 0; i < sortPasal.length; i++) {
-                sortPasal[i].dokumens = [];
-                for (var j = 0; j < dokumen.length; j++) {
-                    for (var k = 0; k < anggota.length; k++) {
-                        if (dokumen[j].id_pasal === sortPasal[i].id) {
-                            if (dokumen[j].creator === anggota[k].id) {
-                                dokumen[j].index_pasal = i;
-                                sortPasal[i].dokumens.push(j);
-                                var userDis = dokumen[j].user_distribusi;
-                                var idDis = dokumen[j].distribusi;
-                                var strUserDis = '';
-                                for (var l = 0; l < userDis.length; l++) {
-                                    strUserDis += '<div><button class="btn btn-danger btn-sm fa fa-trash" onclick="deleteUserDistribusi(' + idDis[l] + ')"></button>&nbsp' + userDis[l] + '</div>';
-                                    if (userDis[l] !== '') {
-                                        for (var m = 0; m < data.length; m++) {
-                                            if (dokumen[j].distribusi[l] == data[m].id) {
-                                                distribusi.push(data[m]);
-                                                break;
-                                            }
-                                        }
-                                        var jd = new Object();
-                                        jd.id = dokumen[j].distribusi[l];
-                                        jd.id_pasal = i;
-                                        jd.id_doc = j;
-                                        jd.username = userDis[l];
-                                        listJadwal.push(jd);
-                                        var aksiDistribusi;
-                                        var txtJadwal = '-';
-                                        if (distribusi[indexJadwal].date == '0000-00-00' & distribusi[indexJadwal].repeat == null) {
-                                            aksiDistribusi = '<button class="btn btn-primary fa fa-edit" title="Edit" onclick="jadwal(' + indexJadwal + ',\'create\')"></botton>';
-                                        } else {
-                                            aksiDistribusi = '<button class="btn btn-primary fa fa-search" title="Detail    " onclick="jadwal(' + indexJadwal + ',\'detail\')"></botton>';
-                                            if (distribusi[indexJadwal].repeat == 'YA') {
-                                                txtJadwal = 'Mingguan';
-                                            } else {
-                                                txtJadwal = distribusi[indexJadwal].date;
-                                            }
-                                        }
-                                        indexJadwal++;
-//                                        break;
-                                    }
-                                }
-                                $('#table-distribusi').append('<tr><td>' + sortPasal[i].fullname + '</td><td>' + dokumen[j].judul + '</td><td>' + anggota[k].fullname + '</td><td>' + strUserDis + '</td><td><button class="btn btn-primary fa fa-edit" onclick="editDistribusi(' + j + ')"></botton></td></tr>');
-                                sortDokumen.push(dokumen[j]);
-                            }
-                        }
-                    }
-                }
-            }
-            getJadwal();
-        });
-    }
-    function getJadwal() {
-        $.getJSON('<?php echo site_url($module); ?>/get_jadwal', {'perusahaan': perusahaan, 'standar': standar}, function (data) {
-            sortJadwal = [];
-            var pasal = '';
-            var doc = '';
-            var n = 0;
-            for (var i = 0; i < sortDokumen.length; i++) {
-                for (var j = 0; j < data.length; j++) {
-                    if (sortDokumen[i].id == data[j].id_document) {
-                        data[j].index_dokumen = i;
-//                        var p = sortPasal[sortDokumen[i].index_pasal].fullname;
-//                        var d = sortDokumen[i].judul;
-//                        var dist = '';
-//                        for (var k = 0; k < data[j].personil_name.length; k++) {
-//                            dist += '<div>' + data[j].personil_name[k] + '</div>';
-//                        }
-//                        dist = '<td>' + dist + '</td>';
-//                        var row = '<td>' + (pasal == p ? '' : p) + '</td><td>' + (doc == d ? '' : d) + '</td>';
-//                        var status = '-';
-//                        var control = '<button onclick="modalUploadBukti(' + j + ')" class="btn btn-sm btn-primary fa fa-upload"></button>';
-//                        var today = new Date().getTime();
-//                        var deadline = new Date(data[j].date).getTime();
-//                        var aksi = '<td><button class="btn btn-sm btn-primary fa fa-info-circle" title="Detail" onclick="detailJadwal(' + n + ')"></button>&nbsp<button class="btn btn-sm btn-primary fa fa-edit" title="Detail" onclick="editJadwal(' + n + ')"></button>&nbsp<button class="btn btn-sm btn-danger fa fa-trash" title="Hapus" onclick="hapusJadwal(' + n + ')"></button></td>';
-//                        var days = ['minggu', 'senin', 'selasa', 'rabu', 'kamis', 'jumat', 'sabtu'];
-//                        data[j].tgl = $.format.date(new Date(data[j].date), "dd-MMM-yyyy");
-//                        data[j].tgl_selesai = $.format.date(new Date(data[j].date_end), "dd-MMM-yyyy");
-//                        if (data[j].repeat == 'YA') {
-//                            status = '<span class="badge badge-sm badge-secondary">Berkala</span>';
-//                            var tgl = new Date(data[j].date);
-//                            var endDate = new Date(data[j].date_end);
-//                            while (tgl.getTime() <= endDate.getTime()) {
-//                                if (data[j][days[tgl.getDay()]] == 'YA') {
-//                                    var txtDate = tgl.getFullYear() + '-' + ('0' + (tgl.getMonth() + 1)).slice(-2) + '-' + ('0' + tgl.getDate()).slice(-2);
-//                                    var stat = getStatusUpload(txtDate);
-//                                    txtDate = $.format.date(tgl, "dd-MMM-yyyy");
-//                                    txtDate = '<td>' + txtDate + '</td>';
-//                                    $('#table-jadwal').append('<tr>' + row + txtDate + dist + aksi + '</tr>');
-//                                    $('#table-implementasi').append('<tr>' + row + txtDate + dist + '<td>' + (stat.status ? control : '') + '</td><td class="text-center">' + stat.badge + '</td></tr>');
-//                                }
-//                                tgl.setDate(tgl.getDate() + 1);
-//                            }
-//                        } else if (data[j].repeat == 'TIDAK') {
-//                            $('#table-jadwal').append('<tr>' + row + '<td>' + data[j].tgl + '</td>' + dist + aksi + '</tr>');
-//                            var stat = getStatusUpload(data[j].date);
-//                            $('#table-implementasi').append('<tr>' + row + '<td>' + data[j].tgl + '</td>' + dist + '<td>' + (stat.status ? control : '') + '</td><td class="text-center">' + stat.badge + '</td></tr>');
-//                        }
-////                        $('#table-implementasi').append('<tr>' + row + '<td>' + control + '</td><td class="text-center">' + status + '</td></tr>');
-////                        if (pasal != p)
-////                            pasal = p;
-////                        if (doc != d)
-////                            doc = d;
-//                        n++;
-                        sortJadwal.push(data[j]);
-                    }
-                }
-            }
-            getImplementasi();
-        });
-    }
-    function getImplementasi() {
-        $.getJSON('<?php echo site_url($module); ?>/get_implementasi', null, function (data) {
-            sortImplementasi = [];
-            $('#table-jadwal').empty();
-            var n = 0;
-            for (var i = 0; i < sortJadwal.length; i++) {
-                for (var j = 0; j < data.length; j++) {
-                    if (data[j].id_jadwal == sortJadwal[i].id) {
-                        data[j].index_jadwal = i;
-                        var personil = '';
-                        for (var k = 0; k < data[j].personil_id.length; k++) {
-                            if (data[j].personil_id != '') {
-                                personil += '<div><span class="text-danger fa fa-trash" title="Hapus" onclick="initHapusPersonilJadwal(' + data[j].personil_implementasi_id[k] + ')"></span>&nbsp' + data[j].personil_name[k] + '</div>';
-                            }
-                        }
-                        $('#table-jadwal').append('<tr>'
-                                + '<td>' + sortPasal[sortDokumen[sortJadwal[i].index_dokumen].index_pasal].fullname + '</td>'
-                                + '<td>' + sortDokumen[sortJadwal[i].index_dokumen].judul + '</td>'
-                                + '<td>' + $.format.date(new Date(data[j].date_jadwal), "dd-MMM-yyyy") + '</td>'
-                                + '<td>' + personil + '</td>'
-                                + '<td>'
-                                + '<span class="btn btn-sm btn-primary fa fa-info-circle" title="Detail" onclick="detailJadwal(' + n + ')"></span>&nbsp'
-                                + '<span class="btn btn-sm btn-primary fa fa-edit" title="Edit" onclick="editJadwal(' + n + ')"></span>&nbsp'
-                                + '<span class="btn btn-sm btn-danger fa fa-trash" title="Hapus" onclick="initHapusJadwal(' + n + ')"></span>'
-                                + '</td>'
-                                + '</tr>');
-                        n++;
-                        sortImplementasi.push(data[j]);
-                    }
-                }
-            }
         });
     }
     function getStatusUpload(date) {
@@ -1118,7 +1059,7 @@ $role = $this->session->userdata['user']['role'];
     }
     function editDistribusi(index) {
         var m = $('#modalDistribusi');
-        var d = dokumen[index];
+        var d = sortDokumen[index];
         m.modal('show');
         m.find('.label-pasal').text(sortPasal[d.index_pasal].fullname);
         m.find('.label-judul').text(d.judul);
@@ -1175,13 +1116,13 @@ $role = $this->session->userdata['user']['role'];
         if (index != '') {
             var docs = sortPasal[index].dokumens;
             for (var i = 0; i < docs.length; i++) {
-                var d = dokumen[docs[i]];
+                var d = sortDokumen[docs[i]];
                 $('.select-dokumen-pasal').append('<option value="' + docs[i] + '">' + d.judul + '</option>');
             }
         }
     });
     $('.select-dokumen-pasal').change(function () {
-        var doc = dokumen[$(this).val()];
+        var doc = sortDokumen[$(this).val()];
         $('.input-dokumen-id').val(doc.id);
         $('.select-personil-distribusi').empty();
         for (var i = 0; i < doc.distribusi.length; i++) {
@@ -1225,7 +1166,7 @@ $role = $this->session->userdata['user']['role'];
         var data = {
             Dokumen: sortDokumen[jadwal.index_dokumen].judul,
             Keterangan: imp.desc == "" ? '-' : imp.desc,
-            'Tanggal Implementasi': imp.date_jadwal,
+            'Tanggal Implementasi': $.format.date(new Date(imp.date_jadwal), "dd-MMM-yyyy"),
             Ulangi: jadwal.repeat,
         };
         if (jadwal.repeat == 'YA') {
@@ -1241,8 +1182,8 @@ $role = $this->session->userdata['user']['role'];
                 txtHari += '<span class="badge badge-' + c + '">' + h + '</span>&nbsp&nbsp';
             }
             data.Ulangi = '<span class="badge badge-success">YA</span>';
-            data['Tanggal Mulai'] = jadwal.start_date;
-            data['Tanggal Selesai'] = jadwal.end_date;
+            data['Tanggal Mulai'] = $.format.date(new Date(jadwal.start_date), "dd-MMM-yyyy");
+            data['Tanggal Selesai'] = $.format.date(new Date(jadwal.end_date), "dd-MMM-yyyy");
             data.Hari = txtHari;
         } else {
             data.Ulangi = '<span class="badge badge-secondary">TIDAK</span>';
@@ -1295,12 +1236,12 @@ $role = $this->session->userdata['user']['role'];
             getJadwal();
         });
     }
-    function modalUploadBukti(index) {
-        var l = listJadwal[index];
-        var m = $('#modalUploadBukti');
-        m.modal('show');
-        m.find('.input-id').val(l.id);
-        m.find('.input-judul').val(dokumen[l.id_doc].judul);
+    function initUploadImplementasi(index) {
+//        var l = listJadwal[index];
+//        var m = $('#modalUploadImplementasi');
+//        m.modal('show');
+//        m.find('.input-id').val(l.id);
+//        m.find('.input-judul').val(dokumen[l.id_doc].judul);
     }
     $('#formUploadBukti').submit(function (e) {
         $('#modalUploadBukti').modal('hide');
