@@ -69,8 +69,9 @@ $role = $this->session->userdata['user']['role'];
                                 <tr>
                                     <th>No</th>
                                     <th>Judul</th>
+                                    <th>Deskripsi</th>
                                     <th>Jenis</th>
-                                    <th class="col-sm-2">Aksi</th>
+                                    <th class="col-sm-1">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody id="table-dokumen"></tbody>
@@ -334,13 +335,13 @@ $role = $this->session->userdata['user']['role'];
                                     <label class="label-dokumen-terkait"></label>
                                 </td>
                             </tr>
-                            <tr>
+                            <tr class="group-edit">
                                 <td>Distribusi</td>
                                 <td>
                                     <select class="form-control select-unit-kerja" id="distribusi-unit-kerja"></select>
                                 </td>
                             </tr>
-                            <tr>
+                            <tr class="group-edit">
                                 <td></td>
                                 <td>
                                     <select class="form-control select-personil select-2 multiselect-dropdown" multiple="multiple" name="personil[]" required="" style="width: 330px !important;"></select>
@@ -351,7 +352,7 @@ $role = $this->session->userdata['user']['role'];
                 </div>
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-primary" data-dismiss="modal">Batal</button>
-                    <button type="submit" class="btn btn-primary btn-submit" name="submit">Simpan</button>
+                    <button type="submit" class="btn btn-primary btn-submit group-edit" name="submit">Simpan</button>
                 </div>
             </div>
         </form>
@@ -797,7 +798,7 @@ $role = $this->session->userdata['user']['role'];
                             data[i].distribusi = [];
                             data[i].user_distribusi = [];
                         }
-                        $('#table-dokumen').append('<tr><td>' + d.nomor + '</td><td>' + d.judul + '</td><td>Level ' + d.jenis + '</td><td><span class="text-primary fa fa-info-circle" onclick="detailDokumen(' + i + ')" title="Detail"></span>&nbsp<span class="text-primary fa fa-edit" onclick="editDokumen(' + i + ')"></span>&nbsp<span class="text-danger fa fa-trash" onclick="initHapusDokumen(' + i + ')"></span></td></tr>');
+                        $('#table-dokumen').append('<tr><td>' + d.nomor + '</td><td>' + d.judul + '</td><td>' + d.deskripsi + '</td><td>Level ' + d.jenis + '</td><td><span class="text-primary fa fa-info-circle" onclick="detailDokumen(' + i + ')" title="Detail"></span>&nbsp<span class="text-primary fa fa-edit" onclick="editDokumen(' + i + ')"></span>&nbsp<span class="text-danger fa fa-trash" onclick="initHapusDokumen(' + i + ')"></span></td></tr>');
                         $('.select-dokumen').append('<option value="' + d.id + '">' + d.judul + '</option>');
                     }
                 }
@@ -835,7 +836,7 @@ $role = $this->session->userdata['user']['role'];
                                         }
                                     }
                                 }
-                                $('#table-distribusi').append('<tr><td>' + sortDokumen[j].judul + '</td><td>' + anggota[k].fullname + '</td><td>' + strUserDis + '</td><td><span class="text-primary fa fa-edit" title="Edit" onclick="editDistribusi(' + j + ')"></span></td></tr>');
+                                $('#table-distribusi').append('<tr><td>' + sortDokumen[j].judul + '</td><td>' + anggota[k].fullname + '</td><td>' + strUserDis + '</td><td><span class="text-primary fa fa-info-circle" title="Detail" onclick="detailDistribusi(' + j + ')"></span>&nbsp<span class="text-primary fa fa-edit" title="Edit" onclick="editDistribusi(' + j + ')"></span></td></tr>');
                             }
                         }
                     }
@@ -1057,9 +1058,15 @@ $role = $this->session->userdata['user']['role'];
         }
         return {status: status, badge: badge};
     }
+    function detailDistribusi(index) {
+        editDistribusi(index);
+        var m = $('#modalDistribusi');
+        m.find('.group-edit').addClass('d-none');
+    }
     function editDistribusi(index) {
         var m = $('#modalDistribusi');
         var d = sortDokumen[index];
+        m.find('.group-edit').removeClass('d-none');
         m.modal('show');
         m.find('.label-pasal').text(sortPasal[d.index_pasal].fullname);
         m.find('.label-judul').text(d.judul);
