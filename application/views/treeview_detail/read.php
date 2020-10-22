@@ -71,7 +71,7 @@ $role = $this->session->userdata['user']['role'];
                                     <th>Judul</th>
                                     <th>Deskripsi</th>
                                     <th>Jenis</th>
-                                    <th class="col-sm-1">Aksi</th>
+                                    <th>Aksi</th>
                                 </tr>
                             </thead>
                             <tbody id="table-dokumen"></tbody>
