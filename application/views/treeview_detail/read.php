@@ -578,10 +578,10 @@ $role = $this->session->userdata['user']['role'];
         </div>
     </div>
 </div>
-<!--MODAL UPLOAD BUKTI-->
+<!--MODAL UPLOAD IMPLEMENTASI-->
 <div class="modal fade" id="modalUploadImplementasi">
     <div class="modal-dialog" role="document">
-        <form id="formUploadBukti">
+        <form id="formUploadImplementasi">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Upload Bukti</h5>
@@ -590,36 +590,34 @@ $role = $this->session->userdata['user']['role'];
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form id="formUploadBukti">
-                        <input class="input-id d-none" name="id"/>
-                        <table class="table">
-                            <tbody>
-                                <tr>
-                                    <td>Judul Dokumen</td>
-                                    <td>
-                                        <input class="form-control input-judul" disabled=""/>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Jadwal</td>
-                                    <td>
-                                        <input class="form-control input-jadwal" disabled=""/>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Dokumen</td>
-                                    <td>
-                                        <input class="radio-type-dokumen" type="radio" name="type_dokumen" value="FILE" required="">
-                                        <label>File</label>
-                                        <input class="radio-type-dokumen" type="radio" name="type_dokumen" value="URL">
-                                        <label>Url</label>
-                                        <input class="form-control input-file d-none" type="file" name="dokumen" required="">
-                                        <input class="form-control input-url d-none" type="url" name="url" required="">
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </form>
+                    <input class="input-id d-none" name="id"/>
+                    <table class="table">
+                        <tbody>
+                            <tr>
+                                <td>Judul Dokumen</td>
+                                <td>
+                                    <input class="form-control input-judul" disabled=""/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Jadwal</td>
+                                <td>
+                                    <input class="form-control input-jadwal" disabled=""/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Dokumen</td>
+                                <td>
+                                    <input class="radio-type-dokumen" type="radio" name="type_dokumen" value="FILE" required="">
+                                    <label>File</label>
+                                    <input class="radio-type-dokumen" type="radio" name="type_dokumen" value="URL">
+                                    <label>Url</label>
+                                    <input class="form-control input-file d-none" type="file" name="dokumen" required="">
+                                    <input class="form-control input-url d-none" type="url" name="url" required="">
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
@@ -650,7 +648,6 @@ $role = $this->session->userdata['user']['role'];
     var anggota;
     var pesonil;
     var sortDokumen;
-//    var listJadwal;
     $('#perusahaan').change(function (s) {
         if ($(this).val()) {
             $.post('<?php echo site_url($module); ?>/standard', {'id': $(this).val()}, function (data) {
@@ -1074,6 +1071,11 @@ $role = $this->session->userdata['user']['role'];
         m.find('.label-klasifikasi').text(d.klasifikasi);
         m.find('.label-klasifikasi').text(d.klasifikasi);
         m.find('.input-dokumen-id').val(d.id);
+        if (d.contoh != null) {
+            m.find('.label-dokumen-terkait').text($('#modalDokumenRead').find('option[value=' + d.contoh + ']').text());
+        }else{
+            m.find('.label-dokumen-terkait').text('-');
+        }
     }
     $('#distribusi-unit-kerja').change(function () {
         var slct = $('#modalDistribusi').find('.select-personil');
@@ -1244,14 +1246,15 @@ $role = $this->session->userdata['user']['role'];
         });
     }
     function initUploadImplementasi(index) {
-//        var l = listJadwal[index];
-//        var m = $('#modalUploadImplementasi');
-//        m.modal('show');
-//        m.find('.input-id').val(l.id);
-//        m.find('.input-judul').val(dokumen[l.id_doc].judul);
+        var imp = sortImplementasi[index];
+        var m = $('#modalUploadImplementasi');
+        m.modal('show');
+        m.find('.input-id').val(imp.id);
+        m.find('.input-jadwal').val($.format.date(new Date(imp.date_jadwal), "dd-MMM-yyyy"));
+        m.find('.input-judul').val(sortDokumen[sortJadwal[imp.index_jadwal].index_dokumen].judul);
     }
-    $('#formUploadBukti').submit(function (e) {
-        $('#modalUploadBukti').modal('hide');
+    $('#formUploadImplementasi').submit(function (e) {
+        $('#modalUploadImplementasi').modal('hide');
         e.preventDefault();
         $.ajax({
             url: '<?php echo site_url($module . '/upload_bukti') ?>',
