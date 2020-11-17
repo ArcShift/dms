@@ -15,14 +15,14 @@ $icon = array('search', 'plus', 'edit', 'trash');
                         <tr>
                             <th>Module</th>
                             <?php foreach ($userRole as $u) { ?>
-                                <th><?php echo $u['name'] ?></th>
+                                <th><?php echo $u['title'] ?></th>
                             <?php } ?>
                         </tr>
                     </thead>
                     <tbody>
                         <?php foreach ($mod as $mkey => $m) { ?>
                             <tr>
-                                <td><?php echo $m['name'] ?></td>
+                                <td><?php echo $m['title'] ?></td>
                                 <?php foreach ($userRole as $ukey => $u) { ?>
                                     <td>
                                         <?php foreach ($crud as $ckey => $c) { ?>
