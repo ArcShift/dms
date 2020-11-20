@@ -16,12 +16,14 @@ class M_pasal extends CI_Model {
 
     function create() {
         $input = $this->input->post();
+        if (!empty($input['id'])) {
+        $p = $this->db->get('pasal')->row_array();
+            $this->db->set('parent', $input['id']);
+//        $this->db->set('sort_index', ???);
+        }
         $this->db->set('name', $input['nama']);
         $this->db->set('id_standard', $this->session->userdata('treeview'));
         $this->db->set('created_by', $this->session->userdata('user')['id']);
-        if (is_numeric($input['id'])) {
-            $this->db->set('parent', $input['id']);
-        }
         $this->db->insert($this->table);
     }
 

@@ -43,9 +43,11 @@ class M_treeview_detail extends CI_Model {
     }
 
     function pasal() {
-        $this->db->select('p.*, COUNT(p2.id) AS child, COUNT(d.id) AS doc');
+        $this->db->select('p.*, COUNT(p2.id) AS child, COUNT(DISTINCT d.id) AS doc, COUNT(i.id) AS imp, SUM(CASE WHEN i.path IS NOT NULL and i.date_jadwal < NOW() THEN 1 ELSE 0 END) as upload, SUM(CASE WHEN i.path IS NULL and i.date_jadwal < NOW() THEN 1 ELSE 0 END) as unupload');
         $this->db->join('pasal p2', 'p2.parent = p.id', 'LEFT');
         $this->db->join('document d', 'd.id_pasal = p.id', 'LEFT');
+        $this->db->join('jadwal j', 'j.id_document = d.id', 'LEFT');
+        $this->db->join('implementasi i', 'i.id_jadwal = j.id', 'LEFT');
         $this->db->where('p.id_standard', $this->input->get('standar'));
         $this->db->group_by('p.id');
         return $this->db->get('pasal p')->result_array();
@@ -290,16 +292,18 @@ class M_treeview_detail extends CI_Model {
     }
 
     function upload_bukti() {
-        $this->db->set('id_distribusi', $this->input->post('id'));
+        $this->db->set('id_jadwal', $this->input->post('id_jadwal'));
         $type = $this->input->post('type_dokumen');
-        $this->db->set('type_doc', $type);
+        $this->db->set('type', $type);
         if ($type == 'FILE') {
             $url = $this->upload->data()['file_name'];
             $this->db->set('url', $this->upload->data()['file_name']);
         } else if ($type == 'URL') {
-            $this->db->set('url', $this->input->post('url'));
+            $this->db->set('path', $this->input->post('url'));
         }
-        return $this->db->insert('upload_bukti');
+            $this->db->set('upload_date', date('Y-m-d'));
+        $this->db->where('id', $this->input->post('id'));
+        return $this->db->update('implementasi');
     }
 
 }

@@ -25,7 +25,7 @@ $role = $this->session->userdata['user']['role'];
                     <li class="nav-item"><a data-toggle="tab" href="#tab-dokumen" class="nav-link">Dokumen</a></li>
                     <li class="nav-item"><a data-toggle="tab" href="#tab-distribusi" class="nav-link">Distribusi</a></li>
                     <li class="nav-item"><a data-toggle="tab" href="#tab-jadwal" class="nav-link">Jadwal</a></li>
-                    <li class="nav-item d-none"><a data-toggle="tab" href="#tab-implementasi" class="nav-link">Implementasi</a></li>
+                    <li class="nav-item"><a data-toggle="tab" href="#tab-implementasi" class="nav-link">Implementasi</a></li>
                     <!--<li class="nav-item"><a data-toggle="tab" href="#tab-base" class="nav-link">Base</a></li>-->
                 </ul>
                 <div class="tab-content">
@@ -37,6 +37,8 @@ $role = $this->session->userdata['user']['role'];
                                     <th>Pasal</th>
                                     <th class="col-sm-2 text-center">Jumlah<br/>Dokumen</th>
                                     <th class="col-sm-2 text-center">Pemenuhan<br/>Dokumen</th>
+                                    <th class="col-sm-2 text-center">Jumlah<br/>Jadwal</th>
+                                    <th class="col-sm-2 text-center">Pemenuhan<br/>Implementasi</th>
                                     <!--<th>Implementasi</th>-->
                                 </tr>
                             </thead>
@@ -118,7 +120,7 @@ $role = $this->session->userdata['user']['role'];
                                     <th>Judul Dokumen</th>
                                     <th>Jadwal</th>
                                     <th>Distribusi</th>
-                                    <th>Bukti</th>
+                                    <th class="text-center">Bukti</th>
                                     <th class="text-center">Status</th>
                                 </tr>
                             </thead>
@@ -591,6 +593,7 @@ $role = $this->session->userdata['user']['role'];
                 </div>
                 <div class="modal-body">
                     <input class="input-id d-none" name="id"/>
+                    <input class="input-id-jadwal d-none" name="id_jadwal"/>
                     <table class="table">
                         <tbody>
                             <tr>
@@ -708,11 +711,18 @@ $role = $this->session->userdata['user']['role'];
                 if (d.child == 0) {
                     if (d.doc == 0) {
                         d.pemenuhan_doc = 0;
+                        d.pemenuhan_imp = 0;
                     } else {
                         d.pemenuhan_doc = 100;
+                        if (d.upload == 0) {
+                            d.pemenuhan_imp = 0;
+                        } else {
+                            d.pemenuhan_imp = d.upload / (+d.upload + +d.unupload) * 100;
+                        }
                     }
                 } else {
                     d.pemenuhan_doc = -1;
+                    d.pemenuhan_imp = -1;
                 }
                 data[i] = d;
             }
@@ -743,6 +753,7 @@ $role = $this->session->userdata['user']['role'];
                         pemenuhanDokumen(i);
                     } else {
                         sortPasal[i].pemenuhan_doc = 0;
+                        sortPasal[i].pemenuhan_imp = 0;
                     }
                 }
             }
@@ -766,7 +777,14 @@ $role = $this->session->userdata['user']['role'];
                     default :
                         pCol = 'warning';
                 }
-                $('#table-pemenuhan').append('<tr><td>' + d.fullname + '</td><td class="text-center">' + (d.doc == '0' ? '-' : d.doc) + '</td><td class="text-center"><span class="badge badge-' + pCol + '">' + d.pemenuhan_doc + '%</span></td></tr>');
+                $('#table-pemenuhan').append('<tr>'
+                        + '<td>' + d.fullname + '</td>'
+                        + '<td class="text-center">' + (d.doc == '0' ? '-' : d.doc) + '</td>'
+                        + '<td class="text-center"><span class="badge badge-' + pCol + '">' + d.pemenuhan_doc + '%</span></td>'
+                        + '<td class="text-center">' + d.imp + '</td>'
+                        + '<td class="text-center">' + '<span class="badge badge-' + percentColor(d.pemenuhan_imp) + '">' + (+d.pemenuhan_imp).toFixed() + '%</span>' + '</td>'
+//                        + '<td class="text-center">' + d.upload + ' - ' + d.unupload + '</td>'//data upload & unupload
+                        + '</tr>');
                 $('#table-pasal').append('<tr><td>' + d.fullname + '</td><td>' + (d.sort_desc == null ? '-' : d.sort_desc) + '</td><td>' + (d.long_desc == null ? '-' : d.long_desc) + '</td><td>' + d.doc + '</td><td><span class="fa fa-info-circle text-primary" onclick="detailPasal(' + i + ')" title="Detail"></span></td></tr>');
                 if (d.child == 0) {
                     $('.select-pasal').append('<option value="' + d.id + '">' + d.fullname + '</option>');
@@ -777,6 +795,20 @@ $role = $this->session->userdata['user']['role'];
             }
             getDokumen();
         });
+    }
+    function percentColor(num) {
+        var col = '';
+        switch (num) {
+            case 100:
+                col = 'success';
+                break;
+            case 0:
+                col = 'danger';
+                break;
+            default :
+                col = 'warning';
+        }
+        return col
     }
     function getDokumen() {
         $.post('<?php echo site_url($module); ?>/get_dokumen', {'perusahaan': perusahaan, 'standar': standar}, function (data) {
@@ -863,6 +895,7 @@ $role = $this->session->userdata['user']['role'];
         $.getJSON('<?php echo site_url($module); ?>/get_implementasi', null, function (data) {
             sortImplementasi = [];
             $('#table-jadwal').empty();
+            $('#table-implementasi').empty();
             var n = 0;
             for (var i = 0; i < sortJadwal.length; i++) {
                 for (var j = 0; j < data.length; j++) {
@@ -876,9 +909,10 @@ $role = $this->session->userdata['user']['role'];
                                 personil2 += '<div>' + data[j].personil_name[k] + '</div>';
                             }
                         }
+                        var jadwal = new Date(data[j].date_jadwal);
                         $('#table-jadwal').append('<tr>'
                                 + '<td>' + sortDokumen[sortJadwal[i].index_dokumen].judul + '</td>'
-                                + '<td>' + $.format.date(new Date(data[j].date_jadwal), "dd-MMM-yyyy") + '</td>'
+                                + '<td>' + $.format.date(jadwal, "dd-MMM-yyyy") + '</td>'
                                 + '<td>' + data[j].desc + '</td>'
 //                                + '<td>' + personil + '</td>'
                                 + '<td>'
@@ -887,11 +921,26 @@ $role = $this->session->userdata['user']['role'];
                                 + '<span class="text-danger fa fa-trash" title="Hapus" onclick="initHapusJadwal(' + n + ')"></span>'
                                 + '</td>'
                                 + '</tr>');
+                        var uploadStatus = '';
+                        if (data[j].path) {
+                            uploadStatus = '<span class="badge badge-success">Sudah<br>diupload</span>';
+                        } else {
+                            uploadStatus = '<span class="badge badge-danger">Belum<br>diupload</span>';
+                        }
+                        var uploadBtn = '-';
+                        if (new Date().setHours(0, 0, 0, 0) == jadwal.setHours(0, 0, 0, 0)) {
+                            uploadBtn = '<span class="text-primary fa fa-upload" title="Upload" onclick="initUploadImplementasi(' + n + ')"></span>'
+                        } else if (new Date() > jadwal) {
+                            uploadBtn = '<span class="badge badge-primary">Lewat</badge>'
+                        } else {
+                            uploadBtn = '<span class="badge badge-warning">Pending</badge>'
+                        }
                         $('#table-implementasi').append('<tr>'
                                 + '<td>' + sortDokumen[sortJadwal[i].index_dokumen].judul + '</td>'
-                                + '<td>' + $.format.date(new Date(data[j].date_jadwal), "dd-MMM-yyyy") + '</td>'
+                                + '<td>' + $.format.date(jadwal, "dd-MMM-yyyy") + '</td>'
                                 + '<td>' + personil2 + '</td>'
-                                + '<td>' + '<span class="text-primary fa fa-upload" title="Upload" onclick="initUploadImplementasi(' + n + ')"></span>&nbsp' + '</td>'
+                                + '<td class="text-center">' + uploadBtn + '</td>'
+                                + '<td class="text-center">' + uploadStatus + '</td>'
                                 + '</tr>');
                         n++;
                         sortImplementasi.push(data[j]);
@@ -902,18 +951,23 @@ $role = $this->session->userdata['user']['role'];
     }
     function pemenuhanDokumen(index) {
         var listPemenuhan = [];
+        var listImp = [];
         var d = sortPasal[index];
         for (var i = 0; i < d.childsIndex.length; i++) {
             if (sortPasal[d.childsIndex[i]].pemenuhan_doc === -1) {
                 pemenuhanDokumen(d.childsIndex[i]);
             }
             listPemenuhan.push(sortPasal[d.childsIndex[i]].pemenuhan_doc);
+            listImp.push(sortPasal[d.childsIndex[i]].pemenuhan_imp);
         }
         var total = 0;
+        var totalImp = 0;
         for (var i = 0; i < listPemenuhan.length; i++) {
             total += listPemenuhan[i];
+            totalImp += listImp[i];
         }
         sortPasal[index].pemenuhan_doc = Math.round(total / listPemenuhan.length);
+        sortPasal[index].pemenuhan_imp = Math.round(totalImp / listImp.length);
     }
     function detailPasal(index) {
         var m = $('#modalDetailPasal');
@@ -937,7 +991,7 @@ $role = $this->session->userdata['user']['role'];
             }
         }
     }
-    function formSubmit() {
+    function formSubmit() {//create dokumen
         $('.formDokumen').on("submit", function (e) {
             e.preventDefault();
             var status = 'Undefined';
@@ -956,8 +1010,9 @@ $role = $this->session->userdata['user']['role'];
                     data = JSON.parse(data);
                     if (data.status === 'success') {
                         status = 'Success';
-                        $(this).trigger("reset");
-                        getDokumen();
+                        console.log($(this));
+                        $('.formDokumen').trigger("reset");
+                        getPasal();
                         $('#modalNotif .modal-message').html('Data Berhasil Disimpan');
                     } else if (data.status === 'error') {
                         status = 'Error';
@@ -978,8 +1033,6 @@ $role = $this->session->userdata['user']['role'];
         var m = $('#modalDokumen');
         m.find('.modal-title').text('Tambah Dokumen');
         m.find('.btn-submit').val('tambah');
-//        dokumenLoadData();
-//        formDokumenReset();
         m.modal('show');
     }
     $('.radio-type-dokumen').change(function () {
@@ -1073,7 +1126,7 @@ $role = $this->session->userdata['user']['role'];
         m.find('.input-dokumen-id').val(d.id);
         if (d.contoh != null) {
             m.find('.label-dokumen-terkait').text($('#modalDokumenRead').find('option[value=' + d.contoh + ']').text());
-        }else{
+        } else {
             m.find('.label-dokumen-terkait').text('-');
         }
     }
@@ -1250,11 +1303,13 @@ $role = $this->session->userdata['user']['role'];
         var m = $('#modalUploadImplementasi');
         m.modal('show');
         m.find('.input-id').val(imp.id);
+        m.find('.input-id-jadwal').val(imp.id_jadwal);
         m.find('.input-jadwal').val($.format.date(new Date(imp.date_jadwal), "dd-MMM-yyyy"));
         m.find('.input-judul').val(sortDokumen[sortJadwal[imp.index_jadwal].index_dokumen].judul);
     }
     $('#formUploadImplementasi').submit(function (e) {
-        $('#modalUploadImplementasi').modal('hide');
+        var m = $('#modalUploadImplementasi');
+        m.modal('hide');
         e.preventDefault();
         $.ajax({
             url: '<?php echo site_url($module . '/upload_bukti') ?>',
@@ -1275,6 +1330,8 @@ $role = $this->session->userdata['user']['role'];
 //                    $('#modalNotif .modal-message').html(data.message);
 //                }
                 status = 'Success';
+                getImplementasi();
+                m.find('form')[0].reset();
             },
             error: function (data) {
                 status = 'Error';
