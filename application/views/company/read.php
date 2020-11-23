@@ -1,7 +1,7 @@
 <div class="main-card mb-3 card">
     <div class="card-header">
         <?php if ($activeModule['acc_create']) { ?>
-            <a class="btn btn-primary fa fa-plus" title="Tambah" href="<?php echo site_url($module . '/create') ?>"></a>
+            <a class="btn btn-outline-primary btn-sm fa fa fa-plus" style="text-transform: none" href="<?php echo site_url($module . '/create') ?>"> Tambah <?= $activeModule['title'] ?></a>
         <?php } ?>
     </div>
     <div class="card-body">
@@ -27,11 +27,11 @@
                             <td class="text-center"><span class="badge badge-<?= $r['standard']==0?'danger':'info'?>"><?php echo $r['standard'] ?></span></td>
                             <td>
                                 <?php if ($activeModule['acc_update']) { ?>
-                                    <button class="btn btn-primary fa fa-edit" title="Edit" name="initEdit" value="<?php echo $r['id'] ?>" formaction="<?php echo site_url($module . '/edit') ?>"></button>
+                                    <button class="btn btn-outline-primary btn-sm fa fa-edit" title="Edit" name="initEdit" value="<?php echo $r['id'] ?>" formaction="<?php echo site_url($module . '/edit') ?>"></button>
                                 <?php } ?>
                                 <?php if ($r['count'] == 0 & $r['standard'] == 0) { ?>
                                     <?php if ($activeModule['acc_delete']) { ?>
-                                        <button class="btn btn-danger fa fa-trash" title="Hapus" name="initHapus" value="<?php echo $r['id'] ?>" formaction="<?php echo site_url($module . '/delete') ?>"></button>
+                                        <button class="btn btn-outline-primary fa fa-trash" title="Hapus" name="initHapus" value="<?php echo $r['id'] ?>" formaction="<?php echo site_url($module . '/delete') ?>"></button>
                                     <?php } ?>
                                 <?php } ?>
                             </td>

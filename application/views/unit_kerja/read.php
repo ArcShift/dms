@@ -1,7 +1,7 @@
 <div class="main-card mb-3 card">
     <div class="card-header">
         <?php if ($activeModule['acc_create']) { ?>
-            <a class="btn btn-primary fa fa-plus" href="<?php echo site_url($module . '/create') ?>" title="Tambah"></a>
+            <a class="btn btn-outline-primary btn-sm fa fa-plus" style="text-transform: none" href="<?php echo site_url($module . '/create') ?>"> Tambah <?= $activeModule['title'] ?></a>
         <?php } ?>
     </div>
     <div class="card-body">
@@ -24,13 +24,13 @@
                             <td><?php echo $d['name'] ?></td>
                             <td><?php echo $d['company'] ?></td>
                             <td><?php echo ucwords(strtolower($d['jenis'])) . ' Dokumen' ?></td>
-                            <td class="text-center"><span class="badge badge-<?= $d['personil']==0?'danger':'info'?>"><?php echo $d['personil'] ?></span></td>
+                            <td class="text-center"><span class="badge badge-<?= $d['personil'] == 0 ? 'danger' : 'info' ?>"><?php echo $d['personil'] ?></span></td>
                             <td>
                                 <?php if ($activeModule['acc_update']) { ?>
-                                    <button class="btn btn-primary fa fa-edit" title="Edit" name="initEdit" value="<?php echo $d['id'] ?>" formaction="<?php echo site_url($module . '/edit') ?>"></button>
+                                    <button class="btn btn-outline-primary btn-sm fa fa-edit" title="Edit" name="initEdit" value="<?php echo $d['id'] ?>" formaction="<?php echo site_url($module . '/edit') ?>"></button>
                                 <?php } ?>
-                                <?php if ($activeModule['acc_delete']&$d['personil']==0) { ?>
-                                    <button class="btn btn-danger fa fa-trash" title="Hapus" name="initHapus" value="<?php echo $d['id'] ?>" formaction="<?php echo site_url($module . '/delete') ?>"></button>
+                                <?php if ($activeModule['acc_delete'] & $d['personil'] == 0) { ?>
+                                    <button class="btn btn-outline-danger btn-sm fa fa-trash" title="Hapus" name="initHapus" value="<?php echo $d['id'] ?>" formaction="<?php echo site_url($module . '/delete') ?>"></button>
                                 <?php } ?>
                             </td>
                         </tr>
@@ -42,3 +42,28 @@
     </div>
     <div class="box-footer"></div>
 </div>
+<script>
+    function afterReady() {
+        $('.data-table').DataTable({
+            destroy: true,
+            initComplete: function () {
+                console.log(this.api().columns());
+                this.api().columns().every(function () {
+                    var column = this;
+                    if (column[0][0] == 2) {
+                        console.log();
+                        var select = $('<select style="width:50%; margin-left:10px" class="form-control form-control-sm pull-right"><option value="">-- Perusahaan --</option></select>')
+                                .prependTo($('.dataTables_filter'))
+                                .on('change', function () {
+                                    var val = $.fn.dataTable.util.escapeRegex($(this).val());
+                                    column.search(val ? '^' + val + '$' : '', true, false).draw();
+                                });
+                        column.data().unique().sort().each(function (d, j) {
+                            select.append('<option value="' + d + '">' + d + '</option>');
+                        });
+                    }
+                });
+            }
+        });
+    }
+</script>
