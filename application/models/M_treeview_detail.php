@@ -297,7 +297,7 @@ class M_treeview_detail extends CI_Model {
         $this->db->set('type', $type);
         if ($type == 'FILE') {
             $url = $this->upload->data()['file_name'];
-            $this->db->set('url', $this->upload->data()['file_name']);
+            $this->db->set('path', $this->upload->data()['file_name']);
         } else if ($type == 'URL') {
             $this->db->set('path', $this->input->post('url'));
         }
