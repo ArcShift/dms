@@ -928,12 +928,10 @@ $role = $this->session->userdata['user']['role'];
                             uploadStatus = '<span class="badge badge-danger">Belum<br>diupload</span>';
                         }
                         var uploadBtn = '-';
-                        if (new Date().setHours(0, 0, 0, 0) == jadwal.setHours(0, 0, 0, 0)) {
-                            uploadBtn = '<span class="text-primary fa fa-upload" title="Upload" onclick="initUploadImplementasi(' + n + ')"></span>'
-                        } else if (new Date() > jadwal) {
-                            uploadBtn = '<span class="badge badge-primary">Lewat</badge>'
+                        if (new Date() > jadwal) {
+                            uploadBtn = '<span class="badge badge-primary">Terlambat</badge>'
                         } else {
-                            uploadBtn = '<span class="badge badge-warning">Pending</badge>'
+                            uploadBtn = '<span class="text-primary fa fa-upload" title="Upload" onclick="initUploadImplementasi(' + n + ')"></span>';
                         }
                         $('#table-implementasi').append('<tr>'
                                 + '<td>' + sortDokumen[sortJadwal[i].index_dokumen].judul + '</td>'

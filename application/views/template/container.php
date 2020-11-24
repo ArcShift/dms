@@ -34,7 +34,7 @@
             .menu-item a{
                 font-size: small;
             }
-            .data-table{
+            table{
                 font-size: .88rem;
             }
         </style>
