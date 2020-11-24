@@ -39,7 +39,7 @@
                             </td>
                             <td>
                                 <?php if ($activeModule['acc_update']) { ?>
-                                    <button class="btn btn-primary fa fa-edit" title="Edit" name="initEdit" value="<?php echo $r['id'] ?>" formaction="<?php echo site_url($module . '/edit') ?>"></button>
+                                    <button class="btn btn-outline-primary btn-sm fa fa-edit" title="Edit" name="initEdit" value="<?php echo $r['id'] ?>" formaction="<?php echo site_url($module . '/edit') ?>"></button>
                                 <?php } ?>
                             </td>
                         </tr>

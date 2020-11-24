@@ -70,7 +70,7 @@
                     </div>
                 </div>
                 <div class="card-footer ">
-                    <button class="btn btn-primary fa fa-search" type="submit"> Cari</button>
+                    <button class="btn btn-outline-primary btn-sm fa fa-search" type="submit"> Cari</button>
                 </div>
             </form>
         </div>
@@ -97,7 +97,7 @@
                                     <td><?php echo $r['fullname'] ?></td>
                                     <td class="text-center <?= $this->input->get('distribusi') | $this->input->get('unit_kerja_distribusi') ? 'd-none' : '' ?>"><div class="badge badge-<?= $r['distribusi'] == 0 ? 'danger' : 'success' ?>"><?= $r['distribusi'] ?></div></td>
                                     <td>
-                                        <a class="btn btn-primary fa fa-eye" href="<?= site_url('document_search/detail/' . $r['id']) ?>" title="Lihat Detail" name="detail"></a>
+                                        <a class="btn btn-outline-primary btn-sm fa fa-search" href="<?= site_url('document_search/detail/' . $r['id']) ?>" title="Lihat Detail" name="detail"></a>
                                     </td>
                                 </tr>
                             <?php } ?>
