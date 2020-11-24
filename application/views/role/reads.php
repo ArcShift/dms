@@ -30,7 +30,7 @@ $icon = array('search', 'plus', 'edit', 'trash');
                                             $btn = isset($access[$mkey][$ukey]['acc_' . $c]) ? 'primary' : 'danger';
                                             $val = isset($access[$mkey][$ukey]['acc_' . $c]) ? '0' : '1';
                                             ?>
-                                            <button class="btn btn-<?php echo $btn . ' fa fa-' . $icon[$ckey] ?>" title="<?php echo (isset($access[$mkey][$ukey]['acc_' . $c]) ? 'Disable ' : 'Enable ') . ucfirst($c) ?>" name="<?php echo $c ?>" value="<?php echo $m['id'] . '_' . $u['id'] . '_' . $val ?>"></button>
+                                            <button class="btn btn-sm btn-outline-<?php echo $btn . ' fa fa-' . $icon[$ckey] ?>" title="<?php echo (isset($access[$mkey][$ukey]['acc_' . $c]) ? 'Disable ' : 'Enable ') . ucfirst($c) ?>" name="<?php echo $c ?>" value="<?php echo $m['id'] . '_' . $u['id'] . '_' . $val ?>"></button>
                                         <?php } ?>
                                     </td>
                                 <?php } ?>

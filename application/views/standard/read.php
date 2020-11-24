@@ -12,7 +12,9 @@
                         <th>No</th>
                         <th>Nama</th>
                         <th class="text-center">Pasal & Ayat</th>
-                        <th class="text-center">Perusahaan</th>
+                        <?php if ($this->session->userdata('user')['role'] == 'admin') { ?>
+                            <th class="text-center">Perusahaan</th>
+                        <?php } ?>
                         <th>Created by</th>
                         <th>Aksi</th>
                     </tr>
@@ -23,7 +25,9 @@
                             <td><?php echo $k + 1 ?></td>
                             <td><?php echo $d['name'] ?></td>
                             <td class="text-center"><span class="badge badge-info"><?php echo $d['detail'] ?></span></td>
-                            <td class="text-center"><div class="badge badge-info"><?php echo $d['used'] ?></div></td>
+                            <?php if ($this->session->userdata('user')['role'] == 'admin') { ?>
+                                <td class="text-center"><div class="badge badge-info"><?php echo $d['used'] ?></div></td>
+                            <?php } ?>
                             <td><?php echo $d['user'] ?></td>
                             <td>
                                 <button class="btn btn-outline-primary btn-sm fa fa-search" title="Detail" name="detail" value="<?php echo $d['id'] ?>" formaction="<?php echo site_url($module . '/detail') ?>"></button>

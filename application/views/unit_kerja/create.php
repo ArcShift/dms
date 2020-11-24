@@ -6,7 +6,9 @@
             <div class="form-group">
                 <label>Perusahaan</label>
                 <select class="form-control" name="perusahaan" required="">
+                    <?php if ($this->session->userdata('user')['role'] == 'admin') { ?>
                     <option value="">-- Perusahaan --</option>
+                    <?php } ?>
                     <?php foreach ($company as $c) { ?>
                         <option value="<?php echo $c['id'] ?>" <?php echo $c['id'] == $this->input->post('role') ? 'selected' : ''; ?>><?php echo $c['name'] ?></option>
                     <?php } ?>

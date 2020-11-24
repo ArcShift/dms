@@ -22,10 +22,10 @@ class M_personil extends CI_Model {
         $this->db->join('unit_kerja uk', 'uk.id = p.id_unit_kerja', 'LEFT');
         $this->db->join('company c', 'c.id = uk.id_company', 'LEFT');
         $this->db->join('users u', 'p.id = u.id_personil', 'LEFT');
-//        if ($this->session->userdata('user')['role'] == 'pic') {
+        if ($this->session->userdata('user')['role'] == 'pic') {
 //            $this->db->where('r.name', 'anggota');
-//            $this->db->where('c.id', $this->session->userdata['user']['id_company']);
-//        }
+            $this->db->where('c.id', $this->session->userdata['user']['id_company']);
+        }
         $this->db->group_by('p.id');
         return $this->db->get($this->table . ' p')->result_array();
     }

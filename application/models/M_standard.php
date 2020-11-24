@@ -15,7 +15,13 @@ class M_standard extends CI_Model {
         $this->db->join('users u', 'u.id = s.created_by');
         $this->db->join('pasal p', 's.id = p.id_standard', 'LEFT');
         $this->db->join('company_standard cs', 's.id = cs.id_standard', 'LEFT');
-        $this->db->group_by('s.id');    
+        if ($this->session->userdata('user')['role'] == 'pic') {
+            $this->db->where('cs.id_company', $this->session->userdata['user']['id_company']);
+        }
+        $this->db->group_by('s.id');
+        if($this->session->userdata('user')['role'] == 'pic'){
+            
+        }
         return $this->db->get($this->table. ' s')->result_array();
     }
 
