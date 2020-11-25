@@ -13,7 +13,7 @@ class M_personil extends CI_Model {
 
     function unit_kerja($id_company) {
         $this->db->select('id, name');
-        $this->db->where('id_company');
+        $this->db->where('id_company',$id_company);
         return $this->db->get('unit_kerja')->result_array();
     }
 
@@ -42,12 +42,15 @@ class M_personil extends CI_Model {
         $input = $this->input->post();
         $this->db->where('id', $input['id']);
         $this->db->set('fullname', $input['fullname']);
+        $this->db->set('id_unit_kerja', $input['id_unit_kerja']);
         return $this->db->update($this->table);
     }
 
     function detail($id) {
-        $this->db->where('id', $id);
-        return $this->db->get($this->table)->row_array();
+        $this->db->select('p.*, uk.id_company');
+        $this->db->join('unit_kerja uk', 'uk.id = p.id_unit_kerja');
+        $this->db->where('p.id', $id);
+        return $this->db->get($this->table . ' p')->row_array();
     }
 
 }

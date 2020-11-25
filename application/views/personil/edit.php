@@ -4,7 +4,8 @@
             <h5>Edit Data</h5>
         </div>
         <div class="card-body">
-            <input hidden="" name="id" required="" value="<?php echo $data['id']?>">
+            <input hidden="" name="id" required="" value="<?php echo $data['id'] ?>">
+            <input hidden="" name="id_company" required="" value="<?php echo $data['id_company'] ?>">
             <div class="form-group">
             </div>
             <div class="form-group">
@@ -16,9 +17,13 @@
             </div>
             <div class="form-group">
                 <label>Unit Kerja</label>
-                <input class="form-control <?php echo form_error('unit-kerja') != "" ? "is-invalid" : "" ?>" name="unit-kerja" placeholder="Unit Kerja" required="" value="<?php echo $data['id_unit_kerja'] ?>">
-                <div class="error invalid-feedback">
-                    <?php echo form_error('unit-kerja'); ?>
+                <select class="form-control <?php echo form_error('id_unit_kerja') != "" ? "is-invalid" : "" ?>" name="id_unit_kerja" required="">
+                    <option value="">-- Unit Kerja --</option>
+                    <?php foreach ($uk as $u) { ?>
+                        <option value="<?= $u['id']?>" <?= $data['id_unit_kerja']==$u['id']?'selected':'' ?>><?= $u['name']?></option>
+                    <?php } ?>
+                </select><div class="error invalid-feedback">
+                    <?php echo form_error('id_unit_kerja'); ?>
                 </div>
             </div>
         </div>
