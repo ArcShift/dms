@@ -14,6 +14,13 @@
                     <?php echo form_error('fullname'); ?>
                 </div>
             </div>
+            <div class="form-group">
+                <label>Unit Kerja</label>
+                <input class="form-control <?php echo form_error('unit-kerja') != "" ? "is-invalid" : "" ?>" name="unit-kerja" placeholder="Unit Kerja" required="" value="<?php echo $data['id_unit_kerja'] ?>">
+                <div class="error invalid-feedback">
+                    <?php echo form_error('unit-kerja'); ?>
+                </div>
+            </div>
         </div>
         <div class="d-block text-right card-footer">
             <a class="mr-2 btn btn-primary" href="<?php echo site_url($module) ?>">Kembali</a>

@@ -37,6 +37,7 @@ class Personil extends MY_Controller {
         } elseif ($this->input->post('edit')) {
             $result = $this->model->detail($this->input->post('edit'));
                 $this->form_validation->set_rules('fullname', 'Nama Lengkap', 'required');
+                $this->form_validation->set_rules('unit-kerja', 'Unit Kerja', 'required');
             if ($this->form_validation->run()) {
                 if ($this->model->updateData()) {
                     $this->session->set_flashdata('msgSuccess', 'Data berhasil diedit');
@@ -49,6 +50,7 @@ class Personil extends MY_Controller {
         } else {
             redirect($this->module);
         }
+            $this->data['data'] = $this->model->unit_kerja();
         $this->render('edit');
     }
 
@@ -59,7 +61,7 @@ class Personil extends MY_Controller {
     }
 
     function unit_kerja() {
-        echo json_encode($this->model->unit_kerja());
+        echo json_encode($this->model->unit_kerja($this->input->post('id')));
     }
 
 }

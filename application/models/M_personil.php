@@ -11,9 +11,9 @@ class M_personil extends CI_Model {
         return $this->db->get('company')->result_array();
     }
 
-    function unit_kerja() {
+    function unit_kerja($id_company) {
         $this->db->select('id, name');
-        $this->db->where('id_company', $this->input->post('id'));
+        $this->db->where('id_company');
         return $this->db->get('unit_kerja')->result_array();
     }
 
