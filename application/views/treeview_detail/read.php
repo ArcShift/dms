@@ -99,18 +99,101 @@ $role = $this->session->userdata['user']['role'];
                             <label>Tambah Jadwal</label>
                             <button class="btn btn-outline-primary fa fa-plus" onclick="jadwal()"></button>
                         </div>
-                        <table class="table table-striped">
-                            <thead>
-                                <tr>
-                                    <th>Judul Dokumen</th>
-                                    <th>Jadwal</th>
-                                    <th>Tugas</th>
-                                    <!--<th>Distribusi</th>-->
-                                    <th>Aksi</th>
-                                </tr>
-                            </thead>
-                            <tbody id="table-jadwal"></tbody>
-                        </table>
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Dokumen</th>
+                                        <th>Tugas</th>
+                                        <th>Form</th>
+                                        <th>Periode</th>
+                                        <th>Jadwal</th>
+                                        <th>Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="table-jadwal">
+                                    <!--DUMMY DATA-->
+                                    <tr>
+                                        <td>SOP Pemenuhan Clausul</td>
+                                        <td>Isi Matrik Dokumen</td>
+                                        <td>Matrik Pemenuhan Clausul ISO & PCI DSS</td>
+                                        <td>WPD.SMKI.FM.01.01</td>
+                                        <td>Ezi</td>
+                                        <td>23-Nov-2020</td>
+                                        <td>
+                                            <span class="text-primary fa fa-info-circle" title="Detail" onclick="detailJadwal(0)">
+                                            </span>&nbsp;<span class="text-primary fa fa-edit" title="Edit" onclick="editJadwal(0)">                                            
+                                            </span>&nbsp;<span class="text-danger fa fa-trash" title="Hapus" onclick="initHapusJadwal(0)"></span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>SOP Analisa Matrik</td>
+                                        <td>Review Matrik Dokumen</td>
+                                        <td>Review dan Analisa</td>
+                                        <td>WPD.SMKI.FM.0x.0x</td>
+                                        <td>Ezi</td>
+                                        <td>22-Oct-2020</td>
+                                        <td>
+                                            <span class="text-primary fa fa-info-circle" title="Detail" onclick="detailJadwal(0)">
+                                            </span>&nbsp;<span class="text-primary fa fa-edit" title="Edit" onclick="editJadwal(0)">                                            
+                                            </span>&nbsp;<span class="text-danger fa fa-trash" title="Hapus" onclick="initHapusJadwal(0)"></span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>SOP Analisa Dokumen</td>
+                                        <td>Isi Daftar Dokumen</td>
+                                        <td>Daftar Induk Dokumen</td>
+                                        <td>WPD.SMKI.FM.01.02</td>
+                                        <td>Ezi</td>
+                                        <td>25-Oct-2020</td>
+                                        <td>
+                                            <span class="text-primary fa fa-info-circle" title="Detail" onclick="detailJadwal(0)">
+                                            </span>&nbsp;<span class="text-primary fa fa-edit" title="Edit" onclick="editJadwal(0)">                                            
+                                            </span>&nbsp;<span class="text-danger fa fa-trash" title="Hapus" onclick="initHapusJadwal(0)"></span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>SOP Analisa Dokumen</td>
+                                        <td>Review Daftar Induk Dokumen</td>
+                                        <td>Daftar Induk Rekaman</td>
+                                        <td>WPD.SMKI.FM.01.03</td>
+                                        <td>Ezi</td>
+                                        <td>29-Oct-2020</td>
+                                        <td>
+                                            <span class="text-primary fa fa-info-circle" title="Detail" onclick="detailJadwal(0)">
+                                            </span>&nbsp;<span class="text-primary fa fa-edit" title="Edit" onclick="editJadwal(0)">                                            
+                                            </span>&nbsp;<span class="text-danger fa fa-trash" title="Hapus" onclick="initHapusJadwal(0)"></span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>SOP Analisa Dokumen</td>
+                                        <td>Review Daftar Induk Dokumen</td>
+                                        <td>Daftar Dokumen Eksternal</td>
+                                        <td>WPD.SMKI.FM.01.04</td>
+                                        <td>Ezi</td>
+                                        <td>18-Nov-2020</td>
+                                        <td>
+                                            <span class="text-primary fa fa-info-circle" title="Detail" onclick="detailJadwal(0)">
+                                            </span>&nbsp;<span class="text-primary fa fa-edit" title="Edit" onclick="editJadwal(0)">                                            
+                                            </span>&nbsp;<span class="text-danger fa fa-trash" title="Hapus" onclick="initHapusJadwal(0)"></span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>SOP Analisa Dokumen</td>
+                                        <td>Review Daftar Induk Dokumen</td>
+                                        <td>Serah Terima Dokumen/Rekaman</td>
+                                        <td>WPD.SMKI.FM.01.05</td>
+                                        <td>Ezi</td>
+                                        <td>19-Nov-2020</td>
+                                        <td>
+                                            <span class="text-primary fa fa-info-circle" title="Detail" onclick="detailJadwal(0)">
+                                            </span>&nbsp;<span class="text-primary fa fa-edit" title="Edit" onclick="editJadwal(0)">                                            
+                                            </span>&nbsp;<span class="text-danger fa fa-trash" title="Hapus" onclick="initHapusJadwal(0)"></span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                     <!--IMPLEMENTASI-->
                     <div class="tab-pane" id="tab-implementasi" role="tabpanel">
@@ -840,7 +923,6 @@ $role = $this->session->userdata['user']['role'];
             data = JSON.parse(data);
             distribusi = [];
             $('#table-distribusi').empty();
-            $('#table-jadwal').empty();
             $('#table-implementasi').empty();
             var indexJadwal = 0;
             for (var i = 0; i < sortPasal.length; i++) {
@@ -911,10 +993,11 @@ $role = $this->session->userdata['user']['role'];
                         }
                         var jadwal = new Date(data[j].date_jadwal);
                         $('#table-jadwal').append('<tr>'
-                                + '<td>' + sortDokumen[sortJadwal[i].index_dokumen].judul + '</td>'
-                                + '<td>' + $.format.date(jadwal, "dd-MMM-yyyy") + '</td>'
+                                + '<td></td>'
                                 + '<td>' + data[j].desc + '</td>'
-//                                + '<td>' + personil + '</td>'
+                                + '<td>' + sortDokumen[sortJadwal[i].index_dokumen].judul + '</td>'
+                                + '<td>' + '' + '</td>'
+                                + '<td>' + $.format.date(jadwal, "dd-MMM-yyyy") + '</td>'
                                 + '<td>'
                                 + '<span class="text-primary fa fa-info-circle" title="Detail" onclick="detailJadwal(' + n + ')"></span>&nbsp'
                                 + '<span class="text-primary fa fa-edit" title="Edit" onclick="editJadwal(' + n + ')"></span>&nbsp'
