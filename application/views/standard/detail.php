@@ -141,6 +141,10 @@
             <span class="title"></span>
             <span class="index d-none"></span>
             <span class="desc d-none"></span>
+            <?php if ($activeModule['acc_update']) { ?>
+                <span class="fa fa-angle-double-up text-success" onclick="sortUp(this)" title="ke atas"></span>
+                <span class="fa fa-angle-double-down text-success" onclick="sortDown(this)" title="ke bawah"></span>
+            <?php } ?>
             <?php if ($activeModule['acc_create']) { ?>
                 <span class="fa fa-plus text-primary" onclick="add(this)" title="Tambah"></span>
             <?php } ?>
@@ -153,7 +157,7 @@
             <?php if ($activeModule['acc_update']) { ?>
                 <span class="fa fa-list-alt text-primary ctrl-form1" onclick="form1(this)" title="Detail"></span>
             <?php } ?>
-                <a class="fa fa-download text-primary"></a>
+            <a class="fa fa-download text-primary"></a>
             <ul></ul>
         </li>
     </ul>
@@ -161,8 +165,8 @@
 <script>
     list = <?php echo $list ?>;
 //    for (var l of list) {
-        for (var i = 0; i < list.length; i++) {
-        var l= list[i];    
+    for (var i = 0; i < list.length; i++) {
+        var l = list[i];
         var parent = l.parent == null ? 'root' : l.parent;
         parent = $('#' + parent);
         var clone = $('#tree').clone();
@@ -178,9 +182,9 @@
             parent.children('.title').before('<span class="fa fa-angle-double-right text-success" onclick="collapse(this)"></span>');
 //            parent.children('.ctrl-form1').remove();
         }
-        if(l.file!=null){
-            clone.children('.fa-download').attr('href','<?php echo base_url('upload/form1/')?>'+l.file);
-        }else{
+        if (l.file != null) {
+            clone.children('.fa-download').attr('href', '<?php echo base_url('upload/form1/') ?>' + l.file);
+        } else {
             clone.children('.fa-download').remove();
         }
     }
@@ -215,7 +219,7 @@
     function form1(item) {
         closeForm();
         showCrud('#form1');
-        var id= $(item).parent().children('.index').text()
+        var id = $(item).parent().children('.index').text();
         $('.item-id').val($(item).parent().attr('id'));
         $('.item-name').val($(item).parent().children('.title').text());
         $('.item-sort-desc').val(list[id].sort_desc);
@@ -232,5 +236,13 @@
         $('#treeview-list').addClass('col-sm-6');
         $('#treeview-crud').show();
         $(item).removeClass('d-none');
+    }
+    function sortUp(item) {
+        var id = $(item).parent().attr('id');
+        $('<form method="post"><input name="sortUp" value="'+ id +'"></form>').appendTo('body').submit();
+        console.log(item);
+    }
+    function sortDown(item) {
+        console.log(item);
     }
 </script>
