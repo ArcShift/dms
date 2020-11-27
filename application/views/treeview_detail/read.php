@@ -556,6 +556,16 @@ $role = $this->session->userdata['user']['role'];
                                     <input class="form-control input-jadwal" name="tanggal_selesai" required="">
                                 </td>
                             </tr>
+                            <tr class="group-input-repeat">
+                                <td>Periode</td>
+                                <td>
+                                    <select name="periode" class="form-control select-periode">
+                                        <option value="mingguan">Mingguan</option>
+                                        <option value="bulanan">Bulanan</option>
+                                        <option value="tahunan">Tahunan</option>
+                                    </select>
+                                </td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -992,11 +1002,12 @@ $role = $this->session->userdata['user']['role'];
                             }
                         }
                         var jadwal = new Date(data[j].date_jadwal);
+                        var periode = sortJadwal[i].periode==null?'-':sortJadwal[i].periode;
                         $('#table-jadwal').append('<tr>'
                                 + '<td></td>'
                                 + '<td>' + data[j].desc + '</td>'
                                 + '<td>' + sortDokumen[sortJadwal[i].index_dokumen].judul + '</td>'
-                                + '<td>' + '' + '</td>'
+                                + '<td>' + periode + '</td>'
                                 + '<td>' + $.format.date(jadwal, "dd-MMM-yyyy") + '</td>'
                                 + '<td>'
                                 + '<span class="text-primary fa fa-info-circle" title="Detail" onclick="detailJadwal(' + n + ')"></span>&nbsp'

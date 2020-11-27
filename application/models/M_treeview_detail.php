@@ -219,6 +219,7 @@ class M_treeview_detail extends CI_Model {
                 $data[$d] = $dy;
             }
             $data['end_date'] = date("Y-m-d", strtotime($this->input->post('tanggal_selesai')));
+            $data['periode'] = $this->input->post('periode');
             $this->db->insert('jadwal', $data);
             $id = $this->db->insert_id();
             $tgl = strtotime($data['start_date']);
