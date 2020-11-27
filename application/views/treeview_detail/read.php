@@ -1004,7 +1004,7 @@ $role = $this->session->userdata['user']['role'];
                         var jadwal = new Date(data[j].date_jadwal);
                         var periode = sortJadwal[i].periode==null?'-':sortJadwal[i].periode;
                         $('#table-jadwal').append('<tr>'
-                                + '<td></td>'
+                                + '<td>' + $('#modalDokumenRead').find('select[name=dokumen_terkait]').find('option[value=' + sortDokumen[sortJadwal[i].index_dokumen].contoh + ']').text() + '</td>'
                                 + '<td>' + data[j].desc + '</td>'
                                 + '<td>' + sortDokumen[sortJadwal[i].index_dokumen].judul + '</td>'
                                 + '<td>' + periode + '</td>'
@@ -1217,7 +1217,7 @@ $role = $this->session->userdata['user']['role'];
         m.find('.label-klasifikasi').text(d.klasifikasi);
         m.find('.input-dokumen-id').val(d.id);
         if (d.contoh != null) {
-            m.find('.label-dokumen-terkait').text($('#modalDokumenRead').find('option[value=' + d.contoh + ']').text());
+            m.find('.label-dokumen-terkait').text($('#modalDokumenRead').find('select[name=dokumen_terkait]').find('option[value=' + d.contoh + ']').text());
         } else {
             m.find('.label-dokumen-terkait').text('-');
         }
