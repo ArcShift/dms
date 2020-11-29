@@ -64,7 +64,7 @@ $role = $this->session->userdata['user']['role'];
                     <div class="tab-pane" id="tab-dokumen" role="tabpanel">
                         <div class="text-right mb-2">
                             <label>Tambah Dokumen</label>
-                            <button class="btn btn-outline-primary fa fa-plus" onclick="tambahDokumen()"></button>
+                            <button class="btn btn-outline-primary fa fa-plus" onclick="initTambahDokumen()"></button>
                         </div>
                         <table class="table table-striped">
                             <thead>
@@ -340,8 +340,10 @@ $role = $this->session->userdata['user']['role'];
                                     <label>File</label>
                                     <input class="radio-type-dokumen" type="radio" name="type_dokumen" value="URL">
                                     <label>Url</label>
-                                    <input class="form-control input-file d-none" type="file" name="dokumen" required="">
-                                    <input class="form-control input-url d-none" type="url" name="url" required="">
+                                    <input class="form-control input-path input-file" type="file" name="dokumen" required="">
+                                    <input class="form-control input-path input-url" type="url" name="url" required="">
+                                    <br/>
+                                    <label class="label-path"></label>
                                 </td>
                             </tr>
                         </tbody>
@@ -708,8 +710,8 @@ $role = $this->session->userdata['user']['role'];
                                     <label>File</label>
                                     <input class="radio-type-dokumen" type="radio" name="type_dokumen" value="URL">
                                     <label>Url</label>
-                                    <input class="form-control input-file d-none" type="file" name="dokumen" required="">
-                                    <input class="form-control input-url d-none" type="url" name="url" required="">
+                                    <input class="form-control input-path input-file" type="file" name="dokumen" required="">
+                                    <input class="form-control input-path input-url" type="url" name="url" required="">
                                 </td>
                             </tr>
                         </tbody>
@@ -735,8 +737,9 @@ $role = $this->session->userdata['user']['role'];
         $('#modalContainer').append(clone);
         $('#tab-pemenuhan').addClass('active');
         $('.select-2').select2();
-        formSubmit();
+        submitDokumen();
         $('.radio-ulangi-jadwal[value=TIDAK]').click();
+        $('.input-path').hide();
     });
     function afterReady() {}
     var idPerusahaan;
@@ -910,6 +913,7 @@ $role = $this->session->userdata['user']['role'];
             $('.select-dokumen').append('<option value="">-- -- --</option>');
             sortDokumen = [];
             data = JSON.parse(data);
+            var n=0;
             for (var h = 0; h < sortPasal.length; h++) {
                 for (var i = 0; i < data.length; i++) {
                     if (data[i].id_pasal == sortPasal[h].id) {
@@ -920,8 +924,9 @@ $role = $this->session->userdata['user']['role'];
                             data[i].distribusi = [];
                             data[i].user_distribusi = [];
                         }
-                        $('#table-dokumen').append('<tr><td>' + d.nomor + '</td><td>' + d.judul + '</td><td>' + d.deskripsi + '</td><td>Level ' + d.jenis + '</td><td><span class="text-primary fa fa-info-circle" onclick="detailDokumen(' + i + ')" title="Detail"></span>&nbsp<span class="text-primary fa fa-edit" onclick="editDokumen(' + i + ')"></span>&nbsp<span class="text-danger fa fa-trash" onclick="initHapusDokumen(' + i + ')"></span></td></tr>');
+                        $('#table-dokumen').append('<tr><td>' + d.nomor + '</td><td>' + d.judul + '</td><td>' + d.deskripsi + '</td><td>Level ' + d.jenis + '</td><td><span class="text-primary fa fa-info-circle" onclick="detailDokumen(' + n + ')" title="Detail"></span>&nbsp<span class="text-primary fa fa-edit" onclick="editDokumen(' + n + ')"></span>&nbsp<span class="text-danger fa fa-trash" onclick="initHapusDokumen(' + n + ')"></span></td></tr>');
                         $('.select-dokumen').append('<option value="' + d.id + '">' + d.judul + '</option>');
+                        n++;
                     }
                 }
             }
@@ -1002,7 +1007,7 @@ $role = $this->session->userdata['user']['role'];
                             }
                         }
                         var jadwal = new Date(data[j].date_jadwal);
-                        var periode = sortJadwal[i].periode==null?'-':sortJadwal[i].periode;
+                        var periode = sortJadwal[i].periode == null ? '-' : sortJadwal[i].periode;
                         $('#table-jadwal').append('<tr>'
                                 + '<td>' + $('#modalDokumenRead').find('select[name=dokumen_terkait]').find('option[value=' + sortDokumen[sortJadwal[i].index_dokumen].contoh + ']').text() + '</td>'
                                 + '<td>' + data[j].desc + '</td>'
@@ -1083,10 +1088,10 @@ $role = $this->session->userdata['user']['role'];
             }
         }
     }
-    function formSubmit() {//create dokumen
+    function submitDokumen() {//create dokumen
         $('.formDokumen').on("submit", function (e) {
             e.preventDefault();
-            var status = 'Undefined';
+            var status = 'Error';
             $('.modal').modal('hide');
             $('#modalNotif .modal-title').text('Uploading...');
             $('#modalNotif').modal('show');
@@ -1102,17 +1107,17 @@ $role = $this->session->userdata['user']['role'];
                     data = JSON.parse(data);
                     if (data.status === 'success') {
                         status = 'Success';
-                        console.log($(this));
-                        $('.formDokumen').trigger("reset");
+//                        console.log($(this));
+                        formDokumenReset = true;
                         getPasal();
                         $('#modalNotif .modal-message').html('Data Berhasil Disimpan');
                     } else if (data.status === 'error') {
-                        status = 'Error';
                         $('#modalNotif .modal-message').html(data.message);
+                    } else {
+                        $('#modalNotif .modal-message').html(data);
                     }
                 },
                 error: function (data) {
-                    status = 'Error';
                     $('#modalNotif .modal-message').text('Error 500');
                 },
                 complete: function () {
@@ -1121,33 +1126,44 @@ $role = $this->session->userdata['user']['role'];
             });
         });
     }
-    function tambahDokumen() {
+    formDokumenReset = true;
+    function initTambahDokumen() {
         var m = $('#modalDokumen');
-        m.find('.modal-title').text('Tambah Dokumen');
-        m.find('.btn-submit').val('tambah');
+        if (formDokumenReset) {
+            $('.formDokumen').trigger("reset");
+            m.find('.input-path').hide();
+            formDokumenReset = false;
+            m.find('.btn-submit').show();
+            m.find('.modal-title').text('Tambah Dokumen');
+            m.find('.btn-submit').val('tambah');
+            m.find('.label-path').empty();
+            m.find('input, select, textarea').prop('disabled', false);
+        }
         m.modal('show');
     }
     $('.radio-type-dokumen').change(function () {
         var m = $('.modal');
         var type = $(this).val();
-        m.find('.input-url').val('');
-        m.find('.input-file').val('');
+        m.find('.input-path').val('');
         if (type === 'FILE') {
-            m.find('.input-file').removeClass('d-none');
+            m.find('.input-file').show();
             m.find('.input-file').add('required');
-            m.find('.input-url').addClass('d-none');
+            m.find('.input-url').hide();
             m.find('.input-url').removeAttr('required');
         } else if (type === 'URL') {
-            m.find('.input-file').addClass('d-none');
+            m.find('.input-file').hide();
             m.find('.input-file').removeAttr('required');
-            m.find('.input-url').removeClass('d-none');
+            m.find('.input-url').show();
             m.find('.input-url').attr('required');
         }
+        console.log(type);
     });
     function detailDokumen(index) {
-        var m = $('#modalDokumenRead');
+        formDokumenReset = true;
+        var m = $('#modalDokumen');
         var d = sortDokumen[index];
         m.modal('show');
+        m.find('.modal-title').text('Detail Dokumen');
         m.find('.btn-submit').hide();
         m.find('.select-pasal').val(d.id_pasal);
         m.find('.input-nomor').val(d.nomor);
@@ -1159,21 +1175,19 @@ $role = $this->session->userdata['user']['role'];
         m.find('.textarea-deskripsi').val(d.deskripsi);
         m.find('.input-versi').val(d.versi);
         m.find('.radio-type-dokumen').filter('[value=' + d.type_doc + ']').prop('checked', true);
-        m.find('input').prop('disabled', true);
-        m.find('select').prop('disabled', true);
-        m.find('textarea').prop('disabled', true);
+        m.find('.input-path').hide();
+        m.find('.label-path').text(d.type_doc == 'FILE' ? d.file : d.url);
+        m.find('input, select, textarea').prop('disabled', true);
     }
     function editDokumen(index) {
         detailDokumen(index);
-        var m = $('#modalDokumenRead');
+        formDokumenReset = true;
+        var m = $('#modalDokumen');
         m.find('.modal-title').text('Edit Dokumen');
         m.find('.btn-submit').show();
         m.find('.input-id').val(sortDokumen[index].id);
-        m.find('input').prop('disabled', false);
-        m.find('select').prop('disabled', false);
-        m.find('textarea').prop('disabled', false);
-        m.find('.input-file').prop('required', false);
-        m.find('.input-url').prop('required', false);
+        m.find('input, select, textarea').prop('disabled', false);
+        m.find('.input-path').prop('required', false);
     }
     function initHapusDokumen(index) {
         var m = $('#modalDeleteDokumen');
