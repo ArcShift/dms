@@ -62,10 +62,10 @@ $role = $this->session->userdata['user']['role'];
                     </div>
                     <!--DOKUMEN-->
                     <div class="tab-pane" id="tab-dokumen" role="tabpanel">
-                        <div class="text-right mb-2">
+<!--                        <div class="text-right mb-2">
                             <label>Tambah Dokumen</label>
                             <button class="btn btn-outline-primary fa fa-plus" onclick="initTambahDokumen()"></button>
-                        </div>
+                        </div>-->
                         <table class="table table-striped">
                             <thead>
                                 <tr>
@@ -111,87 +111,7 @@ $role = $this->session->userdata['user']['role'];
                                         <th>Aksi</th>
                                     </tr>
                                 </thead>
-                                <tbody id="table-jadwal">
-                                    <!--DUMMY DATA-->
-                                    <tr>
-                                        <td>SOP Pemenuhan Clausul</td>
-                                        <td>Isi Matrik Dokumen</td>
-                                        <td>Matrik Pemenuhan Clausul ISO & PCI DSS</td>
-                                        <td>WPD.SMKI.FM.01.01</td>
-                                        <td>Ezi</td>
-                                        <td>23-Nov-2020</td>
-                                        <td>
-                                            <span class="text-primary fa fa-info-circle" title="Detail" onclick="detailJadwal(0)">
-                                            </span>&nbsp;<span class="text-primary fa fa-edit" title="Edit" onclick="editJadwal(0)">                                            
-                                            </span>&nbsp;<span class="text-danger fa fa-trash" title="Hapus" onclick="initHapusJadwal(0)"></span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>SOP Analisa Matrik</td>
-                                        <td>Review Matrik Dokumen</td>
-                                        <td>Review dan Analisa</td>
-                                        <td>WPD.SMKI.FM.0x.0x</td>
-                                        <td>Ezi</td>
-                                        <td>22-Oct-2020</td>
-                                        <td>
-                                            <span class="text-primary fa fa-info-circle" title="Detail" onclick="detailJadwal(0)">
-                                            </span>&nbsp;<span class="text-primary fa fa-edit" title="Edit" onclick="editJadwal(0)">                                            
-                                            </span>&nbsp;<span class="text-danger fa fa-trash" title="Hapus" onclick="initHapusJadwal(0)"></span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>SOP Analisa Dokumen</td>
-                                        <td>Isi Daftar Dokumen</td>
-                                        <td>Daftar Induk Dokumen</td>
-                                        <td>WPD.SMKI.FM.01.02</td>
-                                        <td>Ezi</td>
-                                        <td>25-Oct-2020</td>
-                                        <td>
-                                            <span class="text-primary fa fa-info-circle" title="Detail" onclick="detailJadwal(0)">
-                                            </span>&nbsp;<span class="text-primary fa fa-edit" title="Edit" onclick="editJadwal(0)">                                            
-                                            </span>&nbsp;<span class="text-danger fa fa-trash" title="Hapus" onclick="initHapusJadwal(0)"></span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>SOP Analisa Dokumen</td>
-                                        <td>Review Daftar Induk Dokumen</td>
-                                        <td>Daftar Induk Rekaman</td>
-                                        <td>WPD.SMKI.FM.01.03</td>
-                                        <td>Ezi</td>
-                                        <td>29-Oct-2020</td>
-                                        <td>
-                                            <span class="text-primary fa fa-info-circle" title="Detail" onclick="detailJadwal(0)">
-                                            </span>&nbsp;<span class="text-primary fa fa-edit" title="Edit" onclick="editJadwal(0)">                                            
-                                            </span>&nbsp;<span class="text-danger fa fa-trash" title="Hapus" onclick="initHapusJadwal(0)"></span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>SOP Analisa Dokumen</td>
-                                        <td>Review Daftar Induk Dokumen</td>
-                                        <td>Daftar Dokumen Eksternal</td>
-                                        <td>WPD.SMKI.FM.01.04</td>
-                                        <td>Ezi</td>
-                                        <td>18-Nov-2020</td>
-                                        <td>
-                                            <span class="text-primary fa fa-info-circle" title="Detail" onclick="detailJadwal(0)">
-                                            </span>&nbsp;<span class="text-primary fa fa-edit" title="Edit" onclick="editJadwal(0)">                                            
-                                            </span>&nbsp;<span class="text-danger fa fa-trash" title="Hapus" onclick="initHapusJadwal(0)"></span>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>SOP Analisa Dokumen</td>
-                                        <td>Review Daftar Induk Dokumen</td>
-                                        <td>Serah Terima Dokumen/Rekaman</td>
-                                        <td>WPD.SMKI.FM.01.05</td>
-                                        <td>Ezi</td>
-                                        <td>19-Nov-2020</td>
-                                        <td>
-                                            <span class="text-primary fa fa-info-circle" title="Detail" onclick="detailJadwal(0)">
-                                            </span>&nbsp;<span class="text-primary fa fa-edit" title="Edit" onclick="editJadwal(0)">                                            
-                                            </span>&nbsp;<span class="text-danger fa fa-trash" title="Hapus" onclick="initHapusJadwal(0)"></span>
-                                        </td>
-                                    </tr>
-                                </tbody>
+                                <tbody id="table-jadwal"></tbody>
                             </table>
                         </div>
                     </div>
@@ -249,6 +169,49 @@ $role = $this->session->userdata['user']['role'];
                 </div>
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-primary" data-dismiss="modal">Tutup</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<!--MODAL UPLOAD DOCUMENT-->
+<div class="modal fade" id="modalDocument" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <form id="formUploadDocument">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Tambah Dokumen</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body modal-message">
+                    <input class="input-pasal-id" name="pasal" readonly="" hidden="">
+                    <input class="input-company-id" name="company" readonly="" hidden="">
+                    <div class="form-group">
+                        <label>Pasal</label>
+                        <input class="form-control input-pasal" readonly="">
+                    </div>
+                    <div class="form-group">
+                        <label for="namaModule">Nomor</label>
+                        <input class="form-control" name="nomor" required="">
+                    </div>
+                    <div class="form-group">
+                        <label for="namaModule">Judul</label>
+                        <input class="form-control" name="judul" required="">
+                    </div>
+                    <div>
+                        <input class="radio-type-dokumen" type="radio" name="type_dokumen" value="FILE" required="">
+                        <label>File</label>
+                        <input class="radio-type-dokumen" type="radio" name="type_dokumen" value="URL">
+                        <label>Url</label>
+                        <input class="form-control input-path input-file" type="file" name="dokumen" required="">
+                        <input class="form-control   input-path input-url" type="url" name="url" required="">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" data-dismiss="modal">Tutup</button>
+                    <button type="submit" class="btn btn-primary">Simpan</button>
                 </div>
             </div>
         </form>
@@ -881,7 +844,16 @@ $role = $this->session->userdata['user']['role'];
                         + '<td class="text-center">' + '<span class="badge badge-' + percentColor(d.pemenuhan_imp) + '">' + (+d.pemenuhan_imp).toFixed() + '%</span>' + '</td>'
 //                        + '<td class="text-center">' + d.upload + ' - ' + d.unupload + '</td>'//data upload & unupload
                         + '</tr>');
-                $('#table-pasal').append('<tr><td>' + d.fullname + '</td><td>' + (d.sort_desc == null ? '-' : d.sort_desc) + '</td><td>' + (d.long_desc == null ? '-' : d.long_desc) + '</td><td>' + d.doc + '</td><td><span class="fa fa-info-circle text-primary" onclick="detailPasal(' + i + ')" title="Detail"></span></td></tr>');
+                $('#table-pasal').append('<tr>'
+                        + '<td>' + d.fullname + '</td>'
+                        + '<td>' + (d.sort_desc == null ? '-' : d.sort_desc) + '</td>'
+                        + '<td>' + (d.long_desc == null ? '-' : d.long_desc) + '</td>'
+                        + '<td>' + d.doc + '</td>'
+                        + '<td>'
+                        + '<span class="fa fa-info-circle text-primary" onclick="detailPasal(' + i + ')" title="Detail"></span>&nbsp'
+                        + (d.child == '0'?'<span class="fa fa-upload text-primary" onclick="initAddDocument(' + i + ')" title="Upload"></span>&nbsp':'')
+                        + '</td>'
+                        + '</tr>');
                 if (d.child == 0) {
                     $('.select-pasal').append('<option value="' + d.id + '">' + d.fullname + '</option>');
                 }
@@ -913,7 +885,7 @@ $role = $this->session->userdata['user']['role'];
             $('.select-dokumen').append('<option value="">-- -- --</option>');
             sortDokumen = [];
             data = JSON.parse(data);
-            var n=0;
+            var n = 0;
             for (var h = 0; h < sortPasal.length; h++) {
                 for (var i = 0; i < data.length; i++) {
                     if (data[i].id_pasal == sortPasal[h].id) {
@@ -938,7 +910,6 @@ $role = $this->session->userdata['user']['role'];
             data = JSON.parse(data);
             distribusi = [];
             $('#table-distribusi').empty();
-            $('#table-implementasi').empty();
             var indexJadwal = 0;
             for (var i = 0; i < sortPasal.length; i++) {
                 sortPasal[i].dokumens = [];
@@ -1141,6 +1112,50 @@ $role = $this->session->userdata['user']['role'];
         }
         m.modal('show');
     }
+    function initAddDocument(index) {
+        var m = $('#modalDocument');
+        m.modal('show');
+        m.find('.input-pasal').val(sortPasal[index].name);
+        m.find('.input-pasal-id').val(sortPasal[index].id);
+        m.find('.input-company-id').val(perusahaan);
+    }
+    $('#formUploadDocument').on("submit", function (e) {
+        e.preventDefault();
+        console.log('upload');
+        var status = 'Error';
+            $('.modal').modal('hide');
+            $('#modalNotif .modal-title').text('Uploading...');
+            $('#modalNotif').modal('show');
+            $.ajax({
+                url: '<?php echo site_url($module . '/create_dokumen') ?>',
+                type: "post",
+                data: new FormData(this),
+                processData: false,
+                contentType: false,
+                cache: false,
+                async: false,
+                success: function (data) {
+                    data = JSON.parse(data);
+                    if (data.status === 'success') {
+                        status = 'Success';
+//                        console.log($(this));
+                        formDokumenReset = true;
+                        getPasal();
+                        $('#modalNotif .modal-message').html('Data Berhasil Disimpan');
+                    } else if (data.status === 'error') {
+                        $('#modalNotif .modal-message').html(data.message);
+                    } else {
+                        $('#modalNotif .modal-message').html(data);
+                    }
+                },
+                error: function (data) {
+                    $('#modalNotif .modal-message').text('Error 500');
+                },
+                complete: function () {
+                    $('#modalNotif .modal-title').text(status);
+                }
+            });
+    });
     $('.radio-type-dokumen').change(function () {
         var m = $('.modal');
         var type = $(this).val();
@@ -1185,6 +1200,7 @@ $role = $this->session->userdata['user']['role'];
         var m = $('#modalDokumen');
         m.find('.modal-title').text('Edit Dokumen');
         m.find('.btn-submit').show();
+        m.find('.radio-type-dokumen').hidden();
         m.find('.input-id').val(sortDokumen[index].id);
         m.find('input, select, textarea').prop('disabled', false);
         m.find('.input-path').prop('required', false);
