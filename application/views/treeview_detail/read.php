@@ -62,10 +62,10 @@ $role = $this->session->userdata['user']['role'];
                     </div>
                     <!--DOKUMEN-->
                     <div class="tab-pane" id="tab-dokumen" role="tabpanel">
-<!--                        <div class="text-right mb-2">
-                            <label>Tambah Dokumen</label>
-                            <button class="btn btn-outline-primary fa fa-plus" onclick="initTambahDokumen()"></button>
-                        </div>-->
+                        <!--                        <div class="text-right mb-2">
+                                                    <label>Tambah Dokumen</label>
+                                                    <button class="btn btn-outline-primary fa fa-plus" onclick="initTambahDokumen()"></button>
+                                                </div>-->
                         <table class="table table-striped">
                             <thead>
                                 <tr>
@@ -253,13 +253,13 @@ $role = $this->session->userdata['user']['role'];
                             <tr>
                                 <td>Pembuat Dokumen</td>
                                 <td>
-                                    <select class="form-control select-anggota" name="creator" required=""></select>
+                                    <select class="form-control select-anggota" name="creator"></select>
                                 </td>
                             </tr>
                             <tr>
                                 <td>Jenis Dokumen</td>
                                 <td>
-                                    <select class="form-control select-jenis" name="jenis" required="">
+                                    <select class="form-control select-jenis" name="jenis">
                                         <option value="1">Level I</option>
                                         <option value="2">Level II</option>
                                         <option value="3">Level III</option>
@@ -270,7 +270,7 @@ $role = $this->session->userdata['user']['role'];
                             <tr>
                                 <td>Klasifikasi</td>
                                 <td>
-                                    <select class="form-control select-klasifikasi" name="klasifikasi" required="">
+                                    <select class="form-control select-klasifikasi" name="klasifikasi">
                                         <option value="UMUM">Umum</option>
                                         <option value="INTERNAL">Internal</option>
                                         <option value="RAHASIA">Rahasia</option>
@@ -287,7 +287,7 @@ $role = $this->session->userdata['user']['role'];
                             <tr>
                                 <td>Versi Dokumen</td>
                                 <td>
-                                    <input class="form-control input-versi" name="versi" required="">
+                                    <input class="form-control input-versi" name="versi">
                                 </td>
                             </tr>
                             <tr>
@@ -299,14 +299,18 @@ $role = $this->session->userdata['user']['role'];
                             <tr>
                                 <td>Dokumen</td>
                                 <td>
-                                    <input class="radio-type-dokumen" type="radio" name="type_dokumen" value="FILE" required="">
-                                    <label>File</label>
-                                    <input class="radio-type-dokumen" type="radio" name="type_dokumen" value="URL">
-                                    <label>Url</label>
-                                    <input class="form-control input-path input-file" type="file" name="dokumen" required="">
-                                    <input class="form-control input-path input-url" type="url" name="url" required="">
-                                    <br/>
-                                    <label class="label-path"></label>
+                                    <div class="group-radio-dokumen">
+                                        <input class="radio-type-dokumen" type="radio" name="type_dokumen" value="FILE" required="">
+                                        <label>File</label>
+                                        <input class="radio-type-dokumen" type="radio" name="type_dokumen" value="URL">
+                                        <label>Url</label>
+                                        <input class="form-control input-path input-file" type="file" name="dokumen" required="">
+                                        <input class="form-control input-path input-url" type="url" name="url" required="">
+                                    </div>
+                                    <div class="group-label-dokumen">
+                                        <label class="label-path"></label>
+                                        <i class="btn btn-outline-danger btn-sm pull-right fa fa-trash" onclick="initUpdateDocument()"></i>
+                                    </div>
                                 </td>
                             </tr>
                         </tbody>
@@ -851,7 +855,7 @@ $role = $this->session->userdata['user']['role'];
                         + '<td>' + d.doc + '</td>'
                         + '<td>'
                         + '<span class="fa fa-info-circle text-primary" onclick="detailPasal(' + i + ')" title="Detail"></span>&nbsp'
-                        + (d.child == '0'?'<span class="fa fa-upload text-primary" onclick="initAddDocument(' + i + ')" title="Upload"></span>&nbsp':'')
+                        + (d.child == '0' ? '<span class="fa fa-upload text-primary" onclick="initAddDocument(' + i + ')" title="Upload"></span>&nbsp' : '')
                         + '</td>'
                         + '</tr>');
                 if (d.child == 0) {
@@ -1123,38 +1127,38 @@ $role = $this->session->userdata['user']['role'];
         e.preventDefault();
         console.log('upload');
         var status = 'Error';
-            $('.modal').modal('hide');
-            $('#modalNotif .modal-title').text('Uploading...');
-            $('#modalNotif').modal('show');
-            $.ajax({
-                url: '<?php echo site_url($module . '/create_dokumen') ?>',
-                type: "post",
-                data: new FormData(this),
-                processData: false,
-                contentType: false,
-                cache: false,
-                async: false,
-                success: function (data) {
-                    data = JSON.parse(data);
-                    if (data.status === 'success') {
-                        status = 'Success';
+        $('.modal').modal('hide');
+        $('#modalNotif .modal-title').text('Uploading...');
+        $('#modalNotif').modal('show');
+        $.ajax({
+            url: '<?php echo site_url($module . '/create_dokumen') ?>',
+            type: "post",
+            data: new FormData(this),
+            processData: false,
+            contentType: false,
+            cache: false,
+            async: false,
+            success: function (data) {
+                data = JSON.parse(data);
+                if (data.status === 'success') {
+                    status = 'Success';
 //                        console.log($(this));
-                        formDokumenReset = true;
-                        getPasal();
-                        $('#modalNotif .modal-message').html('Data Berhasil Disimpan');
-                    } else if (data.status === 'error') {
-                        $('#modalNotif .modal-message').html(data.message);
-                    } else {
-                        $('#modalNotif .modal-message').html(data);
-                    }
-                },
-                error: function (data) {
-                    $('#modalNotif .modal-message').text('Error 500');
-                },
-                complete: function () {
-                    $('#modalNotif .modal-title').text(status);
+                    formDokumenReset = true;
+                    getPasal();
+                    $('#modalNotif .modal-message').html('Data Berhasil Disimpan');
+                } else if (data.status === 'error') {
+                    $('#modalNotif .modal-message').html(data.message);
+                } else {
+                    $('#modalNotif .modal-message').html(data);
                 }
-            });
+            },
+            error: function (data) {
+                $('#modalNotif .modal-message').text('Error 500');
+            },
+            complete: function () {
+                $('#modalNotif .modal-title').text(status);
+            }
+        });
     });
     $('.radio-type-dokumen').change(function () {
         var m = $('.modal');
@@ -1173,6 +1177,11 @@ $role = $this->session->userdata['user']['role'];
         }
         console.log(type);
     });
+    function initUpdateDocument() {
+        var m = $('#modalDokumen');
+        m.find('.group-radio-dokumen').show();
+        m.find('.group-label-dokumen').hide();
+    }
     function detailDokumen(index) {
         formDokumenReset = true;
         var m = $('#modalDokumen');
@@ -1189,8 +1198,11 @@ $role = $this->session->userdata['user']['role'];
         m.find('.select-dokumen').val(d.contoh);
         m.find('.textarea-deskripsi').val(d.deskripsi);
         m.find('.input-versi').val(d.versi);
-        m.find('.radio-type-dokumen').filter('[value=' + d.type_doc + ']').prop('checked', true);
+//        m.find('.radio-type-dokumen').filter('[value=' + d.type_doc + ']').prop('checked', true);
         m.find('.input-path').hide();
+        m.find('.fa-trash').hide();
+        m.find('.group-radio-dokumen').hide();
+        m.find('.group-label-dokumen').show();
         m.find('.label-path').text(d.type_doc == 'FILE' ? d.file : d.url);
         m.find('input, select, textarea').prop('disabled', true);
     }
@@ -1200,10 +1212,12 @@ $role = $this->session->userdata['user']['role'];
         var m = $('#modalDokumen');
         m.find('.modal-title').text('Edit Dokumen');
         m.find('.btn-submit').show();
-        m.find('.radio-type-dokumen').hidden();
+        m.find('.radio-type-dokumen').prop('checked', false);
+        m.find('.radio-type-dokumen').prop('required', false);
         m.find('.input-id').val(sortDokumen[index].id);
         m.find('input, select, textarea').prop('disabled', false);
-        m.find('.input-path').prop('required', false);
+        m.find('.input-path').prop('required', false);        
+               m.find('.fa-trash').show();
     }
     function initHapusDokumen(index) {
         var m = $('#modalDeleteDokumen');

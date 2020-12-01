@@ -57,7 +57,9 @@ class M_treeview_detail extends CI_Model {
         $this->db->set('id_pasal', $this->input->post('pasal'));
         $this->db->set('nomor', $this->input->post('nomor'));
         $this->db->set('judul', $this->input->post('judul'));
-        $this->db->set('id_company', $this->input->post('company'));
+        if ($this->input->post('company')) {
+            $this->db->set('id_company', $this->input->post('company'));
+        }
         $this->db->set('creator', $this->input->post('creator'));
         $this->db->set('jenis', $this->input->post('jenis'));
         $this->db->set('klasifikasi', $this->input->post('klasifikasi'));
@@ -67,12 +69,12 @@ class M_treeview_detail extends CI_Model {
             $this->db->set('contoh', $this->input->post('dokumen_terkait'));
         }
         $type = $this->input->post('type_dokumen');
-            $this->db->set('type_doc', $type);
-            if ($type == 'FILE' & !empty($_FILES['dokumen']['name'])) {
-                $this->db->set('file', $this->upload->data()['file_name']);
-            } else if ($type == 'URL' & !empty($this->input->post('url'))) {
-                $this->db->set('url', $this->input->post('url'));
-            }
+        $this->db->set('type_doc', $type);
+        if ($type == 'FILE' & !empty($_FILES['dokumen']['name'])) {
+            $this->db->set('file', $this->upload->data()['file_name']);
+        } else if ($type == 'URL' & !empty($this->input->post('url'))) {
+            $this->db->set('url', $this->input->post('url'));
+        }
         if ($this->input->post('id')) {
             $this->db->where('id', $this->input->post('id'));
             return $this->db->update('document');
@@ -87,7 +89,7 @@ class M_treeview_detail extends CI_Model {
         $this->db->join('users u', 'u.id = d.creator', 'LEFT');
         $this->db->join('company c', 'c.id = d.id_company', 'LEFT');
         $this->db->join('personil pl', 'pl.id = u.id_personil', 'LEFT');
-        $this->db->join('unit_kerja uk', 'uk.id = pl.id_unit_kerja','LEFT');
+        $this->db->join('unit_kerja uk', 'uk.id = pl.id_unit_kerja', 'LEFT');
         $this->db->join('distribusi ds', 'd.id = ds.id_document', 'LEFT');
         $this->db->join('personil pld', 'pld.id = ds.id_personil', 'LEFT');
         $this->db->join('unit_kerja ukd', 'ukd.id = pld.id_unit_kerja', 'LEFT');
@@ -270,9 +272,9 @@ class M_treeview_detail extends CI_Model {
         $this->db->set('date_jadwal', date("Y-m-d", strtotime($this->input->post('tanggal'))));
         $this->db->update('implementasi');
         foreach ($this->input->post('dist') as $dist) {
-            $this->db->where('id_implementasi',$id);
-            $this->db->where('id_personil',$dist);
-            if(!count($this->db->get('personil_implementasi')->result_array())){
+            $this->db->where('id_implementasi', $id);
+            $this->db->where('id_personil', $dist);
+            if (!count($this->db->get('personil_implementasi')->result_array())) {
                 $this->db->set('id_implementasi', $id);
                 $this->db->set('id_personil', $dist);
                 $this->db->insert('personil_implementasi');
@@ -305,7 +307,7 @@ class M_treeview_detail extends CI_Model {
         } else if ($type == 'URL') {
             $this->db->set('path', $this->input->post('url'));
         }
-            $this->db->set('upload_date', date('Y-m-d'));
+        $this->db->set('upload_date', date('Y-m-d'));
         $this->db->where('id', $this->input->post('id'));
         return $this->db->update('implementasi');
     }
