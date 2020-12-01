@@ -54,7 +54,7 @@ $role = $this->session->userdata['user']['role'];
                                     <th>Judul</th>
                                     <th>Deskripsi</th>
                                     <th>Doc</th>
-                                    <th>Detail</th>
+                                    <th>Aksi</th>
                                 </tr>
                             </thead>
                             <tbody id="table-pasal"></tbody>
@@ -854,8 +854,8 @@ $role = $this->session->userdata['user']['role'];
                         + '<td>' + (d.long_desc == null ? '-' : d.long_desc) + '</td>'
                         + '<td>' + d.doc + '</td>'
                         + '<td>'
-                        + '<span class="fa fa-info-circle text-primary" onclick="detailPasal(' + i + ')" title="Detail"></span>&nbsp'
                         + (d.child == '0' ? '<span class="fa fa-upload text-primary" onclick="initAddDocument(' + i + ')" title="Upload"></span>&nbsp' : '')
+                        + '<span class="fa fa-info-circle text-primary" onclick="detailPasal(' + i + ')" title="Detail"></span>&nbsp'
                         + '</td>'
                         + '</tr>');
                 if (d.child == 0) {
@@ -1053,8 +1053,8 @@ $role = $this->session->userdata['user']['role'];
             for (var doc of sortDokumen) {
                 if (d.id == doc.id_pasal) {
                     var link;
-                    if (doc.type_doc == 'file') {
-                        link = '<a class="btn btn-primary btn-sm fa fa-download" href="<?= base_url('upload/dokumen') ?>/' + doc.file + '"></a>';
+                    if (doc.type_doc == 'FILE') {
+                        link = '<a class="btn btn-primary btn-sm fa fa-search" target="_blank" href="<?= base_url('upload/dokumen') ?>/' + doc.file + '"></a>';
                     } else {
                         link = '<a class="btn btn-primary btn-sm fa fa-search" target="_blank" href="' + doc.url + '"></a>';
                     }
