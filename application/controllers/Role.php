@@ -30,7 +30,7 @@ class Role extends MY_Controller {
         $this->data['mod'] = $this->model->module();
         $this->data['userRole'] = $this->model->role();
         $this->data['access']= $this->model->access();
-        $this->render('reads');
+        $this->render('read');
     }
     function user_access($id) {
         $acc= $this->model->user_access($id);

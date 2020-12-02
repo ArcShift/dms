@@ -298,6 +298,8 @@ class M_treeview_detail extends CI_Model {
     }
 
     function upload_bukti() {
+        $this->db->where('id', $this->input->post('id'));
+        $imp = $this->db->get('implementasi')->row_array();
         $this->db->set('id_jadwal', $this->input->post('id_jadwal'));
         $type = $this->input->post('type_dokumen');
         $this->db->set('type', $type);
@@ -307,7 +309,9 @@ class M_treeview_detail extends CI_Model {
         } else if ($type == 'URL') {
             $this->db->set('path', $this->input->post('url'));
         }
-        $this->db->set('upload_date', date('Y-m-d'));
+        if(empty($imp['upload_date'])){
+            $this->db->set('upload_date', date('Y-m-d'));
+        }
         $this->db->where('id', $this->input->post('id'));
         return $this->db->update('implementasi');
     }

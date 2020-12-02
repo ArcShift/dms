@@ -25,7 +25,7 @@ class MY_Controller extends CI_Controller {
         $this->data['module'] = $this->module;
         $this->data['activeModule'] = $this->activeModule;
         $this->data['subTitle'] = $this->subTitle;
-        if (empty($this->activeModule)) {
+        if (empty($this->activeModule['acc_'.$view])) {
             $this->data['view'] = 'template/no_access';
             $this->load->view('template/container', $this->data);
         } else {

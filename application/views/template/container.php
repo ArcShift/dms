@@ -172,7 +172,7 @@
                                 <li id="menu-document_search">-</li>
                                 <li id="menu-company_standard">-</li>
                                 <?php foreach ($this->session->userdata('module') as $key => $m) { ?>
-                                    <?php if ($m['on_menu'] == 'YES') { ?>
+                                    <?php if ($m['on_menu'] == 'YES' & $m['acc_read']) { ?>
                                         <li id="module-<?php echo $m['name'] ?>" class="menu-item">
                                             <a href="<?php echo site_url($m['name']) ?>" class="<?php echo $m['name'] == $this->uri->segment(1) ? 'mm-active' : '' ?>">
                                                 <i class="metismenu-icon fa fa-<?php echo $m['icon'] ?>"></i>
@@ -193,7 +193,7 @@
                             <div class="page-title-wrapper">
                                 <div class="page-title-heading">
                                     <div class="page-title-icon">
-                                        <i class="fa fa-<?php echo $activeModule['icon'] ?> icon-gradient bg-mean-fruit">
+                                        <i class="fa fa-<?= empty($activeModule['icon'])?'eye-slash':$activeModule['icon'] ?> icon-gradient bg-mean-fruit">
                                         </i>
                                     </div>
                                     <div>

@@ -21,7 +21,7 @@ class Dashboard extends MY_Controller {
             array('name' => 'diterapkan', 'title' => 'Diterapkan', 'subtitle'=>'Dokumen Sudah Diupload','color' => 'happy-green', 'value' => '-'),
             array('name' => 'progress', 'title' => 'Progress','subtitle'=>'Pemenuhan Total', 'color' => 'malibu-beach', 'value' => '- %'),
         );
-        $this->render('dashboard', FALSE);
+        $this->render('read');
     }
 
 }
