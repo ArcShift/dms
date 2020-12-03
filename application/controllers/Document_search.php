@@ -14,12 +14,13 @@ class Document_search extends MY_Controller {
         $this->data['standar'] = $this->model->standar();
         $this->data['perusahaan'] = $this->model->perusahaan();
         $this->data['data'] = $this->model->search();
-        $this->render('search');
+        $this->render('read');
     }
 
     function detail($id) {
         $this->subTitle = 'detail';
         $this->data['data'] = $this->model->get($id);
+        $this->access = 'read';
         $this->render('detail');
     }
 

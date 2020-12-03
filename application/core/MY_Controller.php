@@ -7,6 +7,7 @@ class MY_Controller extends CI_Controller {
     protected $subTitle = null;
     protected $data = array();
     protected $activeModule = null;
+    protected $access = null;
 
     public function __construct() {
         parent::__construct();
@@ -25,7 +26,8 @@ class MY_Controller extends CI_Controller {
         $this->data['module'] = $this->module;
         $this->data['activeModule'] = $this->activeModule;
         $this->data['subTitle'] = $this->subTitle;
-        if (empty($this->activeModule['acc_'.$view])) {
+        empty($this->access)?$this->access=$view:null;
+        if (empty($this->activeModule['acc_'.$this->access])) {
             $this->data['view'] = 'template/no_access';
             $this->load->view('template/container', $this->data);
         } else {

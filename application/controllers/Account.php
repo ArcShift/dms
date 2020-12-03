@@ -54,6 +54,7 @@ class Account extends MY_Controller {
             }
         }
         $this->data['data'] = $this->model->get();
+        $this->access = 'read';
         $this->render('detail');
     }
 

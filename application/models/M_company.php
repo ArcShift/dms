@@ -5,7 +5,8 @@ class M_company extends CI_Model {
     private $table = 'company';
 
     function get() {
-        if ($this->session->userdata('user')['role'] == 'pic') {
+        $role = $this->session->userdata('user')['role'];
+        if ($role == 'pic' || $role == 'anggota') {
             $this->db->where('id', $this->session->userdata['user']['id_company']);
         }
         return $this->db->get($this->table)->result_array();
