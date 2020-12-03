@@ -1,6 +1,11 @@
 <?php
 $role = $this->session->userdata['user']['role'];
 ?>
+<style>
+    .col-tgl{
+        min-width: 110;
+    }
+</style>
 <div class="main-card mb-3 card">
     <div class="card-body">
         <div class="form-group">
@@ -75,7 +80,7 @@ $role = $this->session->userdata['user']['role'];
                                     <th>Judul</th>
                                     <th>Deskripsi</th>
                                     <th>Jenis</th>
-                                    <th class="col-aksi">Aksi</th>
+                                    <th class="col-aksi" style="min-width: 70px">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody id="table-dokumen"></tbody>
@@ -109,8 +114,8 @@ $role = $this->session->userdata['user']['role'];
                                         <th>Tugas</th>
                                         <th>Form</th>
                                         <th>Periode</th>
-                                        <th>Jadwal</th>
-                                        <th class="col-aksi">Aksi</th>
+                                        <th class="col-tgl">Jadwal</th>
+                                        <th class="col-aksi" style="min-width: 70px">Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody id="table-jadwal"></tbody>
@@ -124,7 +129,7 @@ $role = $this->session->userdata['user']['role'];
                                 <tr>
                                     <th>Tugas</th>
                                     <th>Form</th>
-                                    <th>Jadwal</th>
+                                    <th class="col-tgl">Jadwal</th>
                                     <th>Distribusi</th>
                                     <th class="text-center">Status</th>
                                     <th class="text-center">Bukti</th>
@@ -683,7 +688,7 @@ $role = $this->session->userdata['user']['role'];
                                     <input class="form-control input-jadwal" disabled=""/>
                                 </td>
                             </tr>
-                            <tr>
+                            <tr class="group-upload">
                                 <td>Dokumen</td>
                                 <td id="tdUpload">
                                     <input class="radio-type-dokumen" type="radio" name="type_dokumen" value="FILE" required="">
@@ -693,9 +698,14 @@ $role = $this->session->userdata['user']['role'];
                                     <input class="form-control input-path input-file" type="file" name="dokumen" required="">
                                     <input class="form-control input-path input-url" type="url" name="url" required="">
                                 </td>
-                                <td id="tdDetail">
-
-                                </td>
+                            </tr>
+                            <tr class="group-detail">
+                                <td>Status</td>
+                                <td class="label-status"></td>
+                            </tr>
+                            <tr class="group-detail">
+                                <td>Dokumen</td>
+                                <td class="label-dokumen"></td>
                             </tr>
                         </tbody>
                     </table>
@@ -851,7 +861,7 @@ $role = $this->session->userdata['user']['role'];
                         pCol = 'warning';
                 }
                 $('#table-pemenuhan').append('<tr ' + (d.parent == null ? 'class="table-success"' : '') + '>'
-                        + '<td>' + (d.parent == null ? '<span class="text-primary">' + d.fullname + '</span>' : d.fullname) + '</td>'
+                        + '<td>' +  d.fullname + '</td>'
                         + '<td class="text-center">' + (d.doc == '0' ? '-' : d.doc) + '</td>'
                         + '<td class="text-center"><span class="badge badge-' + pCol + '">' + d.pemenuhan_doc + '%</span></td>'
                         + '<td class="text-center">' + d.imp + '</td>'
@@ -859,7 +869,7 @@ $role = $this->session->userdata['user']['role'];
 //                        + '<td class="text-center">' + d.upload + ' - ' + d.unupload + '</td>'//data upload & unupload
                         + '</tr>');
                 $('#table-pasal').append('<tr ' + (d.parent == null ? 'class="table-success"' : '') + '>'
-                        + '<td>' + (d.parent == null ? '<span class="text-primary">' + d.fullname + '</span>' : d.fullname) + '</td>'
+                        + '<td>' + d.fullname + '</td>'
                         + '<td>' + (d.sort_desc == null ? '-' : d.sort_desc) + '</td>'
                         + '<td>' + (d.long_desc == null ? '-' : d.long_desc) + '</td>'
                         + '<td>' + d.doc + '</td>'
@@ -1012,7 +1022,7 @@ $role = $this->session->userdata['user']['role'];
                                 + '<td>' + $('#modalDokumen').find('select[name=dokumen_terkait]').find('option[value=' + sortDokumen[sortJadwal[i].index_dokumen].contoh + ']').text() + '</td>'
                                 + '<td>' + data[j].desc + '</td>'
                                 + '<td>' + sortDokumen[sortJadwal[i].index_dokumen].judul + '</td>'
-                                + '<td>' + periode + '</td>'
+                                + '<td style="text-transform: capitalize">' + periode + '</td>'
                                 + '<td>' + $.format.date(jadwal, "dd-MMM-yyyy") + '</td>'
                                 + '<td class="col-aksi">'
                                 + '<span class="text-primary fa fa-info-circle" title="Detail" onclick="detailJadwal(' + n + ')"></span>&nbsp'
@@ -1290,7 +1300,7 @@ $role = $this->session->userdata['user']['role'];
         m.find('.group-detail').show();
         m.find('.group-edit').hide();
         m.find('.label-user-disrtibusi').empty();
-        var user = sortDokumen[index].user_distribusi;
+        var user = sortDokumen[sortJadwal[index].index_dokumen].user_distribusi;
         m.find('.label-user-distribusi').empty();
         for (var i = 0; i < user.length; i++) {
             m.find('.label-user-distribusi').append('<div>' + user[i] + '</div>');
@@ -1402,7 +1412,7 @@ $role = $this->session->userdata['user']['role'];
             $('.radio-ulangi-jadwal[value=TIDAK]').click();
         });
     });
-    function detailJadwal(index) {
+    function detailJadwal(index, disData = null) {
         var imp = sortImplementasi[index];
         var jadwal = sortJadwal[imp.index_jadwal];
         var m = $('#modalDetailJadwal');
@@ -1412,7 +1422,7 @@ $role = $this->session->userdata['user']['role'];
         m.find('.btn-hapus').addClass('d-none');
         m.find('.modal-body').empty();
         var penerima_doc = '';
-        var user = sortDokumen[index].user_distribusi;
+        var user = sortDokumen[jadwal.index_dokumen].user_distribusi;
         for (var i = 0; i < user.length; i++) {
             penerima_doc += '<div>' + user[i] + '</div>';
         }
@@ -1441,10 +1451,13 @@ $role = $this->session->userdata['user']['role'];
             data['Tanggal Mulai'] = $.format.date(new Date(jadwal.start_date), "dd-MMM-yyyy");
             data['Tanggal Selesai'] = $.format.date(new Date(jadwal.end_date), "dd-MMM-yyyy");
             data.Hari = txtHari;
-            data.Periode = (jadwal.periode == null ? '-' :'<span class="badge badge-primary">'+ jadwal.periode+'</span>');
-
+            data.Periode = (jadwal.periode == null ? '-' : '<span class="badge badge-primary">' + jadwal.periode + '</span>');
         } else {
             data.Ulangi = '<span class="badge badge-secondary">TIDAK</span>';
+        }
+        if(disData != null){
+            data['Status Distribusi']= disData.status;
+            data['Dokumen Distribusi']= disData.dokumen;
         }
         for (var key in data) {
             m.find('.modal-body').append('<div class="row"><div class="col-sm-4"><label>' + key + '</label></div><div class="col-sm-8">' + data[key] + '</div></div>');
@@ -1503,19 +1516,25 @@ $role = $this->session->userdata['user']['role'];
         m.find('.input-jadwal').val($.format.date(new Date(imp.date_jadwal), "dd-MMM-yyyy"));
         m.find('.input-judul').val(sortDokumen[sortJadwal[imp.index_jadwal].index_dokumen].judul);
         m.find('.modal-title').text('Upload Bukti');
-        m.find('#tdUpload').show();
-        m.find('#tdDetail').hide();
+        m.find('.group-upload').show();
+        m.find('.group-detail').hide();
     }
     function detailImplementasi(index) {
-        initUploadImplementasi(index);
-        var m = $('#modalUploadImplementasi');
-        m.find('.modal-title').text('Preview Bukti');
-        m.find('#tdUpload').hide();
-        m.find('#tdDetail').show();
-        m.find('#tdDetail').html(
-                '<div><span class="badge badge-primary">' + sortImplementasi[index].type + '</div>'
-                + '<div>' + sortImplementasi[index].path + '</div>'
-                );
+        var imp = sortImplementasi[index];
+        var uploadStatus = '';
+        if (imp.path) {
+            if (new Date() > new Date(imp.date_jadwal, 'YYYY-MM-DD')) {
+                uploadStatus = '<span class="badge badge-danger">Terlambat</span>';
+            } else {
+                uploadStatus = '<span class="badge badge-primary">Selesai</span>';
+            }
+        }
+        var data ={
+            status: uploadStatus,
+            dokumen: '<div><span class="badge badge-primary">' + imp.type + '</div>'
+                + '<div>' + imp.path + '</div>',
+        }
+        detailJadwal(index, data);
     }
     $('#formUploadImplementasi').submit(function (e) {
         var m = $('#modalUploadImplementasi');
