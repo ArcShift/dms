@@ -958,7 +958,7 @@ $role = $this->session->userdata['user']['role'];
                                 + '<td>' + d.nomor + '</td>'
                                 + '<td>' + d.judul + '</td>'
 //                                + '<td>' + d.deskripsi + '</td>'
-                                + '<td>' + '-' + '</td>'
+                                + '<td>' + sortPasal[h].fullname + '</td>'
                                 + '<td>' + d.versi + '</td>'
                                 + '<td>Level ' + d.jenis + '</td>'
                                 + '<td>' + d.klasifikasi + '</td>'
@@ -1076,7 +1076,7 @@ $role = $this->session->userdata['user']['role'];
                                 uploadStatus = '<span class="badge badge-primary">Selesai</span>';
                             }
                             diffDate = new Date(data[j].upload_date).getDate() - new Date(data[j].date_jadwal).getDate();
-                            diffDate = diffDate <= 0 ? '-' : diffDate;
+//                            diffDate = diffDate <= 0 ? '-' : diffDate;
                         } else {
                             uploadStatus = '-';
                         }
