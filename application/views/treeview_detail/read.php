@@ -5,6 +5,9 @@ $role = $this->session->userdata['user']['role'];
     .col-tgl{
         min-width: 110;
     }
+    pre {
+        white-space: pre-wrap; 
+    }
 </style>
 <div class="main-card mb-3 card">
     <div class="card-body">
@@ -31,7 +34,8 @@ $role = $this->session->userdata['user']['role'];
                     <li class="nav-item"><a data-toggle="tab" href="#tab-pasal" class="nav-link">Pasal</a></li>
                     <li class="nav-item"><a data-toggle="tab" href="#tab-dokumen" class="nav-link">Dokumen</a></li>
                     <li class="nav-item"><a data-toggle="tab" href="#tab-distribusi" class="nav-link">Distribusi</a></li>
-                    <li class="nav-item"><a data-toggle="tab" href="#tab-jadwal" class="nav-link">Jadwal Tugas</a></li>
+                    <li class="nav-item"><a data-toggle="tab" href="#tab-tugas" class="nav-link">Tugas</a></li>
+                    <li class="nav-item"><a data-toggle="tab" href="#tab-jadwal" class="nav-link">Jadwal</a></li>
                     <li class="nav-item"><a data-toggle="tab" href="#tab-implementasi" class="nav-link">Implementasi</a></li>
                     <!--<li class="nav-item"><a data-toggle="tab" href="#tab-base" class="nav-link">Base</a></li>-->
                 </ul>
@@ -59,6 +63,7 @@ $role = $this->session->userdata['user']['role'];
                                 <tr>
                                     <th>Pasal</th>
                                     <th>Judul</th>
+                                    <th>Sub Judul</th>
                                     <th>Deskripsi</th>
                                     <th>Dok</th>
                                     <th class="col-aksi" style="min-width: 50px">Aksi</th>
@@ -78,8 +83,10 @@ $role = $this->session->userdata['user']['role'];
                                 <tr>
                                     <th>No</th>
                                     <th>Judul</th>
-                                    <th>Deskripsi</th>
-                                    <th>Jenis</th>
+                                    <th>Pasal</th>
+                                    <th>Versi</th>
+                                    <th>Level</th>
+                                    <th>Klasifikasi</th>
                                     <th class="col-aksi" style="min-width: 70px">Aksi</th>
                                 </tr>
                             </thead>
@@ -91,14 +98,37 @@ $role = $this->session->userdata['user']['role'];
                         <table class="table table-striped">
                             <thead>
                                 <tr>
+                                    <th>Nomor Dokumen</th>
                                     <th>Judul Dokumen</th>
-                                    <th>Pembuat dokumen</th>
-                                    <th>Distribusi</th>
-                                    <th class="col-aksi">Aksi</th>
+                                    <th>Level Dokumen</th>
+                                    <th>Pembuat Dokumen</th>
+                                    <th>Unit Penerima</th>
+                                    <th>PIC Penerima</th>
+                                    <!--<th>Distribusi</th>-->
+                                    <th class="col-aksi" style="min-width: 70px">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody id="table-distribusi"></tbody>
                         </table>
+                    </div>
+                    <!--TUGAS-->
+                    <div class="tab-pane" id="tab-tugas" role="tabpanel">
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Judul Dokumen</th>
+                                        <th>Tugas</th>
+                                        <th>Form Terkait</th>
+                                        <th>Distribusi</th>
+                                        <th>Periode</th>
+                                        <th class="col-tgl">Jadwal</th>
+                                        <th class="col-aksi" style="min-width: 70px">Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="table-tugas"></tbody>
+                            </table>
+                        </div>
                     </div>
                     <!--JADWAL-->
                     <div class="tab-pane" id="tab-jadwal" role="tabpanel">
@@ -128,10 +158,10 @@ $role = $this->session->userdata['user']['role'];
                             <thead>
                                 <tr>
                                     <th>Tugas</th>
-                                    <th>Form</th>
+                                    <th>PIC Pelaksana Tugas</th>
                                     <th class="col-tgl">Jadwal</th>
-                                    <th>Distribusi</th>
                                     <th class="text-center">Status</th>
+                                    <th class="text-center">Keterlambatan</th>
                                     <th class="text-center">Bukti</th>
                                 </tr>
                             </thead>
@@ -861,7 +891,7 @@ $role = $this->session->userdata['user']['role'];
                         pCol = 'warning';
                 }
                 $('#table-pemenuhan').append('<tr ' + (d.parent == null ? 'class="table-success"' : '') + '>'
-                        + '<td>' +  d.fullname + '</td>'
+                        + '<td>' + d.fullname + '</td>'
                         + '<td class="text-center">' + (d.doc == '0' ? '-' : d.doc) + '</td>'
                         + '<td class="text-center"><span class="badge badge-' + pCol + '">' + d.pemenuhan_doc + '%</span></td>'
                         + '<td class="text-center">' + d.imp + '</td>'
@@ -871,7 +901,8 @@ $role = $this->session->userdata['user']['role'];
                 $('#table-pasal').append('<tr ' + (d.parent == null ? 'class="table-success"' : '') + '>'
                         + '<td>' + d.fullname + '</td>'
                         + '<td>' + (d.sort_desc == null ? '-' : d.sort_desc) + '</td>'
-                        + '<td>' + (d.long_desc == null ? '-' : d.long_desc) + '</td>'
+                        + '<td>' + '-' + '</td>'
+                        + '<td><pre>' + (d.long_desc == null ? '-' : d.long_desc) + '</pre></td>'
                         + '<td>' + d.doc + '</td>'
                         + '<td class="col-aksi">'
                         + '<span class="fa fa-info-circle text-primary" onclick="detailPasal(' + i + ')" title="Detail"></span>&nbsp'
@@ -926,8 +957,11 @@ $role = $this->session->userdata['user']['role'];
                         $('#table-dokumen').append('<tr>'
                                 + '<td>' + d.nomor + '</td>'
                                 + '<td>' + d.judul + '</td>'
-                                + '<td>' + d.deskripsi + '</td>'
+//                                + '<td>' + d.deskripsi + '</td>'
+                                + '<td>' + '-' + '</td>'
+                                + '<td>' + d.versi + '</td>'
                                 + '<td>Level ' + d.jenis + '</td>'
+                                + '<td>' + d.klasifikasi + '</td>'
                                 + '<td class="col-aksi">'
                                 + '<span class="text-primary fa fa-info-circle" onclick="detailDokumen(' + n + ')" title="Detail"></span>&nbsp'
                                 + '<span class="text-primary fa fa-edit" onclick="editDokumen(' + n + ')"></span>&nbsp'
@@ -967,9 +1001,12 @@ $role = $this->session->userdata['user']['role'];
                             }
                         }
                         $('#table-distribusi').append('<tr>'
+                                + '<td>' + sortDokumen[j].nomor + '</td>'
                                 + '<td>' + sortDokumen[j].judul + '</td>'
+                                + '<td>Level ' + sortDokumen[j].jenis + '</td>'
                                 + '<td>' + anggota[k].fullname + '</td>'
                                 + '<td>' + strUserDis + '</td>'
+                                + '<td>' + '-' + '</td>'
                                 + '<td class="col-aksi">'
                                 + '<span class="text-primary fa fa-info-circle" title="Detail" onclick="detailDistribusi(' + j + ')"></span>&nbsp'
                                 + '<span class="text-primary fa fa-edit" title="Edit" onclick="editDistribusi(' + j + ')"></span>'
@@ -1019,9 +1056,9 @@ $role = $this->session->userdata['user']['role'];
                         var jadwal = new Date(data[j].date_jadwal);
                         var periode = sortJadwal[i].periode == null ? '-' : sortJadwal[i].periode;
                         $('#table-jadwal').append('<tr>'
-                                + '<td>' + $('#modalDokumen').find('select[name=dokumen_terkait]').find('option[value=' + sortDokumen[sortJadwal[i].index_dokumen].contoh + ']').text() + '</td>'
-                                + '<td>' + data[j].desc + '</td>'
                                 + '<td>' + sortDokumen[sortJadwal[i].index_dokumen].judul + '</td>'
+                                + '<td>' + data[j].desc + '</td>'
+                                + '<td>' + $('#modalDokumen').find('select[name=dokumen_terkait]').find('option[value=' + sortDokumen[sortJadwal[i].index_dokumen].contoh + ']').text() + '</td>'
                                 + '<td style="text-transform: capitalize">' + periode + '</td>'
                                 + '<td>' + $.format.date(jadwal, "dd-MMM-yyyy") + '</td>'
                                 + '<td class="col-aksi">'
@@ -1031,22 +1068,25 @@ $role = $this->session->userdata['user']['role'];
                                 + '</td>'
                                 + '</tr>');
                         var uploadStatus = '';
+                        var diffDate = '-';
                         if (data[j].path) {
-                            if (new Date() > new Date(data[j].date_jadwal, 'YYYY-MM-DD')) {
+                            if (new Date(data[j].upload_date) > new Date(data[j].date_jadwal)) {
                                 uploadStatus = '<span class="badge badge-danger">Terlambat</span>';
                             } else {
                                 uploadStatus = '<span class="badge badge-primary">Selesai</span>';
                             }
+                            diffDate = new Date(data[j].upload_date).getDate() - new Date(data[j].date_jadwal).getDate();
+                            diffDate = diffDate <= 0 ? '-' : diffDate;
                         } else {
                             uploadStatus = '-';
                         }
                         var uploadBtn = '-';
                         $('#table-implementasi').append('<tr>'
                                 + '<td>' + data[j].desc + '</td>'
-                                + '<td>' + sortDokumen[sortJadwal[i].index_dokumen].judul + '</td>'
-                                + '<td>' + $.format.date(jadwal, "dd-MMM-yyyy") + '</td>'
                                 + '<td>' + personil2 + '</td>'
+                                + '<td>' + $.format.date(jadwal, "dd-MMM-yyyy") + '</td>'
                                 + '<td class="text-center">' + uploadStatus + '</td>'
+                                + '<td class="text-center">' + diffDate + '</td>'
                                 + '<td class="text-center">'
                                 + '<span class="text-primary fa fa-upload" title="Upload" onclick="initUploadImplementasi(' + n + ')"></span>&nbsp'
                                 + '<span class="text-primary fa fa-search" title="Detail" onclick="detailImplementasi(' + n + ')"></span>'
@@ -1455,13 +1495,13 @@ $role = $this->session->userdata['user']['role'];
         } else {
             data.Ulangi = '<span class="badge badge-secondary">TIDAK</span>';
         }
-        if(disData != null){
-            data['Status Distribusi']= disData.status;
-            data['Dokumen Distribusi']= disData.dokumen;
+        if (disData != null) {
+            data['Status Distribusi'] = disData.status;
+            data['Dokumen Distribusi'] = disData.dokumen;
         }
         for (var key in data) {
             m.find('.modal-body').append('<div class="row"><div class="col-sm-4"><label>' + key + '</label></div><div class="col-sm-8">' + data[key] + '</div></div>');
-        }
+    }
     }
     function editJadwal(index) {
         var imp = sortImplementasi[index];
@@ -1529,10 +1569,10 @@ $role = $this->session->userdata['user']['role'];
                 uploadStatus = '<span class="badge badge-primary">Selesai</span>';
             }
         }
-        var data ={
+        var data = {
             status: uploadStatus,
             dokumen: '<div><span class="badge badge-primary">' + imp.type + '</div>'
-                + '<div>' + imp.path + '</div>',
+                    + '<div>' + imp.path + '</div>',
         }
         detailJadwal(index, data);
     }
