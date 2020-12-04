@@ -26,9 +26,16 @@ class MY_Controller extends CI_Controller {
         $this->data['module'] = $this->module;
         $this->data['activeModule'] = $this->activeModule;
         $this->data['subTitle'] = $this->subTitle;
-        if($view=='edit')$this->access= 'update';
-        empty($this->access)?$this->access=$view:null;
-        if (empty($this->activeModule['acc_'.$this->access])) {
+        switch ($view) {
+            case 'edit':$this->access = 'update';
+                break;
+            case 'detail':$this->access = 'read';
+                break;
+            default:
+                break;
+        }
+        empty($this->access) ? $this->access = $view : null;
+        if (empty($this->activeModule['acc_' . $this->access])) {
             $this->data['view'] = 'template/no_access';
             $this->load->view('template/container', $this->data);
         } else {
