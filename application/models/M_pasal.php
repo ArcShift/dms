@@ -40,6 +40,7 @@ class M_pasal extends CI_Model {
     function update_desc() {
         $this->db->set('sort_desc', $this->input->post('sort-desc'));
         $this->db->set('long_desc', $this->input->post('long-desc'));
+        $this->db->set('subtitle', $this->input->post('subtitle'));
         $this->db->where('id', $this->input->post('id'));
         return $this->db->update($this->table);
     }

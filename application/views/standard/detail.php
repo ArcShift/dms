@@ -96,7 +96,7 @@
                         <button type="submit" class="btn btn-transition btn-outline-info" name="remove" value="ok">Hapus</button>
                     </div>
                 </form>
-                <!--FORM 1-->
+                <!--FORM DETAIL-->
                 <form id="form1" class="d-none" method="post" enctype="multipart/form-data">
                     <div class="modal-header">
                         <h4 class="modal-title">Informasi Standar</h4>
@@ -116,6 +116,10 @@
                         <div class="form-group">
                             <label for="namaModule">Judul</label>
                             <input class="form-control item-sort-desc" name="sort-desc" placeholder="Judul">
+                        </div>
+                        <div class="form-group">
+                            <label for="namaModule">Sub Judul</label>
+                            <input class="form-control item-subtitle" name="subtitle" placeholder="Sub Judul">
                         </div>
                         <div class="form-group">
                             <label for="namaModule">Deskripsi</label>
@@ -223,6 +227,7 @@
         $('.item-id').val($(item).parent().attr('id'));
         $('.item-name').val($(item).parent().children('.title').text());
         $('.item-sort-desc').val(list[id].sort_desc);
+        $('.item-subtitle').val(list[id].subtitle);
         $('.item-long-desc').val(list[id].long_desc);
     }
     function closeForm() {
