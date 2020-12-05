@@ -248,6 +248,7 @@ class M_treeview_detail extends CI_Model {
         $data['desc'] = $this->input->post('desc');
         $data['date_jadwal'] = $tgl;
         $data['id_jadwal'] = $id_jadwal;
+        $data['form'] = $this->input->post('form');
         $this->db->insert('implementasi', $data);
         $id = $this->db->insert_id();
         $this->insert_personil_jadwal($id);
@@ -269,6 +270,7 @@ class M_treeview_detail extends CI_Model {
         $id = $this->input->post('id');
         $this->db->where('id', $id);
         $this->db->set('desc', $this->input->post('desc'));
+        $this->db->set('form', $this->input->post('form'));
         $this->db->set('date_jadwal', date("Y-m-d", strtotime($this->input->post('tanggal'))));
         $this->db->update('implementasi');
         foreach ($this->input->post('dist') as $dist) {

@@ -34,8 +34,8 @@ $role = $this->session->userdata['user']['role'];
                     <li class="nav-item"><a data-toggle="tab" href="#tab-pasal" class="nav-link">Pasal</a></li>
                     <li class="nav-item"><a data-toggle="tab" href="#tab-dokumen" class="nav-link">Dokumen</a></li>
                     <li class="nav-item"><a data-toggle="tab" href="#tab-distribusi" class="nav-link">Distribusi</a></li>
-                    <li class="nav-item"><a data-toggle="tab" href="#tab-tugas" class="nav-link">Tugas</a></li>
-                    <li class="nav-item"><a data-toggle="tab" href="#tab-jadwal" class="nav-link">Jadwal</a></li>
+                    <!--<li class="nav-item"><a data-toggle="tab" href="#tab-tugas" class="nav-link">Tugas</a></li>-->
+                    <li class="nav-item"><a data-toggle="tab" href="#tab-jadwal" class="nav-link">Jadwal Tugas</a></li>
                     <li class="nav-item"><a data-toggle="tab" href="#tab-implementasi" class="nav-link">Implementasi</a></li>
                     <!--<li class="nav-item"><a data-toggle="tab" href="#tab-base" class="nav-link">Base</a></li>-->
                 </ul>
@@ -102,9 +102,7 @@ $role = $this->session->userdata['user']['role'];
                                     <th>Judul Dokumen</th>
                                     <th>Level Dokumen</th>
                                     <th>Pembuat Dokumen</th>
-                                    <th>Unit Penerima</th>
-                                    <th>PIC Penerima</th>
-                                    <!--<th>Distribusi</th>-->
+                                    <th>Penerima</th>
                                     <th class="col-aksi" style="min-width: 70px">Aksi</th>
                                 </tr>
                             </thead>
@@ -112,7 +110,7 @@ $role = $this->session->userdata['user']['role'];
                         </table>
                     </div>
                     <!--TUGAS-->
-                    <div class="tab-pane" id="tab-tugas" role="tabpanel">
+<!--                    <div class="tab-pane" id="tab-tugas" role="tabpanel">
                         <div class="table-responsive">
                             <table class="table table-striped">
                                 <thead>
@@ -129,7 +127,7 @@ $role = $this->session->userdata['user']['role'];
                                 <tbody id="table-tugas"></tbody>
                             </table>
                         </div>
-                    </div>
+                    </div>-->
                     <!--JADWAL-->
                     <div class="tab-pane" id="tab-jadwal" role="tabpanel">
                         <div class="text-right mb-2 col-aksi">
@@ -186,14 +184,6 @@ $role = $this->session->userdata['user']['role'];
                     </button>
                 </div>
                 <div class="modal-body modal-message">
-                    <div class="form-group">
-                        <label for="namaModule">Judul</label>
-                        <input class="form-control item-sort-desc" name="sort-desc" readonly="">
-                    </div>
-                    <div class="form-group">
-                        <label for="namaModule">Deskripsi</label>
-                        <textarea class="form-control item-long-desc" name="long-desc" readonly=""></textarea>
-                    </div>
                     <table class="table">
                         <thead>
                             <tr>
@@ -495,6 +485,12 @@ $role = $this->session->userdata['user']['role'];
                                 </td>
                             </tr>
                             <tr>
+                                <td>Form</td>
+                                <td>
+                                    <select name="form" class="form-control select-dokumen" required=""></select>
+                                </td>
+                            </tr>
+                            <tr>
                                 <td>Distribusi</td>
                                 <td>
                                     <select name="dist[]" class="form-control select-personil-distribusi select-2 multiselect-dropdown" multiple="" style="width: 330px !important;"></select>
@@ -645,6 +641,12 @@ $role = $this->session->userdata['user']['role'];
                                 <td>Tugas</td>
                                 <td>
                                     <input name="desc" class="form-control input-keterangan">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Form</td>
+                                <td>
+                                    <select name="form" class="form-control select-dokumen" required=""></select>
                                 </td>
                             </tr>
                             <tr>
@@ -902,7 +904,7 @@ $role = $this->session->userdata['user']['role'];
                         + '<td>' + d.fullname + '</td>'
                         + '<td>' + (d.sort_desc == null ? '-' : d.sort_desc) + '</td>'
                         + '<td>' + '-' + '</td>'
-                        + '<td><pre>' + (d.long_desc == null ? '-' : d.long_desc) + '</pre></td>'
+                        + '<td style="white-space: pre-wrap">' + (d.long_desc == null ? '-' : d.long_desc) + '</td>'
                         + '<td>' + d.doc + '</td>'
                         + '<td class="col-aksi">'
                         + '<span class="fa fa-info-circle text-primary" onclick="detailPasal(' + i + ')" title="Detail"></span>&nbsp'
@@ -959,9 +961,9 @@ $role = $this->session->userdata['user']['role'];
                                 + '<td>' + d.judul + '</td>'
 //                                + '<td>' + d.deskripsi + '</td>'
                                 + '<td>' + sortPasal[h].fullname + '</td>'
-                                + '<td>' + d.versi + '</td>'
-                                + '<td>Level ' + d.jenis + '</td>'
-                                + '<td>' + d.klasifikasi + '</td>'
+                                + '<td>' + (d.versi == 0 ? '-' : d.versi) + '</td>'
+                                + '<td>Level ' + (d.jenis == null ? '-' : d.jenis) + '</td>'
+                                + '<td>' + (d.klasifikasi == null ? '-' : d.klasifikasi) + '</td>'
                                 + '<td class="col-aksi">'
                                 + '<span class="text-primary fa fa-info-circle" onclick="detailDokumen(' + n + ')" title="Detail"></span>&nbsp'
                                 + '<span class="text-primary fa fa-edit" onclick="editDokumen(' + n + ')"></span>&nbsp'
@@ -1006,7 +1008,6 @@ $role = $this->session->userdata['user']['role'];
                                 + '<td>Level ' + sortDokumen[j].jenis + '</td>'
                                 + '<td>' + anggota[k].fullname + '</td>'
                                 + '<td>' + strUserDis + '</td>'
-                                + '<td>' + '-' + '</td>'
                                 + '<td class="col-aksi">'
                                 + '<span class="text-primary fa fa-info-circle" title="Detail" onclick="detailDistribusi(' + j + ')"></span>&nbsp'
                                 + '<span class="text-primary fa fa-edit" title="Edit" onclick="editDistribusi(' + j + ')"></span>'
@@ -1053,12 +1054,21 @@ $role = $this->session->userdata['user']['role'];
                                 personil2 += '<div>' + data[j].personil_name[k] + '</div>';
                             }
                         }
+                        if (data[j].form != null) {
+                            for (var k = 0; k < sortDokumen.length; k++) {
+                                if (data[j].form == sortDokumen[k].id) {
+                                    data[j].index_form = k;
+                                }
+                            }
+                        } else {
+                            data[j].index_form = null;
+                        }
                         var jadwal = new Date(data[j].date_jadwal);
                         var periode = sortJadwal[i].periode == null ? '-' : sortJadwal[i].periode;
                         $('#table-jadwal').append('<tr>'
                                 + '<td>' + sortDokumen[sortJadwal[i].index_dokumen].judul + '</td>'
                                 + '<td>' + data[j].desc + '</td>'
-                                + '<td>' + $('#modalDokumen').find('select[name=dokumen_terkait]').find('option[value=' + sortDokumen[sortJadwal[i].index_dokumen].contoh + ']').text() + '</td>'
+                                + '<td>' + (data[j].index_form == null ? '-' : sortDokumen[data[j].index_form].judul) + '</td>'
                                 + '<td style="text-transform: capitalize">' + periode + '</td>'
                                 + '<td>' + $.format.date(jadwal, "dd-MMM-yyyy") + '</td>'
                                 + '<td class="col-aksi">'
