@@ -900,7 +900,7 @@ $role = $this->session->userdata['user']['role'];
                 $('#table-pasal').append('<tr ' + (d.parent == null ? 'class="table-success"' : '') + '>'
                         + '<td>' + d.fullname + '</td>'
                         + '<td>' + (d.sort_desc == null ? '-' : d.sort_desc) + '</td>'
-                        + '<td>' + '-' + '</td>'
+                        + '<td>' + (d.subtitle == null ? '-' : d.subtitle) + '</td>'
                         + '<td style="white-space: pre-wrap">' + (d.long_desc == null ? '-' : d.long_desc) + '</td>'
                         + '<td>' + d.doc + '</td>'
                         + '<td class="col-aksi">'

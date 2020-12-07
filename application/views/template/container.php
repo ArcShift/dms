@@ -37,6 +37,11 @@
             table{
                 font-size: .88rem;
             }
+            .app-page-title{
+                margin-bottom: 0px;
+                padding: 20px;
+                padding-left: 30px;
+            }
         </style>
     </head>
     <body>
