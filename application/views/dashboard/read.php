@@ -1,4 +1,3 @@
-<?php print_r($this->session->user) ?>
 <div class="row">
     <div class="col-md-12">
         <img width="100%" class="rounded" align="right" src="<?php echo base_url('assets/images/dms-header.jpg') ?>" alt="no picture">
