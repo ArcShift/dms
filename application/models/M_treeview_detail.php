@@ -193,7 +193,7 @@ class M_treeview_detail extends CI_Model {
     }
 
     function getImplementasi() {
-        $this->db->select("i.*, GROUP_CONCAT(p.id) AS personil_id,GROUP_CONCAT(pi.id) AS personil_implementasi_id, GROUP_CONCAT(CONCAT(p.fullname,' - ',uk.name)) AS personil_name");
+        $this->db->select("i.*, DATEDIFF(date_jadwal, upload_date)AS terlambat, GROUP_CONCAT(p.id) AS personil_id,GROUP_CONCAT(pi.id) AS personil_implementasi_id, GROUP_CONCAT(CONCAT(p.fullname,' - ',uk.name)) AS personil_name");
         $this->db->join('personil_implementasi pi', 'pi.id_implementasi = i.id', 'LEFT');
         $this->db->join('personil p', 'p.id = pi.id_personil', 'LEFT');
         $this->db->join('unit_kerja uk', 'uk.id = p.id_unit_kerja', 'LEFT');

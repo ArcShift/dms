@@ -5,9 +5,6 @@ $role = $this->session->userdata['user']['role'];
     .col-tgl{
         min-width: 110;
     }
-    pre {
-        white-space: pre-wrap; 
-    }
 </style>
 <div class="main-card mb-3 card">
     <div class="card-body">
@@ -933,7 +930,7 @@ $role = $this->session->userdata['user']['role'];
             default :
                 col = 'warning';
         }
-        return col
+        return col;
     }
     function getDokumen() {
         $.post('<?php echo site_url($module); ?>/get_dokumen', {'perusahaan': perusahaan, 'standar': standar}, function (data) {
@@ -1096,7 +1093,7 @@ $role = $this->session->userdata['user']['role'];
                                 + '<td>' + personil2 + '</td>'
                                 + '<td>' + $.format.date(jadwal, "dd-MMM-yyyy") + '</td>'
                                 + '<td class="text-center">' + uploadStatus + '</td>'
-                                + '<td class="text-center">' + diffDate + '</td>'
+                                + '<td class="text-center">' + (data[j].terlambat<0?Math.abs(data[j].terlambat):'-') + '</td>'
                                 + '<td class="text-center">'
                                 + '<span class="text-primary fa fa-upload" title="Upload" onclick="initUploadImplementasi(' + n + ')"></span>&nbsp'
                                 + '<span class="text-primary fa fa-search" title="Detail" onclick="detailImplementasi(' + n + ')"></span>'
