@@ -12,6 +12,9 @@ class Standard extends MY_Controller {
     function index() {
         $this->subTitle = 'List';
         $this->data['data'] = $this->model->read();
+        if($this->input->post('edit')){
+            $this->model->update();
+        }
         $this->render('read');
     }
 
@@ -26,9 +29,6 @@ class Standard extends MY_Controller {
         }
         $this->subTitle = 'create';
         $this->render('create');
-    }
-    function edit() {
-        
     }
     function detail() {
         if ($this->input->post('detail')) {

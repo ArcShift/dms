@@ -31,7 +31,7 @@
                             <td><?php echo $d['user'] ?></td>
                             <td>
                                 <button class="btn btn-outline-primary btn-sm fa fa-search" title="Detail" name="detail" value="<?php echo $d['id'] ?>" formaction="<?php echo site_url($module . '/detail') ?>"></button>
-                                <button type="button" class="btn btn-outline-primary btn-sm fa fa-edit" title="Edit" onclick="initEdit()"></button>
+                                <button type="button" class="btn btn-outline-primary btn-sm fa fa-edit" title="Edit" onclick="initEdit(<?= $k?>)"></button>
                                 <?php if (!$d['detail'] & !$d['used']) { ?>
                                     <?php if ($activeModule['acc_delete']) { ?>
                                         <button class="btn btn-outline-danger btn-sm fa fa-trash" title="Hapus" name="initHapus" value="<?php echo $d['id'] ?>" formaction="<?php echo site_url($module . '/delete') ?>"></button>
@@ -61,24 +61,23 @@
                 <div class="modal-body">
                     <div class="form-group">
                         <label>Nama Standar</label>
-                        <input class="form-control" name="standar">
+                        <input class="form-control input-standar" name="standar" required="">
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-primary btn-batal" data-dismiss="modal">Tutup</button>
-                    <button type="submit" class="btn btn-primary btn-hapus">Simpan</button>
+                    <button type="submit" class="btn btn-primary btn-hapus" name="edit" value="ok">Simpan</button>
                 </div>
             </div>
         </div>
     </form>
 </div>
-<?php print_r($data) ?>
 <script>
-    var data = '<?= json_encode($data) ?>';
-    function initEdit() {
+    function initEdit(index) {
         console.log('init Edit');
         var m = $('#modalEdit');
         m.modal('show');
+        m.find('.input-standar').val(data[index].name);
     }
-    
+    var data = <?= json_encode($data) ?>;
 </script>

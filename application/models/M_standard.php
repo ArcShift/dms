@@ -19,15 +19,19 @@ class M_standard extends CI_Model {
             $this->db->where('cs.id_company', $this->session->userdata['user']['id_company']);
         }
         $this->db->group_by('s.id');
-        if($this->session->userdata('user')['role'] == 'pic'){
+        if ($this->session->userdata('user')['role'] == 'pic') {
             
         }
-        return $this->db->get($this->table. ' s')->result_array();
+        return $this->db->get($this->table . ' s')->result_array();
     }
 
     function detail($id) {
         $this->db->where('id', $id);
         return $this->db->get($this->table)->row_array();
+    }
+
+    function update() {
+        
     }
 
     function delete($id) {
