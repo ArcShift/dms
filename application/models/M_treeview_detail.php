@@ -63,7 +63,7 @@ class M_treeview_detail extends CI_Model {
         $this->db->set('creator', $this->input->post('creator'));
         $this->db->set('jenis', $this->input->post('jenis'));
         $this->db->set('klasifikasi', $this->input->post('klasifikasi'));
-        $this->db->set('deskripsi', $this->input->post('deskripsi'));
+        $this->db->set('deskripsi', $this->input->post('desc'));
         $this->db->set('versi', $this->input->post('versi'));
         if (!empty($this->input->post('dokumen_terkait'))) {
             $this->db->set('contoh', $this->input->post('dokumen_terkait'));

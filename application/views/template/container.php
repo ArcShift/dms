@@ -174,8 +174,9 @@
                                 <li id="menu-user">-</li>
                                 <li class="app-sidebar__heading">STANDAR</li>
                                 <li id="menu-standard">-</li>
-                                <li id="menu-document_search">-</li>
                                 <li id="menu-company_standard">-</li>
+                                <li id="menu-treeview_detail">-</li>
+                                <li id="menu-document_search">-</li>
                                 <?php foreach ($this->session->userdata('module') as $key => $m) { ?>
                                     <?php if ($m['on_menu'] == 'YES' & $m['acc_read']) { ?>
                                         <li id="module-<?php echo $m['name'] ?>" class="menu-item">

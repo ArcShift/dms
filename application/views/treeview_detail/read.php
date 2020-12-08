@@ -5,6 +5,14 @@ $role = $this->session->userdata['user']['role'];
     .col-tgl{
         min-width: 110;
     }
+    option{
+        font-size: .88rem;
+        height: .1rem;
+        line-height: .1rem;
+    }
+    select{
+        font-size: .88rem !important;
+    }
 </style>
 <div class="main-card mb-3 card">
     <div class="card-body">
@@ -218,12 +226,16 @@ $role = $this->session->userdata['user']['role'];
                         <input class="form-control input-pasal" readonly="">
                     </div>
                     <div class="form-group">
-                        <label for="namaModule">Nomor</label>
+                        <label>Nomor</label>
                         <input class="form-control" name="nomor" required="">
                     </div>
                     <div class="form-group">
-                        <label for="namaModule">Judul</label>
+                        <label>Judul</label>
                         <input class="form-control" name="judul" required="">
+                    </div>
+                    <div class="form-group">
+                        <label>Letak pasal pada dokumen</label>
+                        <textarea class="form-control" name="desc"></textarea>
                     </div>
                     <div>
                         <input class="radio-type-dokumen" type="radio" name="type_dokumen" value="FILE" required="">
@@ -231,7 +243,7 @@ $role = $this->session->userdata['user']['role'];
                         <input class="radio-type-dokumen" type="radio" name="type_dokumen" value="URL">
                         <label>Url</label>
                         <input class="form-control input-path input-file" type="file" name="dokumen" required="">
-                        <input class="form-control   input-path input-url" type="url" name="url" required="">
+                        <input class="form-control input-path input-url" type="url" name="url" required="">
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -304,7 +316,7 @@ $role = $this->session->userdata['user']['role'];
                                 </td>
                             </tr>
                             <tr>
-                                <td>Deskripsi</td>
+                                <td>Letak pasal<br>pada dokumen</td>
                                 <td>
                                     <textarea class="form-control textarea-deskripsi" name="deskripsi"></textarea>
                                 </td>
@@ -1202,7 +1214,7 @@ $role = $this->session->userdata['user']['role'];
         });
     }
     formDokumenReset = true;
-    function initTambahDokumen() {
+    function initTambahDokumen() {//unused
         var m = $('#modalDokumen');
         if (formDokumenReset) {
             $('.formDokumen').trigger("reset");
