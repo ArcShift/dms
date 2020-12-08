@@ -8,7 +8,7 @@ $role = $this->session->userdata['user']['role'];
 </style>
 <div class="main-card mb-3 card">
     <div class="card-body">
-        <div class="form-group">
+        <div class="form-group group-select-perusahaan">
             <label>Perusahaan</label>
             <select id="perusahaan" class="form-control" name="perusahaan" required="">
                 <?php if ($role == 'admin') { ?>
@@ -107,24 +107,24 @@ $role = $this->session->userdata['user']['role'];
                         </table>
                     </div>
                     <!--TUGAS-->
-<!--                    <div class="tab-pane" id="tab-tugas" role="tabpanel">
-                        <div class="table-responsive">
-                            <table class="table table-striped">
-                                <thead>
-                                    <tr>
-                                        <th>Judul Dokumen</th>
-                                        <th>Tugas</th>
-                                        <th>Form Terkait</th>
-                                        <th>Distribusi</th>
-                                        <th>Periode</th>
-                                        <th class="col-tgl">Jadwal</th>
-                                        <th class="col-aksi" style="min-width: 70px">Aksi</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="table-tugas"></tbody>
-                            </table>
-                        </div>
-                    </div>-->
+                    <!--                    <div class="tab-pane" id="tab-tugas" role="tabpanel">
+                                            <div class="table-responsive">
+                                                <table class="table table-striped">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Judul Dokumen</th>
+                                                            <th>Tugas</th>
+                                                            <th>Form Terkait</th>
+                                                            <th>Distribusi</th>
+                                                            <th>Periode</th>
+                                                            <th class="col-tgl">Jadwal</th>
+                                                            <th class="col-aksi" style="min-width: 70px">Aksi</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="table-tugas"></tbody>
+                                                </table>
+                                            </div>
+                                        </div>-->
                     <!--JADWAL-->
                     <div class="tab-pane" id="tab-jadwal" role="tabpanel">
                         <div class="text-right mb-2 col-aksi">
@@ -749,6 +749,9 @@ $role = $this->session->userdata['user']['role'];
 </div>
 <script>
     $(document).ready(function () {
+        if (role != 'admin') {
+            $('.group-select-perusahaan').hide();
+        }
         $('#modalContainer').append($('.modal'));
         $('#perusahaan').change();
         $('#tab-pemenuhan').addClass('active');
@@ -1093,7 +1096,7 @@ $role = $this->session->userdata['user']['role'];
                                 + '<td>' + personil2 + '</td>'
                                 + '<td>' + $.format.date(jadwal, "dd-MMM-yyyy") + '</td>'
                                 + '<td class="text-center">' + uploadStatus + '</td>'
-                                + '<td class="text-center">' + (data[j].terlambat<0?Math.abs(data[j].terlambat):'-') + '</td>'
+                                + '<td class="text-center">' + (data[j].terlambat < 0 ? Math.abs(data[j].terlambat) : '-') + '</td>'
                                 + '<td class="text-center">'
                                 + '<span class="text-primary fa fa-upload" title="Upload" onclick="initUploadImplementasi(' + n + ')"></span>&nbsp'
                                 + '<span class="text-primary fa fa-search" title="Detail" onclick="detailImplementasi(' + n + ')"></span>'
