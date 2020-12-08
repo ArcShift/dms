@@ -205,7 +205,9 @@
     function add(item) {
         closeForm();
         showCrud('#formAdd');
-        $('#parent-id').val($(item).parent().attr('id'));
+        var parent = $(item).parent().attr('id');
+        if(parent == 'root')parent='';
+        $('#parent-id').val();
         $('#parent').val($(item).parent().children('.title').text());
     }
     function edit(item) {

@@ -27,7 +27,9 @@ class Standard extends MY_Controller {
         $this->subTitle = 'create';
         $this->render('create');
     }
-
+    function edit() {
+        
+    }
     function detail() {
         if ($this->input->post('detail')) {
             $this->session->set_userdata('treeview', $this->input->post('detail'));
