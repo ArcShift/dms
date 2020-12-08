@@ -280,6 +280,7 @@
         </div>
         <script>
             $(document).ready(function () {
+                $('#modalContainer').append($('.modal'));
                 $('.input-jadwal').datepicker({
                     format: 'dd-mm-yyyy',
                     startDate: new Date(),

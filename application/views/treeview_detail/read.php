@@ -764,7 +764,6 @@ $role = $this->session->userdata['user']['role'];
         if (role != 'admin') {
             $('.group-select-perusahaan').hide();
         }
-        $('#modalContainer').append($('.modal'));
         $('#perusahaan').change();
         $('#tab-pemenuhan').addClass('active');
         $('.select-2').select2();

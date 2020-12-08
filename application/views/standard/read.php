@@ -31,7 +31,7 @@
                             <td><?php echo $d['user'] ?></td>
                             <td>
                                 <button class="btn btn-outline-primary btn-sm fa fa-search" title="Detail" name="detail" value="<?php echo $d['id'] ?>" formaction="<?php echo site_url($module . '/detail') ?>"></button>
-                                <button class="btn btn-outline-primary btn-sm fa fa-edit" title="Edit" name="detail"></button>
+                                <button type="button" class="btn btn-outline-primary btn-sm fa fa-edit" title="Edit" onclick="initEdit()"></button>
                                 <?php if (!$d['detail'] & !$d['used']) { ?>
                                     <?php if ($activeModule['acc_delete']) { ?>
                                         <button class="btn btn-outline-danger btn-sm fa fa-trash" title="Hapus" name="initHapus" value="<?php echo $d['id'] ?>" formaction="<?php echo site_url($module . '/delete') ?>"></button>
@@ -47,22 +47,38 @@
     </div>
     <div class="box-footer"></div>
 </div>
-<div class="modal fade" id="modalDetailJadwal" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Detail Jadwal</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                DETAIL
-            </div>
-            <div class="modal-footer">
-                <button type="submit" class="btn btn-primary btn-batal" data-dismiss="modal">Tutup</button>
-                <button type="submit" class="btn btn-danger btn-hapus" onclick="hapusJadwal()">Hapus</button>
+<!--MODAL EDIT STANDAR-->
+<div class="modal fade" id="modalEdit" tabindex="-1" role="dialog">
+    <form method="post">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Edit Standar</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Nama Standar</label>
+                        <input class="form-control" name="standar">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary btn-batal" data-dismiss="modal">Tutup</button>
+                    <button type="submit" class="btn btn-primary btn-hapus">Simpan</button>
+                </div>
             </div>
         </div>
-    </div>
+    </form>
 </div>
+<?php print_r($data) ?>
+<script>
+    var data = '<?= json_encode($data) ?>';
+    function initEdit() {
+        console.log('init Edit');
+        var m = $('#modalEdit');
+        m.modal('show');
+    }
+    
+</script>

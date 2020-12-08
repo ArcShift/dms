@@ -168,7 +168,6 @@
 </div>
 <script>
     list = <?php echo $list ?>;
-//    for (var l of list) {
     for (var i = 0; i < list.length; i++) {
         var l = list[i];
         var parent = l.parent == null ? 'root' : l.parent;
@@ -184,7 +183,6 @@
         parent.children('.fa-trash').remove();
         if (parent.children('.fa-angle-double-right').length == 0) {
             parent.children('.title').before('<span class="fa fa-angle-double-right text-success" onclick="collapse(this)"></span>');
-//            parent.children('.ctrl-form1').remove();
         }
         if (l.file != null) {
             clone.children('.fa-download').attr('href', '<?php echo base_url('upload/form1/') ?>' + l.file);
@@ -207,7 +205,7 @@
         showCrud('#formAdd');
         var parent = $(item).parent().attr('id');
         if(parent == 'root')parent='';
-        $('#parent-id').val();
+        $('#parent-id').val(parent);
         $('#parent').val($(item).parent().children('.title').text());
     }
     function edit(item) {
