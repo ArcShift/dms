@@ -84,7 +84,7 @@ class M_treeview_detail extends CI_Model {
     }
 
     function read_document() {
-        $this->db->select("d.*, GROUP_CONCAT(ds.id) AS distribusi, GROUP_CONCAT(pld.id) AS personil_distribusi_id, GROUP_CONCAT(CONCAT(pld.fullname,' - ', ukd.name)) AS user_distribusi");
+        $this->db->select("d.*,COUNT(imp.id) AS c_imp, GROUP_CONCAT(ds.id) AS distribusi, GROUP_CONCAT(pld.id) AS personil_distribusi_id, GROUP_CONCAT(CONCAT(pld.fullname,' - ', ukd.name)) AS user_distribusi");
         $this->db->join('pasal p', 'p.id = d.id_pasal');
         $this->db->join('users u', 'u.id = d.creator', 'LEFT');
         $this->db->join('company c', 'c.id = d.id_company', 'LEFT');
@@ -93,6 +93,8 @@ class M_treeview_detail extends CI_Model {
         $this->db->join('distribusi ds', 'd.id = ds.id_document', 'LEFT');
         $this->db->join('personil pld', 'pld.id = ds.id_personil', 'LEFT');
         $this->db->join('unit_kerja ukd', 'ukd.id = pld.id_unit_kerja', 'LEFT');
+        $this->db->join('jadwal j', 'j.id_document = d.id', 'LEFT');
+        $this->db->join('implementasi imp', 'imp.id_jadwal = j.id', 'LEFT');
 //        $this->db->where('uk.id_company = ' . $this->input->post('perusahaan'));
         $this->db->where('c.id = ' . $this->input->post('perusahaan'));
         $this->db->where('p.id_standard = ' . $this->input->post('standar'));
@@ -108,6 +110,8 @@ class M_treeview_detail extends CI_Model {
     }
 
     function delete_document() {
+        $this->db->where('id_document', $this->input->post('id'));
+        $this->db->delete('jadwal');
         $this->db->where('id', $this->input->post('id'));
         $result = $this->db->get('document')->row_array();
         $this->db->where('id', $this->input->post('id'));

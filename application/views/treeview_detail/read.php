@@ -958,6 +958,7 @@ $role = $this->session->userdata['user']['role'];
                 sortPasal[h].dokumens = [];
                 for (var i = 0; i < data.length; i++) {
                     if (data[i].id_pasal == sortPasal[h].id) {
+                            var btnDelete = '<span class="text-secondary fa fa-trash"></span>';
                         data[i].index_pasal = h;
                         sortDokumen.push(data[i]);
                         sortPasal[h].dokumens.push(n);
@@ -967,18 +968,21 @@ $role = $this->session->userdata['user']['role'];
                             data[i].distribusi = [];
                             data[i].user_distribusi = [];
                         }
+                        if (data[i].c_imp == 0 & data[i].distribusi.length == 0) {
+                            btnDelete = '<span class="text-danger fa fa-trash" onclick="initHapusDokumen(' + n + ')"></span>';
+                        }
                         $('#table-dokumen').append('<tr>'
                                 + '<td>' + d.nomor + '</td>'
                                 + '<td>' + d.judul + '</td>'
 //                                + '<td>' + d.deskripsi + '</td>'
                                 + '<td>' + sortPasal[h].fullname + '</td>'
-                                + '<td>' + (d.versi == 0 ? '-' : d.versi) + '</td>'
+                                + '<td>' + (d.versi == 0 | d.versi == null ? '-' : d.versi) + '</td>'
                                 + '<td>Level ' + (d.jenis == null ? '-' : d.jenis) + '</td>'
                                 + '<td>' + (d.klasifikasi == null ? '-' : d.klasifikasi) + '</td>'
                                 + '<td class="col-aksi">'
                                 + '<span class="text-primary fa fa-info-circle" onclick="detailDokumen(' + n + ')" title="Detail"></span>&nbsp'
                                 + '<span class="text-primary fa fa-edit" onclick="editDokumen(' + n + ')"></span>&nbsp'
-                                + '<span class="text-danger fa fa-trash" onclick="initHapusDokumen(' + n + ')"></span>'
+                                + btnDelete
                                 + '</td>'
                                 + '</tr>');
                         $('.select-dokumen').append('<option value="' + d.id + '">' + d.judul + '</option>');
@@ -1023,7 +1027,7 @@ $role = $this->session->userdata['user']['role'];
                                 + '<span class="text-primary fa fa-info-circle" title="Detail" onclick="detailDistribusi(' + j + ')"></span>&nbsp'
                                 + '<span class="text-primary fa fa-edit" title="Edit" onclick="editDistribusi(' + j + ')"></span>'
                                 + '</td>'
-                                + '</tr>');
+                                + '</tr>');     
                     }
                 }
             }
