@@ -372,11 +372,48 @@ $role = $this->session->userdata['user']['role'];
                 </button>
             </div>
             <div class="modal-body modal-message">
-                <input class="form-control" disabled=""/>
+                <table class="table">
+                    <tbody>
+                        <tr>
+                            <td>Pasal</td>
+                            <td>
+                                <input class="form-control input-pasal" disabled=""/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Nomor</td>
+                            <td>
+                                <input class="form-control input-nomor" disabled=""/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Judul</td>
+                            <td>
+                                <input class="form-control input-judul" disabled=""/>
+                            </td>
+                        </tr>
+                        <tr class="d-none">
+                            <td>Distribusi</td>
+                            <td>
+                                <input class="form-control input-distribusi" disabled=""/>
+                            </td>
+                        </tr>
+                        <tr class="d-none">
+                            <td>Jadwal</td>
+                            <td>
+                                <input class="form-control input-jadwal" disabled=""/>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="alert alert-danger" role="alert">
+                    Peringatan <i class="fa fa-exclamation"></i><br>
+                    Dokumen ini sudah memiliki data distribusi dan jadwal implementasi.<br>Apa Anda yakin ingin menghapus dokumen ini?
+                </div>
             </div>
             <div class="modal-footer">
                 <button class="btn btn-primary" data-dismiss="modal">Batal</button>
-                <button class="btn btn-danger" onclick="hapusDokumen(deleteId)">Hapus</button>
+                <button class="btn btn-danger" onclick="hapusDokumen()">Hapus</button>
             </div>
         </div>
     </div>
@@ -958,7 +995,7 @@ $role = $this->session->userdata['user']['role'];
                 sortPasal[h].dokumens = [];
                 for (var i = 0; i < data.length; i++) {
                     if (data[i].id_pasal == sortPasal[h].id) {
-                            var btnDelete = '<span class="text-secondary fa fa-trash"></span>';
+                        var btnDelete = '<span class="text-secondary fa fa-trash"></span>';
                         data[i].index_pasal = h;
                         sortDokumen.push(data[i]);
                         sortPasal[h].dokumens.push(n);
@@ -968,9 +1005,9 @@ $role = $this->session->userdata['user']['role'];
                             data[i].distribusi = [];
                             data[i].user_distribusi = [];
                         }
-                        if (data[i].c_imp == 0 & data[i].distribusi.length == 0) {
-                            btnDelete = '<span class="text-danger fa fa-trash" onclick="initHapusDokumen(' + n + ')"></span>';
-                        }
+//                        if (data[i].c_imp == 0 & data[i].distribusi.length == 0) {
+                        btnDelete = '<span class="text-danger fa fa-trash" onclick="initHapusDokumen(' + n + ')"></span>';
+//                        }
                         $('#table-dokumen').append('<tr>'
                                 + '<td>' + d.nomor + '</td>'
                                 + '<td>' + d.judul + '</td>'
@@ -1027,7 +1064,7 @@ $role = $this->session->userdata['user']['role'];
                                 + '<span class="text-primary fa fa-info-circle" title="Detail" onclick="detailDistribusi(' + j + ')"></span>&nbsp'
                                 + '<span class="text-primary fa fa-edit" title="Edit" onclick="editDistribusi(' + j + ')"></span>'
                                 + '</td>'
-                                + '</tr>');     
+                                + '</tr>');
                     }
                 }
             }
@@ -1336,14 +1373,29 @@ $role = $this->session->userdata['user']['role'];
     }
     function initHapusDokumen(index) {
         var m = $('#modalDeleteDokumen');
+        var d = sortDokumen[index];
         m.modal('show');
-        m.find('input').val(sortDokumen[index].judul);
+        m.find('.input-pasal').val(sortPasal[d.index_pasal].fullname);
+        m.find('.input-nomor').val(d.nomor);
+        m.find('.input-judul').val(d.judul);
+        m.find('.input-distribusi').val(d.distribusi.length);
+        m.find('.input-jadwal').val(d.c_imp);
+        if (d.c_imp != 0 | d.distribusi.length != 0) {
+            m.find('.alert').show();
+        } else {
+            m.find('.alert').hide();
+        }
         deleteId = index;
     }
-    function hapusDokumen(index) {
-        $.post('<?php echo site_url($module); ?>/hapus_dokumen', {id: sortDokumen[index].id}, function (data) {
+    function hapusDokumen() {
+        $('#modalNotif').modal('show');
+        $('#modalDeleteDokumen').modal('hide');
+        $('#modalNotif .modal-title').text('Mengapus Data');
+        $.post('<?php echo site_url($module); ?>/hapus_dokumen', {id: sortDokumen[deleteId].id}, function (data) {
+            $('#modalNotif .modal-message').html('Sukses');
             getPasal();
-            $('#modalDeleteDokumen').modal('hide');
+        }).fail(function () {
+            $('#modalNotif .modal-message').html('Error');
         });
     }
     function getStatusUpload(date) {
