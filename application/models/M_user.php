@@ -50,6 +50,7 @@ class M_user extends CI_Model {
         $input = $this->input->post();
         $this->db->where('id', $input['id']);
         $this->db->set('username', $input['username']);
+        $this->db->set('id_role', $input['role']);
         return $this->db->update($this->table);
     }
 

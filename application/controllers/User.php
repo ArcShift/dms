@@ -49,26 +49,39 @@ class User extends MY_Controller {
         if ($this->input->post('initEdit')) {
             $this->data['data'] = $this->model->detail($this->input->post('initEdit'));
         } elseif ($this->input->post('edit')) {
-//            $result = $this->model->detail($this->input->post('edit'));
-//            if ($this->input->post('username') == $result['username']) {
-                $this->form_validation->set_rules('username', 'Username', 'required|is_unique[users.username]');
-//            }
-            if ($this->form_validation->run()) {
-                if ($this->model->updateData()) {
-                    $this->session->set_flashdata('msgSuccess', 'Data berhasil diedit');
-                    redirect($this->module);
-                } else {
-                    $this->session->set_flashdata('msgError', $this->db->error()['message']);
+            $result = $this->model->detail($this->input->post('id'));
+                if ($this->input->post('username') != $result['username']) {
+                    $this->form_validation->set_rules('username', 'Username', 'required|is_unique[users.username]');
                 }
+                $this->form_validation->set_rules('role', 'Role', 'required');
+                if ($this->form_validation->run()) {
+                    if ($this->model->updateData()) {
+                        $this->session->set_flashdata('msgSuccess', 'Data berhasil diedit');
+                        redirect($this->module);
+                    } else {
+                        $this->session->set_flashdata('msgError', $this->db->error()['message']);
+                    }
+                }
+                $this->data['data'] = array(
+                    "id" => $this->input->post('id'),
+                    "username" => $this->input->post('username'),
+                    "id_role" => $this->input->post('role')
+                );
+            } elseif ($this->input->post('editPass')) {
+            $this->data['data'] = $this->model->detail($this->input->post('id'));
+            $this->form_validation->set_rules('newPass', 'Password', 'required');
+            $this->form_validation->set_rules('ulangi_pass', 'Username', 'required|matches[newPass]');
+                if ($this->form_validation->run()) {
+                    if ($this->model->gantiPassword()) {
+                        $this->session->set_flashdata('msgSuccess', 'Password berhasil diubah');
+                        redirect($this->module);
+                    } else {
+                        $this->session->set_flashdata('msgError', $this->db->error()['message']);
+                    }
+                }
+            } else {
+                redirect($this->module);
             }
-            $this->data['data'] = array(
-                "id" => $this->input->post('id'),
-                "username" => $this->input->post('username'),
-                "id_role" => $this->input->post('role')
-            );
-        } else {
-            redirect($this->module);
-        }
         $this->render('edit');
     }
 
