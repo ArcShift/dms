@@ -344,9 +344,15 @@ $role = $this->session->userdata['user']['role'];
                                         <input class="form-control input-path input-file" type="file" name="dokumen" required="">
                                         <input class="form-control input-path input-url" type="url" name="url" required="">
                                     </div>
-                                    <div class="group-label-dokumen">
-                                        <label class="label-path"></label>
-                                        <i class="btn btn-outline-danger btn-sm pull-right fa fa-trash" onclick="initUpdateDocument()"></i>
+                                    <div class="input-group mb-3 group-label-dokumen">
+                                        <input class="form-control label-path" readonly="">
+                                        <div class="input-group-append">
+                                        <i class="input-group-text btn btn-outline-danger btn-sm pull-right fa fa-trash" onclick="initUpdateDocument()"></i>
+                                            <!--<span class="input-group-text" id="basic-addon2">@example.com</span>-->
+                                        </div>
+                                    </div>
+                                    <div class="">
+                                        <!--<label class="label-path" style="width: 60%; word-wrap: break-word; display: inline-block" ></label>-->
                                     </div>
                                 </td>
                             </tr>
@@ -1355,7 +1361,7 @@ $role = $this->session->userdata['user']['role'];
         m.find('.fa-trash').hide();
         m.find('.group-radio-dokumen').hide();
         m.find('.group-label-dokumen').show();
-        m.find('.label-path').text(d.type_doc == 'FILE' ? d.file : d.url);
+        m.find('.label-path').val(d.type_doc == 'FILE' ? d.file : d.url);
         m.find('input, select, textarea').prop('disabled', true);
     }
     function editDokumen(index) {
