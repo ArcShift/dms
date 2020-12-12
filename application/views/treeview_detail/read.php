@@ -1277,6 +1277,7 @@ $role = $this->session->userdata['user']['role'];
     function initAddDocument(index) {
         var m = $('#modalDocument');
         m.modal('show');
+        m.find('form').trigger("reset");
         m.find('.input-pasal').val(sortPasal[index].name);
         m.find('.input-pasal-id').val(sortPasal[index].id);
         m.find('.input-company-id').val(perusahaan);
