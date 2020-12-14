@@ -275,6 +275,8 @@ $role = $this->session->userdata['user']['role'];
                                 <td>Pasal</td>
                                 <td>
                                     <select name="pasal" class="form-control select-pasal" required=""></select>
+                                    <br>
+                                    <select name="pasals[]" class="form-control select-2 select-pasal multiselect-dropdown" multiple="" style="width: 320px !important; margin-top: 100px"></select>
                                 </td>
                             </tr>
                             <tr>
@@ -810,7 +812,7 @@ $role = $this->session->userdata['user']['role'];
             $('.group-select-perusahaan').hide();
         }
 //        $(".select-2").select2({ width: 'resolve' });
-        $(".select-2").select2({ width: '100%' });      
+        $(".select-2").select2({width: '100%'});
         $('#perusahaan').change();
         $('#tab-pemenuhan').addClass('active');
         $('.select-2').select2();
@@ -1001,41 +1003,48 @@ $role = $this->session->userdata['user']['role'];
             sortDokumen = [];
             data = JSON.parse(data);
             var n = 0;
-            for (var h = 0; h < sortPasal.length; h++) {
-                sortPasal[h].dokumens = [];
-                for (var i = 0; i < data.length; i++) {
-                    if (data[i].id_pasal == sortPasal[h].id) {
-                        var btnDelete = '<span class="text-secondary fa fa-trash"></span>';
-                        data[i].index_pasal = h;
-                        sortDokumen.push(data[i]);
-                        sortPasal[h].dokumens.push(n);
-                        var d = data[i];
-                        data[i].index_pasal = h;
-                        if (d.distribusi[0] == "") {
-                            data[i].distribusi = [];
-                            data[i].user_distribusi = [];
+            for (var i = 0; i < data.length; i++) {
+                var d = data[i];
+                d.index_dokumen_pasal = [];
+                if (d.dokumen_pasal[0] == '') {
+                    d.dokumen_pasal = [];
+                }
+                for (var j = 0; j < d.dokumen_pasal.length; j++) {
+                    for (var k = 0; k < sortPasal.length; k++) {
+                        if (d.dokumen_pasal[j] == sortPasal[k].id) {
+                            d.index_dokumen_pasal.push(k);
                         }
-//                        if (data[i].c_imp == 0 & data[i].distribusi.length == 0) {
-                        btnDelete = '<span class="text-danger fa fa-trash" onclick="initHapusDokumen(' + n + ')"></span>';
-//                        }
-                        $('#table-dokumen').append('<tr>'
-                                + '<td>' + d.nomor + '</td>'
-                                + '<td>' + d.judul + '</td>'
-//                                + '<td>' + d.deskripsi + '</td>'
-                                + '<td>' + sortPasal[h].fullname + '</td>'
-                                + '<td>' + (d.versi == 0 | d.versi == null ? '-' : d.versi) + '</td>'
-                                + '<td>Level ' + (d.jenis == null ? '-' : d.jenis) + '</td>'
-                                + '<td>' + (d.klasifikasi == null ? '-' : d.klasifikasi) + '</td>'
-                                + '<td class="col-aksi">'
-                                + '<span class="text-primary fa fa-info-circle" onclick="detailDokumen(' + n + ')" title="Detail"></span>&nbsp'
-                                + '<span class="text-primary fa fa-edit" onclick="editDokumen(' + n + ')"></span>&nbsp'
-                                + btnDelete
-                                + '</td>'
-                                + '</tr>');
-                        $('.select-dokumen').append('<option value="' + d.id + '">' + d.judul + '</option>');
-                        n++;
                     }
                 }
+                for (var h = 0; h < sortPasal.length; h++) {//TODO: remove later
+                    sortPasal[h].dokumens = [];
+                    if (d.id_pasal == sortPasal[h].id) {
+                        d.index_pasal = h;
+                        sortPasal[h].dokumens.push(n);
+                    }
+                }
+                var btnDelete = '<span class="text-secondary fa fa-trash"></span>';
+                if (d.distribusi[0] == "") {
+                    d.distribusi = [];
+                    d.user_distribusi = [];
+                }
+                btnDelete = '<span class="text-danger fa fa-trash" onclick="initHapusDokumen(' + n + ')"></span>';
+                $('#table-dokumen').append('<tr>'
+                        + '<td>' + d.nomor + '</td>'
+                        + '<td>' + d.judul + '</td>'
+                        + '<td>' + sortPasal[d.index_pasal].fullname + '</td>'
+                        + '<td>' + (d.versi == 0 | d.versi == null ? '-' : d.versi) + '</td>'
+                        + '<td>Level ' + (d.jenis == null ? '-' : d.jenis) + '</td>'
+                        + '<td>' + (d.klasifikasi == null ? '-' : d.klasifikasi) + '</td>'
+                        + '<td class="col-aksi">'
+                        + '<span class="text-primary fa fa-info-circle" onclick="detailDokumen(' + n + ')" title="Detail"></span>&nbsp'
+                        + '<span class="text-primary fa fa-edit" onclick="editDokumen(' + n + ')"></span>&nbsp'
+                        + btnDelete
+                        + '</td>'
+                        + '</tr>');
+                $('.select-dokumen').append('<option value="' + d.id + '">' + d.judul + '</option>');
+                n++;
+                sortDokumen.push(d);
             }
             getDistribusi();
         });
@@ -1351,6 +1360,11 @@ $role = $this->session->userdata['user']['role'];
         var d = sortDokumen[index];
         m.modal('show');
         m.find('.modal-title').text('Detail Dokumen');
+        m.find('.select-2').val(null).trigger('change');
+        m.find('.select-2').val(d.dokumen_pasal).trigger('change');
+        for (var i = 0; i < d.index_dokumen_pasal.length; i++) {
+            
+        }
         m.find('.btn-submit').hide();
         m.find('.select-pasal').val(d.id_pasal);
         m.find('.input-nomor').val(d.nomor);
