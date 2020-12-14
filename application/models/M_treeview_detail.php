@@ -54,12 +54,13 @@ class M_treeview_detail extends CI_Model {
     }
 
     function create_document() {
-        $this->db->set('id_pasal', $this->input->post('pasal'));
+        $this->db->set('id_pasal', $this->input->post('pasal')[0]); //TODO: DELETE LATER
         $this->db->set('nomor', $this->input->post('nomor'));
         $this->db->set('judul', $this->input->post('judul'));
         if ($this->input->post('company')) {
             $this->db->set('id_company', $this->input->post('company'));
         }
+
         $this->db->set('creator', $this->input->post('creator'));
         $this->db->set('jenis', $this->input->post('jenis'));
         $this->db->set('klasifikasi', $this->input->post('klasifikasi'));
@@ -79,13 +80,26 @@ class M_treeview_detail extends CI_Model {
             $this->db->where('id', $this->input->post('id'));
             return $this->db->update('document');
         } else {
-            return $this->db->insert('document');
+            if ($this->db->insert('document')) {
+                $id_document = $this->db->insert_id();
+                foreach ($this->input->post('pasals') as $k => $p) {
+                    $this->db->set('id_document', $id_document);
+                    $this->db->set('id_pasal', $p);
+                    if (!$this->db->insert('document_pasal')) {
+                        return false;
+                    }
+                }
+            } else {
+                return false;
+            }
         }
+        return true;
     }
 
     function read_document() {
-        $this->db->select("d.*,COUNT(imp.id) AS c_imp, GROUP_CONCAT(DISTINCT ds.id) AS distribusi, GROUP_CONCAT(DISTINCT pld.id) AS personil_distribusi_id, GROUP_CONCAT(DISTINCT CONCAT(pld.fullname,' - ', ukd.name)) AS user_distribusi");
+        $this->db->select("d.*,COUNT(imp.id) AS c_imp,GROUP_CONCAT(DISTINCT dp.id_pasal) AS doc_pasal, GROUP_CONCAT(DISTINCT ds.id) AS distribusi, GROUP_CONCAT(DISTINCT pld.id) AS personil_distribusi_id, GROUP_CONCAT(DISTINCT CONCAT(pld.fullname,' - ', ukd.name)) AS user_distribusi");
         $this->db->join('pasal p', 'p.id = d.id_pasal');
+        $this->db->join('document_pasal dp', 'dp.id_document = d.id', 'LEFT');
         $this->db->join('users u', 'u.id = d.creator', 'LEFT');
         $this->db->join('company c', 'c.id = d.id_company', 'LEFT');
         $this->db->join('personil pl', 'pl.id = u.id_personil', 'LEFT');
@@ -105,6 +119,7 @@ class M_treeview_detail extends CI_Model {
             $result[$i]['distribusi'] = explode(',', $result[$i]['distribusi']);
             $result[$i]['user_distribusi'] = explode(',', $result[$i]['user_distribusi']);
             $result[$i]['personil_distribusi_id'] = explode(',', $result[$i]['personil_distribusi_id']);
+            $result[$i]['dokumen_pasal'] = explode(',', $result[$i]['doc_pasal']);
         }
         return $result;
     }
@@ -315,7 +330,7 @@ class M_treeview_detail extends CI_Model {
         } else if ($type == 'URL') {
             $this->db->set('path', $this->input->post('url'));
         }
-        if(empty($imp['upload_date'])){
+        if (empty($imp['upload_date'])) {
             $this->db->set('upload_date', date('Y-m-d'));
         }
         $this->db->where('id', $this->input->post('id'));

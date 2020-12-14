@@ -224,6 +224,8 @@ $role = $this->session->userdata['user']['role'];
                     <div class="form-group">
                         <label>Pasal</label>
                         <input class="form-control input-pasal" readonly="">
+                        <br>
+                        <select name="pasals[]" class="form-control select-2 select-pasal multiselect-dropdown" multiple="" style="width: 465px !important; margin-top: 100px"></select>
                     </div>
                     <div class="form-group">
                         <label>Nomor</label>
@@ -347,8 +349,8 @@ $role = $this->session->userdata['user']['role'];
                                     <div class="input-group mb-3 group-label-dokumen">
                                         <input class="form-control label-path" readonly="">
                                         <div class="input-group-append">
-                                        <i class="input-group-text btn btn-outline-danger btn-sm pull-right fa fa-trash" onclick="initUpdateDocument()"></i>
-                                            <!--<span class="input-group-text" id="basic-addon2">@example.com</span>-->
+                                            <i class="input-group-text btn btn-outline-danger btn-sm pull-right fa fa-trash" onclick="initUpdateDocument()"></i>
+                                                <!--<span class="input-group-text" id="basic-addon2">@example.com</span>-->
                                         </div>
                                     </div>
                                     <div class="">
@@ -488,7 +490,7 @@ $role = $this->session->userdata['user']['role'];
                             <tr class="group-edit">
                                 <td></td>
                                 <td>
-                                    <select class="form-control select-personil select-2 multiselect-dropdown" multiple="multiple" name="personil[]" required="" style="width: 330px !important;"></select>
+                                    <select name="dist[]" class="form-control select-personil select-2 multiselect-dropdown" multiple="multiple" name="personil[]" required="" style="width: 330px !important;"></select>
                                 </td>
                             </tr>
                         </tbody>
@@ -807,6 +809,8 @@ $role = $this->session->userdata['user']['role'];
         if (role != 'admin') {
             $('.group-select-perusahaan').hide();
         }
+//        $(".select-2").select2({ width: 'resolve' });
+        $(".select-2").select2({ width: '100%' });      
         $('#perusahaan').change();
         $('#tab-pemenuhan').addClass('active');
         $('.select-2').select2();
@@ -1278,7 +1282,7 @@ $role = $this->session->userdata['user']['role'];
         var m = $('#modalDocument');
         m.modal('show');
         m.find('form').trigger("reset");
-        m.find('.input-pasal').val(sortPasal[index].name);
+        m.find('.input-pasal').val(sortPasal[index].fullname);
         m.find('.input-pasal-id').val(sortPasal[index].id);
         m.find('.input-company-id').val(perusahaan);
     }
