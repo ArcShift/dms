@@ -78,7 +78,11 @@ class M_treeview_detail extends CI_Model {
         }
         if ($this->input->post('id')) {
             $this->db->where('id', $this->input->post('id'));
-            return $this->db->update('document');
+            if ($this->db->update('document')) {
+                return $this->editDokumenPasal();
+            } else {
+                return false;
+            }
         } else {
             if ($this->db->insert('document')) {
                 $id_document = $this->db->insert_id();
@@ -92,6 +96,34 @@ class M_treeview_detail extends CI_Model {
             } else {
                 return false;
             }
+        }
+        return true;
+    }
+
+    private function editDokumenPasal() {
+        $document = $this->input->post('id');
+        $input = $this->input->post('pasals');
+        $this->db->where('id_document', $document);
+        $result = $this->db->get('document_pasal')->result_array();
+        $db = [];
+        foreach ($result as $r) {
+            array_push($db, $r['id_pasal']);
+        }
+        $remove = array_diff($db, $input);
+        $add = array_diff($input, $db);
+        $data = [];
+        $data['remove'] = $remove;
+        $data['add'] = $add;
+        $data['current'] = array_intersect($db, $input);
+        foreach ($remove as $r) {
+            $this->db->where('id_document', $document);
+            $this->db->where('id_pasal', $r);
+            $this->db->delete('document_pasal');
+        }
+        foreach ($add as $a) {
+            $this->db->set('id_document', $document);
+            $this->db->set('id_pasal', $a);
+            $this->db->insert('document_pasal');
         }
         return true;
     }

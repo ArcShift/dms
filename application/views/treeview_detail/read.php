@@ -224,8 +224,10 @@ $role = $this->session->userdata['user']['role'];
                     <div class="form-group">
                         <label>Pasal</label>
                         <input class="form-control input-pasal" readonly="">
-                        <br>
-                        <select name="pasals[]" class="form-control select-2 select-pasal multiselect-dropdown" multiple="" style="width: 465px !important; margin-top: 100px"></select>
+                    </div>
+                    <div class="form-group">
+                        <label>Tambahkan Pasal Lain</label>
+                        <select name="pasals[]" class="form-control select-2 select-2-pasal multiselect-dropdown" multiple="" style="width: 465px !important; margin-top: 100px"></select>
                     </div>
                     <div class="form-group">
                         <label>Nomor</label>
@@ -276,7 +278,7 @@ $role = $this->session->userdata['user']['role'];
                                 <td>
                                     <select name="pasal" class="form-control select-pasal" required=""></select>
                                     <br>
-                                    <select name="pasals[]" class="form-control select-2 select-pasal multiselect-dropdown" multiple="" style="width: 320px !important; margin-top: 100px"></select>
+                                    <select name="pasals[]" class="form-control select-2 select-2-pasal multiselect-dropdown" multiple="" style="width: 320px !important; margin-top: 100px"></select>
                                 </td>
                             </tr>
                             <tr>
@@ -935,7 +937,7 @@ $role = $this->session->userdata['user']['role'];
             $('#tab-base').empty();
             $('#table-pemenuhan').empty();
             $('#table-pasal').empty();
-            $('.select-pasal').empty();
+            $('.select-pasal, .select-2-pasal').empty();
             $('.select-pasal-has-dokumen').empty();
             $('.select-pasal').append('<option value="">-- pilih pasal --</option>');
             $('.select-pasal-has-dokumen').append('<option value="">-- pilih pasal --</option>');
@@ -972,7 +974,7 @@ $role = $this->session->userdata['user']['role'];
                         + '</td>'
                         + '</tr>');
                 if (d.child == 0) {
-                    $('.select-pasal').append('<option value="' + d.id + '">' + d.fullname + '</option>');
+                    $('.select-pasal, .select-2-pasal').append('<option value="' + d.id + '">' + d.fullname + '</option>');
                 }
                 if (d.doc != 0) {
                     $('.select-pasal-has-dokumen').append('<option value="' + i + '">' + d.fullname + '</option>');
@@ -1290,6 +1292,10 @@ $role = $this->session->userdata['user']['role'];
     function initAddDocument(index) {
         var m = $('#modalDocument');
         m.modal('show');
+        m.find('.select-2').val(null);
+        m.find('.select-2 option').prop('disabled', false);
+        m.find('.select-2 option[value=' + sortPasal[index].id + ']').prop('disabled', true);
+        m.find('.select-2').select2();
         m.find('form').trigger("reset");
         m.find('.input-pasal').val(sortPasal[index].fullname);
         m.find('.input-pasal-id').val(sortPasal[index].id);
@@ -1362,9 +1368,6 @@ $role = $this->session->userdata['user']['role'];
         m.find('.modal-title').text('Detail Dokumen');
         m.find('.select-2').val(null).trigger('change');
         m.find('.select-2').val(d.dokumen_pasal).trigger('change');
-        for (var i = 0; i < d.index_dokumen_pasal.length; i++) {
-            
-        }
         m.find('.btn-submit').hide();
         m.find('.select-pasal').val(d.id_pasal);
         m.find('.input-nomor').val(d.nomor);
