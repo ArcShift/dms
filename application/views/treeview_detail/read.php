@@ -192,10 +192,9 @@ $role = $this->session->userdata['user']['role'];
                     <table class="table">
                         <thead>
                             <tr>
-                                <th>Dokumen</th>
-                                <th>Jenis</th>
+                                <th>Judul Dokumen</th>
                                 <th>Pasal Terkait</th>
-                                <th>Nama File / Url</th>
+                                <th>Letak Pasal pada Dokumen</th>
                                 <th>Aksi</th>
                             </tr>
                         </thead>
@@ -1241,14 +1240,14 @@ $role = $this->session->userdata['user']['role'];
                         link = '<a class="btn btn-primary btn-sm fa fa-search" target="_blank" href="' + doc.url + '"></a>';
                     }
                     var pasals = '';
-//                    for (var i = 0; i < doc.dokumen_pasal.length; i++) {
-//                       pasals+=      
+                    console.log(doc.index_dokumen_pasal.length);
+//                    for (var i = 0; i < doc.index_dokumen_pasal.length; i++) {
+//                       pasals+= '<div>'+i+'</div>' ;    
 //                    }
                     m.find('.files').append('<tr>'
                             + '<td>' + doc.judul + '</td>'
-                            + '<td>' + doc.type_doc + '</td>'
-                            + '<td>' + '-' + '</td>'
-                            + '<td>' + '-' + '</td>'
+                            + '<td>' + pasals + '</td>'
+                            + '<td>' + (doc.deskripsi==null?'-':doc.deskripsi) + '</td>'
                             + '<td>' + link
                             + '&nbsp<span class="btn btn-danger btn-sm fa fa-trash" onclick="initHapusDokumen(' + i + ')"></span>'
                             + '</td>'
