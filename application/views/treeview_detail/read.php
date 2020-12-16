@@ -39,8 +39,8 @@ $role = $this->session->userdata['user']['role'];
                     <li class="nav-item"><a data-toggle="tab" href="#tab-pasal" class="nav-link">Pasal</a></li>
                     <li class="nav-item"><a data-toggle="tab" href="#tab-dokumen" class="nav-link">Dokumen</a></li>
                     <li class="nav-item"><a data-toggle="tab" href="#tab-distribusi" class="nav-link">Distribusi</a></li>
-                    <!--<li class="nav-item"><a data-toggle="tab" href="#tab-tugas" class="nav-link">Tugas</a></li>-->
-                    <li class="nav-item"><a data-toggle="tab" href="#tab-jadwal" class="nav-link">Jadwal dan Tugas</a></li>
+                    <li class="nav-item"><a data-toggle="tab" href="#tab-tugas" class="nav-link">Tugas</a></li>
+                    <li class="nav-item"><a data-toggle="tab" href="#tab-jadwal" class="nav-link">Jadwal</a></li>
                     <li class="nav-item"><a data-toggle="tab" href="#tab-implementasi" class="nav-link">Implementasi</a></li>
                     <!--<li class="nav-item"><a data-toggle="tab" href="#tab-base" class="nav-link">Base</a></li>-->
                 </ul>
@@ -115,24 +115,24 @@ $role = $this->session->userdata['user']['role'];
                         </table>
                     </div>
                     <!--TUGAS-->
-                    <!--                    <div class="tab-pane" id="tab-tugas" role="tabpanel">
-                                            <div class="table-responsive">
-                                                <table class="table table-striped">
-                                                    <thead>
-                                                        <tr>
-                                                            <th>Judul Dokumen</th>
-                                                            <th>Tugas</th>
-                                                            <th>Form Terkait</th>
-                                                            <th>Distribusi</th>
-                                                            <th>Periode</th>
-                                                            <th class="col-tgl">Jadwal</th>
-                                                            <th class="col-aksi" style="min-width: 70px">Aksi</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody id="table-tugas"></tbody>
-                                                </table>
-                                            </div>
-                                        </div>-->
+                    <div class="tab-pane" id="tab-tugas" role="tabpanel">
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Judul Dokumen</th>
+                                        <th>Tugas</th>
+                                        <th>Form Terkait</th>
+                                        <th>Distribusi</th>
+                                        <th>Periode</th>
+                                        <th class="col-tgl">Jadwal</th>
+                                        <th class="col-aksi" style="min-width: 70px">Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="table-tugas"></tbody>
+                            </table>
+                        </div>
+                    </div>
                     <!--JADWAL-->
                     <div class="tab-pane" id="tab-jadwal" role="tabpanel">
                         <div class="text-right mb-2 col-aksi">
@@ -1112,6 +1112,7 @@ $role = $this->session->userdata['user']['role'];
     function getImplementasi() {
         $.getJSON('<?php echo site_url($module); ?>/get_implementasi', null, function (data) {
             sortImplementasi = [];
+            $('#table-tugas').empty();
             $('#table-jadwal').empty();
             $('#table-implementasi').empty();
             var n = 0;
@@ -1142,6 +1143,19 @@ $role = $this->session->userdata['user']['role'];
                                 + '<td>' + sortDokumen[sortJadwal[i].index_dokumen].judul + '</td>'
                                 + '<td>' + data[j].desc + '</td>'
                                 + '<td>' + (data[j].index_form == null ? '-' : sortDokumen[data[j].index_form].judul) + '</td>'
+                                + '<td style="text-transform: capitalize">' + periode + '</td>'
+                                + '<td>' + $.format.date(jadwal, "dd-MMM-yyyy") + '</td>'
+                                + '<td class="col-aksi">'
+                                + '<span class="text-primary fa fa-info-circle" title="Detail" onclick="detailJadwal(' + n + ')"></span>&nbsp'
+                                + '<span class="text-primary fa fa-edit" title="Edit" onclick="editJadwal(' + n + ')"></span>&nbsp'
+                                + '<span class="text-danger fa fa-trash" title="Hapus" onclick="initHapusJadwal(' + n + ')"></span>'
+                                + '</td>'
+                                + '</tr>');
+                        $('#table-tugas').append('<tr>'
+                                + '<td>' + sortDokumen[sortJadwal[i].index_dokumen].judul + '</td>'
+                                + '<td>' + data[j].desc + '</td>'
+                                + '<td>' + (data[j].index_form == null ? '-' : sortDokumen[data[j].index_form].judul) + '</td>'
+                                + '<td>' + personil2 + '</td>'
                                 + '<td style="text-transform: capitalize">' + periode + '</td>'
                                 + '<td>' + $.format.date(jadwal, "dd-MMM-yyyy") + '</td>'
                                 + '<td class="col-aksi">'

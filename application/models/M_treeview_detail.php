@@ -182,7 +182,7 @@ class M_treeview_detail extends CI_Model {
 
     function insert_distribusi() {
         $in = $this->input->post();
-        foreach ($in['personil'] as $p) {
+        foreach ($in['dist'] as $p) {
             $this->db->where('id_document', $in['dokumen']);
             $this->db->where('id_personil', $p);
             $count = $this->db->count_all_results('distribusi');
