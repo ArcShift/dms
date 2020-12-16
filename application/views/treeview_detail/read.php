@@ -50,7 +50,7 @@ $role = $this->session->userdata['user']['role'];
                         <table class="table table-striped">
                             <thead>
                                 <tr>
-                                    <th>Pasal</th>
+                                    <th>Pasal</th>-
                                     <th class="col-sm-2 text-center">Jumlah<br/>Dokumen</th>
                                     <th class="col-sm-2 text-center">Pemenuhan<br/>Dokumen</th>
                                     <th class="col-sm-2 text-center">Jumlah<br/>Jadwal</th>
@@ -124,8 +124,8 @@ $role = $this->session->userdata['user']['role'];
                                         <th>Tugas</th>
                                         <th>Form Terkait</th>
                                         <th>Distribusi</th>
-                                        <th>Periode</th>
-                                        <th class="col-tgl">Jadwal</th>
+                                        <!--<th>Periode</th>-->
+                                        <!--<th class="col-tgl">Jadwal</th>-->
                                         <th class="col-aksi" style="min-width: 70px">Aksi</th>
                                     </tr>
                                 </thead>
@@ -194,6 +194,8 @@ $role = $this->session->userdata['user']['role'];
                             <tr>
                                 <th>Dokumen</th>
                                 <th>Jenis</th>
+                                <th>Pasal Terkait</th>
+                                <th>Nama File / Url</th>
                                 <th>Aksi</th>
                             </tr>
                         </thead>
@@ -1156,8 +1158,8 @@ $role = $this->session->userdata['user']['role'];
                                 + '<td>' + data[j].desc + '</td>'
                                 + '<td>' + (data[j].index_form == null ? '-' : sortDokumen[data[j].index_form].judul) + '</td>'
                                 + '<td>' + personil2 + '</td>'
-                                + '<td style="text-transform: capitalize">' + periode + '</td>'
-                                + '<td>' + $.format.date(jadwal, "dd-MMM-yyyy") + '</td>'
+//                                + '<td style="text-transform: capitalize">' + periode + '</td>'
+//                                + '<td>' + $.format.date(jadwal, "dd-MMM-yyyy") + '</td>'
                                 + '<td class="col-aksi">'
                                 + '<span class="text-primary fa fa-info-circle" title="Detail" onclick="detailJadwal(' + n + ')"></span>&nbsp'
                                 + '<span class="text-primary fa fa-edit" title="Edit" onclick="editJadwal(' + n + ')"></span>&nbsp'
@@ -1238,9 +1240,15 @@ $role = $this->session->userdata['user']['role'];
                     } else {
                         link = '<a class="btn btn-primary btn-sm fa fa-search" target="_blank" href="' + doc.url + '"></a>';
                     }
+                    var pasals = '';
+//                    for (var i = 0; i < doc.dokumen_pasal.length; i++) {
+//                       pasals+=      
+//                    }
                     m.find('.files').append('<tr>'
                             + '<td>' + doc.judul + '</td>'
                             + '<td>' + doc.type_doc + '</td>'
+                            + '<td>' + '-' + '</td>'
+                            + '<td>' + '-' + '</td>'
                             + '<td>' + link
                             + '&nbsp<span class="btn btn-danger btn-sm fa fa-trash" onclick="initHapusDokumen(' + i + ')"></span>'
                             + '</td>'
@@ -1318,7 +1326,6 @@ $role = $this->session->userdata['user']['role'];
     $('#formUploadDocument').on("submit", function (e) {
         e.preventDefault();
         console.log('upload');
-        var status = 'Error';
         $('.modal').modal('hide');
         $('#modalNotif .modal-title').text('Uploading...');
         $('#modalNotif').modal('show');
@@ -1332,12 +1339,11 @@ $role = $this->session->userdata['user']['role'];
             async: false,
             success: function (data) {
                 data = JSON.parse(data);
-                if (data.status === 'success') {
-                    status = 'Success';
-//                        console.log($(this));
+                if (data.status == 'success') {
                     formDokumenReset = true;
                     getPasal();
                     $('#modalNotif .modal-message').html('Data Berhasil Disimpan');
+                    $('#modalNotif .modal-title').text('Success');
                 } else if (data.status === 'error') {
                     $('#modalNotif .modal-message').html(data.message);
                 } else {
@@ -1347,9 +1353,6 @@ $role = $this->session->userdata['user']['role'];
             error: function (data) {
                 $('#modalNotif .modal-message').text('Error 500');
             },
-            complete: function () {
-                $('#modalNotif .modal-title').text(status);
-            }
         });
     });
     $('.radio-type-dokumen').change(function () {

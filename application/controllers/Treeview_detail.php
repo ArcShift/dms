@@ -49,10 +49,10 @@ class Treeview_detail extends MY_Controller {
     function create_dokumen() {
         $this->ajax_request();
         $this->load->library('form_validation');
-            $this->form_validation->set_rules('pasal', 'Pasal', 'required');//TODO: remove later
-        if(!$this->input->post('pasals')){
-            $this->form_validation->set_rules('pasals', 'Pasals', 'required');
-        }
+        $this->form_validation->set_rules('pasal', 'Pasal', 'required');
+//        if(!$this->input->post('pasals')){
+//            $this->form_validation->set_rules('pasals', 'Pasals', 'required');
+//        }
         $this->form_validation->set_rules('nomor', 'Nomor', 'required');
         $result['status'] = 'error';
         if ($this->form_validation->run()) {
@@ -152,6 +152,7 @@ class Treeview_detail extends MY_Controller {
             echo 'error';
         }
     }
+
     function hapus_personil_jadwal() {
         $this->ajax_request();
         if ($this->model->deletePersonilImplementasi()) {

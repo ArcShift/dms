@@ -54,7 +54,7 @@ class M_treeview_detail extends CI_Model {
     }
 
     function create_document() {
-        $this->db->set('id_pasal', $this->input->post('pasal')[0]); //TODO: DELETE LATER
+        $this->db->set('id_pasal', $this->input->post('pasal'));
         $this->db->set('nomor', $this->input->post('nomor'));
         $this->db->set('judul', $this->input->post('judul'));
         if ($this->input->post('company')) {
@@ -86,11 +86,13 @@ class M_treeview_detail extends CI_Model {
         } else {
             if ($this->db->insert('document')) {
                 $id_document = $this->db->insert_id();
-                foreach ($this->input->post('pasals') as $k => $p) {
-                    $this->db->set('id_document', $id_document);
-                    $this->db->set('id_pasal', $p);
-                    if (!$this->db->insert('document_pasal')) {
-                        return false;
+                if (!empty($this->input->post('pasals'))) {
+                    foreach ($this->input->post('pasals') as $k => $p) {
+                        $this->db->set('id_document', $id_document);
+                        $this->db->set('id_pasal', $p);
+                        if (!$this->db->insert('document_pasal')) {
+                            return false;
+                        }
                     }
                 }
             } else {
