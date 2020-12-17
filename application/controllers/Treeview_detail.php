@@ -50,9 +50,9 @@ class Treeview_detail extends MY_Controller {
         $this->ajax_request();
         $this->load->library('form_validation');
         $this->form_validation->set_rules('pasal', 'Pasal', 'required');
-//        if(!$this->input->post('pasals')){
-//            $this->form_validation->set_rules('pasals', 'Pasals', 'required');
-//        }
+        if(!$this->input->post('pasals')){
+            $this->form_validation->set_rules('pasals', 'Pasal Lain', 'required');
+        }
         $this->form_validation->set_rules('nomor', 'Nomor', 'required');
         $result['status'] = 'error';
         if ($this->form_validation->run()) {

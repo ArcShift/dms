@@ -43,8 +43,9 @@ class M_treeview_detail extends CI_Model {
     }
 
     function pasal() {
-        $this->db->select('p.*, COUNT(p2.id) AS child, COUNT(DISTINCT d.id) AS doc, COUNT(i.id) AS imp, SUM(CASE WHEN i.path IS NOT NULL and i.date_jadwal < NOW() THEN 1 ELSE 0 END) as upload, SUM(CASE WHEN i.path IS NULL and i.date_jadwal < NOW() THEN 1 ELSE 0 END) as unupload');
+        $this->db->select('p.*, COUNT(p2.id) AS child, COUNT(DISTINCT dp.id) AS doc, COUNT(i.id) AS imp, SUM(CASE WHEN i.path IS NOT NULL and i.date_jadwal < NOW() THEN 1 ELSE 0 END) as upload, SUM(CASE WHEN i.path IS NULL and i.date_jadwal < NOW() THEN 1 ELSE 0 END) as unupload');
         $this->db->join('pasal p2', 'p2.parent = p.id', 'LEFT');
+        $this->db->join('document_pasal dp', 'dp.id_pasal = p.id', 'LEFT');
         $this->db->join('document d', 'd.id_pasal = p.id', 'LEFT');
         $this->db->join('jadwal j', 'j.id_document = d.id', 'LEFT');
         $this->db->join('implementasi i', 'i.id_jadwal = j.id', 'LEFT');
@@ -60,7 +61,6 @@ class M_treeview_detail extends CI_Model {
         if ($this->input->post('company')) {
             $this->db->set('id_company', $this->input->post('company'));
         }
-
         $this->db->set('creator', $this->input->post('creator'));
         $this->db->set('jenis', $this->input->post('jenis'));
         $this->db->set('klasifikasi', $this->input->post('klasifikasi'));
@@ -131,9 +131,10 @@ class M_treeview_detail extends CI_Model {
     }
 
     function read_document() {
-        $this->db->select("d.*,COUNT(imp.id) AS c_imp,GROUP_CONCAT(DISTINCT dp.id_pasal) AS doc_pasal, GROUP_CONCAT(DISTINCT ds.id) AS distribusi, GROUP_CONCAT(DISTINCT pld.id) AS personil_distribusi_id, GROUP_CONCAT(DISTINCT CONCAT(pld.fullname,' - ', ukd.name)) AS user_distribusi");
+        $this->db->select("d.*, COUNT(DISTINCT cd.id) AS child_document, COUNT(DISTINCT imp.id) AS c_imp,GROUP_CONCAT(DISTINCT dp.id_pasal) AS doc_pasal, GROUP_CONCAT(DISTINCT ds.id) AS distribusi, GROUP_CONCAT(DISTINCT pld.id) AS personil_distribusi_id, GROUP_CONCAT(DISTINCT CONCAT(pld.fullname,' - ', ukd.name)) AS user_distribusi");
         $this->db->join('pasal p', 'p.id = d.id_pasal');
         $this->db->join('document_pasal dp', 'dp.id_document = d.id', 'LEFT');
+        $this->db->join('document cd', 'cd.contoh = d.id', 'LEFT');
         $this->db->join('users u', 'u.id = d.creator', 'LEFT');
         $this->db->join('company c', 'c.id = d.id_company', 'LEFT');
         $this->db->join('personil pl', 'pl.id = u.id_personil', 'LEFT');
@@ -143,7 +144,6 @@ class M_treeview_detail extends CI_Model {
         $this->db->join('unit_kerja ukd', 'ukd.id = pld.id_unit_kerja', 'LEFT');
         $this->db->join('jadwal j', 'j.id_document = d.id', 'LEFT');
         $this->db->join('implementasi imp', 'imp.id_jadwal = j.id', 'LEFT');
-//        $this->db->where('uk.id_company = ' . $this->input->post('perusahaan'));
         $this->db->where('c.id = ' . $this->input->post('perusahaan'));
         $this->db->where('p.id_standard = ' . $this->input->post('standar'));
         $this->db->order_by('p.id');
@@ -159,15 +159,25 @@ class M_treeview_detail extends CI_Model {
     }
 
     function delete_document() {
-        $this->db->where('id_document', $this->input->post('id'));
-        $this->db->delete('jadwal');
-        $this->db->where('id', $this->input->post('id'));
-        $result = $this->db->get('document')->row_array();
-        $this->db->where('id', $this->input->post('id'));
-        if ($this->db->delete('document') & !empty($result['file'])) {
-            unlink(FCPATH . 'upload\\dokumen\\' . $result['file']);
-            return true;
-        }
+        $id = $this->input->post('id');
+//        $this->db->where('id_document', $this->input->post('id'));
+//        $this->db->delete('jadwal');
+//        $this->db->where('id', $this->input->post('id'));
+//        $result = $this->db->get('document')->row_array();
+
+
+
+//        $this->db->where('id_document', $id);
+//        if ($this->db->delete('distribusi')) {
+            $this->db->where('id_document', $id);
+            if ($this->db->delete('document_pasal')) {
+                $this->db->where('id', $id);
+                if ($this->db->delete('document') & !empty($result['file'])) {
+                    unlink(FCPATH . 'upload\\dokumen\\' . $result['file']);
+                    return true;
+                }
+            }
+//        }
         return false;
     }
 
