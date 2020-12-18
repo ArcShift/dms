@@ -119,8 +119,8 @@ $role = $this->session->userdata['user']['role'];
                                         <th>Judul Dokumen</th>
                                         <th>Tugas</th>
                                         <th>Form Terkait</th>
-                                        <th>Distribusi</th>
-                                        <!--<th>Periode</th>-->
+                                        <th>Sifat</th>
+                                        <th>PIC Pelakasana</th>
                                         <!--<th class="col-tgl">Jadwal</th>-->
                                         <th class="col-aksi" style="min-width: 70px">Aksi</th>
                                     </tr>
@@ -1141,6 +1141,7 @@ $role = $this->session->userdata['user']['role'];
                                 + '<td>' + sortDokumen[sortJadwal[i].index_dokumen].judul + '</td>'
                                 + '<td>' + data[j].desc + '</td>'
                                 + '<td>' + (data[j].index_form == null ? '-' : sortDokumen[data[j].index_form].judul) + '</td>'
+                                + '<td>' + 'Wajib / Situasional' + '</td>'
                                 + '<td>' + personil2 + '</td>'
 //                                + '<td style="text-transform: capitalize">' + periode + '</td>'
 //                                + '<td>' + $.format.date(jadwal, "dd-MMM-yyyy") + '</td>'
