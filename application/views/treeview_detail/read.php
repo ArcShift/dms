@@ -784,6 +784,9 @@ $role = $this->session->userdata['user']['role'];
                                     <label>Url</label>
                                     <input class="form-control input-path input-file" type="file" name="dokumen" required="">
                                     <input class="form-control input-path input-url" type="url" name="url" required="">
+                                    <div class="invalid-feedback">
+                                        Please choose a username.
+                                    </div>
                                 </td>
                             </tr>
                             <tr class="group-detail">
@@ -1010,11 +1013,13 @@ $role = $this->session->userdata['user']['role'];
                 if (d.dokumen_pasal[0] == '') {
                     d.dokumen_pasal = [];
                 }
+                d.txt_pasals = '';
                 for (var j = 0; j < d.dokumen_pasal.length; j++) {
                     for (var k = 0; k < sortPasal.length; k++) {
                         if (d.dokumen_pasal[j] == sortPasal[k].id) {
                             d.index_dokumen_pasal.push(k);
                             sortPasal[k].index_documents.push(i);
+                            d.txt_pasals += '<div>' + sortPasal[k].fullname + '<div>';
                         }
                     }
                 }
@@ -1049,7 +1054,7 @@ $role = $this->session->userdata['user']['role'];
                 $('#table-dokumen').append('<tr>'
                         + '<td>' + d.nomor + '</td>'
                         + '<td>' + d.judul + '</td>'
-                        + '<td>' + sortPasal[d.index_pasal].fullname + '</td>'
+                        + '<td>' + d.txt_pasals + '</td>'
                         + '<td>' + (d.versi == 0 | d.versi == null ? '-' : d.versi) + '</td>'
                         + '<td>Level ' + (d.jenis == null ? '-' : d.jenis) + '</td>'
                         + '<td>' + (d.klasifikasi == null ? '-' : d.klasifikasi) + '</td>'
@@ -1063,12 +1068,12 @@ $role = $this->session->userdata['user']['role'];
                 $('#table-distribusi').append('<tr>'
                         + '<td>' + d.nomor + '</td>'
                         + '<td>' + d.judul + '</td>'
-                        + '<td>Level ' + d.jenis + '</td>'
+                        + '<td>' + (d.jenis==null?'-':'Level '+d.jenis) + '</td>'
                         + '<td>' + d.creator_name + '</td>'
-//                        + '<td>' + strUserDis + '</td>'
+                        + '<td>' + strUserDis + '</td>'
                         + '<td class="col-aksi">'
-                        + '<span class="text-primary fa fa-info-circle" title="Detail" onclick="detailDistribusi(' + j + ')"></span>&nbsp'
-                        + '<span class="text-primary fa fa-edit" title="Edit" onclick="editDistribusi(' + j + ')"></span>'
+                        + '<span class="text-primary fa fa-info-circle" title="Detail" onclick="detailDistribusi(' + n + ')"></span>&nbsp'
+                        + '<span class="text-primary fa fa-edit" title="Edit" onclick="editDistribusi(' + n + ')"></span>'
                         + '</td>'
                         + '</tr>');
                 n++;
@@ -1432,14 +1437,13 @@ $role = $this->session->userdata['user']['role'];
     function editDistribusi(index) {
         var m = $('#modalDistribusi');
         var d = sortDokumen[index];
-//        m.find('.group-edit').removeClass('d-none');
         m.modal('show');
-        m.find('.label-pasal').text(sortPasal[d.index_pasal].fullname);
+        m.find('.label-pasal').html(d.txt_pasals);
         m.find('.label-judul').text(d.judul);
         m.find('.label-jenis').text('Level ' + d.jenis);
         m.find('.label-klasifikasi').text(d.klasifikasi);
         m.find('.label-klasifikasi').text(d.klasifikasi);
-        m.find('.label-pembuat-dokumen').text(anggota[d.index_creator].fullname);
+        m.find('.label-pembuat-dokumen').text(d.creator_name);
         m.find('.input-dokumen-id').val(d.id);
         m.find('.group-detail').hide();
         m.find('.group-edit').show();
