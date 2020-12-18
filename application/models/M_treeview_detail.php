@@ -43,14 +43,14 @@ class M_treeview_detail extends CI_Model {
     }
 
     function pasal() {
-        $this->db->select('p.*, COUNT(p2.id) AS child, COUNT(DISTINCT dp.id) AS doc, COUNT(i.id) AS imp, SUM(CASE WHEN i.path IS NOT NULL and i.date_jadwal < NOW() THEN 1 ELSE 0 END) as upload, SUM(CASE WHEN i.path IS NULL and i.date_jadwal < NOW() THEN 1 ELSE 0 END) as unupload');
+        $this->db->select('p.*, COUNT(p2.id) AS child, COUNT(DISTINCT ddp.id) AS doc, COUNT(i.id) AS imp, SUM(CASE WHEN i.path IS NOT NULL and i.date_jadwal < NOW() THEN 1 ELSE 0 END) as upload, SUM(CASE WHEN i.path IS NULL and i.date_jadwal < NOW() THEN 1 ELSE 0 END) as unupload');
         $this->db->join('pasal p2', 'p2.parent = p.id', 'LEFT');
         $this->db->join('document_pasal dp', 'dp.id_pasal = p.id', 'LEFT');
+        $this->db->join('document ddp', 'ddp.id = dp.id_document AND ddp.id_company = '.$this->input->get('perusahaan'), 'LEFT');
         $this->db->join('document d', 'd.id_pasal = p.id', 'LEFT');
         $this->db->join('jadwal j', 'j.id_document = d.id', 'LEFT');
         $this->db->join('implementasi i', 'i.id_jadwal = j.id', 'LEFT');
         $this->db->where('p.id_standard', $this->input->get('standar'));
-        $this->db->where('d.id_document', $this->input->get('perusahaan'));
         $this->db->group_by('p.id');
         return $this->db->get('pasal p')->result_array();
     }
