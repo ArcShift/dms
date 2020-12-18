@@ -1232,7 +1232,7 @@ $role = $this->session->userdata['user']['role'];
                     + '<td>' + pasals + '</td>'
                     + '<td>' + (d.deskripsi == null ? '-' : d.deskripsi) + '</td>'
                     + '<td>' + link
-                    + '&nbsp<span class="btn btn-danger btn-sm fa fa-trash" onclick="initHapusDokumen(' + i + ')"></span>'
+                    + '&nbsp<span class="btn btn-danger btn-sm fa fa-trash" onclick="initHapusDokumen(' + p.index_documents[i] + ')"></span>'
                     + '</td>'
                     + '</tr>');
         }
