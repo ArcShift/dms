@@ -207,7 +207,7 @@ $role = $this->session->userdata['user']['role'];
 <!--MODAL UPLOAD DOCUMENT-->
 <div class="modal fade" id="modalDocument" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
-        <form id="formUploadDocument">
+        <form id="formUploadDocument" class="needs-validation" novalidate>
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Tambah Dokumen</h5>
@@ -244,7 +244,7 @@ $role = $this->session->userdata['user']['role'];
                         <input class="radio-type-dokumen" type="radio" name="type_dokumen" value="URL">
                         <label>Url</label>
                         <input class="form-control input-path input-file" type="file" name="dokumen" required="">
-                        <input class="form-control input-path input-url" type="url" name="url" required="">
+                        <input class="form-control input-path input-url" type="url" name="url" required="" placeholder="https://">
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -273,8 +273,7 @@ $role = $this->session->userdata['user']['role'];
                             <tr>
                                 <td>Pasal</td>
                                 <td>
-                                    <select name="pasal" class="form-control select-pasal" required=""></select>
-                                    <br>
+                                    <select name="pasal" class="form-control select-pasal" required="" hidden=""></select>
                                     <select name="pasals[]" class="form-control select-2 select-2-pasal multiselect-dropdown" multiple="" style="width: 320px !important; margin-top: 100px"></select>
                                 </td>
                             </tr>
@@ -784,9 +783,6 @@ $role = $this->session->userdata['user']['role'];
                                     <label>Url</label>
                                     <input class="form-control input-path input-file" type="file" name="dokumen" required="">
                                     <input class="form-control input-path input-url" type="url" name="url" required="">
-                                    <div class="invalid-feedback">
-                                        Please choose a username.
-                                    </div>
                                 </td>
                             </tr>
                             <tr class="group-detail">
@@ -1068,7 +1064,7 @@ $role = $this->session->userdata['user']['role'];
                 $('#table-distribusi').append('<tr>'
                         + '<td>' + d.nomor + '</td>'
                         + '<td>' + d.judul + '</td>'
-                        + '<td>' + (d.jenis==null?'-':'Level '+d.jenis) + '</td>'
+                        + '<td>' + (d.jenis == null ? '-' : 'Level ' + d.jenis) + '</td>'
                         + '<td>' + d.creator_name + '</td>'
                         + '<td>' + strUserDis + '</td>'
                         + '<td class="col-aksi">'
