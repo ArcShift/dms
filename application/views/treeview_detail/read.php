@@ -1149,9 +1149,9 @@ $role = $this->session->userdata['user']['role'];
                                 + '<td><span class="badge badge-secondary">' + t.sifat + '</span></td>'
                                 + '<td>' + d.txt_user_distribusi + '</td>'
                                 + '<td class="col-aksi">'
-                                + '<span class="text-primary fa fa-info-circle" title="Detail" onclick="detailJadwal(' + i + ')"></span>&nbsp'
+                                + '<span class="text-primary fa fa-info-circle" title="Detail" onclick=""></span>&nbsp'
                                 + '<span class="text-primary fa fa-edit" title="Edit" onclick="initEditTugas(' + j + ')"></span>&nbsp'
-                                + '<span class="text-danger fa fa-trash" title="Hapus" onclick="initHapusJadwal(' + i + ')"></span>'
+                                + '<span class="text-danger fa fa-trash" title="Hapus" onclick=""></span>'
                                 + '</td>'
                                 + '</tr>');
                         sortTugas.push(t);
@@ -1544,6 +1544,7 @@ $role = $this->session->userdata['user']['role'];
         var m = $('#modalTugas');
         var d = sortDokumen[index];
         m.modal('show');
+        m.find('form').trigger('reset');
         m.find('.modal-title').text('Tambah Tugas');
         m.find('.input-document-id').val(d.id);
         m.find('.input-document-judul').val(d.judul);
