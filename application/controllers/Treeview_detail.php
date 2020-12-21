@@ -50,7 +50,7 @@ class Treeview_detail extends MY_Controller {
         $this->ajax_request();
         $this->load->library('form_validation');
         $this->form_validation->set_rules('pasal', 'Pasal', 'required');
-        if(!$this->input->post('pasals')){
+        if (!$this->input->post('pasals')) {
             $this->form_validation->set_rules('pasals', 'Pasal Lain', 'required');
         }
         $this->form_validation->set_rules('nomor', 'Nomor', 'required');
@@ -114,6 +114,17 @@ class Treeview_detail extends MY_Controller {
         } else {
             echo 'error';
         }
+    }
+    function get_tugas() {
+        echo json_encode($this->model->readsTugas());
+    }
+    function tugas() {
+        if ($this->model->tugas()) {
+            $result['status'] = 'success';
+        } else {
+            $result['status'] = 'error';
+        }
+        return $result;
     }
 
     function get_jadwal() {

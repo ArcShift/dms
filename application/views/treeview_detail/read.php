@@ -50,7 +50,7 @@ $role = $this->session->userdata['user']['role'];
                         <table class="table table-striped">
                             <thead>
                                 <tr>
-                                    <th>Pasal</th>-
+                                    <th>Pasal</th>
                                     <th class="col-sm-2 text-center">Jumlah<br/>Dokumen</th>
                                     <th class="col-sm-2 text-center">Pemenuhan<br/>Dokumen</th>
                                     <th class="col-sm-2 text-center">Jumlah<br/>Jadwal</th>
@@ -121,7 +121,6 @@ $role = $this->session->userdata['user']['role'];
                                         <th>Form Terkait</th>
                                         <th>Sifat</th>
                                         <th>PIC Pelakasana</th>
-                                        <!--<th class="col-tgl">Jadwal</th>-->
                                         <th class="col-aksi" style="min-width: 70px">Aksi</th>
                                     </tr>
                                 </thead>
@@ -804,6 +803,44 @@ $role = $this->session->userdata['user']['role'];
         </form>
     </div>
 </div>
+<!--MODAL TUGAS-->
+<div class="modal fade" id="modalTugas">
+    <div class="modal-dialog" role="document">
+        <form id="formTugas">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Dokumen</label>
+                        <input class="form-control input-document-id" name="id-document" hidden="" required="">
+                        <input class="form-control input-document-judul" disabled="">
+                    </div>
+                    <div class="form-group">
+                        <label>Tugas</label>
+                        <input class="form-control input-tugas" name="tugas" required="">
+                    </div>
+                    <div class="form-group">
+                        <label>Sifat</label>
+                        <select class="form-control input-sifat" name="sifat" required="">
+                            <option value="">-- sifat --</option>
+                            <option value="WAJIB">Wajib</option>
+                            <option value="SITUASIONAL">Situasional</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-primary">Simpan</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
 <script>
     $(document).ready(function () {
         if (role != 'admin') {
@@ -1019,11 +1056,11 @@ $role = $this->session->userdata['user']['role'];
                         }
                     }
                 }
-                for (var h = 0; h < sortPasal.length; h++) {//TODO: remove later
-                    sortPasal[h].dokumens = [];
-                    if (d.id_pasal == sortPasal[h].id) {
-                        d.index_pasal = h;
-                        sortPasal[h].dokumens.push(n);
+                for (var j = 0; j < sortPasal.length; j++) {//TODO: remove later
+                    sortPasal[j].dokumens = [];
+                    if (d.id_pasal == sortPasal[j].id) {
+                        d.index_pasal = j;
+                        sortPasal[j].dokumens.push(n);
                     }
                 }
                 var btnDelete = '<span class="text-secondary fa fa-trash"></span>';
@@ -1034,8 +1071,10 @@ $role = $this->session->userdata['user']['role'];
                 var idDis = d.distribusi;
                 var userDis = d.user_distribusi;
                 var strUserDis = '';
+                d.txt_user_distribusi = '';
                 for (var l = 0; l < userDis.length; l++) {
                     strUserDis += '<div><span class="text-danger fa fa-trash" title="Hapus" onclick="deleteUserDistribusi(' + idDis[l] + ')"></span>&nbsp' + userDis[l] + '</div>';
+                    d.txt_user_distribusi += '<div>' + userDis[l] + '</div>';
                 }
                 for (var k = 0; k < anggota.length; k++) {
                     if (d.creator == null) {
@@ -1044,6 +1083,12 @@ $role = $this->session->userdata['user']['role'];
                     } else if (d.creator === anggota[k].id) {
                         d.index_creator = k;
                         d.creator_name = anggota[k].fullname;
+                    }
+                }
+                d.index_form_terkait = null;
+                for (var j = 0; j < data.length; j++) {
+                    if (d.contoh == data[j].id) {
+                        d.index_form_terkait = j;
                     }
                 }
                 btnDelete = '<span class="text-danger fa fa-trash" onclick="initHapusDokumen(' + n + ')"></span>';
@@ -1075,6 +1120,44 @@ $role = $this->session->userdata['user']['role'];
                 n++;
                 sortDokumen.push(d);
             }
+            getTugas();
+        });
+    }
+    function getTugas() {
+        $.getJSON('<?php echo site_url($module); ?>/get_tugas', {perusahaan: perusahaan, standar: standar}, function (data) {
+            sortTugas = [];
+            $('#table-tugas').empty();
+            for (var i = 0; i < sortDokumen.length; i++) {
+                var d = sortDokumen[i];
+                $('#table-tugas').append('<tr>'
+                        + '<td>' + d.judul + '</td>'
+                        + '<td></td>'
+                        + '<td></td>'
+                        + '<td></td>'
+                        + '<td></td>'
+                        + '<td class="col-aksi">'
+                        + '<span class="text-primary fa fa-plus" title="Tambah" onclick="initCreateTugas(' + i + ')"></span>'
+                        + '</td>'
+                        + '</tr>');
+                for (var j = 0; j < data.length; j++) {
+                    var t = data[j];
+                    if (t.id_document == d.id) {
+                        $('#table-tugas').append('<tr>'
+                                + '<td></td>'
+                                + '<td>' + t.nama + '</td>'
+                                + '<td>' + (d.index_form_terkait == null ? '-' : sortDokumen[d.index_form_terkait].judul) + '</td>'
+                                + '<td><span class="badge badge-secondary">' + t.sifat + '</span></td>'
+                                + '<td>' + d.txt_user_distribusi + '</td>'
+                                + '<td class="col-aksi">'
+                                + '<span class="text-primary fa fa-info-circle" title="Detail" onclick="detailJadwal(' + i + ')"></span>&nbsp'
+                                + '<span class="text-primary fa fa-edit" title="Edit" onclick="initEditTugas(' + j + ')"></span>&nbsp'
+                                + '<span class="text-danger fa fa-trash" title="Hapus" onclick="initHapusJadwal(' + i + ')"></span>'
+                                + '</td>'
+                                + '</tr>');
+                        sortTugas.push(t);
+                    }
+                }
+            }
             getJadwal();
         });
     }
@@ -1098,7 +1181,6 @@ $role = $this->session->userdata['user']['role'];
     function getImplementasi() {
         $.getJSON('<?php echo site_url($module); ?>/get_implementasi', null, function (data) {
             sortImplementasi = [];
-            $('#table-tugas').empty();
             $('#table-jadwal').empty();
             $('#table-implementasi').empty();
             var n = 0;
@@ -1131,20 +1213,6 @@ $role = $this->session->userdata['user']['role'];
                                 + '<td>' + (data[j].index_form == null ? '-' : sortDokumen[data[j].index_form].judul) + '</td>'
                                 + '<td style="text-transform: capitalize">' + periode + '</td>'
                                 + '<td>' + $.format.date(jadwal, "dd-MMM-yyyy") + '</td>'
-                                + '<td class="col-aksi">'
-                                + '<span class="text-primary fa fa-info-circle" title="Detail" onclick="detailJadwal(' + n + ')"></span>&nbsp'
-                                + '<span class="text-primary fa fa-edit" title="Edit" onclick="editJadwal(' + n + ')"></span>&nbsp'
-                                + '<span class="text-danger fa fa-trash" title="Hapus" onclick="initHapusJadwal(' + n + ')"></span>'
-                                + '</td>'
-                                + '</tr>');
-                        $('#table-tugas').append('<tr>'
-                                + '<td>' + sortDokumen[sortJadwal[i].index_dokumen].judul + '</td>'
-                                + '<td>' + data[j].desc + '</td>'
-                                + '<td>' + (data[j].index_form == null ? '-' : sortDokumen[data[j].index_form].judul) + '</td>'
-                                + '<td>' + 'Wajib / Situasional' + '</td>'
-                                + '<td>' + personil2 + '</td>'
-//                                + '<td style="text-transform: capitalize">' + periode + '</td>'
-//                                + '<td>' + $.format.date(jadwal, "dd-MMM-yyyy") + '</td>'
                                 + '<td class="col-aksi">'
                                 + '<span class="text-primary fa fa-info-circle" title="Detail" onclick="detailJadwal(' + n + ')"></span>&nbsp'
                                 + '<span class="text-primary fa fa-edit" title="Edit" onclick="editJadwal(' + n + ')"></span>&nbsp'
@@ -1288,7 +1356,6 @@ $role = $this->session->userdata['user']['role'];
     }
     $('#formUploadDocument').on("submit", function (e) {
         e.preventDefault();
-        console.log('upload');
         $('.modal').modal('hide');
         $('#modalNotif .modal-title').text('Uploading...');
         $('#modalNotif').modal('show');
@@ -1439,7 +1506,6 @@ $role = $this->session->userdata['user']['role'];
         m.find('.label-judul').text(d.judul);
         m.find('.label-jenis').text('Level ' + d.jenis);
         m.find('.label-klasifikasi').text(d.klasifikasi);
-        m.find('.label-klasifikasi').text(d.klasifikasi);
         m.find('.label-pembuat-dokumen').text(d.creator_name);
         m.find('.input-dokumen-id').val(d.id);
         m.find('.group-detail').hide();
@@ -1472,6 +1538,62 @@ $role = $this->session->userdata['user']['role'];
         //TODO: check child: upload_bukti
         $.post('<?php echo site_url($module); ?>/delete_distribusi', {id: id}, function (data) {
             getPasal();
+        });
+    }
+    function initCreateTugas(index) {
+        var m = $('#modalTugas');
+        var d = sortDokumen[index];
+        m.modal('show');
+        m.find('.modal-title').text('Tambah Tugas');
+        m.find('.input-document-id').val(d.id);
+        m.find('.input-document-judul').val(d.judul);
+    }
+    $('#formTugas').on("submit", function (e) {
+        e.preventDefault();
+        post(this, 'tugas');
+    });
+    function initEditTugas(index) {
+        var t = sortTugas[index];
+        var m = $('#modalTugas');
+        m.modal('show');
+        m.find('.modal-title').text('Edit Tugas');
+        m.find('.input-document-id').val(t.id_document);
+        m.find('.input-document-judul').val(sortDokumen[t.id_document].judul);
+        m.find('.input-tugas').val(t.nama);
+        m.find('.input-sifat').val(t.sifat);
+    }
+    function post(form, url) {
+        $('.modal').modal('hide');
+        $('#modalNotif .modal-title').text('Menyimpan data...');
+        $('#modalNotif').modal('show');
+        $.ajax({
+            url: '<?php echo site_url($module . '/') ?>' + url,
+            type: "post",
+            data: new FormData(form),
+            processData: false,
+            contentType: false,
+            cache: false,
+            async: false,
+            success: function (data) {
+                try {
+                    data = JSON.parse(data);
+                    if (data.status == 'success') {
+                        getPasal();
+                        $('#modalNotif .modal-message').html('Data Berhasil Disimpan');
+                        $('#modalNotif .modal-title').text('Success');
+                    } else if (data.status === 'error') {
+                        $('#modalNotif .modal-title').text('Error');
+                        $('#modalNotif .modal-message').html(data.message);
+                    }
+                } catch (e) {
+                    $('#modalNotif .modal-message').html(data);
+                }
+
+            },
+            error: function (data) {
+                $('#modalNotif .modal-title').text('Error');
+                $('#modalNotif .modal-message').text('Error 500');
+            },
         });
     }
     function jadwal() {

@@ -46,7 +46,7 @@ class M_treeview_detail extends CI_Model {
         $this->db->select('p.*, COUNT(p2.id) AS child, COUNT(DISTINCT ddp.id) AS doc, COUNT(i.id) AS imp, SUM(CASE WHEN i.path IS NOT NULL and i.date_jadwal < NOW() THEN 1 ELSE 0 END) as upload, SUM(CASE WHEN i.path IS NULL and i.date_jadwal < NOW() THEN 1 ELSE 0 END) as unupload');
         $this->db->join('pasal p2', 'p2.parent = p.id', 'LEFT');
         $this->db->join('document_pasal dp', 'dp.id_pasal = p.id', 'LEFT');
-        $this->db->join('document ddp', 'ddp.id = dp.id_document AND ddp.id_company = '.$this->input->get('perusahaan'), 'LEFT');
+        $this->db->join('document ddp', 'ddp.id = dp.id_document AND ddp.id_company = ' . $this->input->get('perusahaan'), 'LEFT');
         $this->db->join('document d', 'd.id_pasal = p.id', 'LEFT');
         $this->db->join('jadwal j', 'j.id_document = d.id', 'LEFT');
         $this->db->join('implementasi i', 'i.id_jadwal = j.id', 'LEFT');
@@ -165,19 +165,16 @@ class M_treeview_detail extends CI_Model {
 //        $this->db->delete('jadwal');
 //        $this->db->where('id', $this->input->post('id'));
 //        $result = $this->db->get('document')->row_array();
-
-
-
 //        $this->db->where('id_document', $id);
 //        if ($this->db->delete('distribusi')) {
-            $this->db->where('id_document', $id);
-            if ($this->db->delete('document_pasal')) {
-                $this->db->where('id', $id);
-                if ($this->db->delete('document') & !empty($result['file'])) {
-                    unlink(FCPATH . 'upload\\dokumen\\' . $result['file']);
-                    return true;
-                }
+        $this->db->where('id_document', $id);
+        if ($this->db->delete('document_pasal')) {
+            $this->db->where('id', $id);
+            if ($this->db->delete('document') & !empty($result['file'])) {
+                unlink(FCPATH . 'upload\\dokumen\\' . $result['file']);
+                return true;
             }
+        }
 //        }
         return false;
     }
@@ -213,6 +210,25 @@ class M_treeview_detail extends CI_Model {
     function delete_distribusi() {
         $this->db->where('id', $this->input->post('id'));
         return $this->db->delete('distribusi');
+    }
+
+    function readsTugas() {
+        $this->db->select('t.*');
+        $this->db->join('document d', 'd.id = t.id_document AND d.id_company = ' . $this->input->get('perusahaan'));
+        $this->db->join('pasal p', 'p.id = d.id_pasal AND p.id_standard = ' . $this->input->get('standar'));
+        return $this->db->get('tugas t')->result_array();
+    }
+
+    function tugas() {
+        $this->db->set('id_document', $this->input->post('id-document'));
+        $this->db->set('nama', $this->input->post('tugas'));
+        $this->db->set('sifat', $this->input->post('sifat'));
+        if ($this->input->post('id')) {//UPDATE
+            $this->db->where('id', $this->input->post('id'));
+            return $this->db->update('tugas');
+        } else {//CREATE
+            return $this->db->insert('tugas');
+        }
     }
 
     function reads_schedule() {
