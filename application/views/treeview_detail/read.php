@@ -823,11 +823,11 @@ $role = $this->session->userdata['user']['role'];
                     </div>
                     <div class="form-group">
                         <label>Tugas</label>
-                        <input class="form-control input-tugas" name="tugas" required="">
+                        <input class="form-control input-field input-tugas" name="tugas" required="">
                     </div>
                     <div class="form-group">
                         <label>Sifat</label>
-                        <select class="form-control input-sifat" name="sifat" required="">
+                        <select class="form-control input-field input-sifat" name="sifat" required="">
                             <option value="">-- sifat --</option>
                             <option value="WAJIB">Wajib</option>
                             <option value="SITUASIONAL">Situasional</option>
@@ -836,7 +836,7 @@ $role = $this->session->userdata['user']['role'];
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-                    <button type="submit" class="btn btn-primary">Simpan</button>
+                    <button type="submit" class="btn btn-primary btn-save">Simpan</button>
                 </div>
             </div>
         </form>
@@ -1151,8 +1151,8 @@ $role = $this->session->userdata['user']['role'];
                                 + '<td><span class="badge badge-secondary">' + t.sifat + '</span></td>'
                                 + '<td>' + d.txt_user_distribusi + '</td>'
                                 + '<td class="col-aksi">'
-                                + '<span class="text-primary fa fa-info-circle" title="Detail" onclick="detailTugas(' + j + ')"></span>&nbsp'
-                                + '<span class="text-primary fa fa-edit" title="Edit" onclick="initEditTugas(' + j + ')"></span>&nbsp'
+                                + '<span class="text-primary fa fa-info-circle" title="Detail" onclick="detailTugas(' + sortTugas.length + ')"></span>&nbsp'
+                                + '<span class="text-primary fa fa-edit" title="Edit" onclick="initEditTugas(' + sortTugas.length + ')"></span>&nbsp'
                                 + '<span class="text-danger fa fa-trash" title="Hapus" onclick=""></span>'
                                 + '</td>'
                                 + '</tr>');
@@ -1551,25 +1551,34 @@ $role = $this->session->userdata['user']['role'];
         m.find('.input-id').val('');
         m.find('.input-document-id').val(d.id);
         m.find('.input-document-judul').val(d.judul);
+        m.find('.input-field').prop('disabled', false);
+        m.find('.btn-save').show();
     }
     $('#formTugas').on("submit", function (e) {
         console.log('post');
         e.preventDefault();
         post(this, 'tugas');
     });
-    function detailTugas() {
-        
-    }
-    function initEditTugas(index) {
+    function detailTugas(index) {
         var t = sortTugas[index];
         var m = $('#modalTugas');
         m.modal('show');
-        m.find('.modal-title').text('Edit Tugas');
-        m.find('.input-id').val(t.id);
-        m.find('.input-document-id').val(t.id_document);
+        m.find('.modal-title').text('Detail Tugas');
         m.find('.input-document-judul').val(sortDokumen[t.index_document].judul);
         m.find('.input-tugas').val(t.nama);
         m.find('.input-sifat').val(t.sifat);
+        m.find('.input-field').prop('disabled', true);
+        m.find('.btn-save').hide();
+    }
+    function initEditTugas(index) {
+        detailTugas(index);
+        var t = sortTugas[index];
+        var m = $('#modalTugas');
+        m.find('.modal-title').text('Edit Tugas');
+        m.find('.input-id').val(t.id);
+        m.find('.input-document-id').val(t.id_document);
+        m.find('.input-field').prop('disabled', false);
+        m.find('.btn-save').show();
     }
     function post(form, url) {
         $('.modal').modal('hide');
