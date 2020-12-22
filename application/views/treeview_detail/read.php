@@ -814,6 +814,7 @@ $role = $this->session->userdata['user']['role'];
                         <span aria-hidden="true">&times;</span>
                     </button>
                     <input class="form-control input-id" name="id" hidden="">
+                    <input class="form-control input-delete" name="delete-id" hidden="">
                     <input class="form-control input-document-id" name="id-document" hidden="" required="">
                 </div>
                 <div class="modal-body">
@@ -836,7 +837,8 @@ $role = $this->session->userdata['user']['role'];
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-                    <button type="submit" class="btn btn-primary btn-save">Simpan</button>
+                    <button type="submit" class="btn btn-primary btn-modif btn-save">Simpan</button>
+                    <button type="submit" class="btn btn-danger btn-modif btn-delete" name="delete">Hapus</button>
                 </div>
             </div>
         </form>
@@ -1153,7 +1155,7 @@ $role = $this->session->userdata['user']['role'];
                                 + '<td class="col-aksi">'
                                 + '<span class="text-primary fa fa-info-circle" title="Detail" onclick="detailTugas(' + sortTugas.length + ')"></span>&nbsp'
                                 + '<span class="text-primary fa fa-edit" title="Edit" onclick="initEditTugas(' + sortTugas.length + ')"></span>&nbsp'
-                                + '<span class="text-danger fa fa-trash" title="Hapus" onclick=""></span>'
+                                + '<span class="text-danger fa fa-trash" title="Hapus" onclick="initDeleteTugas(' + sortTugas.length + ')"></span>'
                                 + '</td>'
                                 + '</tr>');
                         sortTugas.push(t);
@@ -1553,6 +1555,7 @@ $role = $this->session->userdata['user']['role'];
         m.find('.input-document-judul').val(d.judul);
         m.find('.input-field').prop('disabled', false);
         m.find('.btn-save').show();
+        m.find('.btn-delete').hide();
     }
     $('#formTugas').on("submit", function (e) {
         console.log('post');
@@ -1568,7 +1571,7 @@ $role = $this->session->userdata['user']['role'];
         m.find('.input-tugas').val(t.nama);
         m.find('.input-sifat').val(t.sifat);
         m.find('.input-field').prop('disabled', true);
-        m.find('.btn-save').hide();
+        m.find('.btn-modif').hide();
     }
     function initEditTugas(index) {
         detailTugas(index);
@@ -1579,6 +1582,14 @@ $role = $this->session->userdata['user']['role'];
         m.find('.input-document-id').val(t.id_document);
         m.find('.input-field').prop('disabled', false);
         m.find('.btn-save').show();
+    }
+    function initDeleteTugas(index){
+        detailTugas(index);
+        var t = sortTugas[index];
+        var m = $('#modalTugas');
+        m.find('.modal-title').text('Hapus Tugas');
+        m.find('.input-delete').val(t.id);
+        m.find('.btn-delete').show();
     }
     function post(form, url) {
         $('.modal').modal('hide');

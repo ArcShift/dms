@@ -123,7 +123,7 @@ class Treeview_detail extends MY_Controller {
             $result['status'] = 'success';
         } else {
             $result['status'] = 'error';
-            $result['status'] = 'error';
+            $result['message'] = $this->db->error()['message'];
         }
         echo json_encode($result);
     }

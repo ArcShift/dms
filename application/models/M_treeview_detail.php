@@ -223,7 +223,10 @@ class M_treeview_detail extends CI_Model {
         $this->db->set('id_document', $this->input->post('id-document'));
         $this->db->set('nama', $this->input->post('tugas'));
         $this->db->set('sifat', $this->input->post('sifat'));
-        if ($this->input->post('id')) {//UPDATE
+        if ($this->input->post('delete-id')) {//HAPUS
+            $this->db->where('id', $this->input->post('delete-id'));
+            return $this->db->delete('tugas');
+        }else if ($this->input->post('id')) {//UPDATE
             $this->db->where('id', $this->input->post('id'));
             return $this->db->update('tugas');
         } else {//CREATE
