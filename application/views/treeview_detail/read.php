@@ -813,11 +813,12 @@ $role = $this->session->userdata['user']['role'];
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
+                    <input class="form-control input-id" name="id" hidden="">
+                    <input class="form-control input-document-id" name="id-document" hidden="" required="">
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
                         <label>Dokumen</label>
-                        <input class="form-control input-document-id" name="id-document" hidden="" required="">
                         <input class="form-control input-document-judul" disabled="">
                     </div>
                     <div class="form-group">
@@ -1142,6 +1143,7 @@ $role = $this->session->userdata['user']['role'];
                 for (var j = 0; j < data.length; j++) {
                     var t = data[j];
                     if (t.id_document == d.id) {
+                        t.index_document = i;
                         $('#table-tugas').append('<tr>'
                                 + '<td></td>'
                                 + '<td>' + t.nama + '</td>'
@@ -1149,7 +1151,7 @@ $role = $this->session->userdata['user']['role'];
                                 + '<td><span class="badge badge-secondary">' + t.sifat + '</span></td>'
                                 + '<td>' + d.txt_user_distribusi + '</td>'
                                 + '<td class="col-aksi">'
-                                + '<span class="text-primary fa fa-info-circle" title="Detail" onclick=""></span>&nbsp'
+                                + '<span class="text-primary fa fa-info-circle" title="Detail" onclick="detailTugas(' + j + ')"></span>&nbsp'
                                 + '<span class="text-primary fa fa-edit" title="Edit" onclick="initEditTugas(' + j + ')"></span>&nbsp'
                                 + '<span class="text-danger fa fa-trash" title="Hapus" onclick=""></span>'
                                 + '</td>'
@@ -1546,20 +1548,26 @@ $role = $this->session->userdata['user']['role'];
         m.modal('show');
         m.find('form').trigger('reset');
         m.find('.modal-title').text('Tambah Tugas');
+        m.find('.input-id').val('');
         m.find('.input-document-id').val(d.id);
         m.find('.input-document-judul').val(d.judul);
     }
     $('#formTugas').on("submit", function (e) {
+        console.log('post');
         e.preventDefault();
         post(this, 'tugas');
     });
+    function detailTugas() {
+        
+    }
     function initEditTugas(index) {
         var t = sortTugas[index];
         var m = $('#modalTugas');
         m.modal('show');
         m.find('.modal-title').text('Edit Tugas');
+        m.find('.input-id').val(t.id);
         m.find('.input-document-id').val(t.id_document);
-        m.find('.input-document-judul').val(sortDokumen[t.id_document].judul);
+        m.find('.input-document-judul').val(sortDokumen[t.index_document].judul);
         m.find('.input-tugas').val(t.nama);
         m.find('.input-sifat').val(t.sifat);
     }

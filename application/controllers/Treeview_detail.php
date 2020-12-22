@@ -123,8 +123,9 @@ class Treeview_detail extends MY_Controller {
             $result['status'] = 'success';
         } else {
             $result['status'] = 'error';
+            $result['status'] = 'error';
         }
-        return $result;
+        echo json_encode($result);
     }
 
     function get_jadwal() {
