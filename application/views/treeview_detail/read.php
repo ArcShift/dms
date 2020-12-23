@@ -834,6 +834,11 @@ $role = $this->session->userdata['user']['role'];
                             <option value="SITUASIONAL">Situasional</option>
                         </select>
                     </div>
+                    <div class="form-group">
+                        <label>Penerima Dokumen</label>
+                        <br>
+                        <select class="form-control input-field select-2 multiselect-dropdown" multiple="" style="width: 450px !important;" name="penerima[]"></select>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
@@ -849,8 +854,8 @@ $role = $this->session->userdata['user']['role'];
         if (role != 'admin') {
             $('.group-select-perusahaan').hide();
         }
-//        $(".select-2").select2({ width: 'resolve' });
-        $(".select-2").select2({width: '100%'});
+        $(".select-2").select2({width: 'resolve'});
+//        $(".select-2").select2({width: '100%'});
         $('#perusahaan').change();
         $('#tab-pemenuhan').addClass('active');
         $('.select-2').select2();
@@ -1556,6 +1561,7 @@ $role = $this->session->userdata['user']['role'];
         m.find('.input-field').prop('disabled', false);
         m.find('.btn-save').show();
         m.find('.btn-delete').hide();
+        loadUserDistribusi(index);
     }
     $('#formTugas').on("submit", function (e) {
         console.log('post');
@@ -1572,6 +1578,8 @@ $role = $this->session->userdata['user']['role'];
         m.find('.input-sifat').val(t.sifat);
         m.find('.input-field').prop('disabled', true);
         m.find('.btn-modif').hide();
+        loadUserDistribusi(t.index_document);
+        m.find('.select-2').val(t.personil).trigger('change');
     }
     function initEditTugas(index) {
         detailTugas(index);
@@ -1583,13 +1591,23 @@ $role = $this->session->userdata['user']['role'];
         m.find('.input-field').prop('disabled', false);
         m.find('.btn-save').show();
     }
-    function initDeleteTugas(index){
+    function initDeleteTugas(index) {
         detailTugas(index);
         var t = sortTugas[index];
         var m = $('#modalTugas');
         m.find('.modal-title').text('Hapus Tugas');
         m.find('.input-delete').val(t.id);
         m.find('.btn-delete').show();
+    }
+    function loadUserDistribusi(idx_doc) {
+        var d = sortDokumen[idx_doc];
+        var m = $('#modalTugas');
+        m.find('.select-2').empty();
+        for (var i = 0; i < d.distribusi.length; i++) {
+            console.log('dist');
+            m.find('.select-2').append(new Option(d.user_distribusi[i], d.personil_distribusi_id[i], false, false));
+        }
+        m.find('select-2').trigger('change');
     }
     function post(form, url) {
         $('.modal').modal('hide');
@@ -1617,7 +1635,7 @@ $role = $this->session->userdata['user']['role'];
                 } catch (e) {
                     $('#modalNotif .modal-message').html(data);
                 }
-
+                
             },
             error: function (data) {
                 $('#modalNotif .modal-title').text('Error');

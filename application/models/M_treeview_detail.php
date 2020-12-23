@@ -213,10 +213,19 @@ class M_treeview_detail extends CI_Model {
     }
 
     function readsTugas() {
-        $this->db->select('t.*');
+        $this->db->select('t.*, GROUP_CONCAT(DISTINCT pt.id_personil) AS personil');
         $this->db->join('document d', 'd.id = t.id_document AND d.id_company = ' . $this->input->get('perusahaan'));
         $this->db->join('pasal p', 'p.id = d.id_pasal AND p.id_standard = ' . $this->input->get('standar'));
-        return $this->db->get('tugas t')->result_array();
+        $this->db->join('penerima_tugas pt', 'pt.id_tugas = t.id', 'LEFT');
+        $this->db->group_by('t.id');
+        $result = $this->db->get('tugas t')->result_array();
+        for ($i = 0; $i < count($result); $i++) {
+            $result[$i]['personil'] = explode(',', $result[$i]['personil']);
+            if ($result[$i]['personil'][0] == '') {
+                $result[$i]['personil'] = [];
+            }
+        }
+        return $result;
     }
 
     function tugas() {
@@ -226,11 +235,25 @@ class M_treeview_detail extends CI_Model {
         if ($this->input->post('delete-id')) {//HAPUS
             $this->db->where('id', $this->input->post('delete-id'));
             return $this->db->delete('tugas');
-        }else if ($this->input->post('id')) {//UPDATE
+        } else if ($this->input->post('id')) {//UPDATE
             $this->db->where('id', $this->input->post('id'));
             return $this->db->update('tugas');
         } else {//CREATE
-            return $this->db->insert('tugas');
+            if ($this->db->insert('tugas')) {
+                $id_tugas = $this->db->insert_id();
+                if (!empty($this->input->post('penerima'))) {
+                    foreach ($this->input->post('penerima') as $p) {
+                        $this->db->set('id_tugas', $id_tugas);
+                        $this->db->set('id_personil', $p);
+                        if (!$this->db->insert('penerima_tugas')) {
+                            return false;
+                        }
+                    }
+                }
+                return true;
+            } else {
+                return false;
+            }
         }
     }
 
