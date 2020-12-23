@@ -1151,12 +1151,22 @@ $role = $this->session->userdata['user']['role'];
                     var t = data[j];
                     if (t.id_document == d.id) {
                         t.index_document = i;
+                        t.index_personil = [];
+                        t.txt_personil ='';
+                        for (var k = 0; k < t.personil.length; k++) {
+                            for (var l = 0; l < personil.length; l++) {
+                                if(t.personil[k]==personil[l].id){
+                                    t.index_personil.push(l);
+                                    t.txt_personil += '<div>'+personil[l].fullname +'</div>';
+                                }
+                            }
+                        }
                         $('#table-tugas').append('<tr>'
                                 + '<td></td>'
                                 + '<td>' + t.nama + '</td>'
                                 + '<td>' + (d.index_form_terkait == null ? '-' : sortDokumen[d.index_form_terkait].judul) + '</td>'
                                 + '<td><span class="badge badge-secondary">' + t.sifat + '</span></td>'
-                                + '<td>' + d.txt_user_distribusi + '</td>'
+                                + '<td>' + t.txt_personil + '</td>'
                                 + '<td class="col-aksi">'
                                 + '<span class="text-primary fa fa-info-circle" title="Detail" onclick="detailTugas(' + sortTugas.length + ')"></span>&nbsp'
                                 + '<span class="text-primary fa fa-edit" title="Edit" onclick="initEditTugas(' + sortTugas.length + ')"></span>&nbsp'
@@ -1635,7 +1645,7 @@ $role = $this->session->userdata['user']['role'];
                 } catch (e) {
                     $('#modalNotif .modal-message').html(data);
                 }
-                
+
             },
             error: function (data) {
                 $('#modalNotif .modal-title').text('Error');
