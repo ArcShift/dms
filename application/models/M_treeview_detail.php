@@ -232,12 +232,17 @@ class M_treeview_detail extends CI_Model {
         $this->db->set('id_document', $this->input->post('id-document'));
         $this->db->set('nama', $this->input->post('tugas'));
         $this->db->set('sifat', $this->input->post('sifat'));
-        if ($this->input->post('delete-id')) {//HAPUS
+        $this->db->set('form_terkait', $this->input->post('form_terkait'));
+        if ($this->input->post('delete-id')) {//DELETE
             $this->db->where('id', $this->input->post('delete-id'));
             return $this->db->delete('tugas');
         } else if ($this->input->post('id')) {//UPDATE
             $this->db->where('id', $this->input->post('id'));
-            return $this->db->update('tugas');
+            if ($this->db->update('tugas')) {
+                return $this->editPenerima();
+            } else {
+                return false;
+            }
         } else {//CREATE
             if ($this->db->insert('tugas')) {
                 $id_tugas = $this->db->insert_id();
@@ -255,6 +260,32 @@ class M_treeview_detail extends CI_Model {
                 return false;
             }
         }
+    }
+
+    private function editPenerima() {
+        if (!empty($this->input->post('penerima'))) {
+            $id_tugas = $this->input->post('id');
+            $input = $this->input->post('penerima');
+            $this->db->where('id_tugas', $id_tugas);
+            $result = $this->db->get('penerima_tugas')->result_array();
+            $db = [];
+            foreach ($result as $r) {
+                array_push($db, $r['id_personil']);
+            }
+            $remove = array_diff($db, $input);
+            $add = array_diff($input, $db);
+            foreach ($remove as $r) {
+                $this->db->where('id_tugas', $id_tugas);
+                $this->db->where('id_personil', $r);
+                $this->db->delete('penerima_tugas');
+            }
+            foreach ($add as $a) {
+                $this->db->set('id_tugas', $id_tugas);
+                $this->db->set('id_personil', $a);
+                $this->db->insert('penerima_tugas');
+            }
+        }
+        return true;
     }
 
     function reads_schedule() {

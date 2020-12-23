@@ -827,6 +827,10 @@ $role = $this->session->userdata['user']['role'];
                         <input class="form-control input-field input-tugas" name="tugas" required="">
                     </div>
                     <div class="form-group">
+                        <label>Form Terkait</label>
+                        <select class="form-control input-field input-form-terkait" name="form_terkait" required=""></select>
+                    </div>
+                    <div class="form-group">
                         <label>Sifat</label>
                         <select class="form-control input-field input-sifat" name="sifat" required="">
                             <option value="">-- sifat --</option>
@@ -835,7 +839,7 @@ $role = $this->session->userdata['user']['role'];
                         </select>
                     </div>
                     <div class="form-group">
-                        <label>Penerima Dokumen</label>
+                        <label>PIC Pelaksana</label>
                         <br>
                         <select class="form-control input-field select-2 multiselect-dropdown" multiple="" style="width: 450px !important;" name="penerima[]"></select>
                     </div>
@@ -1080,9 +1084,16 @@ $role = $this->session->userdata['user']['role'];
                 var userDis = d.user_distribusi;
                 var strUserDis = '';
                 d.txt_user_distribusi = '';
-                for (var l = 0; l < userDis.length; l++) {
-                    strUserDis += '<div><span class="text-danger fa fa-trash" title="Hapus" onclick="deleteUserDistribusi(' + idDis[l] + ')"></span>&nbsp' + userDis[l] + '</div>';
-                    d.txt_user_distribusi += '<div>' + userDis[l] + '</div>';
+                d.index_user_distribusi = [];
+                for (var j = 0; j < idDis.length; j++) {
+                    //TODO: FIX USER DISTRIBUSI
+                    strUserDis += '<div><span class="text-danger fa fa-trash" title="Hapus" onclick="deleteUserDistribusi(' + idDis[j] + ')"></span>&nbsp' + userDis[j] + '</div>';
+                    d.txt_user_distribusi += '<div>' + userDis[j] + '</div>';
+                    for (var k = 0; k < personil.length; k++) {
+                        if (d.personil_distribusi_id[j] == personil[k].id) {
+                            d.index_user_distribusi.push(k);
+                        }
+                    }
                 }
                 for (var k = 0; k < anggota.length; k++) {
                     if (d.creator == null) {
@@ -1135,6 +1146,8 @@ $role = $this->session->userdata['user']['role'];
         $.getJSON('<?php echo site_url($module); ?>/get_tugas', {perusahaan: perusahaan, standar: standar}, function (data) {
             sortTugas = [];
             $('#table-tugas').empty();
+            $('.input-form-terkait').empty();
+            $('.input-form-terkait').append('<option value="">-- form terkait --</option>');
             for (var i = 0; i < sortDokumen.length; i++) {
                 var d = sortDokumen[i];
                 $('#table-tugas').append('<tr>'
@@ -1147,24 +1160,33 @@ $role = $this->session->userdata['user']['role'];
                         + '<span class="text-primary fa fa-plus" title="Tambah" onclick="initCreateTugas(' + i + ')"></span>'
                         + '</td>'
                         + '</tr>');
+                if (d.jenis == 4) {
+                    $('.input-form-terkait').append('<option value="' + d.id + '">' + d.judul + '</option>');
+                }
                 for (var j = 0; j < data.length; j++) {
                     var t = data[j];
                     if (t.id_document == d.id) {
                         t.index_document = i;
                         t.index_personil = [];
-                        t.txt_personil ='';
+                        t.txt_personil = '';
                         for (var k = 0; k < t.personil.length; k++) {
                             for (var l = 0; l < personil.length; l++) {
-                                if(t.personil[k]==personil[l].id){
+                                if (t.personil[k] == personil[l].id) {
                                     t.index_personil.push(l);
-                                    t.txt_personil += '<div>'+personil[l].fullname +'</div>';
+                                    t.txt_personil += '<div>' + personil[l].fullname + '</div>';
                                 }
+                            }
+                        }
+                        t.index_form_terkait = null;
+                        for (var k = 0; k < sortDokumen.length; k++) {
+                            if (t.form_terkait == sortDokumen[k].id) {
+                                t.index_form_terkait = k;
                             }
                         }
                         $('#table-tugas').append('<tr>'
                                 + '<td></td>'
                                 + '<td>' + t.nama + '</td>'
-                                + '<td>' + (d.index_form_terkait == null ? '-' : sortDokumen[d.index_form_terkait].judul) + '</td>'
+                                + '<td>' + (t.index_form_terkait == null ? '-' : sortDokumen[t.index_form_terkait].judul) + '</td>'
                                 + '<td><span class="badge badge-secondary">' + t.sifat + '</span></td>'
                                 + '<td>' + t.txt_personil + '</td>'
                                 + '<td class="col-aksi">'
@@ -1582,10 +1604,12 @@ $role = $this->session->userdata['user']['role'];
         var t = sortTugas[index];
         var m = $('#modalTugas');
         m.modal('show');
+        m.find('form').trigger('reset');
         m.find('.modal-title').text('Detail Tugas');
         m.find('.input-document-judul').val(sortDokumen[t.index_document].judul);
         m.find('.input-tugas').val(t.nama);
         m.find('.input-sifat').val(t.sifat);
+        m.find('.input-form-terkait').val(t.form_terkait);
         m.find('.input-field').prop('disabled', true);
         m.find('.btn-modif').hide();
         loadUserDistribusi(t.index_document);
@@ -1615,7 +1639,7 @@ $role = $this->session->userdata['user']['role'];
         m.find('.select-2').empty();
         for (var i = 0; i < d.distribusi.length; i++) {
             console.log('dist');
-            m.find('.select-2').append(new Option(d.user_distribusi[i], d.personil_distribusi_id[i], false, false));
+            m.find('.select-2').append(new Option(personil[d.index_user_distribusi[i]].fullname, d.personil_distribusi_id[i], false, false));
         }
         m.find('select-2').trigger('change');
     }
