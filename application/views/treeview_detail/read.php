@@ -1125,7 +1125,7 @@ $role = $this->session->userdata['user']['role'];
                         + '</td>'
                         + '</tr>');
                 $('.select-dokumen').append('<option value="' + d.id + '">' + d.judul + '</option>');
-                if (d.jenis < 4) {
+                if (d.jenis < 4 & d.jenis >= 1) {
                     $('#table-distribusi').append('<tr>'
                             + '<td>' + d.nomor + '</td>'
                             + '<td>' + d.judul + '</td>'
@@ -1152,7 +1152,7 @@ $role = $this->session->userdata['user']['role'];
             $('.input-form-terkait').append('<option value="">-- form terkait --</option>');
             for (var i = 0; i < sortDokumen.length; i++) {
                 var d = sortDokumen[i];
-                if (d.jenis < 4) {
+                if (d.jenis < 4 & d.jenis >= 1) {
                     $('#table-tugas').append('<tr>'
                             + '<td>' + d.judul + '</td>'
                             + '<td></td>'
@@ -1206,6 +1206,22 @@ $role = $this->session->userdata['user']['role'];
         });
     }
     function getJadwal() {
+        for (var i = 0; i < sortTugas.length; i++) {
+            var t = sortTugas[i];
+            $('#table-jadwal').append('<tr>'
+                    + '<td>' + t.nama + '</td>'
+//                    + '<td>' + sortDokumen[sortJadwal[i].index_dokumen].judul + '</td>'
+//                    + '<td>' + data[j].desc + '</td>'
+//                    + '<td>' + (data[j].index_form == null ? '-' : sortDokumen[data[j].index_form].judul) + '</td>'
+//                    + '<td style="text-transform: capitalize">' + periode + '</td>'
+//                    + '<td>' + $.format.date(jadwal, "dd-MMM-yyyy") + '</td>'
+//                    + '<td class="col-aksi">'
+//                    + '<span class="text-primary fa fa-info-circle" title="Detail" onclick="detailJadwal(' + n + ')"></span>&nbsp'
+//                    + '<span class="text-primary fa fa-edit" title="Edit" onclick="editJadwal(' + n + ')"></span>&nbsp'
+//                    + '<span class="text-danger fa fa-trash" title="Hapus" onclick="initHapusJadwal(' + n + ')"></span>'
+//                    + '</td>'
+                    + '</tr>');
+        }
         $.getJSON('<?php echo site_url($module); ?>/get_jadwal', {'perusahaan': perusahaan, 'standar': standar}, function (data) {
             sortJadwal = [];
             var pasal = '';
@@ -1251,18 +1267,6 @@ $role = $this->session->userdata['user']['role'];
                         }
                         var jadwal = new Date(data[j].date_jadwal);
                         var periode = sortJadwal[i].periode == null ? '-' : sortJadwal[i].periode;
-                        $('#table-jadwal').append('<tr>'
-                                + '<td>' + sortDokumen[sortJadwal[i].index_dokumen].judul + '</td>'
-                                + '<td>' + data[j].desc + '</td>'
-                                + '<td>' + (data[j].index_form == null ? '-' : sortDokumen[data[j].index_form].judul) + '</td>'
-                                + '<td style="text-transform: capitalize">' + periode + '</td>'
-                                + '<td>' + $.format.date(jadwal, "dd-MMM-yyyy") + '</td>'
-                                + '<td class="col-aksi">'
-                                + '<span class="text-primary fa fa-info-circle" title="Detail" onclick="detailJadwal(' + n + ')"></span>&nbsp'
-                                + '<span class="text-primary fa fa-edit" title="Edit" onclick="editJadwal(' + n + ')"></span>&nbsp'
-                                + '<span class="text-danger fa fa-trash" title="Hapus" onclick="initHapusJadwal(' + n + ')"></span>'
-                                + '</td>'
-                                + '</tr>');
                         var uploadStatus = '';
                         var diffDate = '-';
                         if (data[j].path) {
