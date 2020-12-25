@@ -1125,17 +1125,19 @@ $role = $this->session->userdata['user']['role'];
                         + '</td>'
                         + '</tr>');
                 $('.select-dokumen').append('<option value="' + d.id + '">' + d.judul + '</option>');
-                $('#table-distribusi').append('<tr>'
-                        + '<td>' + d.nomor + '</td>'
-                        + '<td>' + d.judul + '</td>'
-                        + '<td>' + (d.jenis == null ? '-' : 'Level ' + d.jenis) + '</td>'
-                        + '<td>' + d.creator_name + '</td>'
-                        + '<td>' + strUserDis + '</td>'
-                        + '<td class="col-aksi">'
-                        + '<span class="text-primary fa fa-info-circle" title="Detail" onclick="detailDistribusi(' + n + ')"></span>&nbsp'
-                        + '<span class="text-primary fa fa-edit" title="Edit" onclick="editDistribusi(' + n + ')"></span>'
-                        + '</td>'
-                        + '</tr>');
+                if (d.jenis < 4) {
+                    $('#table-distribusi').append('<tr>'
+                            + '<td>' + d.nomor + '</td>'
+                            + '<td>' + d.judul + '</td>'
+                            + '<td>' + (d.jenis == null ? '-' : 'Level ' + d.jenis) + '</td>'
+                            + '<td>' + d.creator_name + '</td>'
+                            + '<td>' + strUserDis + '</td>'
+                            + '<td class="col-aksi">'
+                            + '<span class="text-primary fa fa-info-circle" title="Detail" onclick="detailDistribusi(' + n + ')"></span>&nbsp'
+                            + '<span class="text-primary fa fa-edit" title="Edit" onclick="editDistribusi(' + n + ')"></span>'
+                            + '</td>'
+                            + '</tr>');
+                }
                 n++;
                 sortDokumen.push(d);
             }
@@ -1150,53 +1152,54 @@ $role = $this->session->userdata['user']['role'];
             $('.input-form-terkait').append('<option value="">-- form terkait --</option>');
             for (var i = 0; i < sortDokumen.length; i++) {
                 var d = sortDokumen[i];
-                $('#table-tugas').append('<tr>'
-                        + '<td>' + d.judul + '</td>'
-                        + '<td></td>'
-                        + '<td></td>'
-                        + '<td></td>'
-                        + '<td></td>'
-                        + '<td class="col-aksi">'
-                        + '<span class="text-primary fa fa-plus" title="Tambah" onclick="initCreateTugas(' + i + ')"></span>'
-                        + '</td>'
-                        + '</tr>');
-                if (d.jenis == 4) {
-                    $('.input-form-terkait').append('<option value="' + d.id + '">' + d.judul + '</option>');
-                }
-                for (var j = 0; j < data.length; j++) {
-                    var t = data[j];
-                    if (t.id_document == d.id) {
-                        t.index_document = i;
-                        t.index_personil = [];
-                        t.txt_personil = '';
-                        for (var k = 0; k < t.personil.length; k++) {
-                            for (var l = 0; l < personil.length; l++) {
-                                if (t.personil[k] == personil[l].id) {
-                                    t.index_personil.push(l);
-                                    t.txt_personil += '<div>' + personil[l].fullname + '</div>';
+                if (d.jenis < 4) {
+                    $('#table-tugas').append('<tr>'
+                            + '<td>' + d.judul + '</td>'
+                            + '<td></td>'
+                            + '<td></td>'
+                            + '<td></td>'
+                            + '<td></td>'
+                            + '<td class="col-aksi">'
+                            + '<span class="text-primary fa fa-plus" title="Tambah" onclick="initCreateTugas(' + i + ')"></span>'
+                            + '</td>'
+                            + '</tr>');
+                    for (var j = 0; j < data.length; j++) {
+                        var t = data[j];
+                        if (t.id_document == d.id) {
+                            t.index_document = i;
+                            t.index_personil = [];
+                            t.txt_personil = '';
+                            for (var k = 0; k < t.personil.length; k++) {
+                                for (var l = 0; l < personil.length; l++) {
+                                    if (t.personil[k] == personil[l].id) {
+                                        t.index_personil.push(l);
+                                        t.txt_personil += '<div>' + personil[l].fullname + '</div>';
+                                    }
                                 }
                             }
-                        }
-                        t.index_form_terkait = null;
-                        for (var k = 0; k < sortDokumen.length; k++) {
-                            if (t.form_terkait == sortDokumen[k].id) {
-                                t.index_form_terkait = k;
+                            t.index_form_terkait = null;
+                            for (var k = 0; k < sortDokumen.length; k++) {
+                                if (t.form_terkait == sortDokumen[k].id) {
+                                    t.index_form_terkait = k;
+                                }
                             }
+                            $('#table-tugas').append('<tr>'
+                                    + '<td></td>'
+                                    + '<td>' + t.nama + '</td>'
+                                    + '<td>' + (t.index_form_terkait == null ? '-' : sortDokumen[t.index_form_terkait].judul) + '</td>'
+                                    + '<td><span class="badge badge-secondary">' + t.sifat + '</span></td>'
+                                    + '<td>' + t.txt_personil + '</td>'
+                                    + '<td class="col-aksi">'
+                                    + '<span class="text-primary fa fa-info-circle" title="Detail" onclick="detailTugas(' + sortTugas.length + ')"></span>&nbsp'
+                                    + '<span class="text-primary fa fa-edit" title="Edit" onclick="initEditTugas(' + sortTugas.length + ')"></span>&nbsp'
+                                    + '<span class="text-danger fa fa-trash" title="Hapus" onclick="initDeleteTugas(' + sortTugas.length + ')"></span>'
+                                    + '</td>'
+                                    + '</tr>');
+                            sortTugas.push(t);
                         }
-                        $('#table-tugas').append('<tr>'
-                                + '<td></td>'
-                                + '<td>' + t.nama + '</td>'
-                                + '<td>' + (t.index_form_terkait == null ? '-' : sortDokumen[t.index_form_terkait].judul) + '</td>'
-                                + '<td><span class="badge badge-secondary">' + t.sifat + '</span></td>'
-                                + '<td>' + t.txt_personil + '</td>'
-                                + '<td class="col-aksi">'
-                                + '<span class="text-primary fa fa-info-circle" title="Detail" onclick="detailTugas(' + sortTugas.length + ')"></span>&nbsp'
-                                + '<span class="text-primary fa fa-edit" title="Edit" onclick="initEditTugas(' + sortTugas.length + ')"></span>&nbsp'
-                                + '<span class="text-danger fa fa-trash" title="Hapus" onclick="initDeleteTugas(' + sortTugas.length + ')"></span>'
-                                + '</td>'
-                                + '</tr>');
-                        sortTugas.push(t);
                     }
+                } else {
+                    $('.input-form-terkait').append('<option value="' + d.id + '">' + d.judul + '</option>');
                 }
             }
             getJadwal();
@@ -1810,7 +1813,7 @@ $role = $this->session->userdata['user']['role'];
     $('#formEditJadwal').submit(function (e) {
         e.preventDefault();
         $.post('<?php echo site_url($module); ?>/edit_jadwal', $(this).serialize(), function (data) {
-            getDistribusi();
+            getDokumen();
             $('#modalEditJadwal').modal('hide');
         });
     });

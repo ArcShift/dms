@@ -263,8 +263,8 @@ class M_treeview_detail extends CI_Model {
     }
 
     private function editPenerima() {
+        $id_tugas = $this->input->post('id');
         if (!empty($this->input->post('penerima'))) {
-            $id_tugas = $this->input->post('id');
             $input = $this->input->post('penerima');
             $this->db->where('id_tugas', $id_tugas);
             $result = $this->db->get('penerima_tugas')->result_array();
@@ -284,6 +284,9 @@ class M_treeview_detail extends CI_Model {
                 $this->db->set('id_personil', $a);
                 $this->db->insert('penerima_tugas');
             }
+        } else {//remove all data
+            $this->db->where('id_tugas', $id_tugas);
+            return $this->db->delete('penerima_tugas');
         }
         return true;
     }
