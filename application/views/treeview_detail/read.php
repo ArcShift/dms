@@ -515,39 +515,10 @@ $role = $this->session->userdata['user']['role'];
                     <table class="table">
                         <tbody>
                             <tr>
-                                <td>Pasal</td>
-                                <td>
-                                    <select name="pasal" class="form-control select-pasal-has-dokumen" required=""></select>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Judul Dokumen</td>
-                                <td>
-                                    <input name="dokumen_id" class="input-dokumen-id d-none">
-                                    <select name="dokumen" class="form-control select-dokumen-pasal" required=""></select>
-                                </td>
-                            </tr>
-                            <tr>
                                 <td>Tugas</td>
                                 <td>
                                     <input name="desc" class="form-control">
                                 </td>
-                            </tr>
-                            <tr>
-                                <td>Form</td>
-                                <td>
-                                    <select name="form" class="form-control select-dokumen" required=""></select>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Distribusi</td>
-                                <td>
-                                    <select name="dist[]" class="form-control select-personil-distribusi select-2 multiselect-dropdown" multiple="" style="width: 330px !important;"></select>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Penjadwalan</td>
-                                <td></td>
                             </tr>
                             <tr>
                                 <td id="tglMulaiJadwal">Tanggal</td>
@@ -811,7 +782,7 @@ $role = $this->session->userdata['user']['role'];
                     </button>
                     <input class="form-control input-id" name="id" hidden="">
                     <input class="form-control input-delete" name="delete-id" hidden="">
-                    <input class="form-control input-document-id" name="id-document" hidden="" required="">
+                    <input class="form-control input-document-id" name="id-document" hidden="">
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
@@ -1223,21 +1194,21 @@ $role = $this->session->userdata['user']['role'];
                     + '<td><span class="text-primary fa fa-plus" title="Tambah" onclick="initCreateJadwal(' + i + ')"></span></td>'
                     + '</tr>');
         }
-        $.getJSON('<?php echo site_url($module); ?>/get_jadwal', {'perusahaan': perusahaan, 'standar': standar}, function (data) {
-            sortJadwal = [];
-            var pasal = '';
-            var doc = '';
-            var n = 0;
-            for (var i = 0; i < sortDokumen.length; i++) {
-                for (var j = 0; j < data.length; j++) {
-                    if (sortDokumen[i].id == data[j].id_document) {
-                        data[j].index_dokumen = i;
-                        sortJadwal.push(data[j]);
-                    }
-                }
-            }
-            getImplementasi();
-        });
+//        $.getJSON('<?php // echo site_url($module); ?>/get_jadwal', {'perusahaan': perusahaan, 'standar': standar}, function (data) {
+//            sortJadwal = [];
+//            var pasal = '';
+//            var doc = '';
+//            var n = 0;
+//            for (var i = 0; i < sortDokumen.length; i++) {
+//                for (var j = 0; j < data.length; j++) {
+//                    if (sortDokumen[i].id == data[j].id_document) {
+//                        data[j].index_dokumen = i;
+//                        sortJadwal.push(data[j]);
+//                    }
+//                }
+//            }
+//            getImplementasi();
+//        });
     }
     function getImplementasi() {
         $.getJSON('<?php echo site_url($module); ?>/get_implementasi', null, function (data) {
@@ -1501,7 +1472,7 @@ $role = $this->session->userdata['user']['role'];
         m.find('.input-judul').val(d.judul);
         m.find('.input-distribusi').val(d.distribusi.length);
         m.find('.input-jadwal').val(d.c_imp);
-        if (d.c_imp != 0 | d.distribusi.length != 0 | d.child_document != 0) {
+        if (d.distribusi.length != 0 | d.child_document != 0) {
             m.find('.alert').show();
         } else {
             m.find('.alert').hide();

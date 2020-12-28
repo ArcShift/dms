@@ -43,13 +43,11 @@ class M_treeview_detail extends CI_Model {
     }
 
     function pasal() {
-        $this->db->select('p.*, COUNT(p2.id) AS child, COUNT(DISTINCT ddp.id) AS doc, COUNT(i.id) AS imp, SUM(CASE WHEN i.path IS NOT NULL and i.date_jadwal < NOW() THEN 1 ELSE 0 END) as upload, SUM(CASE WHEN i.path IS NULL and i.date_jadwal < NOW() THEN 1 ELSE 0 END) as unupload');
+        $this->db->select('p.*, COUNT(p2.id) AS child, COUNT(DISTINCT ddp.id) AS doc');
         $this->db->join('pasal p2', 'p2.parent = p.id', 'LEFT');
         $this->db->join('document_pasal dp', 'dp.id_pasal = p.id', 'LEFT');
         $this->db->join('document ddp', 'ddp.id = dp.id_document AND ddp.id_company = ' . $this->input->get('perusahaan'), 'LEFT');
         $this->db->join('document d', 'd.id_pasal = p.id', 'LEFT');
-        $this->db->join('jadwal j', 'j.id_document = d.id', 'LEFT');
-        $this->db->join('implementasi i', 'i.id_jadwal = j.id', 'LEFT');
         $this->db->where('p.id_standard', $this->input->get('standar'));
         $this->db->group_by('p.id');
         return $this->db->get('pasal p')->result_array();
@@ -132,7 +130,7 @@ class M_treeview_detail extends CI_Model {
     }
 
     function read_document() {
-        $this->db->select("d.*, COUNT(DISTINCT cd.id) AS child_document, COUNT(DISTINCT imp.id) AS c_imp,GROUP_CONCAT(DISTINCT dp.id_pasal) AS doc_pasal, GROUP_CONCAT(DISTINCT ds.id) AS distribusi, GROUP_CONCAT(DISTINCT pld.id) AS personil_distribusi_id, GROUP_CONCAT(DISTINCT CONCAT(pld.fullname,' - ', ukd.name)) AS user_distribusi");
+        $this->db->select("d.*, COUNT(DISTINCT cd.id) AS child_document, GROUP_CONCAT(DISTINCT dp.id_pasal) AS doc_pasal, GROUP_CONCAT(DISTINCT ds.id) AS distribusi, GROUP_CONCAT(DISTINCT pld.id) AS personil_distribusi_id, GROUP_CONCAT(DISTINCT CONCAT(pld.fullname,' - ', ukd.name)) AS user_distribusi");
         $this->db->join('pasal p', 'p.id = d.id_pasal');
         $this->db->join('document_pasal dp', 'dp.id_document = d.id', 'LEFT');
         $this->db->join('document cd', 'cd.contoh = d.id', 'LEFT');
@@ -143,8 +141,6 @@ class M_treeview_detail extends CI_Model {
         $this->db->join('distribusi ds', 'd.id = ds.id_document', 'LEFT');
         $this->db->join('personil pld', 'pld.id = ds.id_personil', 'LEFT');
         $this->db->join('unit_kerja ukd', 'ukd.id = pld.id_unit_kerja', 'LEFT');
-        $this->db->join('jadwal j', 'j.id_document = d.id', 'LEFT');
-        $this->db->join('implementasi imp', 'imp.id_jadwal = j.id', 'LEFT');
         $this->db->where('d.id_company = ' . $this->input->get('perusahaan'));
         $this->db->where('p.id_standard = ' . $this->input->get('standar'));
         $this->db->order_by('p.id');
