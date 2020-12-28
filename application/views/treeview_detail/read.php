@@ -1043,13 +1043,11 @@ $role = $this->session->userdata['user']['role'];
         $.getJSON('<?php echo site_url($module); ?>/get_dokumen', {'perusahaan': perusahaan, 'standar': standar}, function (data) {
             $('#table-dokumen').empty();
             $('#table-distribusi').empty();
-            if(data.length == 0){
-                $('#table-distribusi').html('<tr><td colspan="6" class="text-center text-danger">Upload dan pilih jenis dokumen untuk melakukan distribusi dokumen dan penambahan tugas</td></tr>');
-            }
             $('.select-dokumen').empty();
             $('.select-dokumen').append('<option value="">-- -- --</option>');
             sortDokumen = [];
             var n = 0;
+            var nDoc = 0;                
             for (var i = 0; i < data.length; i++) {
                 var d = data[i];
                 d.index_dokumen_pasal = [];
@@ -1124,6 +1122,7 @@ $role = $this->session->userdata['user']['role'];
                         + '</tr>');
                 $('.select-dokumen').append('<option value="' + d.id + '">' + d.judul + '</option>');
                 if (d.jenis < 4 & d.jenis >= 1) {
+                    nDoc++;
                     $('#table-distribusi').append('<tr>'
                             + '<td>' + d.nomor + '</td>'
                             + '<td>' + d.judul + '</td>'
@@ -1139,6 +1138,9 @@ $role = $this->session->userdata['user']['role'];
                 n++;
                 sortDokumen.push(d);
             }
+            if(nDoc == 0){
+                $('#table-distribusi').html('<tr><td colspan="6" class="text-center text-danger">Upload dan pilih jenis dokumen level 1-3 untuk melakukan distribusi dokumen dan penambahan tugas</td></tr>');
+            }
             getTugas();
         });
     }
@@ -1146,14 +1148,13 @@ $role = $this->session->userdata['user']['role'];
         $.getJSON('<?php echo site_url($module); ?>/get_tugas', {perusahaan: perusahaan, standar: standar}, function (data) {
             sortTugas = [];
             $('#table-tugas').empty();
-            if(sortDokumen.length == 0){
-                $('#table-tugas').html('<tr><td colspan="6" class="text-center text-danger">Upload dan pilih jenis dokumen untuk melakukan distribusi dokumen dan penambahan tugas</td></tr>');
-            }
             $('.input-form-terkait').empty();
             $('.input-form-terkait').append('<option value="">-- form terkait --</option>');
+            var nDoc = 0;
             for (var i = 0; i < sortDokumen.length; i++) {
                 var d = sortDokumen[i];
                 if (d.jenis < 4 & d.jenis >= 1) {
+                    nDoc++;
                     $('#table-tugas').append('<tr>'
                             + '<td>' + d.judul + '</td>'
                             + '<td></td>'
@@ -1202,6 +1203,9 @@ $role = $this->session->userdata['user']['role'];
                 } else {
                     $('.input-form-terkait').append('<option value="' + d.id + '">' + d.judul + '</option>');
                 }
+            }
+            if(nDoc == 0){
+                $('#table-tugas').html('<tr><td colspan="6" class="text-center text-danger">Upload dan pilih jenis dokumen level 1-3 untuk melakukan distribusi dokumen dan penambahan tugas</td></tr>');
             }
             getJadwal();
         });
