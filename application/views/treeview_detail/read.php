@@ -130,10 +130,6 @@ $role = $this->session->userdata['user']['role'];
                     </div>
                     <!--JADWAL-->
                     <div class="tab-pane" id="tab-jadwal" role="tabpanel">
-                        <div class="text-right mb-2 col-aksi">
-                            <label>Tambah Jadwal</label>
-                            <button class="btn btn-outline-primary fa fa-plus" onclick="jadwal()"></button>
-                        </div>
                         <div class="table-responsive">
                             <table class="table table-striped">
                                 <thead>
@@ -1044,13 +1040,15 @@ $role = $this->session->userdata['user']['role'];
         return col;
     }
     function getDokumen() {
-        $.post('<?php echo site_url($module); ?>/get_dokumen', {'perusahaan': perusahaan, 'standar': standar}, function (data) {
+        $.getJSON('<?php echo site_url($module); ?>/get_dokumen', {'perusahaan': perusahaan, 'standar': standar}, function (data) {
             $('#table-dokumen').empty();
             $('#table-distribusi').empty();
+            if(data.length == 0){
+                $('#table-distribusi').html('<tr><td colspan="6" class="text-center text-danger">Upload dan pilih jenis dokumen untuk melakukan distribusi dokumen dan penambahan tugas</td></tr>');
+            }
             $('.select-dokumen').empty();
             $('.select-dokumen').append('<option value="">-- -- --</option>');
             sortDokumen = [];
-            data = JSON.parse(data);
             var n = 0;
             for (var i = 0; i < data.length; i++) {
                 var d = data[i];
@@ -1148,6 +1146,9 @@ $role = $this->session->userdata['user']['role'];
         $.getJSON('<?php echo site_url($module); ?>/get_tugas', {perusahaan: perusahaan, standar: standar}, function (data) {
             sortTugas = [];
             $('#table-tugas').empty();
+            if(sortDokumen.length == 0){
+                $('#table-tugas').html('<tr><td colspan="6" class="text-center text-danger">Upload dan pilih jenis dokumen untuk melakukan distribusi dokumen dan penambahan tugas</td></tr>');
+            }
             $('.input-form-terkait').empty();
             $('.input-form-terkait').append('<option value="">-- form terkait --</option>');
             for (var i = 0; i < sortDokumen.length; i++) {
@@ -1206,20 +1207,16 @@ $role = $this->session->userdata['user']['role'];
         });
     }
     function getJadwal() {
+        $('#table-jadwal').empty();
         for (var i = 0; i < sortTugas.length; i++) {
             var t = sortTugas[i];
             $('#table-jadwal').append('<tr>'
+                    + '<td>' + sortDokumen[t.index_document].judul + '</td>'
                     + '<td>' + t.nama + '</td>'
-//                    + '<td>' + sortDokumen[sortJadwal[i].index_dokumen].judul + '</td>'
-//                    + '<td>' + data[j].desc + '</td>'
-//                    + '<td>' + (data[j].index_form == null ? '-' : sortDokumen[data[j].index_form].judul) + '</td>'
-//                    + '<td style="text-transform: capitalize">' + periode + '</td>'
-//                    + '<td>' + $.format.date(jadwal, "dd-MMM-yyyy") + '</td>'
-//                    + '<td class="col-aksi">'
-//                    + '<span class="text-primary fa fa-info-circle" title="Detail" onclick="detailJadwal(' + n + ')"></span>&nbsp'
-//                    + '<span class="text-primary fa fa-edit" title="Edit" onclick="editJadwal(' + n + ')"></span>&nbsp'
-//                    + '<span class="text-danger fa fa-trash" title="Hapus" onclick="initHapusJadwal(' + n + ')"></span>'
-//                    + '</td>'
+                    + '<td>---</td>'
+                    + '<td>---</td>'
+                    + '<td>---</td>'
+                    + '<td><span class="text-primary fa fa-plus" title="Tambah" onclick="initCreateJadwal(' + i + ')"></span></td>'
                     + '</tr>');
         }
         $.getJSON('<?php echo site_url($module); ?>/get_jadwal', {'perusahaan': perusahaan, 'standar': standar}, function (data) {
@@ -1241,7 +1238,6 @@ $role = $this->session->userdata['user']['role'];
     function getImplementasi() {
         $.getJSON('<?php echo site_url($module); ?>/get_implementasi', null, function (data) {
             sortImplementasi = [];
-            $('#table-jadwal').empty();
             $('#table-implementasi').empty();
             var n = 0;
             for (var i = 0; i < sortJadwal.length; i++) {
@@ -1276,7 +1272,6 @@ $role = $this->session->userdata['user']['role'];
                                 uploadStatus = '<span class="badge badge-primary">Selesai</span>';
                             }
                             diffDate = new Date(data[j].upload_date).getDate() - new Date(data[j].date_jadwal).getDate();
-//                            diffDate = diffDate <= 0 ? '-' : diffDate;
                         } else {
                             uploadStatus = '-';
                         }
@@ -1684,7 +1679,7 @@ $role = $this->session->userdata['user']['role'];
             },
         });
     }
-    function jadwal() {
+    function initCreateJadwal() {
         var m = $('#modalJadwal');
         m.modal('show');
     }

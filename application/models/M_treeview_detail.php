@@ -145,8 +145,8 @@ class M_treeview_detail extends CI_Model {
         $this->db->join('unit_kerja ukd', 'ukd.id = pld.id_unit_kerja', 'LEFT');
         $this->db->join('jadwal j', 'j.id_document = d.id', 'LEFT');
         $this->db->join('implementasi imp', 'imp.id_jadwal = j.id', 'LEFT');
-        $this->db->where('d.id_company = ' . $this->input->post('perusahaan'));
-        $this->db->where('p.id_standard = ' . $this->input->post('standar'));
+        $this->db->where('d.id_company = ' . $this->input->get('perusahaan'));
+        $this->db->where('p.id_standard = ' . $this->input->get('standar'));
         $this->db->order_by('p.id');
         $this->db->group_by('d.id');
         $result = $this->db->get('document d')->result_array();
