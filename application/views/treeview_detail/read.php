@@ -186,7 +186,7 @@ $role = $this->session->userdata['user']['role'];
                                 <th>Judul Dokumen</th>
                                 <th>Pasal Terkait</th>
                                 <th>Letak Pasal<br>pada Dokumen</th>
-                                <th>Aksi</th>
+                                <th style="width: 90px">Aksi</th>
                             </tr>
                         </thead>
                         <tbody class="files"></tbody>
@@ -315,7 +315,7 @@ $role = $this->session->userdata['user']['role'];
                             <tr>
                                 <td>Letak pasal<br>pada dokumen</td>
                                 <td>
-                                    <textarea class="form-control textarea-deskripsi" name="deskripsi"></textarea>
+                                    <textarea class="form-control textarea-deskripsi" name="desc"></textarea>
                                 </td>
                             </tr>
                             <tr>
@@ -327,7 +327,7 @@ $role = $this->session->userdata['user']['role'];
                             <tr>
                                 <td>Dokumen terkait</td>
                                 <td>
-                                    <select class="form-control select-dokumen" name="dokumen_terkait"></select>
+                                    <select name="documents[]" class="form-control select-2 select-dokumen multiselect-dropdown" multiple="" style="width: 330px !important; margin-top: 100px"></select>
                                 </td>
                             </tr>
                             <tr>
@@ -339,17 +339,123 @@ $role = $this->session->userdata['user']['role'];
                                         <input class="radio-type-dokumen" type="radio" name="type_dokumen" value="URL">
                                         <label>Url</label>
                                         <input class="form-control input-path input-file" type="file" name="dokumen" required="">
-                                        <input class="form-control input-path input-url" type="url" name="url" required="">
+                                        <input class="form-control input-path input-url" type="url" name="url" required="" placeholder="http://">
                                     </div>
                                     <div class="input-group mb-3 group-label-dokumen">
                                         <input class="form-control label-path" readonly="">
                                         <div class="input-group-append">
-                                            <i class="input-group-text btn btn-outline-danger btn-sm pull-right fa fa-trash" onclick="initUpdateDocument()"></i>
-                                                <!--<span class="input-group-text" id="basic-addon2">@example.com</span>-->
+                                            <i class="btn btn-outline-danger btn-sm pull-right fa fa-trash" onclick="initUpdateDocument()"></i>
                                         </div>
                                     </div>
-                                    <div class="">
-                                        <!--<label class="label-path" style="width: 60%; word-wrap: break-word; display: inline-block" ></label>-->
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" data-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-primary btn-submit" name="submit">Simpan</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<!--MODAL DETAIL DOCUMENT-->
+<div class="modal fade" id="modalDetailDocument">
+    <div class="modal-dialog" role="document">
+        <form method="post" class="formDokumen">
+            <input class="input-id" name="id" hidden="">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Detail Dokumen</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body modal-message">
+                    <table class="table">
+                        <tbody>
+                            <tr>
+                                <td>Pasal</td>
+                                <td>
+                                    <select name="pasal" class="form-control select-pasal" required="" hidden=""></select>
+                                    <select name="pasals[]" class="form-control select-2 select-2-pasal multiselect-dropdown" multiple="" style="width: 320px !important; margin-top: 100px"></select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Nomor</td>
+                                <td>
+                                    <input class="form-control input-nomor" name="nomor" required="">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Judul</td>
+                                <td>
+                                    <input class="form-control input-judul" name="judul" required="">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Pembuat Dokumen</td>
+                                <td>
+                                    <select class="form-control select-anggota" name="creator"></select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Jenis Dokumen</td>
+                                <td>
+                                    <select class="form-control select-jenis" name="jenis">
+                                        <option value="1">Level I</option>
+                                        <option value="2">Level II</option>
+                                        <option value="3">Level III</option>
+                                        <option value="4">Level IV</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Klasifikasi</td>
+                                <td>
+                                    <select class="form-control select-klasifikasi" name="klasifikasi">
+                                        <option value="UMUM">Umum</option>
+                                        <option value="INTERNAL">Internal</option>
+                                        <option value="RAHASIA">Rahasia</option>
+                                        <option value="SANGAT RAHASIA">Sangat Rahasia</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Letak pasal<br>pada dokumen</td>
+                                <td>
+                                    <textarea class="form-control textarea-deskripsi" name="desc"></textarea>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Versi Dokumen</td>
+                                <td>
+                                    <input class="form-control input-versi" name="versi">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Dokumen terkait</td>
+                                <td>
+                                    <select name="documents[]" class="form-control select-2 select-dokumen multiselect-dropdown" multiple="" style="width: 330px !important; margin-top: 100px"></select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Dokumen</td>
+                                <td>
+                                    <div class="group-radio-dokumen">
+                                        <input class="radio-type-dokumen" type="radio" name="type_dokumen" value="FILE" required="">
+                                        <label>File</label>
+                                        <input class="radio-type-dokumen" type="radio" name="type_dokumen" value="URL">
+                                        <label>Url</label>
+                                        <input class="form-control input-path input-file" type="file" name="dokumen" required="">
+                                        <input class="form-control input-path input-url" type="url" name="url" required="" placeholder="http://">
+                                    </div>
+                                    <div class="input-group mb-3 group-label-dokumen">
+                                        <input class="form-control label-path" readonly="">
+                                        <div class="input-group-append">
+                                            <i class="btn btn-outline-danger btn-sm pull-right fa fa-trash" onclick="initUpdateDocument()"></i>
+                                        </div>
                                     </div>
                                 </td>
                             </tr>
@@ -517,7 +623,8 @@ $role = $this->session->userdata['user']['role'];
                             <tr>
                                 <td>Tugas</td>
                                 <td>
-                                    <input name="desc" class="form-control">
+                                    <input class="form-control input-tugas">
+                                    <input class="input-id-tugas" name="id-tugas">
                                 </td>
                             </tr>
                             <tr>
@@ -925,7 +1032,7 @@ $role = $this->session->userdata['user']['role'];
             }
             for (var i = 0; i < sortPasal.length; i++) {
                 var s = sortPasal[i];
-                s.childsIndex = [];
+                s.index_childs = [];
                 s.index_documents = [];
                 if (s.parent === null) {
                     s.parentIndex = null;
@@ -933,7 +1040,7 @@ $role = $this->session->userdata['user']['role'];
                 } else {
                     s.parentIndex = $('#item-base' + s.parent).children('.index').text();
                     s.fullname = sortPasal[s.parentIndex].fullname + ' - ' + s.name;
-                    sortPasal[s.parentIndex].childsIndex.push(i);
+                    sortPasal[s.parentIndex].index_childs.push(i);
                 }
                 sortPasal[i] = s;
             }
@@ -1018,7 +1125,7 @@ $role = $this->session->userdata['user']['role'];
             $('.select-dokumen').append('<option value="">-- -- --</option>');
             sortDokumen = [];
             var n = 0;
-            var nDoc = 0;                
+            var nDoc = 0;
             for (var i = 0; i < data.length; i++) {
                 var d = data[i];
                 d.index_dokumen_pasal = [];
@@ -1086,7 +1193,7 @@ $role = $this->session->userdata['user']['role'];
                         + '<td>Level ' + (d.jenis == null ? '-' : d.jenis) + '</td>'
                         + '<td>' + (d.klasifikasi == null ? '-' : d.klasifikasi) + '</td>'
                         + '<td class="col-aksi">'
-                        + '<span class="text-primary fa fa-info-circle" onclick="detailDokumen(' + n + ')" title="Detail"></span>&nbsp'
+                        + '<span class="text-primary fa fa-info-circle" onclick="detailDocument(' + n + ')" title="Detail"></span>&nbsp'
                         + '<span class="text-primary fa fa-edit" onclick="editDokumen(' + n + ')"></span>&nbsp'
                         + btnDelete
                         + '</td>'
@@ -1109,11 +1216,32 @@ $role = $this->session->userdata['user']['role'];
                 n++;
                 sortDokumen.push(d);
             }
-            if(nDoc == 0){
+            if (nDoc == 0) {
                 $('#table-distribusi').html('<tr><td colspan="6" class="text-center text-danger">Upload dan pilih jenis dokumen level 1-3 untuk melakukan distribusi dokumen dan penambahan tugas</td></tr>');
+            }
+            for (var i = 0; i < sortPasal.length; i++) {
+                if (sortPasal[i].parent == null) {
+                    listPasalDocuments(i);
+                }
             }
             getTugas();
         });
+    }
+    function listPasalDocuments(index) {
+        console.log(index);
+        var p = sortPasal[index];
+        p.index_child_documents = [];
+        Array.prototype.push.apply(p.index_child_documents,p.index_documents);
+        for (var i = 0; i < p.index_childs.length; i++) {
+            var ic = p.index_childs[i];
+            listPasalDocuments(ic);
+            Array.prototype.push.apply(p.index_child_documents,sortPasal[ic].index_child_documents);
+        }
+        //TODO: remove duplicate index_child_documents
+        var td=$('#table-pasal tr:nth-child('+(index+1) +') td:nth-child(5)');
+        td.text(p.index_child_documents.length);
+        console.log(td);
+        sortPasal[index] = p;
     }
     function getTugas() {
         $.getJSON('<?php echo site_url($module); ?>/get_tugas', {perusahaan: perusahaan, standar: standar}, function (data) {
@@ -1171,11 +1299,11 @@ $role = $this->session->userdata['user']['role'];
                             sortTugas.push(t);
                         }
                     }
-                } else {
+                } else if (d.jenis == 4) {
                     $('.input-form-terkait').append('<option value="' + d.id + '">' + d.judul + '</option>');
                 }
             }
-            if(nDoc == 0){
+            if (nDoc == 0) {
                 $('#table-tugas').html('<tr><td colspan="6" class="text-center text-danger">Upload dan pilih jenis dokumen level 1-3 untuk melakukan distribusi dokumen dan penambahan tugas</td></tr>');
             }
             getJadwal();
@@ -1194,7 +1322,7 @@ $role = $this->session->userdata['user']['role'];
                     + '<td><span class="text-primary fa fa-plus" title="Tambah" onclick="initCreateJadwal(' + i + ')"></span></td>'
                     + '</tr>');
         }
-//        $.getJSON('<?php // echo site_url($module); ?>/get_jadwal', {'perusahaan': perusahaan, 'standar': standar}, function (data) {
+//        $.getJSON('<?php // echo site_url($module);                 ?>/get_jadwal', {'perusahaan': perusahaan, 'standar': standar}, function (data) {
 //            sortJadwal = [];
 //            var pasal = '';
 //            var doc = '';
@@ -1277,13 +1405,13 @@ $role = $this->session->userdata['user']['role'];
         var listPemenuhan = [];
         var listImp = [];
         var d = sortPasal[index];
-        for (var i = 0; i < d.childsIndex.length; i++) {
-            if (sortPasal[d.childsIndex[i]].pemenuhan_doc === -1) {
-                pemenuhanDokumen(d.childsIndex[i]);
-            }
-            listPemenuhan.push(sortPasal[d.childsIndex[i]].pemenuhan_doc);
-            listImp.push(sortPasal[d.childsIndex[i]].pemenuhan_imp);
-        }
+//        for (var i = 0; i < d.childsIndex.length; i++) {
+//            if (sortPasal[d.childsIndex[i]].pemenuhan_doc === -1) {
+//                pemenuhanDokumen(d.childsIndex[i]);
+//            }
+//            listPemenuhan.push(sortPasal[d.childsIndex[i]].pemenuhan_doc);
+//            listImp.push(sortPasal[d.childsIndex[i]].pemenuhan_imp);
+//        }
         var total = 0;
         var totalImp = 0;
         for (var i = 0; i < listPemenuhan.length; i++) {
@@ -1301,8 +1429,8 @@ $role = $this->session->userdata['user']['role'];
         m.find('.item-sort-desc').val(p.sort_desc);
         m.find('.item-long-desc').text(p.long_desc);
         m.find('.files').empty();
-        for (var i = 0; i < p.index_documents.length; i++) {
-            var d = sortDokumen[p.index_documents[i]];
+        for (var i = 0; i < p.index_child_documents.length; i++) {
+            var d = sortDokumen[p.index_child_documents[i]];
             var link;
             if (d.type_doc == 'FILE') {
                 link = '<a class="btn btn-primary btn-sm fa fa-search" target="_blank" href="<?= base_url('upload/dokumen') ?>/' + d.file + '"></a>';
@@ -1317,7 +1445,7 @@ $role = $this->session->userdata['user']['role'];
             m.find('.files').append('<tr>'
                     + '<td>' + d.judul + '</td>'
                     + '<td>' + pasals + '</td>'
-                    + '<td>' + (d.deskripsi == null ? '-' : d.deskripsi) + '</td>'
+                    + '<td style="white-space: pre-wrap">' + (d.deskripsi == null ? '-' : d.deskripsi) + '</td>'
                     + '<td>' + link
                     + '&nbsp<span class="btn btn-danger btn-sm fa fa-trash" onclick="initHapusDokumen(' + p.index_documents[i] + ')"></span>'
                     + '</td>'
@@ -1424,6 +1552,11 @@ $role = $this->session->userdata['user']['role'];
         m.find('.group-radio-dokumen').show();
         m.find('.group-label-dokumen').hide();
     }
+    function detailDocument(index) {
+        var m = $('#modalDetailDocument');
+        m.modal('show');
+        console.log('show');
+    }
     function detailDokumen(index) {
         formDokumenReset = true;
         var m = $('#modalDokumen');
@@ -1442,12 +1575,17 @@ $role = $this->session->userdata['user']['role'];
         m.find('.select-dokumen').val(d.contoh);
         m.find('.textarea-deskripsi').val(d.deskripsi);
         m.find('.input-versi').val(d.versi);
-//        m.find('.radio-type-dokumen').filter('[value=' + d.type_doc + ']').prop('checked', true);
         m.find('.input-path').hide();
         m.find('.fa-trash').hide();
         m.find('.group-radio-dokumen').hide();
         m.find('.group-label-dokumen').show();
-        m.find('.label-path').val(d.type_doc == 'FILE' ? d.file : d.url);
+        if (d.type_doc == 'FILE') {
+            m.find('.label-path').val(d.file);
+            m.find('.input-group-append').val('<a class="btn btn-outline-primary btn-sm pull-right fa fa-download" onclick="downloadDocument()"></a>');
+        } else {
+            m.find('.label-path').val(d.url);
+            m.find('.input-group-append').val('<a class="btn btn-outline-primary btn-sm pull-right fa fa-search" onclick="previewDocument()"></i>');
+        }
         m.find('input, select, textarea').prop('disabled', true);
     }
     function editDokumen(index) {

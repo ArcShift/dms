@@ -43,11 +43,8 @@ class M_treeview_detail extends CI_Model {
     }
 
     function pasal() {
-        $this->db->select('p.*, COUNT(p2.id) AS child, COUNT(DISTINCT ddp.id) AS doc');
+        $this->db->select('p.*, COUNT(p2.id) AS child');
         $this->db->join('pasal p2', 'p2.parent = p.id', 'LEFT');
-        $this->db->join('document_pasal dp', 'dp.id_pasal = p.id', 'LEFT');
-        $this->db->join('document ddp', 'ddp.id = dp.id_document AND ddp.id_company = ' . $this->input->get('perusahaan'), 'LEFT');
-        $this->db->join('document d', 'd.id_pasal = p.id', 'LEFT');
         $this->db->where('p.id_standard', $this->input->get('standar'));
         $this->db->group_by('p.id');
         return $this->db->get('pasal p')->result_array();
