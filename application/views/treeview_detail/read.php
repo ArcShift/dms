@@ -327,7 +327,7 @@ $role = $this->session->userdata['user']['role'];
                             <tr>
                                 <td>Dokumen terkait</td>
                                 <td>
-                                    <select name="documents[]" class="form-control select-2 select-dokumen multiselect-dropdown" multiple="" style="width: 330px !important; margin-top: 100px"></select>
+                                    <select name="documents[]" class="form-control select-2 select-2-document multiselect-dropdown" multiple="" style="width: 330px !important; margin-top: 100px"></select>
                                 </td>
                             </tr>
                             <tr>
@@ -437,7 +437,7 @@ $role = $this->session->userdata['user']['role'];
                             <tr>
                                 <td>Dokumen terkait</td>
                                 <td>
-                                    <select name="documents[]" class="form-control select-2 select-dokumen multiselect-dropdown" multiple="" style="width: 330px !important; margin-top: 100px"></select>
+                                    <select name="documents[]" class="form-control select-2 select-2-document multiselect-dropdown" multiple="" style="width: 330px !important; margin-top: 100px"></select>
                                 </td>
                             </tr>
                             <tr>
@@ -1122,6 +1122,7 @@ $role = $this->session->userdata['user']['role'];
             $('#table-dokumen').empty();
             $('#table-distribusi').empty();
             $('.select-dokumen').empty();
+            $('.select-2-document').empty();
             $('.select-dokumen').append('<option value="">-- -- --</option>');
             sortDokumen = [];
             var n = 0;
@@ -1199,6 +1200,7 @@ $role = $this->session->userdata['user']['role'];
                         + '</td>'
                         + '</tr>');
                 $('.select-dokumen').append('<option value="' + d.id + '">' + d.judul + '</option>');
+                $('.select-2-document').append('<option value="' + d.id + '">' + d.judul + '</option>');
                 if (d.jenis < 4 & d.jenis >= 1) {
                     nDoc++;
                     $('#table-distribusi').append('<tr>'
@@ -1438,7 +1440,7 @@ $role = $this->session->userdata['user']['role'];
             var pasals = '';
             for (var j = 0; j < d.index_dokumen_pasal.length; j++) {
                 var idx = d.index_dokumen_pasal[j];
-                pasals += '<div class="badge badge-secondary">' + sortPasal[idx].fullname + '</div>';
+                pasals += '<div><span class="badge badge-secondary">' + sortPasal[idx].fullname + '</span></div>';
             }
             m.find('.files').append('<tr>'
                     + '<td>' + d.judul + '</td>'
@@ -1561,8 +1563,8 @@ $role = $this->session->userdata['user']['role'];
         var d = sortDokumen[index];
         m.modal('show');
         m.find('.modal-title').text('Detail Dokumen');
-        m.find('.select-2').val(null).trigger('change');
-        m.find('.select-2').val(d.dokumen_pasal).trigger('change');
+        m.find('.select-2-pasal').val(null).trigger('change');
+        m.find('.select-2-pasal').val(d.dokumen_pasal).trigger('change');
         m.find('.btn-submit').hide();
         m.find('.select-pasal').val(d.id_pasal);
         m.find('.input-nomor').val(d.nomor);

@@ -75,7 +75,11 @@ class M_treeview_detail extends CI_Model {
         if ($this->input->post('id')) {
             $this->db->where('id', $this->input->post('id'));
             if ($this->db->update('document')) {
-                return $this->editDokumenPasal();
+                if($this->editDokumenPasal()){
+                    return $this->editDocumentTerkait();
+                }else{
+                    return false;
+                }
             } else {
                 return false;
             }
@@ -124,6 +128,9 @@ class M_treeview_detail extends CI_Model {
             $this->db->insert('document_pasal');
         }
         return true;
+    }
+    private function editDocumentTerkait() {
+        
     }
 
     function read_document() {
