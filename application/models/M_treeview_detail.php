@@ -75,9 +75,9 @@ class M_treeview_detail extends CI_Model {
         if ($this->input->post('id')) {
             $this->db->where('id', $this->input->post('id'));
             if ($this->db->update('document')) {
-                if($this->editDokumenPasal()){
+                if ($this->editDokumenPasal()) {
                     return $this->editDocumentTerkait();
-                }else{
+                } else {
                     return false;
                 }
             } else {
@@ -129,12 +129,37 @@ class M_treeview_detail extends CI_Model {
         }
         return true;
     }
+
     private function editDocumentTerkait() {
-        
+        $document = $this->input->post('id');
+        $input = $this->input->post('documents');
+        $this->db->where('induk', $document);
+        $result = $this->db->get('document_terkait')->result_array();
+        $db = [];
+        foreach ($result as $r) {
+            array_push($db, $r['terkait']);
+        }
+        $remove = array_diff($db, $input);
+        $add = array_diff($input, $db);
+        $data = [];
+        $data['remove'] = $remove;
+        $data['add'] = $add;
+        $data['current'] = array_intersect($db, $input);
+        foreach ($remove as $r) {
+            $this->db->where('induk', $document);
+            $this->db->where('terkait', $r);
+            $this->db->delete('document_terkait');
+        }
+        foreach ($add as $a) {
+            $this->db->set('induk', $document);
+            $this->db->set('terkait', $a);
+            $this->db->insert('document_terkait');
+        }
+        return true;
     }
 
     function read_document() {
-        $this->db->select("d.*, COUNT(DISTINCT cd.id) AS child_document, GROUP_CONCAT(DISTINCT dp.id_pasal) AS doc_pasal, GROUP_CONCAT(DISTINCT ds.id) AS distribusi, GROUP_CONCAT(DISTINCT pld.id) AS personil_distribusi_id, GROUP_CONCAT(DISTINCT CONCAT(pld.fullname,' - ', ukd.name)) AS user_distribusi");
+        $this->db->select("d.*, COUNT(DISTINCT cd.id) AS child_document,GROUP_CONCAT(DISTINCT dt.terkait) AS document_terkait, GROUP_CONCAT(DISTINCT dp.id_pasal) AS dokumen_pasal, GROUP_CONCAT(DISTINCT ds.id) AS distribusi, GROUP_CONCAT(DISTINCT pld.id) AS personil_distribusi_id, GROUP_CONCAT(DISTINCT CONCAT(pld.fullname,' - ', ukd.name)) AS user_distribusi");
         $this->db->join('pasal p', 'p.id = d.id_pasal');
         $this->db->join('document_pasal dp', 'dp.id_document = d.id', 'LEFT');
         $this->db->join('document cd', 'cd.contoh = d.id', 'LEFT');
@@ -145,17 +170,28 @@ class M_treeview_detail extends CI_Model {
         $this->db->join('distribusi ds', 'd.id = ds.id_document', 'LEFT');
         $this->db->join('personil pld', 'pld.id = ds.id_personil', 'LEFT');
         $this->db->join('unit_kerja ukd', 'ukd.id = pld.id_unit_kerja', 'LEFT');
+        $this->db->join('document_terkait dt', 'dt.induk = d.id', 'LEFT');
         $this->db->where('d.id_company = ' . $this->input->get('perusahaan'));
         $this->db->where('p.id_standard = ' . $this->input->get('standar'));
         $this->db->order_by('p.id');
         $this->db->group_by('d.id');
         $result = $this->db->get('document d')->result_array();
+        $fields = ['distribusi', 'user_distribusi', 'personil_distribusi_id', 'dokumen_pasal', 'document_terkait'];
         for ($i = 0; $i < count($result); $i++) {
-            $result[$i]['distribusi'] = explode(',', $result[$i]['distribusi']);
-            $result[$i]['user_distribusi'] = explode(',', $result[$i]['user_distribusi']);
-            $result[$i]['personil_distribusi_id'] = explode(',', $result[$i]['personil_distribusi_id']);
-            $result[$i]['dokumen_pasal'] = explode(',', $result[$i]['doc_pasal']);
+            foreach ($fields as $f) {
+                $result[$i][$f] = explode(',', $result[$i][$f]);
+                if ($result[$i][$f][0] == '') {
+                    $result[$i][$f] = [];
+                }
+            }
         }
+//        for ($i = 0; $i < count($result); $i++) {
+//            $result[$i]['distribusi'] = explode(',', $result[$i]['distribusi']);
+//            $result[$i]['user_distribusi'] = explode(',', $result[$i]['user_distribusi']);
+//            $result[$i]['personil_distribusi_id'] = explode(',', $result[$i]['personil_distribusi_id']);
+//            $result[$i]['dokumen_pasal'] = explode(',', $result[$i]['doc_pasal']);
+//            $result[$i]['document_terkait'] = explode(',', $result[$i]['document_terkait']);
+//        }
         return $result;
     }
 

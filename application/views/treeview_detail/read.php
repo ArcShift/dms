@@ -1130,9 +1130,6 @@ $role = $this->session->userdata['user']['role'];
             for (var i = 0; i < data.length; i++) {
                 var d = data[i];
                 d.index_dokumen_pasal = [];
-                if (d.dokumen_pasal[0] == '') {
-                    d.dokumen_pasal = [];
-                }
                 d.txt_pasals = '';
                 for (var j = 0; j < d.dokumen_pasal.length; j++) {
                     for (var k = 0; k < sortPasal.length; k++) {
@@ -1151,10 +1148,6 @@ $role = $this->session->userdata['user']['role'];
                     }
                 }
                 var btnDelete = '<span class="text-secondary fa fa-trash"></span>';
-                if (d.distribusi[0] == "") {
-                    d.distribusi = [];
-                    d.user_distribusi = [];
-                }
                 var idDis = d.distribusi;
                 var userDis = d.user_distribusi;
                 var strUserDis = '';
@@ -1180,10 +1173,12 @@ $role = $this->session->userdata['user']['role'];
                     }
                 }
                 d.index_form_terkait = null;
+                d.index_dokuments_terkait = [];
                 for (var j = 0; j < data.length; j++) {
                     if (d.contoh == data[j].id) {
                         d.index_form_terkait = j;
                     }
+
                 }
                 btnDelete = '<span class="text-danger fa fa-trash" onclick="initHapusDokumen(' + n + ')"></span>';
                 $('#table-dokumen').append('<tr>'
@@ -1232,14 +1227,14 @@ $role = $this->session->userdata['user']['role'];
     function listPasalDocuments(index) {
         var p = sortPasal[index];
         p.index_child_documents = [];
-        Array.prototype.push.apply(p.index_child_documents,p.index_documents);
+        Array.prototype.push.apply(p.index_child_documents, p.index_documents);
         for (var i = 0; i < p.index_childs.length; i++) {
             var ic = p.index_childs[i];
             listPasalDocuments(ic);
-            Array.prototype.push.apply(p.index_child_documents,sortPasal[ic].index_child_documents);
+            Array.prototype.push.apply(p.index_child_documents, sortPasal[ic].index_child_documents);
         }
         //TODO: remove duplicate index_child_documents
-        var td=$('#table-pasal tr:nth-child('+(index+1) +') td:nth-child(5)');
+        var td = $('#table-pasal tr:nth-child(' + (index + 1) + ') td:nth-child(5)');
         td.text(p.index_child_documents.length);
         sortPasal[index] = p;
     }
@@ -1322,7 +1317,7 @@ $role = $this->session->userdata['user']['role'];
                     + '<td><span class="text-primary fa fa-plus" title="Tambah" onclick="initCreateJadwal(' + i + ')"></span></td>'
                     + '</tr>');
         }
-//        $.getJSON('<?php // echo site_url($module);                 ?>/get_jadwal', {'perusahaan': perusahaan, 'standar': standar}, function (data) {
+//        $.getJSON('<?php // echo site_url($module);                        ?>/get_jadwal', {'perusahaan': perusahaan, 'standar': standar}, function (data) {
 //            sortJadwal = [];
 //            var pasal = '';
 //            var doc = '';
@@ -1433,7 +1428,7 @@ $role = $this->session->userdata['user']['role'];
             var d = sortDokumen[p.index_child_documents[i]];
             var link;
             if (d.type_doc == 'FILE') {
-                link = '<a class="btn btn-primary btn-sm fa fa-search" target="_blank" href="<?= base_url('upload/dokumen') ?>/' + d.file + '"></a>';
+                link = '<a class="btn btn-primary btn-sm fa fa-download" target="_blank" href="<?= base_url('upload/dokumen') ?>/' + d.file + '"></a>';
             } else {
                 link = '<a class="btn btn-primary btn-sm fa fa-search" target="_blank" href="' + d.url + '"></a>';
             }
@@ -1553,16 +1548,36 @@ $role = $this->session->userdata['user']['role'];
         m.find('.group-label-dokumen').hide();
     }
     function detailDocument(index) {
+        var d = sortDokumen[index];
         var m = $('#modalDetailDocument');
         m.modal('show');
-        console.log('show');
+        m.find('.modal-body').empty();
+        var link = '';
+        if (d.type_doc == 'FILE') {
+            link = '<a class="btn btn-primary btn-sm fa fa-download" target="_blank" href="<?= base_url('upload/dokumen') ?>/' + d.file + '"></a>';
+        } else {
+            link = '<a class="btn btn-primary btn-sm fa fa-search" target="_blank" href="' + d.url + '"></a>';
+        }
+        var data = {
+            Pasal: d.txt_pasals,
+            Nomor: d.nomor,
+            Judul: d.judul,
+            'Pembuat Dokumen': personil[d.index_creator].fullname,
+            'Jenis Dokumen': d.jenis,
+            'Klasifikasi': d.klasifikasi,
+            'Letak Pasal Pada Dokumen': d.deskripsi,
+            'Versi Dokumen': d.versi,
+            'Dokumen Terkait': '-',
+            'Tipe Dokumen': '<span class="badge badge-secondary">' + d.type_doc + '</span>&nbsp' + link,
+        }
+        for (var key in data) {
+            m.find('.modal-body').append('<div class="row"><div class="col-sm-4"><label>' + key + '</label></div><div class="col-sm-8">' + data[key] + '</div></div>');
+        }
     }
     function detailDokumen(index) {
-        formDokumenReset = true;
         var m = $('#modalDokumen');
         var d = sortDokumen[index];
         m.modal('show');
-        m.find('.modal-title').text('Detail Dokumen');
         m.find('.select-2-pasal').val(null).trigger('change');
         m.find('.select-2-pasal').val(d.dokumen_pasal).trigger('change');
         m.find('.btn-submit').hide();
@@ -1577,6 +1592,7 @@ $role = $this->session->userdata['user']['role'];
         m.find('.input-versi').val(d.versi);
         m.find('.input-path').hide();
         m.find('.fa-trash').hide();
+        m.find('.select-2-document').val(d.dokumen_pasal).trigger('change');
         m.find('.group-radio-dokumen').hide();
         m.find('.group-label-dokumen').show();
         if (d.type_doc == 'FILE') {
@@ -1590,7 +1606,6 @@ $role = $this->session->userdata['user']['role'];
     }
     function editDokumen(index) {
         detailDokumen(index);
-        formDokumenReset = true;
         var m = $('#modalDokumen');
         m.find('.modal-title').text('Edit Dokumen');
         m.find('.btn-submit').show();
