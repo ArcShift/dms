@@ -423,7 +423,7 @@ $role = $this->session->userdata['user']['role'];
                                 </td>
                             </tr>
                             <tr>
-                                <td>Letak pasal<br>pada dokumen</td>
+                                <td>Letak pasal pada dokumen</td>
                                 <td>
                                     <textarea class="form-control textarea-deskripsi" name="desc"></textarea>
                                 </td>
@@ -1228,7 +1228,6 @@ $role = $this->session->userdata['user']['role'];
         });
     }
     function listPasalDocuments(index) {
-        console.log(index);
         var p = sortPasal[index];
         p.index_child_documents = [];
         Array.prototype.push.apply(p.index_child_documents,p.index_documents);
@@ -1240,7 +1239,6 @@ $role = $this->session->userdata['user']['role'];
         //TODO: remove duplicate index_child_documents
         var td=$('#table-pasal tr:nth-child('+(index+1) +') td:nth-child(5)');
         td.text(p.index_child_documents.length);
-        console.log(td);
         sortPasal[index] = p;
     }
     function getTugas() {
@@ -1440,7 +1438,7 @@ $role = $this->session->userdata['user']['role'];
             var pasals = '';
             for (var j = 0; j < d.index_dokumen_pasal.length; j++) {
                 var idx = d.index_dokumen_pasal[j];
-                pasals += '<div>' + sortPasal[idx].fullname + '<div>';
+                pasals += '<div class="badge badge-secondary">' + sortPasal[idx].fullname + '</div>';
             }
             m.find('.files').append('<tr>'
                     + '<td>' + d.judul + '</td>'
