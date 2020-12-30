@@ -66,7 +66,7 @@ $role = $this->session->userdata['user']['role'];
                         </table>
                     </div>
                     <!--PASAL-->
-                    <div class="tab-pane" id="tab-pasal" role="tabpanel">
+                    <div class="tab-pane active" id="tab-pasal" role="tabpanel">
                         <table class="table table-striped">
                             <thead>
                                 <tr>
@@ -938,7 +938,7 @@ $role = $this->session->userdata['user']['role'];
         $(".select-2").select2({width: 'resolve'});
 //        $(".select-2").select2({width: '100%'});
         $('#perusahaan').change();
-        $('#tab-pemenuhan').addClass('active');
+        $('#tab-pasal').addClass('active');
         $('.select-2').select2();
         submitDokumen();
         $('.radio-ulangi-jadwal[value=TIDAK]').click();
