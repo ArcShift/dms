@@ -13,6 +13,10 @@ $role = $this->session->userdata['user']['role'];
     select{
         font-size: .88rem !important;
     }
+    .no-wrap{
+        white-space: nowrap;
+        overflow: hidden;
+    }
 </style>
 <div class="main-card mb-3 card">
     <div class="card-body">
@@ -1588,7 +1592,7 @@ $role = $this->session->userdata['user']['role'];
             'Letak Pasal Pada Dokumen': (d.deskripsi == null ? '-' : d.deskripsi),
             'Versi Dokumen': (d.versi == null ? '-' : d.versi),
             'Dokumen Terkait': doc_terkait,
-            'Dokumen': txt_doc + link,
+            'Dokumen': link + '<div class="no-wrap" style="width:85%">'+ txt_doc+ '</div>',
         }
         for (var key in data) {
             m.find('.modal-body').append('<div class="row"><div class="col-sm-4"><label>' + key + '</label></div><div class="col-sm-8">' + data[key] + '</div></div>');
