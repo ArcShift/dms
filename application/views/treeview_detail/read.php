@@ -206,7 +206,7 @@ $role = $this->session->userdata['user']['role'];
 <!--MODAL UPLOAD DOCUMENT-->
 <div class="modal fade" id="modalDocument" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
-        <form id="formUploadDocument" class="needs-validation" novalidate>
+        <form id="formUploadDocument">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Tambah Dokumen</h5>
