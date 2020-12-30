@@ -463,8 +463,7 @@ $role = $this->session->userdata['user']['role'];
                     </table>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-primary" data-dismiss="modal">Batal</button>
-                    <button type="submit" class="btn btn-primary btn-submit" name="submit">Simpan</button>
+                    <button class="btn btn-primary" data-dismiss="modal">Tutup</button>
                 </div>
             </div>
         </form>
@@ -1173,12 +1172,19 @@ $role = $this->session->userdata['user']['role'];
                     }
                 }
                 d.index_form_terkait = null;
-                d.index_dokuments_terkait = [];
                 for (var j = 0; j < data.length; j++) {
                     if (d.contoh == data[j].id) {
                         d.index_form_terkait = j;
                     }
-
+                }
+                d.index_documents_terkait = [];
+                for (var j = 0; j < d.document_terkait.length; j++) {
+                    for (var k = 0; k < data.length; k++) {
+                        if (d.document_terkait[j] == data[k].id) {
+                            d.index_documents_terkait.push(k);
+                            break;
+                        }
+                    }
                 }
                 btnDelete = '<span class="text-danger fa fa-trash" onclick="initHapusDokumen(' + n + ')"></span>';
                 $('#table-dokumen').append('<tr>'
@@ -1317,7 +1323,7 @@ $role = $this->session->userdata['user']['role'];
                     + '<td><span class="text-primary fa fa-plus" title="Tambah" onclick="initCreateJadwal(' + i + ')"></span></td>'
                     + '</tr>');
         }
-//        $.getJSON('<?php // echo site_url($module);                        ?>/get_jadwal', {'perusahaan': perusahaan, 'standar': standar}, function (data) {
+//        $.getJSON('<?php // echo site_url($module);                                ?>/get_jadwal', {'perusahaan': perusahaan, 'standar': standar}, function (data) {
 //            sortJadwal = [];
 //            var pasal = '';
 //            var doc = '';
@@ -1552,6 +1558,18 @@ $role = $this->session->userdata['user']['role'];
         var m = $('#modalDetailDocument');
         m.modal('show');
         m.find('.modal-body').empty();
+        var doc_terkait = '';
+        console.log(d.index_documents_terkait);
+        for (var i = 0; i < d.index_documents_terkait.length; i++) {
+            var d2 = sortDokumen[d.index_documents_terkait[i]];
+            var d2link = '';
+            if (d2.type_doc == 'FILE') {
+                d2link = '<a class="btn btn-primary btn-sm fa fa-download" target="_blank" href="<?= base_url('upload/dokumen') ?>/' + d2.file + '"></a>';
+            } else {
+                d2link = '<a class="btn btn-primary btn-sm fa fa-search" target="_blank" href="' + d2.url + '"></a>';
+            }
+            doc_terkait += '<div>' + d2link + ' ' + d2.judul + '</div>';
+        }
         var link = '';
         if (d.type_doc == 'FILE') {
             link = '<a class="btn btn-primary btn-sm fa fa-download" target="_blank" href="<?= base_url('upload/dokumen') ?>/' + d.file + '"></a>';
@@ -1567,8 +1585,8 @@ $role = $this->session->userdata['user']['role'];
             'Klasifikasi': d.klasifikasi,
             'Letak Pasal Pada Dokumen': d.deskripsi,
             'Versi Dokumen': d.versi,
-            'Dokumen Terkait': '-',
-            'Tipe Dokumen': '<span class="badge badge-secondary">' + d.type_doc + '</span>&nbsp' + link,
+            'Dokumen Terkait': doc_terkait,
+            'Tipe Dokumen': link + ' <span class="badge badge-secondary">' + d.type_doc + '</span>&nbsp',
         }
         for (var key in data) {
             m.find('.modal-body').append('<div class="row"><div class="col-sm-4"><label>' + key + '</label></div><div class="col-sm-8">' + data[key] + '</div></div>');
