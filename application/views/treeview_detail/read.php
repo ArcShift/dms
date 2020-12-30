@@ -1323,7 +1323,7 @@ $role = $this->session->userdata['user']['role'];
                     + '<td><span class="text-primary fa fa-plus" title="Tambah" onclick="initCreateJadwal(' + i + ')"></span></td>'
                     + '</tr>');
         }
-//        $.getJSON('<?php // echo site_url($module);                                ?>/get_jadwal', {'perusahaan': perusahaan, 'standar': standar}, function (data) {
+//        $.getJSON('<?php // echo site_url($module);                                 ?>/get_jadwal', {'perusahaan': perusahaan, 'standar': standar}, function (data) {
 //            sortJadwal = [];
 //            var pasal = '';
 //            var doc = '';
@@ -1568,13 +1568,16 @@ $role = $this->session->userdata['user']['role'];
             } else {
                 d2link = '<a class="btn btn-primary btn-sm fa fa-search pull-right" target="_blank" href="' + d2.url + '"></a>';
             }
-            doc_terkait += '<div style="margin-bottom: 10px">' + d2.judul + ' ' + d2link  + '</div>';
+            doc_terkait += '<div style="margin-bottom: 10px">' + d2.judul + ' ' + d2link + '</div>';
         }
         var link = '';
+        var txt_doc = '';
         if (d.type_doc == 'FILE') {
             link = '<a class="btn btn-primary btn-sm fa fa-download pull-right" target="_blank" href="<?= base_url('upload/dokumen') ?>/' + d.file + '"></a>';
-        } else {
+            txt_doc = d.file;
+        } else if (d.type_doc == 'URL') {
             link = '<a class="btn btn-primary btn-sm fa fa-search pull-right" target="_blank" href="' + d.url + '"></a>';
+            txt_doc = d.url;
         }
         var data = {
             Pasal: d.txt_pasals,
@@ -1586,8 +1589,9 @@ $role = $this->session->userdata['user']['role'];
             'Letak Pasal Pada Dokumen': d.deskripsi,
             'Versi Dokumen': d.versi,
             'Dokumen Terkait': doc_terkait,
-            'Tipe Dokumen':'<span class="badge badge-secondary">' + d.type_doc + ' </span> '+  link ,
+            'Dokumen': txt_doc + link,
         }
+        console.log(txt_doc);
         for (var key in data) {
             m.find('.modal-body').append('<div class="row"><div class="col-sm-4"><label>' + key + '</label></div><div class="col-sm-8">' + data[key] + '</div></div>');
         }
