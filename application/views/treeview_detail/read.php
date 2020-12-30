@@ -1616,7 +1616,7 @@ $role = $this->session->userdata['user']['role'];
         m.find('.input-versi').val(d.versi);
         m.find('.input-path').hide();
         m.find('.fa-trash').hide();
-        m.find('.select-2-document').val(d.dokumen_pasal).trigger('change');
+        m.find('.select-2-document').val(d.document_terkait).trigger('change');
         m.find('.group-radio-dokumen').hide();
         m.find('.group-label-dokumen').show();
         if (d.type_doc == 'FILE') {
