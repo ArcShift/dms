@@ -45,7 +45,7 @@ $role = $this->session->userdata['user']['role'];
                     <li class="nav-item"><a data-toggle="tab" href="#tab-distribusi" class="nav-link">Distribusi</a></li>
                     <li class="nav-item"><a data-toggle="tab" href="#tab-tugas" class="nav-link">Tugas</a></li>
                     <!--<li class="nav-item"><a data-toggle="tab" href="#tab-jadwal" class="nav-link">Jadwal</a></li>-->
-<!--                    <li class="nav-item"><a data-toggle="tab" href="#tab-implementasi" class="nav-link">Implementasi</a></li>-->
+                    <!--                    <li class="nav-item"><a data-toggle="tab" href="#tab-implementasi" class="nav-link">Implementasi</a></li>-->
                     <!--<li class="nav-item"><a data-toggle="tab" href="#tab-base" class="nav-link">Base</a></li>-->
                 </ul>
                 <div class="tab-content">
@@ -1327,7 +1327,7 @@ $role = $this->session->userdata['user']['role'];
                     + '<td><span class="text-primary fa fa-plus" title="Tambah" onclick="initCreateJadwal(' + i + ')"></span></td>'
                     + '</tr>');
         }
-//        $.getJSON('<?php // echo site_url($module);                                    ?>/get_jadwal', {'perusahaan': perusahaan, 'standar': standar}, function (data) {
+//        $.getJSON('<?php // echo site_url($module);                                      ?>/get_jadwal', {'perusahaan': perusahaan, 'standar': standar}, function (data) {
 //            sortJadwal = [];
 //            var pasal = '';
 //            var doc = '';
@@ -1571,7 +1571,7 @@ $role = $this->session->userdata['user']['role'];
             } else {
                 d2link = '<a class="btn btn-primary btn-sm fa fa-search pull-right" target="_blank" href="' + d2.url + '"></a>';
             }
-            doc_terkait += d2link +'<div class="no-wrap" style="width:85%; margin-bottom: 10px">' + d2.judul +  '</div>';
+            doc_terkait += d2link + '<div class="no-wrap" style="width:85%; margin-bottom: 10px">' + d2.judul + '</div>';
         }
         var link = '';
         var txt_doc = '';
@@ -1592,7 +1592,7 @@ $role = $this->session->userdata['user']['role'];
             'Letak Pasal Pada Dokumen': (d.deskripsi == null ? '-' : d.deskripsi),
             'Versi Dokumen': (d.versi == null ? '-' : d.versi),
             'Dokumen Terkait': doc_terkait,
-            'Dokumen': link + '<div class="no-wrap" style="width:85%">'+ txt_doc+ '</div>',
+            'Dokumen': link + '<div class="no-wrap" style="width:85%">' + txt_doc + '</div>',
         }
         for (var key in data) {
             m.find('.modal-body').append('<div class="row"><div class="col-sm-4"><label>' + key + '</label></div><div class="col-sm-8">' + data[key] + '</div></div>');
@@ -1622,7 +1622,7 @@ $role = $this->session->userdata['user']['role'];
         if (d.type_doc == 'FILE') {
             m.find('.label-path').val(d.file);
             m.find('.input-group-append').val('<a class="btn btn-outline-primary btn-sm pull-right fa fa-download" onclick="downloadDocument()"></a>');
-        } else if(d.type_doc == 'URL'){
+        } else if (d.type_doc == 'URL') {
             m.find('.label-path').val(d.url);
             m.find('.input-group-append').val('<a class="btn btn-outline-primary btn-sm pull-right fa fa-search" onclick="previewDocument()"></i>');
         }
@@ -1687,11 +1687,11 @@ $role = $this->session->userdata['user']['role'];
         m.find('.group-detail').show();
         m.find('.group-edit').hide();
         m.find('.label-user-disrtibusi').empty();
-        var user = sortDokumen[sortJadwal[index].index_dokumen].user_distribusi;
+//        var user = sortDokumen[sortJadwal[index].index_dokumen].user_distribusi;
         m.find('.label-user-distribusi').empty();
-        for (var i = 0; i < user.length; i++) {
-            m.find('.label-user-distribusi').append('<div>' + user[i] + '</div>');
-        }
+//        for (var i = 0; i < user.length; i++) {
+//            m.find('.label-user-distribusi').append('<div>' + user[i] + '</div>');
+//        }
     }
     function editDistribusi(index) {
         var m = $('#modalDistribusi');
@@ -1701,15 +1701,16 @@ $role = $this->session->userdata['user']['role'];
         m.find('.label-judul').text(d.judul);
         m.find('.label-jenis').text('Level ' + d.jenis);
         m.find('.label-klasifikasi').text(d.klasifikasi);
+        var doc = '';
+        for (var i = 0; i < d.index_documents_terkait.length; i++) {
+            var d2 = d.index_documents_terkait[i];
+            doc += '<div>' + sortDokumen[d2].judul + '</div>';
+        }
+        m.find('.label-dokumen-terkait').html(doc);
         m.find('.label-pembuat-dokumen').text(d.creator_name);
         m.find('.input-dokumen-id').val(d.id);
         m.find('.group-detail').hide();
         m.find('.group-edit').show();
-        if (d.contoh != null) {
-            m.find('.label-dokumen-terkait').text($('#modalDokumen').find('select[name=dokumen_terkait]').find('option[value=' + d.contoh + ']').text());
-        } else {
-            m.find('.label-dokumen-terkait').text('-');
-        }
     }
     $('#distribusi-unit-kerja').change(function () {
         var slct = $('#modalDistribusi').find('.select-personil');
