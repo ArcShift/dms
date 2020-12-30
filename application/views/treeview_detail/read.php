@@ -1622,7 +1622,7 @@ $role = $this->session->userdata['user']['role'];
         if (d.type_doc == 'FILE') {
             m.find('.label-path').val(d.file);
             m.find('.input-group-append').val('<a class="btn btn-outline-primary btn-sm pull-right fa fa-download" onclick="downloadDocument()"></a>');
-        } else {
+        } else if(d.type_doc == 'URL'){
             m.find('.label-path').val(d.url);
             m.find('.input-group-append').val('<a class="btn btn-outline-primary btn-sm pull-right fa fa-search" onclick="previewDocument()"></i>');
         }
