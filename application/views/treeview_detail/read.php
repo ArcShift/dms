@@ -1564,17 +1564,17 @@ $role = $this->session->userdata['user']['role'];
             var d2 = sortDokumen[d.index_documents_terkait[i]];
             var d2link = '';
             if (d2.type_doc == 'FILE') {
-                d2link = '<a class="btn btn-primary btn-sm fa fa-download" target="_blank" href="<?= base_url('upload/dokumen') ?>/' + d2.file + '"></a>';
+                d2link = '<a class="btn btn-primary btn-sm fa fa-download pull-right" target="_blank" href="<?= base_url('upload/dokumen') ?>/' + d2.file + '"></a>';
             } else {
-                d2link = '<a class="btn btn-primary btn-sm fa fa-search" target="_blank" href="' + d2.url + '"></a>';
+                d2link = '<a class="btn btn-primary btn-sm fa fa-search pull-right" target="_blank" href="' + d2.url + '"></a>';
             }
-            doc_terkait += '<div>' + d2link + ' ' + d2.judul + '</div>';
+            doc_terkait += '<div style="margin-bottom: 10px">' + d2.judul + ' ' + d2link  + '</div>';
         }
         var link = '';
         if (d.type_doc == 'FILE') {
-            link = '<a class="btn btn-primary btn-sm fa fa-download" target="_blank" href="<?= base_url('upload/dokumen') ?>/' + d.file + '"></a>';
+            link = '<a class="btn btn-primary btn-sm fa fa-download pull-right" target="_blank" href="<?= base_url('upload/dokumen') ?>/' + d.file + '"></a>';
         } else {
-            link = '<a class="btn btn-primary btn-sm fa fa-search" target="_blank" href="' + d.url + '"></a>';
+            link = '<a class="btn btn-primary btn-sm fa fa-search pull-right" target="_blank" href="' + d.url + '"></a>';
         }
         var data = {
             Pasal: d.txt_pasals,
@@ -1586,7 +1586,7 @@ $role = $this->session->userdata['user']['role'];
             'Letak Pasal Pada Dokumen': d.deskripsi,
             'Versi Dokumen': d.versi,
             'Dokumen Terkait': doc_terkait,
-            'Tipe Dokumen': link + ' <span class="badge badge-secondary">' + d.type_doc + '</span>&nbsp',
+            'Tipe Dokumen':'<span class="badge badge-secondary">' + d.type_doc + ' </span> '+  link ,
         }
         for (var key in data) {
             m.find('.modal-body').append('<div class="row"><div class="col-sm-4"><label>' + key + '</label></div><div class="col-sm-8">' + data[key] + '</div></div>');
