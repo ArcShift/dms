@@ -1323,7 +1323,7 @@ $role = $this->session->userdata['user']['role'];
                     + '<td><span class="text-primary fa fa-plus" title="Tambah" onclick="initCreateJadwal(' + i + ')"></span></td>'
                     + '</tr>');
         }
-//        $.getJSON('<?php // echo site_url($module);                                 ?>/get_jadwal', {'perusahaan': perusahaan, 'standar': standar}, function (data) {
+//        $.getJSON('<?php // echo site_url($module);                                    ?>/get_jadwal', {'perusahaan': perusahaan, 'standar': standar}, function (data) {
 //            sortJadwal = [];
 //            var pasal = '';
 //            var doc = '';
@@ -1559,7 +1559,6 @@ $role = $this->session->userdata['user']['role'];
         m.modal('show');
         m.find('.modal-body').empty();
         var doc_terkait = '';
-        console.log(d.index_documents_terkait);
         for (var i = 0; i < d.index_documents_terkait.length; i++) {
             var d2 = sortDokumen[d.index_documents_terkait[i]];
             var d2link = '';
@@ -1583,15 +1582,14 @@ $role = $this->session->userdata['user']['role'];
             Pasal: d.txt_pasals,
             Nomor: d.nomor,
             Judul: d.judul,
-            'Pembuat Dokumen': personil[d.index_creator].fullname,
-            'Jenis Dokumen': d.jenis,
-            'Klasifikasi': d.klasifikasi,
-            'Letak Pasal Pada Dokumen': d.deskripsi,
-            'Versi Dokumen': d.versi,
+            'Pembuat Dokumen': (d.index_creator == null ? '-' : personil[d.index_creator].fullname),
+            'Jenis Dokumen': (d.jenis == null ? '-' : d.jenis),
+            'Klasifikasi': (d.klasifikasi == null ? '-' : d.klasifikasi),
+            'Letak Pasal Pada Dokumen': (d.deskripsi == null ? '-' : d.deskripsi),
+            'Versi Dokumen': (d.versi == null ? '-' : d.versi),
             'Dokumen Terkait': doc_terkait,
             'Dokumen': txt_doc + link,
         }
-        console.log(txt_doc);
         for (var key in data) {
             m.find('.modal-body').append('<div class="row"><div class="col-sm-4"><label>' + key + '</label></div><div class="col-sm-8">' + data[key] + '</div></div>');
         }
