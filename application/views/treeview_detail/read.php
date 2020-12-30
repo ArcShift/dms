@@ -1571,7 +1571,7 @@ $role = $this->session->userdata['user']['role'];
             } else {
                 d2link = '<a class="btn btn-primary btn-sm fa fa-search pull-right" target="_blank" href="' + d2.url + '"></a>';
             }
-            doc_terkait += '<div style="margin-bottom: 10px">' + d2.judul + ' ' + d2link + '</div>';
+            doc_terkait += d2link +'<div class="no-wrap" style="width:85%; margin-bottom: 10px">' + d2.judul +  '</div>';
         }
         var link = '';
         var txt_doc = '';
