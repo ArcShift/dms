@@ -39,7 +39,7 @@ $role = $this->session->userdata['user']['role'];
             <div id="container" class="card-body">
                 <!--TAB-->
                 <ul class="nav nav-tabs">
-                    <!--<li class="nav-item"><a data-toggle="tab" href="#tab-pemenuhan" class="nav-link">Pemenuhan</a></li>-->
+                    <li class="nav-item"><a data-toggle="tab" href="#tab-pemenuhan" class="nav-link">Pemenuhan</a></li>
                     <li class="nav-item"><a data-toggle="tab" href="#tab-pasal" class="nav-link active">Pasal</a></li>
                     <li class="nav-item"><a data-toggle="tab" href="#tab-dokumen" class="nav-link">Dokumen</a></li>
                     <li class="nav-item"><a data-toggle="tab" href="#tab-distribusi" class="nav-link">Distribusi</a></li>
@@ -59,14 +59,13 @@ $role = $this->session->userdata['user']['role'];
                                     <th class="col-sm-2 text-center">Pemenuhan<br/>Dokumen</th>
                                     <th class="col-sm-2 text-center">Jumlah<br/>Jadwal</th>
                                     <th class="col-sm-2 text-center">Pemenuhan<br/>Implementasi</th>
-                                    <!--<th>Implementasi</th>-->
                                 </tr>
                             </thead>
                             <tbody id="table-pemenuhan"></tbody>
                         </table>
                     </div>
                     <!--PASAL-->
-                    <div class="tab-pane active" id="tab-pasal" role="tabpanel">
+                    <div class="tab-pane" id="tab-pasal" role="tabpanel">
                         <table class="table table-striped">
                             <thead>
                                 <tr>
@@ -938,7 +937,7 @@ $role = $this->session->userdata['user']['role'];
         $(".select-2").select2({width: 'resolve'});
 //        $(".select-2").select2({width: '100%'});
         $('#perusahaan').change();
-        $('#tab-pasal').addClass('active');
+        $('#tab-pemenuhan').addClass('active');
         $('.select-2').select2();
         submitDokumen();
         $('.radio-ulangi-jadwal[value=TIDAK]').click();
@@ -1079,7 +1078,7 @@ $role = $this->session->userdata['user']['role'];
                 }
                 $('#table-pemenuhan').append('<tr ' + (d.parent == null ? 'class="table-success"' : '') + '>'
                         + '<td>' + d.fullname + '</td>'
-                        + '<td class="text-center">' + (d.doc == '0' ? '-' : d.doc) + '</td>'
+                        + '<td class="text-center"></td>'
                         + '<td class="text-center"><span class="badge badge-' + pCol + '">' + d.pemenuhan_doc + '%</span></td>'
                         + '<td class="text-center">' + d.imp + '</td>'
                         + '<td class="text-center">' + '<span class="badge badge-' + percentColor(d.pemenuhan_imp) + '">' + (+d.pemenuhan_imp).toFixed() + '%</span>' + '</td>'
@@ -1141,11 +1140,13 @@ $role = $this->session->userdata['user']['role'];
                             sortPasal[k].index_documents.push(i);
                             d.txt_pasals += '<div>' + sortPasal[k].fullname + '<div>';
                         }
+
                     }
                 }
                 for (var j = 0; j < sortPasal.length; j++) {//TODO: remove later
                     sortPasal[j].dokumens = [];
-                    if (d.id_pasal == sortPasal[j].id) {
+                    var p = sortPasal[j];
+                    if (d.id_pasal = p.id) {
                         d.index_pasal = j;
                         sortPasal[j].dokumens.push(n);
                     }
@@ -1227,12 +1228,40 @@ $role = $this->session->userdata['user']['role'];
                 $('#table-distribusi').html('<tr><td colspan="6" class="text-center text-danger">Upload dan pilih jenis dokumen level 1-3 untuk melakukan distribusi dokumen dan penambahan tugas</td></tr>');
             }
             for (var i = 0; i < sortPasal.length; i++) {
-                if (sortPasal[i].parent == null) {
+                var p = sortPasal[i];
+                if (p.parent == null) {
                     listPasalDocuments(i);
+                }
+                //PEMENUHAN DOKUMEN
+                var td = $('#table-pemenuhan tr:nth-child(' + (i + 1) + ') td:nth-child(2)');
+                td.text(p.index_documents.length);
+                if (p.parent == null) {
+                    pemenuhanDocument(i);
                 }
             }
             getTugas();
         });
+    }
+    function pemenuhanDocument(index) {
+        var p = sortPasal[index];
+        var sumPemenuhan = 0;
+        if (p.index_childs.length != 0) {
+            for (var i = 0; i < p.index_childs.length; i++) {
+                var child = p.index_childs[i];
+                pemenuhanDocument(child);
+                sumPemenuhan += sortPasal[child].pemenuhanDocument;
+            }
+            sortPasal[index].pemenuhanDocument = sumPemenuhan / p.index_childs.length;
+
+        } else {
+            if (p.index_documents.length == 0) {
+                sortPasal[index].pemenuhanDocument = 0;
+            } else {
+                sortPasal[index].pemenuhanDocument = 100;
+            }
+        }
+        var td = $('#table-pemenuhan tr:nth-child(' + (index + 1) + ') td:nth-child(3)');
+        td.text(sortPasal[index].pemenuhanDocument);
     }
     function listPasalDocuments(index) {
         var p = sortPasal[index];
@@ -1327,7 +1356,7 @@ $role = $this->session->userdata['user']['role'];
                     + '<td><span class="text-primary fa fa-plus" title="Tambah" onclick="initCreateJadwal(' + i + ')"></span></td>'
                     + '</tr>');
         }
-//        $.getJSON('<?php // echo site_url($module);                                      ?>/get_jadwal', {'perusahaan': perusahaan, 'standar': standar}, function (data) {
+//        $.getJSON('<?php // echo site_url($module);                 ?>/get_jadwal', {'perusahaan': perusahaan, 'standar': standar}, function (data) {
 //            sortJadwal = [];
 //            var pasal = '';
 //            var doc = '';
@@ -1425,6 +1454,7 @@ $role = $this->session->userdata['user']['role'];
         }
         sortPasal[index].pemenuhan_doc = Math.round(total / listPemenuhan.length);
         sortPasal[index].pemenuhan_imp = Math.round(totalImp / listImp.length);
+
     }
     function detailPasal(index) {
         var m = $('#modalDetailPasal');

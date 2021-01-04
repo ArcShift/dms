@@ -270,8 +270,13 @@ class M_treeview_detail extends CI_Model {
         $this->db->set('sifat', $this->input->post('sifat'));
         $this->db->set('form_terkait', $this->input->post('form_terkait'));
         if ($this->input->post('delete-id')) {//DELETE
-            $this->db->where('id', $this->input->post('delete-id'));
-            return $this->db->delete('tugas');
+            //DELETE pic PELAKSANA 
+            $this->db->where('id_tugas', $this->input->post('delete-id'));
+            if ($this->db->delete('penerima_tugas')) {
+                $this->db->where('id', $this->input->post('delete-id'));
+                return $this->db->delete('tugas');
+            }
+            return false;
         } else if ($this->input->post('id')) {//UPDATE
             $this->db->where('id', $this->input->post('id'));
             if ($this->db->update('tugas')) {
