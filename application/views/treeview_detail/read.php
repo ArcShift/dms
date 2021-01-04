@@ -1065,21 +1065,10 @@ $role = $this->session->userdata['user']['role'];
             $('.select-pasal-has-dokumen').append('<option value="">-- pilih pasal --</option>');
             for (var i = 0; i < sortPasal.length; i++) {
                 var d = sortPasal[i];
-                var pCol;
-                switch (d.pemenuhan_doc) {
-                    case 100:
-                        pCol = 'success';
-                        break;
-                    case 0:
-                        pCol = 'danger';
-                        break;
-                    default :
-                        pCol = 'warning';
-                }
                 $('#table-pemenuhan').append('<tr ' + (d.parent == null ? 'class="table-success"' : '') + '>'
                         + '<td>' + d.fullname + '</td>'
                         + '<td class="text-center"></td>'
-                        + '<td class="text-center"><span class="badge badge-' + pCol + '">' + d.pemenuhan_doc + '%</span></td>'
+                        + '<td class="text-center"></td>'
                         + '<td class="text-center">' + d.imp + '</td>'
                         + '<td class="text-center">' + '<span class="badge badge-' + percentColor(d.pemenuhan_imp) + '">' + (+d.pemenuhan_imp).toFixed() + '%</span>' + '</td>'
 //                        + '<td class="text-center">' + d.upload + ' - ' + d.unupload + '</td>'//data upload & unupload
@@ -1104,20 +1093,6 @@ $role = $this->session->userdata['user']['role'];
             }
             getDokumen();
         });
-    }
-    function percentColor(num) {
-        var col = '';
-        switch (num) {
-            case 100:
-                col = 'success';
-                break;
-            case 0:
-                col = 'danger';
-                break;
-            default :
-                col = 'warning';
-        }
-        return col;
     }
     function getDokumen() {
         $.getJSON('<?php echo site_url($module); ?>/get_dokumen', {'perusahaan': perusahaan, 'standar': standar}, function (data) {
@@ -1245,23 +1220,39 @@ $role = $this->session->userdata['user']['role'];
     function pemenuhanDocument(index) {
         var p = sortPasal[index];
         var sumPemenuhan = 0;
+        var percent = 0;
         if (p.index_childs.length != 0) {
             for (var i = 0; i < p.index_childs.length; i++) {
                 var child = p.index_childs[i];
                 pemenuhanDocument(child);
                 sumPemenuhan += sortPasal[child].pemenuhanDocument;
             }
-            sortPasal[index].pemenuhanDocument = sumPemenuhan / p.index_childs.length;
+            percent = sumPemenuhan / p.index_childs.length;
 
         } else {
             if (p.index_documents.length == 0) {
-                sortPasal[index].pemenuhanDocument = 0;
+                percent = 0;
             } else {
-                sortPasal[index].pemenuhanDocument = 100;
+                percent = 100;
             }
         }
         var td = $('#table-pemenuhan tr:nth-child(' + (index + 1) + ') td:nth-child(3)');
-        td.text(sortPasal[index].pemenuhanDocument);
+        td.html('<span class="badge badge-' + percentColor(percent) + '">' + percent + '%</span>');
+        sortPasal[index].pemenuhanDocument = percent;
+    }
+    function percentColor(num) {
+        var col = '';
+        switch (num) {
+            case 100:
+                col = 'success';
+                break;
+            case 0:
+                col = 'danger';
+                break;
+            default :
+                col = 'warning';
+        }
+        return col;
     }
     function listPasalDocuments(index) {
         var p = sortPasal[index];
@@ -1356,7 +1347,7 @@ $role = $this->session->userdata['user']['role'];
                     + '<td><span class="text-primary fa fa-plus" title="Tambah" onclick="initCreateJadwal(' + i + ')"></span></td>'
                     + '</tr>');
         }
-//        $.getJSON('<?php // echo site_url($module);                 ?>/get_jadwal', {'perusahaan': perusahaan, 'standar': standar}, function (data) {
+//        $.getJSON('<?php // echo site_url($module);                  ?>/get_jadwal', {'perusahaan': perusahaan, 'standar': standar}, function (data) {
 //            sortJadwal = [];
 //            var pasal = '';
 //            var doc = '';
