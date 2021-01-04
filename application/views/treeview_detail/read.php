@@ -39,8 +39,8 @@ $role = $this->session->userdata['user']['role'];
             <div id="container" class="card-body">
                 <!--TAB-->
                 <ul class="nav nav-tabs">
-                    <li class="nav-item"><a data-toggle="tab" href="#tab-pemenuhan" class="nav-link">Pemenuhan</a></li>
-                    <li class="nav-item"><a data-toggle="tab" href="#tab-pasal" class="nav-link active">Pasal</a></li>
+                    <li class="nav-item"><a data-toggle="tab" href="#tab-pemenuhan" class="nav-link active">Pemenuhan</a></li>
+                    <li class="nav-item"><a data-toggle="tab" href="#tab-pasal" class="nav-link">Pasal</a></li>
                     <li class="nav-item"><a data-toggle="tab" href="#tab-dokumen" class="nav-link">Dokumen</a></li>
                     <li class="nav-item"><a data-toggle="tab" href="#tab-distribusi" class="nav-link">Distribusi</a></li>
                     <li class="nav-item"><a data-toggle="tab" href="#tab-tugas" class="nav-link">Tugas</a></li>
@@ -54,11 +54,12 @@ $role = $this->session->userdata['user']['role'];
                         <table class="table table-striped">
                             <thead>
                                 <tr>
-                                    <th>Pasal</th>
+                                    <th class="col-sm-4">Pasal</th>
+                                    <th class="col-sm-4">Judul</th>
                                     <th class="col-sm-2 text-center">Jumlah<br/>Dokumen</th>
                                     <th class="col-sm-2 text-center">Pemenuhan<br/>Dokumen</th>
-                                    <th class="col-sm-2 text-center">Jumlah<br/>Jadwal</th>
-                                    <th class="col-sm-2 text-center">Pemenuhan<br/>Implementasi</th>
+                                    <!--<th class="col-sm-2 text-center">Jumlah<br/>Jadwal</th>-->
+                                    <!--<th class="col-sm-2 text-center">Pemenuhan<br/>Implementasi</th>-->
                                 </tr>
                             </thead>
                             <tbody id="table-pemenuhan"></tbody>
@@ -1067,10 +1068,11 @@ $role = $this->session->userdata['user']['role'];
                 var d = sortPasal[i];
                 $('#table-pemenuhan').append('<tr ' + (d.parent == null ? 'class="table-success"' : '') + '>'
                         + '<td>' + d.fullname + '</td>'
+                        + '<td>' + (d.sort_desc==null?'':d.sort_desc) + '</td>'
                         + '<td class="text-center"></td>'
                         + '<td class="text-center"></td>'
-                        + '<td class="text-center">' + d.imp + '</td>'
-                        + '<td class="text-center">' + '<span class="badge badge-' + percentColor(d.pemenuhan_imp) + '">' + (+d.pemenuhan_imp).toFixed() + '%</span>' + '</td>'
+//                        + '<td class="text-center">' + d.imp + '</td>'
+//                        + '<td class="text-center">' + '<span class="badge badge-' + percentColor(d.pemenuhan_imp) + '">' + (+d.pemenuhan_imp).toFixed() + '%</span>' + '</td>'
 //                        + '<td class="text-center">' + d.upload + ' - ' + d.unupload + '</td>'//data upload & unupload
                         + '</tr>');
                 $('#table-pasal').append('<tr ' + (d.parent == null ? 'class="table-success"' : '') + '>'
@@ -1208,7 +1210,7 @@ $role = $this->session->userdata['user']['role'];
                     listPasalDocuments(i);
                 }
                 //PEMENUHAN DOKUMEN
-                var td = $('#table-pemenuhan tr:nth-child(' + (i + 1) + ') td:nth-child(2)');
+                var td = $('#table-pemenuhan tr:nth-child(' + (i + 1) + ') td:nth-child(3)');
                 td.text(p.index_documents.length);
                 if (p.parent == null) {
                     pemenuhanDocument(i);
@@ -1236,7 +1238,7 @@ $role = $this->session->userdata['user']['role'];
                 percent = 100;
             }
         }
-        var td = $('#table-pemenuhan tr:nth-child(' + (index + 1) + ') td:nth-child(3)');
+        var td = $('#table-pemenuhan tr:nth-child(' + (index + 1) + ') td:nth-child(4)');
         td.html('<span class="badge badge-' + percentColor(percent) + '">' + percent + '%</span>');
         sortPasal[index].pemenuhanDocument = percent;
     }
