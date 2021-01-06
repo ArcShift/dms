@@ -402,8 +402,9 @@ class M_treeview_detail extends CI_Model {
     }
 
     function schedule() {
-        if ($this->input->post('idDelete')) {
-            
+        if ($this->input->post('id-delete')) {
+            $this->db->where('id',$this->input->post('id-delete'));
+            return $this->db->delete('jadwal');
         } else if ($this->input->post('id')) {
             $this->db->set('tanggal', date("Y-m-d", strtotime($this->input->post('tanggal'))));
             $this->db->set('periode', $this->input->post('periode'));

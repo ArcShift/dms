@@ -720,88 +720,6 @@ $role = $this->session->userdata['user']['role'];
         </form>
     </div>
 </div>
-<!--MODAL DETAIL JADWAL-->
-<div class="modal fade" id="modalDetailJadwal" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Detail Jadwal</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                DETAIL
-            </div>
-            <div class="modal-footer">
-                <button type="submit" class="btn btn-primary btn-batal" data-dismiss="modal">Tutup</button>
-                <button type="submit" class="btn btn-danger btn-hapus" onclick="hapusJadwal()">Hapus</button>
-            </div>
-        </div>
-    </div>
-</div>
-<!--MODAL EDIT JADWAL-->
-<div class="modal fade" id="modalEditJadwal" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-        <form id="formEditJadwal">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Edit Jadwal</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <input class="input-id d-none" name="id"/>
-                    <table class="table">
-                        <tbody>
-                            <tr>
-                                <td>Pasal</td>
-                                <td>
-                                    <input class="form-control input-pasal" disabled="">
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Judul Dokumen</td>
-                                <td>
-                                    <input class="form-control input-dokumen" disabled="">
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Tugas</td>
-                                <td>
-                                    <input name="desc" class="form-control input-keterangan">
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Form</td>
-                                <td>
-                                    <select name="form" class="form-control select-dokumen" required=""></select>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Tanggal</td>
-                                <td>
-                                    <input class="form-control input-jadwal input-tanggal-jadwal" name="tanggal" required="">
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Distribusi</td>
-                                <td>
-                                    <select name="dist[]" class="form-control select-personil-distribusi select-2 multiselect-dropdown" multiple="" style="width: 330px !important;"></select>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-                    <button type="submit" class="btn btn-primary">Simpan</button>
-                </div>
-            </div>
-        </form>
-    </div>
-</div>
 <!--MODAL UPLOAD IMPLEMENTASI-->
 <div class="modal fade" id="modalUploadImplementasi">
     <div class="modal-dialog" role="document">
@@ -910,26 +828,6 @@ $role = $this->session->userdata['user']['role'];
         </form>
     </div>
 </div>
-<!--MODAL DELETE JADWAL-->
-<div class="modal fade" id="modalDeleteJadwal" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Hapus Jadwal</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body modal-message">
-                <input class="form-control" disabled=""/>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-primary" data-dismiss="modal">Batal</button>
-                <button class="btn btn-danger" onclick="deleteJadwal()">Hapus</button>
-            </div>
-        </div>
-    </div>
-</div>
 <!--MODAL JADWAL-->
 <div class="modal fade" id="modalJadwal" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -941,6 +839,7 @@ $role = $this->session->userdata['user']['role'];
                         <span aria-hidden="true">&times;</span>
                     </button>
                     <input class="form-control input-id-jadwal" name="id" hidden="">
+                    <input class="form-control input-delete-id" name="id-delete" hidden="">
                 </div>
                 <div class="modal-body modal-message">
                     <div class="form-group">
@@ -949,7 +848,7 @@ $role = $this->session->userdata['user']['role'];
                     </div>
                     <div class="form-group">
                         <label>Tanggal</label>
-                        <input class="form-control input-field input-tanggal" name="tanggal">
+                        <input class="form-control input-field input-jadwal" name="tanggal">
                     </div>
                     <div class="form-group">
                         <label>Periode</label>
@@ -1416,7 +1315,7 @@ $role = $this->session->userdata['user']['role'];
         m.modal('show');
         m.find('.modal-title').text('Detail Jadwal');
         m.find('.input-tugas').val(sortTugas[j.indexTugas].nama);
-        m.find('.input-tanggal').val(j.tanggal);
+        m.find('.input-jadwal').val(j.tanggal);
         m.find('.select-periode').val(j.periode);
         m.find('.input-field').prop('disabled', true);
         m.find('.btn-submit').hide();
@@ -1430,14 +1329,10 @@ $role = $this->session->userdata['user']['role'];
         m.find('.btn-save').show();
     }
     function initDeleteJadwal(index) {
-        var m = $('#modalDeleteJadwal');
-        deleteId = index;
-        m.modal('show');
-
-    }
-    function deleteJadwal() {
-        //insert delete id
-//        post(, 'hapus_jadwal');
+        detailJadwal(index);
+        var m = $('#modalJadwal');
+        m.find('.btn-delete').show();
+        m.find('.input-delete-id').val(sortJadwal[index].id);
     }
     function getImplementasi() {
         $.getJSON('<?php echo site_url($module); ?>/get_implementasi', null, function (data) {
@@ -1977,13 +1872,6 @@ $role = $this->session->userdata['user']['role'];
             $('#tglMulaiJadwal').text('Tanggal');
         }
     });
-//    $('#formEditJadwal').submit(function (e) {
-//        e.preventDefault();
-//        $.post('<?php echo site_url($module); ?>/edit_jadwal', $(this).serialize(), function (data) {
-//            getDokumen();
-//            $('#modalEditJadwal').modal('hide');
-//        });
-//    });
     function initHapusJadwal(index) {
         deleteIndex = index;
         detailJadwal(index);
