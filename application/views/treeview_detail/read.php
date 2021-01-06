@@ -703,9 +703,9 @@ $role = $this->session->userdata['user']['role'];
                                 <td>Periode</td>
                                 <td>
                                     <select name="periode" class="form-control select-periode">
-                                        <option value="mingguan">Mingguan</option>
-                                        <option value="bulanan">Bulanan</option>
-                                        <option value="tahunan">Tahunan</option>
+                                        <option value="MINGGU">Mingguan</option>
+                                        <option value="BULAN">Bulanan</option>
+                                        <option value="TAHUN">Tahunan</option>
                                     </select>
                                 </td>
                             </tr>

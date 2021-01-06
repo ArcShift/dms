@@ -390,25 +390,38 @@ class M_treeview_detail extends CI_Model {
 
     function insertSchedule() {
         if ($this->input->post('ulangi') == 'YA') {
-            
+            $day = array('minggu', 'senin', 'selasa', 'rabu', 'kamis', 'jumat', 'sabtu');
+            $tgl = date_create_from_format('d-m-Y', $this->input->post('tanggal')[0]);
+//            die($tgl->format('w'));
+//            die(print_r($tgl));
+            while ($tgl <= date_create_from_format('d-m-Y', $this->input->post('tanggal_selesai'))) {
+                if (in_array(strtoupper($day[$tgl->format('w')]), $this->input->post('hari'))) {
+                    $this->db->set('id_tugas', $this->input->post('id-tugas'));
+                    $this->db->set('tanggal', $tgl->format('Y-m-d'));
+                    $this->db->set('periode', $this->input->post('periode'));
+                    $this->db->insert('jadwal');
+                }
+                $tgl->add(new DateInterval('P1D'));
+//                $tgl = strtotime('+1 days', $tgl);
+            }
         } else if ($this->input->post('ulangi') == 'TIDAK') {
             foreach ($this->input->post('tanggal') as $tgl) {
                 $this->db->set('id_tugas', $this->input->post('id-tugas'));
                 $this->db->set('tanggal', date("Y-m-d", strtotime($tgl)));
                 $this->db->insert('jadwal');
             }
-            return true;
         }
+        return true;
     }
 
     function schedule() {
         if ($this->input->post('id-delete')) {
-            $this->db->where('id',$this->input->post('id-delete'));
+            $this->db->where('id', $this->input->post('id-delete'));
             return $this->db->delete('jadwal');
         } else if ($this->input->post('id')) {
             $this->db->set('tanggal', date("Y-m-d", strtotime($this->input->post('tanggal'))));
             $this->db->set('periode', $this->input->post('periode'));
-            $this->db->where('id',$this->input->post('id'));
+            $this->db->where('id', $this->input->post('id'));
             return $this->db->update('jadwal');
         }
         die('id not found');
