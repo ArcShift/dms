@@ -115,9 +115,11 @@ class Treeview_detail extends MY_Controller {
             echo 'error';
         }
     }
+
     function get_tugas() {
         echo json_encode($this->model->readsTugas());
     }
+
     function tugas() {
         if ($this->model->tugas()) {
             $result['status'] = 'success';
@@ -140,11 +142,12 @@ class Treeview_detail extends MY_Controller {
 
     function set_jadwal() {
         $this->ajax_request();
-        if ($this->model->insert_jadwal()) {
-            echo 'success';
+        if ($this->model->insertSchedule()) {
+            $result['status'] = 'success';
         } else {
-            echo 'error';
+            $result['status'] = 'error';
         }
+        echo json_encode($result);
     }
 
     function edit_jadwal() {

@@ -388,7 +388,20 @@ class M_treeview_detail extends CI_Model {
         return $result;
     }
 
-    function insert_jadwal() {
+    function insertSchedule() {
+        if ($this->input->post('ulangi') == 'YA') {
+            
+        } else if ($this->input->post('ulangi') == 'TIDAK') {
+            foreach ($this->input->post('tanggal') as $tgl) {
+                $this->db->set('id_tugas', $this->input->post('id-tugas'));
+                $this->db->set('tanggal', date("Y-m-d", strtotime($tgl)));
+                $this->db->insert('jadwal');
+            }
+            return true;
+        }
+    }
+
+    function insert_jadwal() {//TODO: remove later
         $data = [];
         $data['repeat'] = $this->input->post('ulangi');
         $data['id_document'] = $this->input->post('dokumen_id');
