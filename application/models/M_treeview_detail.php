@@ -401,6 +401,18 @@ class M_treeview_detail extends CI_Model {
         }
     }
 
+    function schedule() {
+        if ($this->input->post('idDelete')) {
+            
+        } else if ($this->input->post('id')) {
+            $this->db->set('tanggal', date("Y-m-d", strtotime($this->input->post('tanggal'))));
+            $this->db->set('periode', $this->input->post('periode'));
+            $this->db->where('id',$this->input->post('id'));
+            return $this->db->update('jadwal');
+        }
+        die('id not found');
+    }
+
     function insert_jadwal() {//TODO: remove later
         $data = [];
         $data['repeat'] = $this->input->post('ulangi');
