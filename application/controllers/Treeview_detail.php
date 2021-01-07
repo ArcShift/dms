@@ -60,6 +60,7 @@ class Treeview_detail extends MY_Controller {
             if ($this->input->post('type_dokumen') == 'FILE' & !empty($_FILES['dokumen']['name'])) {
                 $config['upload_path'] = './upload/dokumen';
                 $config['allowed_types'] = '*';
+                $config['max_size'] = '5000';
                 $this->load->library('upload', $config);
                 if (!$this->upload->do_upload('dokumen')) {
                     $result['message'] = $this->upload->display_errors();

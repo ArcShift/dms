@@ -850,7 +850,7 @@ $role = $this->session->userdata['user']['role'];
                         <label>Tanggal</label>
                         <input class="form-control input-field input-jadwal" name="tanggal">
                     </div>
-                    <div class="form-group">
+<!--                    <div class="form-group">
                         <label>Periode</label>
                         <select name="periode" class="form-control input-field select-periode" name="periode">
                             <option value="">~ Pilih Periode ~</option>
@@ -858,7 +858,7 @@ $role = $this->session->userdata['user']['role'];
                             <option value="BULAN">Bulanan</option>
                             <option value="TAHUN">Tahunan</option>
                         </select>
-                    </div>
+                    </div>-->
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-primary" data-dismiss="modal">Batal</button>
@@ -1271,8 +1271,9 @@ $role = $this->session->userdata['user']['role'];
         });
     }
     function getJadwal() {
-        $('#table-jadwal').empty();
         $.getJSON('<?= site_url($module); ?>/get_jadwal', {'perusahaan': perusahaan, 'standar': standar}, function (data) {
+            $('#table-jadwal').empty();
+            $('#table-implementasi').empty();
             sortJadwal = [];
             for (var i = 0; i < sortTugas.length; i++) {
                 var t = sortTugas[i];
@@ -1304,15 +1305,14 @@ $role = $this->session->userdata['user']['role'];
                         jd.indexTugas = i;
                         sortJadwal.push(jd);
                         $('#table-implementasi').append('<tr>'
-                                + '<td>---</td>'
-                                + '<td>---</td>'
-                                + '<td>---</td>'
-                                + '<td>' + (jd.periode == null ? '-' : (jd.periode + 'AN')) + '</td>'
+                                + '<td>' + t.nama + '</td>'
+                                + '<td>' + t.txt_personil + '</td>'
                                 + '<td>' + jd.tanggal + '</td>'
+                                + '<td>---</td>'
+                                + '<td>' + '-' + '</td>'
                                 + '<td>'
                                 + '<span class="text-primary fa fa-info-circle" title="Detail" onclick="detailJadwal(' + n + ')"></span> '
                                 + '<span class="text-primary fa fa-edit" title="Edit" onclick="editJadwal(' + n + ')"></span> '
-                                + '<span class="text-danger fa fa-trash" title="Hapus" onclick="initDeleteJadwal(' + n + ')"></span>'
                                 + '</td>'
                                 + '</tr>');
                     }
@@ -1346,7 +1346,7 @@ $role = $this->session->userdata['user']['role'];
         m.find('.btn-delete').show();
         m.find('.input-delete-id').val(sortJadwal[index].id);
     }
-    function getImplementasi() {
+    function getImplementasi() {//REMOVE LATER
         $.getJSON('<?php echo site_url($module); ?>/get_implementasi', null, function (data) {
             sortImplementasi = [];
             $('#table-implementasi').empty();
