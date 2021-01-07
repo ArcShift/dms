@@ -45,7 +45,7 @@ $role = $this->session->userdata['user']['role'];
                     <li class="nav-item"><a data-toggle="tab" href="#tab-distribusi" class="nav-link">Distribusi</a></li>
                     <li class="nav-item"><a data-toggle="tab" href="#tab-tugas" class="nav-link">Tugas</a></li>
                     <li class="nav-item"><a data-toggle="tab" href="#tab-jadwal" class="nav-link">Jadwal</a></li>
-                    <!--                    <li class="nav-item"><a data-toggle="tab" href="#tab-implementasi" class="nav-link">Implementasi</a></li>-->
+                    <li class="nav-item"><a data-toggle="tab" href="#tab-implementasi" class="nav-link">Implementasi</a></li>
                     <!--<li class="nav-item"><a data-toggle="tab" href="#tab-base" class="nav-link">Base</a></li>-->
                 </ul>
                 <div class="tab-content">
@@ -1303,6 +1303,18 @@ $role = $this->session->userdata['user']['role'];
                         n++;
                         jd.indexTugas = i;
                         sortJadwal.push(jd);
+                        $('#table-implementasi').append('<tr>'
+                                + '<td>---</td>'
+                                + '<td>---</td>'
+                                + '<td>---</td>'
+                                + '<td>' + (jd.periode == null ? '-' : (jd.periode + 'AN')) + '</td>'
+                                + '<td>' + jd.tanggal + '</td>'
+                                + '<td>'
+                                + '<span class="text-primary fa fa-info-circle" title="Detail" onclick="detailJadwal(' + n + ')"></span> '
+                                + '<span class="text-primary fa fa-edit" title="Edit" onclick="editJadwal(' + n + ')"></span> '
+                                + '<span class="text-danger fa fa-trash" title="Hapus" onclick="initDeleteJadwal(' + n + ')"></span>'
+                                + '</td>'
+                                + '</tr>');
                     }
                 }
             }
@@ -1452,39 +1464,7 @@ $role = $this->session->userdata['user']['role'];
     function submitDokumen() {//create dokumen
         $('.formDokumen').on("submit", function (e) {
             e.preventDefault();
-            var status = 'Error';
-            $('.modal').modal('hide');
-            $('#modalNotif .modal-title').text('Uploading...');
-            $('#modalNotif .modal-message').empty();
-            $('#modalNotif').modal('show');
-            $.ajax({
-                url: '<?php echo site_url($module . '/create_dokumen') ?>',
-                type: "post",
-                data: new FormData(this),
-                processData: false,
-                contentType: false,
-                cache: false,
-                async: false,
-                success: function (data) {
-                    data = JSON.parse(data);
-                    if (data.status === 'success') {
-                        status = 'Success';
-                        formDokumenReset = true;
-                        getPasal();
-                        $('#modalNotif .modal-message').html('Data Berhasil Disimpan');
-                    } else if (data.status === 'error') {
-                        $('#modalNotif .modal-message').html(data.message);
-                    } else {
-                        $('#modalNotif .modal-message').html(data);
-                    }
-                },
-                error: function (data) {
-                    $('#modalNotif .modal-message').text('Error 500');
-                },
-                complete: function () {
-                    $('#modalNotif .modal-title').text(status);
-                }
-            });
+            post(this, 'create_dokumen');
         });
     }
     function initAddDocument(index) {
@@ -1499,33 +1479,7 @@ $role = $this->session->userdata['user']['role'];
     }
     $('#formUploadDocument').on("submit", function (e) {
         e.preventDefault();
-        $('.modal').modal('hide');
-        $('#modalNotif .modal-title').text('Uploading...');
-        $('#modalNotif').modal('show');
-        $.ajax({
-            url: '<?php echo site_url($module . '/create_dokumen') ?>',
-            type: "post",
-            data: new FormData(this),
-            processData: false,
-            contentType: false,
-            cache: false,
-            async: false,
-            success: function (data) {
-                data = JSON.parse(data);
-                if (data.status == 'success') {
-                    getPasal();
-                    $('#modalNotif .modal-message').html('Data Berhasil Disimpan');
-                    $('#modalNotif .modal-title').text('Success');
-                } else if (data.status === 'error') {
-                    $('#modalNotif .modal-message').html(data.message);
-                } else {
-                    $('#modalNotif .modal-message').html(data);
-                }
-            },
-            error: function (data) {
-                $('#modalNotif .modal-message').text('Error 500');
-            },
-        });
+        post(this, 'create_dokumen');
     });
     $('.radio-type-dokumen').change(function () {
         var m = $('.modal');

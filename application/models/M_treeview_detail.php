@@ -132,28 +132,33 @@ class M_treeview_detail extends CI_Model {
 
     private function editDocumentTerkait() {
         $document = $this->input->post('id');
-        $input = $this->input->post('documents');
-        $this->db->where('induk', $document);
-        $result = $this->db->get('document_terkait')->result_array();
-        $db = [];
-        foreach ($result as $r) {
-            array_push($db, $r['terkait']);
-        }
-        $remove = array_diff($db, $input);
-        $add = array_diff($input, $db);
-        $data = [];
-        $data['remove'] = $remove;
-        $data['add'] = $add;
-        $data['current'] = array_intersect($db, $input);
-        foreach ($remove as $r) {
+        if (!empty($this->input->post('penerima'))) {
+            $input = $this->input->post('documents');
             $this->db->where('induk', $document);
-            $this->db->where('terkait', $r);
-            $this->db->delete('document_terkait');
-        }
-        foreach ($add as $a) {
-            $this->db->set('induk', $document);
-            $this->db->set('terkait', $a);
-            $this->db->insert('document_terkait');
+            $result = $this->db->get('document_terkait')->result_array();
+            $db = [];
+            foreach ($result as $r) {
+                array_push($db, $r['terkait']);
+            }
+            $remove = array_diff($db, $input);
+            $add = array_diff($input, $db);
+            $data = [];
+            $data['remove'] = $remove;
+            $data['add'] = $add;
+            $data['current'] = array_intersect($db, $input);
+            foreach ($remove as $r) {
+                $this->db->where('induk', $document);
+                $this->db->where('terkait', $r);
+                $this->db->delete('document_terkait');
+            }
+            foreach ($add as $a) {
+                $this->db->set('induk', $document);
+                $this->db->set('terkait', $a);
+                $this->db->insert('document_terkait');
+            }
+        } else {//remove all data
+            $this->db->where('induk', $document);
+            return $this->db->delete('document_terkait');
         }
         return true;
     }
@@ -185,13 +190,6 @@ class M_treeview_detail extends CI_Model {
                 }
             }
         }
-//        for ($i = 0; $i < count($result); $i++) {
-//            $result[$i]['distribusi'] = explode(',', $result[$i]['distribusi']);
-//            $result[$i]['user_distribusi'] = explode(',', $result[$i]['user_distribusi']);
-//            $result[$i]['personil_distribusi_id'] = explode(',', $result[$i]['personil_distribusi_id']);
-//            $result[$i]['dokumen_pasal'] = explode(',', $result[$i]['doc_pasal']);
-//            $result[$i]['document_terkait'] = explode(',', $result[$i]['document_terkait']);
-//        }
         return $result;
     }
 
@@ -392,8 +390,6 @@ class M_treeview_detail extends CI_Model {
         if ($this->input->post('ulangi') == 'YA') {
             $day = array('minggu', 'senin', 'selasa', 'rabu', 'kamis', 'jumat', 'sabtu');
             $tgl = date_create_from_format('d-m-Y', $this->input->post('tanggal')[0]);
-//            die($tgl->format('w'));
-//            die(print_r($tgl));
             while ($tgl <= date_create_from_format('d-m-Y', $this->input->post('tanggal_selesai'))) {
                 if (in_array(strtoupper($day[$tgl->format('w')]), $this->input->post('hari'))) {
                     $this->db->set('id_tugas', $this->input->post('id-tugas'));
