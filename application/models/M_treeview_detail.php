@@ -510,28 +510,23 @@ class M_treeview_detail extends CI_Model {
         return true;
     }
 
-    function deletePersonilImplementasi() {
-        $this->db->where('id', $this->input->post('id'));
-        return $this->db->delete('personil_implementasi');
-    }
-
     function upload_bukti() {
         $this->db->where('id', $this->input->post('id'));
-        $imp = $this->db->get('implementasi')->row_array();
-        $this->db->set('id_jadwal', $this->input->post('id_jadwal'));
+        $j = $this->db->get('jadwal')->row_array();
+        $this->db->set('id', $this->input->post('id_jadwal'));
         $type = $this->input->post('type_dokumen');
-        $this->db->set('type', $type);
+        $this->db->set('doc_type', $type);
         if ($type == 'FILE') {
             $url = $this->upload->data()['file_name'];
             $this->db->set('path', $this->upload->data()['file_name']);
         } else if ($type == 'URL') {
             $this->db->set('path', $this->input->post('url'));
         }
-        if (empty($imp['upload_date'])) {
+        if (empty($j['upload_date'])) {
             $this->db->set('upload_date', date('Y-m-d'));
         }
         $this->db->where('id', $this->input->post('id'));
-        return $this->db->update('implementasi');
+        return $this->db->update('jadwal');
     }
 
 }

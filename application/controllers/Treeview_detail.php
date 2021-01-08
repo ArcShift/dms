@@ -160,33 +160,6 @@ class Treeview_detail extends MY_Controller {
         echo json_encode($result);
     }
 
-//    function edit_jadwal() {
-//        $this->ajax_request();
-//        if ($this->model->update_jadwal()) {
-//            echo 'success';
-//        } else {
-//            echo 'error';
-//        }
-//    }
-
-//    function hapus_jadwal() {
-//        $this->ajax_request();
-//        if ($this->model->deleteJadwal()) {
-//            echo 'success';
-//        } else {
-//            echo 'error';
-//        }
-//    }
-
-    function hapus_personil_jadwal() {
-        $this->ajax_request();
-        if ($this->model->deletePersonilImplementasi()) {
-            echo 'success';
-        } else {
-            echo 'error';
-        }
-    }
-
     function upload_bukti() {
         $this->ajax_request();
         //TODO: form validation

@@ -254,14 +254,14 @@ $role = $this->session->userdata['user']['role'];
         </form>
     </div>
 </div>
-<!--MODAL DOKUMEN-->
+<!--MODAL EDIT DOKUMEN-->
 <div class="modal fade" id="modalDokumen" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <form method="post" class="formDokumen">
             <input class="input-id" name="id" hidden="">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Form Dokumen</h5>
+                    <h5 class="modal-title">Edit Dokumen</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -367,7 +367,7 @@ $role = $this->session->userdata['user']['role'];
 <!--MODAL DETAIL DOCUMENT-->
 <div class="modal fade" id="modalDetailDocument">
     <div class="modal-dialog" role="document">
-        <form method="post" class="formDokumen">
+        <form method="post">
             <input class="input-id" name="id" hidden="">
             <div class="modal-content">
                 <div class="modal-header">
@@ -608,6 +608,56 @@ $role = $this->session->userdata['user']['role'];
         </form>
     </div>
 </div>
+<!--MODAL TUGAS-->
+<div class="modal fade" id="modalTugas">
+    <div class="modal-dialog" role="document">
+        <form id="formTugas">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <input class="form-control input-id" name="id" hidden="">
+                    <input class="form-control input-delete" name="delete-id" hidden="">
+                    <input class="form-control input-document-id" name="id-document" hidden="">
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Dokumen</label>
+                        <input class="form-control input-document-judul" disabled="">
+                    </div>
+                    <div class="form-group">
+                        <label>Tugas</label>
+                        <input class="form-control input-field input-tugas" name="tugas" required="">
+                    </div>
+                    <div class="form-group">
+                        <label>Form Terkait</label>
+                        <select class="form-control input-field input-form-terkait" name="form_terkait" required=""></select>
+                    </div>
+                    <div class="form-group">
+                        <label>Sifat</label>
+                        <select class="form-control input-field input-sifat" name="sifat" required="">
+                            <option value="">-- sifat --</option>
+                            <option value="WAJIB">Wajib</option>
+                            <option value="SITUASIONAL">Situasional</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>PIC Pelaksana</label>
+                        <br>
+                        <select class="form-control input-field select-2 multiselect-dropdown" multiple="" style="width: 450px !important;" name="penerima[]"></select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-primary btn-modif btn-save">Simpan</button>
+                    <button type="submit" class="btn btn-danger btn-modif btn-delete" name="delete">Hapus</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
 <!--MODAL CREATE JADWAL-->
 <div class="modal fade" id="modalCreateJadwal" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
@@ -720,114 +770,6 @@ $role = $this->session->userdata['user']['role'];
         </form>
     </div>
 </div>
-<!--MODAL UPLOAD IMPLEMENTASI-->
-<div class="modal fade" id="modalUploadImplementasi">
-    <div class="modal-dialog" role="document">
-        <form id="formUploadImplementasi">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Upload Bukti</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <input class="input-id d-none" name="id"/>
-                    <input class="input-id-jadwal d-none" name="id_jadwal"/>
-                    <table class="table">
-                        <tbody>
-                            <tr>
-                                <td>Judul Dokumen</td>
-                                <td>
-                                    <input class="form-control input-judul" disabled=""/>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Jadwal</td>
-                                <td>
-                                    <input class="form-control input-jadwal" disabled=""/>
-                                </td>
-                            </tr>
-                            <tr class="group-upload">
-                                <td>Dokumen</td>
-                                <td id="tdUpload">
-                                    <input class="radio-type-dokumen" type="radio" name="type_dokumen" value="FILE" required="">
-                                    <label>File</label>
-                                    <input class="radio-type-dokumen" type="radio" name="type_dokumen" value="URL">
-                                    <label>Url</label>
-                                    <input class="form-control input-path input-file" type="file" name="dokumen" required="">
-                                    <input class="form-control input-path input-url" type="url" name="url" required="">
-                                </td>
-                            </tr>
-                            <tr class="group-detail">
-                                <td>Status</td>
-                                <td class="label-status"></td>
-                            </tr>
-                            <tr class="group-detail">
-                                <td>Dokumen</td>
-                                <td class="label-dokumen"></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-                    <button type="submit" class="btn btn-primary">Simpan</button>
-                </div>
-            </div>
-        </form>
-    </div>
-</div>
-<!--MODAL TUGAS-->
-<div class="modal fade" id="modalTugas">
-    <div class="modal-dialog" role="document">
-        <form id="formTugas">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title"></h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                    <input class="form-control input-id" name="id" hidden="">
-                    <input class="form-control input-delete" name="delete-id" hidden="">
-                    <input class="form-control input-document-id" name="id-document" hidden="">
-                </div>
-                <div class="modal-body">
-                    <div class="form-group">
-                        <label>Dokumen</label>
-                        <input class="form-control input-document-judul" disabled="">
-                    </div>
-                    <div class="form-group">
-                        <label>Tugas</label>
-                        <input class="form-control input-field input-tugas" name="tugas" required="">
-                    </div>
-                    <div class="form-group">
-                        <label>Form Terkait</label>
-                        <select class="form-control input-field input-form-terkait" name="form_terkait" required=""></select>
-                    </div>
-                    <div class="form-group">
-                        <label>Sifat</label>
-                        <select class="form-control input-field input-sifat" name="sifat" required="">
-                            <option value="">-- sifat --</option>
-                            <option value="WAJIB">Wajib</option>
-                            <option value="SITUASIONAL">Situasional</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>PIC Pelaksana</label>
-                        <br>
-                        <select class="form-control input-field select-2 multiselect-dropdown" multiple="" style="width: 450px !important;" name="penerima[]"></select>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-                    <button type="submit" class="btn btn-primary btn-modif btn-save">Simpan</button>
-                    <button type="submit" class="btn btn-danger btn-modif btn-delete" name="delete">Hapus</button>
-                </div>
-            </div>
-        </form>
-    </div>
-</div>
 <!--MODAL JADWAL-->
 <div class="modal fade" id="modalJadwal" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -850,15 +792,15 @@ $role = $this->session->userdata['user']['role'];
                         <label>Tanggal</label>
                         <input class="form-control input-field input-jadwal" name="tanggal">
                     </div>
-<!--                    <div class="form-group">
-                        <label>Periode</label>
-                        <select name="periode" class="form-control input-field select-periode" name="periode">
-                            <option value="">~ Pilih Periode ~</option>
-                            <option value="MINGGU">Mingguan</option>
-                            <option value="BULAN">Bulanan</option>
-                            <option value="TAHUN">Tahunan</option>
-                        </select>
-                    </div>-->
+                    <!--                    <div class="form-group">
+                                            <label>Periode</label>
+                                            <select name="periode" class="form-control input-field select-periode" name="periode">
+                                                <option value="">~ Pilih Periode ~</option>
+                                                <option value="MINGGU">Mingguan</option>
+                                                <option value="BULAN">Bulanan</option>
+                                                <option value="TAHUN">Tahunan</option>
+                                            </select>
+                                        </div>-->
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-primary" data-dismiss="modal">Batal</button>
@@ -869,23 +811,59 @@ $role = $this->session->userdata['user']['role'];
         </div>
     </div>
 </div>
+<!--MODAL UPLOAD IMPLEMENTASI-->
+<div class="modal fade" id="modalUploadImplementasi">
+    <div class="modal-dialog" role="document">
+        <form id="formUploadImplementasi">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Upload Bukti</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <input class="input-id" name="id" hidden=""/>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Tugas</label>
+                        <input class="form-control input-tugas" disabled="">
+                    </div>
+                    <div class="form-group">
+                        <label>Tanggal</label>
+                        <input class="form-control input-field input-jadwal" name="tanggal" disabled="">
+                    </div>
+                    <div class="form-group">
+                        <label>Dokumen</label>
+                        <div id="tdUpload">
+                            <input class="radio-type-dokumen" type="radio" name="type_dokumen" value="FILE" required="">
+                            <label>File</label>
+                            <input class="radio-type-dokumen" type="radio" name="type_dokumen" value="URL">
+                            <label>Url</label>
+                            <input class="form-control input-path input-file" type="file" name="dokumen" required="">
+                            <input class="form-control input-path input-url" type="url" name="url" required="">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-primary">Simpan</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
 <script>
     $(document).ready(function () {
         if (role != 'admin') {
             $('.group-select-perusahaan').hide();
         }
-        $(".select-2").select2({width: 'resolve'});
-//        $(".select-2").select2({width: '100%'});
         $('#perusahaan').change();
         $('#tab-pemenuhan').addClass('active');
         $('.select-2').select2();
-        submitDokumen();
         $('.radio-ulangi-jadwal[value=TIDAK]').click();
         $('.input-path').hide();
     });
     function afterReady() {}
-    var idPerusahaan;
-    var idStandar;
     var anggota;
     var pesonil;
     var sortDokumen;
@@ -1312,7 +1290,7 @@ $role = $this->session->userdata['user']['role'];
                                 + '<td>' + '-' + '</td>'
                                 + '<td>'
                                 + '<span class="text-primary fa fa-info-circle" title="Detail" onclick="detailJadwal(' + n + ')"></span> '
-                                + '<span class="text-primary fa fa-edit" title="Edit" onclick="editJadwal(' + n + ')"></span> '
+                                + '<span class="text-primary fa fa-upload" title="Edit" onclick="initUploadImplementasi(' + n + ')"></span> '
                                 + '</td>'
                                 + '</tr>');
                     }
@@ -1320,31 +1298,6 @@ $role = $this->session->userdata['user']['role'];
             }
 //            getImplementasi();
         });
-    }
-    function detailJadwal(index) {
-        var m = $('#modalJadwal');
-        var j = sortJadwal[index];
-        m.modal('show');
-        m.find('.modal-title').text('Detail Jadwal');
-        m.find('.input-tugas').val(sortTugas[j.indexTugas].nama);
-        m.find('.input-jadwal').val(j.tanggal);
-        m.find('.select-periode').val(j.periode);
-        m.find('.input-field').prop('disabled', true);
-        m.find('.btn-submit').hide();
-    }
-    function editJadwal(index) {
-        detailJadwal(index);
-        var m = $('#modalJadwal');
-        m.find('.modal-title').text('Edit Jadwal');
-        m.find('.input-id-jadwal').val(sortJadwal[index].id);
-        m.find('.input-field').prop('disabled', false);
-        m.find('.btn-save').show();
-    }
-    function initDeleteJadwal(index) {
-        detailJadwal(index);
-        var m = $('#modalJadwal');
-        m.find('.btn-delete').show();
-        m.find('.input-delete-id').val(sortJadwal[index].id);
     }
     function getImplementasi() {//REMOVE LATER
         $.getJSON('<?php echo site_url($module); ?>/get_implementasi', null, function (data) {
@@ -1359,7 +1312,6 @@ $role = $this->session->userdata['user']['role'];
                         var personil2 = '';
                         for (var k = 0; k < data[j].personil_id.length; k++) {
                             if (data[j].personil_id != '') {
-                                personil += '<div><span class="text-danger fa fa-trash" title="Hapus" onclick="initHapusPersonilJadwal(' + data[j].personil_implementasi_id[k] + ')"></span>&nbsp' + data[j].personil_name[k] + '</div>';
                                 personil2 += '<div>' + data[j].personil_name[k] + '</div>';
                             }
                         }
@@ -1461,12 +1413,10 @@ $role = $this->session->userdata['user']['role'];
                     + '</tr>');
         }
     }
-    function submitDokumen() {//create dokumen
-        $('.formDokumen').on("submit", function (e) {
-            e.preventDefault();
-            post(this, 'create_dokumen');
-        });
-    }
+    $('.formDokumen').on("submit", function (e) {
+        e.preventDefault();
+        post(this, 'create_dokumen');
+    });
     function initAddDocument(index) {
         var m = $('#modalDocument');
         m.modal('show');
@@ -1543,7 +1493,7 @@ $role = $this->session->userdata['user']['role'];
             m.find('.modal-body').append('<div class="row"><div class="col-sm-4"><label>' + key + '</label></div><div class="col-sm-8">' + data[key] + '</div></div>');
         }
     }
-    function detailDokumen(index) {
+    function editDokumen(index) {
         var m = $('#modalDokumen');
         var d = sortDokumen[index];
         m.modal('show');
@@ -1572,11 +1522,6 @@ $role = $this->session->userdata['user']['role'];
             m.find('.input-group-append').val('<a class="btn btn-outline-primary btn-sm pull-right fa fa-search" onclick="previewDocument()"></i>');
         }
         m.find('input, select, textarea').prop('disabled', true);
-    }
-    function editDokumen(index) {
-        detailDokumen(index);
-        var m = $('#modalDokumen');
-        m.find('.modal-title').text('Edit Dokumen');
         m.find('.btn-submit').show();
         m.find('.radio-type-dokumen').prop('checked', false);
         m.find('.radio-type-dokumen').prop('required', false);
@@ -1826,13 +1771,32 @@ $role = $this->session->userdata['user']['role'];
             $('#tglMulaiJadwal').text('Tanggal');
         }
     });
-    function initHapusJadwal(index) {
-        deleteIndex = index;
+
+    function detailJadwal(index) {
+        var m = $('#modalJadwal');
+        var j = sortJadwal[index];
+        m.modal('show');
+        m.find('.modal-title').text('Detail Jadwal');
+        m.find('.input-tugas').val(sortTugas[j.indexTugas].nama);
+        m.find('.input-jadwal').val(j.tanggal);
+        m.find('.select-periode').val(j.periode);
+        m.find('.input-field').prop('disabled', true);
+        m.find('.btn-submit').hide();
+    }
+    function editJadwal(index) {
         detailJadwal(index);
-        var m = $('#modalDetailJadwal');
-        m.find('.modal-title').text('Hapus Jadwal');
-        m.find('.btn-batal').text('Batal');
-        m.find('.btn-hapus').removeClass('d-none');
+        var m = $('#modalJadwal');
+        m.find('.modal-title').text('Edit Jadwal');
+        m.find('.input-id-jadwal').val(sortJadwal[index].id);
+        m.find('.input-field').prop('disabled', false);
+        m.find('.btn-save').show();
+    }
+    function initDeleteJadwal(index) {
+        detailJadwal(index);
+        var m = $('#modalJadwal');
+        m.find('.modal-title').text('Modal Jadwal');
+        m.find('.btn-delete').show();
+        m.find('.input-delete-id').val(sortJadwal[index].id);
     }
     function hapusJadwal() {
         $.post('<?php echo site_url($module); ?>/hapus_jadwal', {id: sortImplementasi[deleteIndex].id}, function (data) {
@@ -1840,76 +1804,16 @@ $role = $this->session->userdata['user']['role'];
             getJadwal();
         });
     }
-    function initHapusPersonilJadwal(id) {
-        deleteId = id;
-        $.post('<?php echo site_url($module); ?>/hapus_personil_jadwal', {id: deleteId}, function (data) {
-            getJadwal();
-        });
-    }
     function initUploadImplementasi(index) {
-        var imp = sortImplementasi[index];
+        var j = sortJadwal[index];
         var m = $('#modalUploadImplementasi');
         m.modal('show');
-        m.find('.input-id').val(imp.id);
-        m.find('.input-id-jadwal').val(imp.id_jadwal);
-        m.find('.input-jadwal').val($.format.date(new Date(imp.date_jadwal), "dd-MMM-yyyy"));
-        m.find('.input-judul').val(sortDokumen[sortJadwal[imp.index_jadwal].index_dokumen].judul);
-        m.find('.modal-title').text('Upload Bukti');
-        m.find('.group-upload').show();
-        m.find('.group-detail').hide();
-    }
-    function detailImplementasi(index) {
-        var imp = sortImplementasi[index];
-        var uploadStatus = '';
-        if (imp.path) {
-            if (new Date() > new Date(imp.date_jadwal, 'YYYY-MM-DD')) {
-                uploadStatus = '<span class="badge badge-danger">Terlambat</span>';
-            } else {
-                uploadStatus = '<span class="badge badge-primary">Selesai</span>';
-            }
-        }
-        var data = {
-            status: uploadStatus,
-            dokumen: '<div><span class="badge badge-primary">' + imp.type + '</div>'
-                    + '<div>' + imp.path + '</div>',
-        }
-        detailJadwal(index, data);
+        m.find('.input-id').val(j.id);
+        m.find('.input-tugas').val(sortTugas[j.indexTugas].nama);
+        m.find('.input-jadwal').val(j.tanggal);
     }
     $('#formUploadImplementasi').submit(function (e) {
-        var m = $('#modalUploadImplementasi');
-        m.modal('hide');
         e.preventDefault();
-        var status = 'Error';
-        $('#modalNotif .modal-title').text('Uploading...');
-        $('#modalNotif .modal-message').empty();
-        $('#modalNotif').modal('show');
-        $.ajax({
-            url: '<?php echo site_url($module . '/upload_bukti') ?>',
-            type: "post",
-            data: new FormData(this),
-            processData: false,
-            contentType: false,
-            cache: false,
-            async: false,
-            success: function (data) {
-                data = JSON.parse(data);
-                if (data.status === 'success') {
-                    status = 'Success';
-                    formDokumenReset = true;
-                    getPasal();
-                    $('#modalNotif .modal-message').html('Data Berhasil Disimpan');
-                } else if (data.status === 'error') {
-                    $('#modalNotif .modal-message').html(data.message);
-                } else {
-                    $('#modalNotif .modal-message').html(data);
-                }
-            },
-            error: function (data) {
-                $('#modalNotif .modal-message').text('Error 500');
-            },
-            complete: function () {
-                $('#modalNotif .modal-title').text(status);
-            }
-        });
+        post(this, 'upload_bukti');
     });
 </script>
