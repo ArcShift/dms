@@ -780,7 +780,7 @@ $role = $this->session->userdata['user']['role'];
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
-                    <input class="form-control input-id-jadwal" name="id" hidden="">
+                    <input class="form-control input-id" name="id" hidden="">
                     <input class="form-control input-delete-id" name="id-delete" hidden="">
                 </div>
                 <div class="modal-body modal-message">
@@ -1253,9 +1253,9 @@ $role = $this->session->userdata['user']['role'];
             $('#table-jadwal').empty();
             $('#table-implementasi').empty();
             sortJadwal = [];
+            var n = 0;
             for (var i = 0; i < sortTugas.length; i++) {
                 var t = sortTugas[i];
-                var n = 0;
                 $('#table-jadwal').append('<tr>'
                         + '<td>' + sortDokumen[t.index_document].judul + '</td>'
                         + '<td>' + t.nama + '</td>'
@@ -1267,6 +1267,18 @@ $role = $this->session->userdata['user']['role'];
                 for (var j = 0; j < data.length; j++) {
                     var jd = data[j];
                     if (jd.id_tugas == t.id) {
+                        jd.status = '-';
+                        var diffDate = '-';
+                        if (jd.path && jd.upload_date && jd.doc_type) {
+                            if (new Date(jd.upload_date) > new Date(jd.tanggal)) {
+                                jd.status = 'terlambat';
+                                uploadStatus = '<span class="badge badge-danger">Terlambat</span>';
+                            } else {
+                                jd.status = 'selesai';
+                                uploadStatus = '<span class="badge badge-primary">Selesai</span>';
+                            }
+                            diffDate = new Date(jd.upload_date).getDate() - new Date(jd.tanggal).getDate();
+                        }
                         $('#table-jadwal').append('<tr>'
                                 + '<td>---</td>'
                                 + '<td>---</td>'
@@ -1279,20 +1291,20 @@ $role = $this->session->userdata['user']['role'];
                                 + '<span class="text-danger fa fa-trash" title="Hapus" onclick="initDeleteJadwal(' + n + ')"></span>'
                                 + '</td>'
                                 + '</tr>');
-                        n++;
-                        jd.indexTugas = i;
-                        sortJadwal.push(jd);
                         $('#table-implementasi').append('<tr>'
                                 + '<td>' + t.nama + '</td>'
                                 + '<td>' + t.txt_personil + '</td>'
                                 + '<td>' + jd.tanggal + '</td>'
-                                + '<td>---</td>'
-                                + '<td>' + '-' + '</td>'
+                                + '<td>' + jd.status + '</td>'
+                                + '<td>' + diffDate + '</td>'
                                 + '<td>'
                                 + '<span class="text-primary fa fa-info-circle" title="Detail" onclick="detailJadwal(' + n + ')"></span> '
                                 + '<span class="text-primary fa fa-upload" title="Edit" onclick="initUploadImplementasi(' + n + ')"></span> '
                                 + '</td>'
                                 + '</tr>');
+                        sortJadwal.push(jd);
+                        jd.indexTugas = i;
+                        n++;
                     }
                 }
             }
@@ -1787,7 +1799,7 @@ $role = $this->session->userdata['user']['role'];
         detailJadwal(index);
         var m = $('#modalJadwal');
         m.find('.modal-title').text('Edit Jadwal');
-        m.find('.input-id-jadwal').val(sortJadwal[index].id);
+        m.find('.input-id').val(sortJadwal[index].id);
         m.find('.input-field').prop('disabled', false);
         m.find('.btn-save').show();
     }
