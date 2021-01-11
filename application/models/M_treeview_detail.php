@@ -513,7 +513,6 @@ class M_treeview_detail extends CI_Model {
     function upload_bukti() {
         $this->db->where('id', $this->input->post('id'));
         $j = $this->db->get('jadwal')->row_array();
-        $this->db->set('id', $this->input->post('id_jadwal'));
         $type = $this->input->post('type_dokumen');
         $this->db->set('doc_type', $type);
         if ($type == 'FILE') {

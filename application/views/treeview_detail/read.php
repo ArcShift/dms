@@ -964,16 +964,6 @@ $role = $this->session->userdata['user']['role'];
                 }
                 sortPasal[i] = s;
             }
-//            for (var i = 0; i < sortPasal.length; i++) {
-//                if (sortPasal[i].parent === null) {
-//                    if (sortPasal[i].child != 0) {
-//                        pemenuhanDokumen(i);
-//                    } else {
-//                        sortPasal[i].pemenuhan_doc = 0;
-//                        sortPasal[i].pemenuhan_imp = 0;
-//                    }
-//                }
-//            }
             $('#tab-base').empty();
             $('#table-pasal').empty();
             $('.select-pasal, .select-2-pasal').empty();
@@ -1118,55 +1108,6 @@ $role = $this->session->userdata['user']['role'];
             getTugas();
         });
     }
-    function pemenuhanDocument(index) {
-        var p = sortPasal[index];
-        var sumPemenuhan = 0;
-        var percent = 0;
-        if (p.index_childs.length != 0) {
-            for (var i = 0; i < p.index_childs.length; i++) {
-                var child = p.index_childs[i];
-                pemenuhanDocument(child);
-                sumPemenuhan += sortPasal[child].pemenuhanDocument;
-            }
-            percent = sumPemenuhan / p.index_childs.length;
-
-        } else {
-            if (p.index_documents.length == 0) {
-                percent = 0;
-            } else {
-                percent = 100;
-            }
-        }
-        sortPasal[index].pemenuhanDocument = percent;
-    }
-    function percentColor(num) {
-        var col = '';
-        switch (num) {
-            case 100:
-                col = 'success';
-                break;
-            case 0:
-                col = 'danger';
-                break;
-            default :
-                col = 'warning';
-        }
-        return col;
-    }
-    function listPasalDocuments(index) {
-        var p = sortPasal[index];
-        p.index_child_documents = [];
-        Array.prototype.push.apply(p.index_child_documents, p.index_documents);
-        for (var i = 0; i < p.index_childs.length; i++) {
-            var ic = p.index_childs[i];
-            listPasalDocuments(ic);
-            Array.prototype.push.apply(p.index_child_documents, sortPasal[ic].index_child_documents);
-        }
-        //TODO: remove duplicate index_child_documents
-        var td = $('#table-pasal tr:nth-child(' + (index + 1) + ') td:nth-child(5)');
-        td.text(p.index_child_documents.length);
-        sortPasal[index] = p;
-    }
     function getTugas() {
         $.getJSON('<?php echo site_url($module); ?>/get_tugas', {perusahaan: perusahaan, standar: standar}, function (data) {
             sortTugas = [];
@@ -1192,7 +1133,7 @@ $role = $this->session->userdata['user']['role'];
                         var t = data[j];
                         if (t.id_document == d.id) {
                             t.index_document = i;
-                            sortDokumen[i].index_tugas.push(j);
+                            sortDokumen[i].index_tugas.push(sortTugas.length);
                             t.index_personil = [];
                             t.txt_personil = '';
                             for (var k = 0; k < t.personil.length; k++) {
@@ -1221,6 +1162,7 @@ $role = $this->session->userdata['user']['role'];
                                     + '<span class="text-danger fa fa-trash" title="Hapus" onclick="initDeleteTugas(' + sortTugas.length + ')"></span>'
                                     + '</td>'
                                     + '</tr>');
+                            t.indexJadwal = [];
                             sortTugas.push(t);
                         }
                     }
@@ -1288,78 +1230,20 @@ $role = $this->session->userdata['user']['role'];
                                 + '<span class="text-primary fa fa-upload" title="Edit" onclick="initUploadImplementasi(' + n + ')"></span> '
                                 + '</td>'
                                 + '</tr>');
-                        sortJadwal.push(jd);
                         jd.indexTugas = i;
+                        sortTugas[i].indexJadwal.push(n);
+                        sortJadwal.push(jd);
                         n++;
                     }
                 }
             }
             getPemenuhan();
-//            getImplementasi();
-        });
-    }
-    function getImplementasi() {//REMOVE LATER
-        $.getJSON('<?php echo site_url($module); ?>/get_implementasi', null, function (data) {
-            sortImplementasi = [];
-            $('#table-implementasi').empty();
-            var n = 0;
-            for (var i = 0; i < sortJadwal.length; i++) {
-                for (var j = 0; j < data.length; j++) {
-                    if (data[j].id_jadwal == sortJadwal[i].id) {
-                        data[j].index_jadwal = i;
-                        var personil = '';
-                        var personil2 = '';
-                        for (var k = 0; k < data[j].personil_id.length; k++) {
-                            if (data[j].personil_id != '') {
-                                personil2 += '<div>' + data[j].personil_name[k] + '</div>';
-                            }
-                        }
-                        if (data[j].form != null) {
-                            for (var k = 0; k < sortDokumen.length; k++) {
-                                if (data[j].form == sortDokumen[k].id) {
-                                    data[j].index_form = k;
-                                }
-                            }
-                        } else {
-                            data[j].index_form = null;
-                        }
-                        var jadwal = new Date(data[j].date_jadwal);
-                        var periode = sortJadwal[i].periode == null ? '-' : sortJadwal[i].periode;
-                        var uploadStatus = '';
-                        var diffDate = '-';
-                        if (data[j].path) {
-                            if (new Date(data[j].upload_date) > new Date(data[j].date_jadwal)) {
-                                uploadStatus = '<span class="badge badge-danger">Terlambat</span>';
-                            } else {
-                                uploadStatus = '<span class="badge badge-primary">Selesai</span>';
-                            }
-                            diffDate = new Date(data[j].upload_date).getDate() - new Date(data[j].date_jadwal).getDate();
-                        } else {
-                            uploadStatus = '-';
-                        }
-                        var uploadBtn = '-';
-                        $('#table-implementasi').append('<tr>'
-                                + '<td>' + data[j].desc + '</td>'
-                                + '<td>' + personil2 + '</td>'
-                                + '<td>' + $.format.date(jadwal, "dd-MMM-yyyy") + '</td>'
-                                + '<td class="text-center">' + uploadStatus + '</td>'
-                                + '<td class="text-center">' + (data[j].terlambat < 0 ? Math.abs(data[j].terlambat) : '-') + '</td>'
-                                + '<td class="text-center">'
-                                + '<span class="text-primary fa fa-upload" title="Upload" onclick="initUploadImplementasi(' + n + ')"></span>&nbsp'
-                                + '<span class="text-primary fa fa-search" title="Detail" onclick="detailImplementasi(' + n + ')"></span>'
-                                + '</td>'
-                                + '</tr>');
-                        n++;
-                        sortImplementasi.push(data[j]);
-                    }
-                }
-            }
-            if (role == 'anggota') {
-                $('.col-aksi').remove();
-            }
         });
     }
     function getPemenuhan() {
+        if (role == 'anggota') {
+            $('.col-aksi').remove();
+        }
         $('#table-pemenuhan').empty();
         for (var i = 0; i < sortPasal.length; i++) {
             var ps = sortPasal[i];
@@ -1368,48 +1252,86 @@ $role = $this->session->userdata['user']['role'];
                 pemenuhanDocument(i);
             }
             var imp = 0;
+            var upImp = 0;
             for (var j = 0; j < ps.index_documents.length; j++) {
                 var doc = sortDokumen[ps.index_documents[j]];
                 for (var k = 0; k < doc.index_tugas.length; k++) {
                     var tgs = sortTugas[doc.index_tugas[k]];
-//                    for (var l = 0; l < tgs.indexJadwal.length; l++) {
-                    imp++;
-//                    }
+                    for (var l = 0; l < tgs.indexJadwal.length; l++) {
+                        var jd = sortJadwal[tgs.indexJadwal[l]];
+                        if (jd.status == 'selesai') {
+                            upImp++;
+                        }
+                        imp++;
+
+                    }
                 }
             }
+            var percentImp = (upImp * 100 / imp).toFixed();
+            console.log(percentImp);
             $('#table-pemenuhan').append('<tr ' + (ps.parent == null ? 'class="table-success"' : '') + '>'
                     + '<td>' + ps.fullname + '</td>'
                     + '<td>' + (ps.sort_desc == null ? '' : ps.sort_desc) + '</td>'
                     + '<td class="text-center">' + ps.index_documents.length + '</td>'
                     + '<td class="text-center"><span class="badge badge-' + percentColor(sortPasal[i].pemenuhanDocument) + '">' + sortPasal[i].pemenuhanDocument + '%</span></td>'
                     + '<td class="text-center">' + imp + '</td>'
-//                        + '<td class="text-center">' + '<span class="badge badge-' + percentColor(d.pemenuhan_imp) + '">' + (+d.pemenuhan_imp).toFixed() + '%</span>' + '</td>'
+                    + '<td class="text-center">' + (imp == 0?'-':'<span class="badge badge-' + percentColor(percentImp) + '">' + percentImp + '%</span>') + '</td>'
+//                        + '<td class="text-center">' + '<span class="badge badge-' + upImp + '">' + (+d.pemenuhan_imp).toFixed() + '%</span>' + '</td>'
 //                        + '<td class="text-center">' + d.upload + ' - ' + d.unupload + '</td>'//data upload & unupload
-                    + '</tr>');
+                            + '</tr>');
         }
+    }
+    function pemenuhanDocument(index) {
+        var p = sortPasal[index];
+        var sumPemenuhan = 0;
+        var percent = 0;
+        if (p.index_childs.length != 0) {
+            for (var i = 0; i < p.index_childs.length; i++) {
+                var child = p.index_childs[i];
+                pemenuhanDocument(child);
+                sumPemenuhan += sortPasal[child].pemenuhanDocument;
+            }
+            percent = sumPemenuhan / p.index_childs.length;
+
+        } else {
+            if (p.index_documents.length == 0) {
+                percent = 0;
+            } else {
+                percent = 100;
+            }
+        }
+        sortPasal[index].pemenuhanDocument = percent;
+    }
+    function percentColor(num) {
+        num = parseInt(num);
+        var col = '';
+        switch (num) {
+            case 100:
+                col = 'success';
+                break;
+            case 0:
+                col = 'danger';
+                break;
+            default :
+                col = 'warning';
+        }
+        return col;
+    }
+    function listPasalDocuments(index) {
+        var p = sortPasal[index];
+        p.index_child_documents = [];
+        Array.prototype.push.apply(p.index_child_documents, p.index_documents);
+        for (var i = 0; i < p.index_childs.length; i++) {
+            var ic = p.index_childs[i];
+            listPasalDocuments(ic);
+            Array.prototype.push.apply(p.index_child_documents, sortPasal[ic].index_child_documents);
+        }
+        //TODO: remove duplicate index_child_documents
+        var td = $('#table-pasal tr:nth-child(' + (index + 1) + ') td:nth-child(5)');
+        td.text(p.index_child_documents.length);
+        sortPasal[index] = p;
     }
     var role = '<?= $role ?>';
-    function pemenuhanDokumen(index) {
-        var listPemenuhan = [];
-        var listImp = [];
-        var d = sortPasal[index];
-//        for (var i = 0; i < d.childsIndex.length; i++) {
-//            if (sortPasal[d.childsIndex[i]].pemenuhan_doc === -1) {
-//                pemenuhanDokumen(d.childsIndex[i]);
-//            }
-//            listPemenuhan.push(sortPasal[d.childsIndex[i]].pemenuhan_doc);
-//            listImp.push(sortPasal[d.childsIndex[i]].pemenuhan_imp);
-//        }
-        var total = 0;
-        var totalImp = 0;
-        for (var i = 0; i < listPemenuhan.length; i++) {
-            total += listPemenuhan[i];
-            totalImp += listImp[i];
-        }
-        sortPasal[index].pemenuhan_doc = Math.round(total / listPemenuhan.length);
-        sortPasal[index].pemenuhan_imp = Math.round(totalImp / listImp.length);
-
-    }
     function detailPasal(index) {
         var m = $('#modalDetailPasal');
         var p = sortPasal[index];
