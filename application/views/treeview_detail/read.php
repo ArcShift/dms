@@ -254,114 +254,18 @@ $role = $this->session->userdata['user']['role'];
         </form>
     </div>
 </div>
-<!--MODAL EDIT DOKUMEN-->
-<div class="modal fade" id="modalDokumen" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<!--MODAL SHOW MORE PASAL-->
+<div class="modal fade" id="modalShowMorePasal">
     <div class="modal-dialog" role="document">
-        <form method="post" class="formDokumen">
-            <input class="input-id" name="id" hidden="">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Edit Dokumen</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body modal-message">
-                    <table class="table">
-                        <tbody>
-                            <tr>
-                                <td>Pasal</td>
-                                <td>
-                                    <select name="pasal" class="form-control select-pasal" required="" hidden=""></select>
-                                    <select name="pasals[]" class="form-control select-2 select-2-pasal multiselect-dropdown" multiple="" style="width: 320px !important; margin-top: 100px"></select>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Nomor</td>
-                                <td>
-                                    <input class="form-control input-nomor" name="nomor" required="">
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Judul</td>
-                                <td>
-                                    <input class="form-control input-judul" name="judul" required="">
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Pembuat Dokumen</td>
-                                <td>
-                                    <select class="form-control select-anggota" name="creator"></select>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Jenis Dokumen</td>
-                                <td>
-                                    <select class="form-control select-jenis" name="jenis">
-                                        <option value="1">Level I</option>
-                                        <option value="2">Level II</option>
-                                        <option value="3">Level III</option>
-                                        <option value="4">Level IV</option>
-                                    </select>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Klasifikasi</td>
-                                <td>
-                                    <select class="form-control select-klasifikasi" name="klasifikasi">
-                                        <option value="UMUM">Umum</option>
-                                        <option value="INTERNAL">Internal</option>
-                                        <option value="RAHASIA">Rahasia</option>
-                                        <option value="SANGAT RAHASIA">Sangat Rahasia</option>
-                                    </select>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Letak pasal<br>pada dokumen</td>
-                                <td>
-                                    <textarea class="form-control textarea-deskripsi" name="desc"></textarea>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Versi Dokumen</td>
-                                <td>
-                                    <input class="form-control input-versi" name="versi">
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Dokumen terkait</td>
-                                <td>
-                                    <select name="documents[]" class="form-control select-2 select-2-document multiselect-dropdown" multiple="" style="width: 330px !important; margin-top: 100px"></select>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Dokumen</td>
-                                <td>
-                                    <div class="group-radio-dokumen">
-                                        <input class="radio-type-dokumen" type="radio" name="type_dokumen" value="FILE" required="">
-                                        <label>File</label>
-                                        <input class="radio-type-dokumen" type="radio" name="type_dokumen" value="URL">
-                                        <label>Url</label>
-                                        <input class="form-control input-path input-file" type="file" name="dokumen" required="">
-                                        <input class="form-control input-path input-url" type="url" name="url" required="" placeholder="http://">
-                                    </div>
-                                    <div class="input-group mb-3 group-label-dokumen">
-                                        <input class="form-control label-path" readonly="">
-                                        <div class="input-group-append">
-                                            <i class="btn btn-outline-danger btn-sm pull-right fa fa-trash" onclick="initUpdateDocument()"></i>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div class="modal-footer">
-                    <button class="btn btn-primary" data-dismiss="modal">Batal</button>
-                    <button type="submit" class="btn btn-primary btn-submit" name="submit">Simpan</button>
-                </div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Nama Dokumen</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
-        </form>
+            <div class="modal-body modal-message"></div>
+        </div>
     </div>
 </div>
 <!--MODAL DETAIL DOCUMENT-->
@@ -458,7 +362,7 @@ $role = $this->session->userdata['user']['role'];
                                     <div class="input-group mb-3 group-label-dokumen">
                                         <input class="form-control label-path" readonly="">
                                         <div class="input-group-append">
-                                            <i class="btn btn-outline-danger btn-sm pull-right fa fa-trash" onclick="initUpdateDocument()"></i>
+                                            <i class="btn btn-outline-danger btn-sm pull-right fa fa-trash"></i>
                                         </div>
                                     </div>
                                 </td>
@@ -468,6 +372,116 @@ $role = $this->session->userdata['user']['role'];
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-primary" data-dismiss="modal">Tutup</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<!--MODAL EDIT DOKUMEN-->
+<div class="modal fade" id="modalDokumen" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <form method="post" class="formDokumen">
+            <input class="input-id" name="id" hidden="">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Edit Dokumen</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body modal-message">
+                    <table class="table">
+                        <tbody>
+                            <tr>
+                                <td>Pasal</td>
+                                <td>
+                                    <select name="pasal" class="form-control select-pasal" required="" hidden=""></select>
+                                    <select name="pasals[]" class="form-control select-2 select-2-pasal multiselect-dropdown" multiple="" style="width: 320px !important; margin-top: 100px"></select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Nomor</td>
+                                <td>
+                                    <input class="form-control input-nomor" name="nomor" required="">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Judul</td>
+                                <td>
+                                    <input class="form-control input-judul" name="judul" required="">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Pembuat Dokumen</td>
+                                <td>
+                                    <select class="form-control select-anggota" name="creator"></select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Jenis Dokumen</td>
+                                <td>
+                                    <select class="form-control select-jenis" name="jenis">
+                                        <option value="1">Level I</option>
+                                        <option value="2">Level II</option>
+                                        <option value="3">Level III</option>
+                                        <option value="4">Level IV</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Klasifikasi</td>
+                                <td>
+                                    <select class="form-control select-klasifikasi" name="klasifikasi">
+                                        <option value="UMUM">Umum</option>
+                                        <option value="INTERNAL">Internal</option>
+                                        <option value="RAHASIA">Rahasia</option>
+                                        <option value="SANGAT RAHASIA">Sangat Rahasia</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Letak pasal<br>pada dokumen</td>
+                                <td>
+                                    <textarea class="form-control textarea-deskripsi" name="desc"></textarea>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Versi Dokumen</td>
+                                <td>
+                                    <input class="form-control input-versi" name="versi">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Dokumen terkait</td>
+                                <td>
+                                    <select name="documents[]" class="form-control select-2 select-2-document multiselect-dropdown" multiple="" style="width: 330px !important; margin-top: 100px"></select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Dokumen</td>
+                                <td>
+                                    <div class="group-radio-dokumen">
+                                        <input class="radio-type-dokumen" type="radio" name="type_dokumen" value="FILE" required="">
+                                        <label>File</label>
+                                        <input class="radio-type-dokumen" type="radio" name="type_dokumen" value="URL">
+                                        <label>Url</label>
+                                        <input class="form-control input-path input-file" type="file" name="dokumen" required="">
+                                        <input class="form-control input-path input-url" type="url" name="url" required="" placeholder="http://">
+                                    </div>
+                                    <div class="input-group mb-3 group-label-dokumen">
+                                        <input class="form-control label-path" readonly="">
+                                        <div class="input-group-append">
+                                            <i class="btn btn-outline-danger btn-sm pull-right fa fa-trash"></i>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" data-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-primary btn-submit" name="submit">Simpan</button>
                 </div>
             </div>
         </form>
@@ -792,15 +806,6 @@ $role = $this->session->userdata['user']['role'];
                         <label>Tanggal</label>
                         <input class="form-control input-field input-jadwal" name="tanggal">
                     </div>
-                    <!--                    <div class="form-group">
-                                            <label>Periode</label>
-                                            <select name="periode" class="form-control input-field select-periode" name="periode">
-                                                <option value="">~ Pilih Periode ~</option>
-                                                <option value="MINGGU">Mingguan</option>
-                                                <option value="BULAN">Bulanan</option>
-                                                <option value="TAHUN">Tahunan</option>
-                                            </select>
-                                        </div>-->
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-primary" data-dismiss="modal">Batal</button>
@@ -1018,7 +1023,7 @@ $role = $this->session->userdata['user']['role'];
                     }
                 }
                 if (n2 > 10) {
-                    d.txt_pasals2 += '<div class="text-primary" onclick="detailDocument(' + n + ')">lihat lebih lengkap</div>';
+                    d.txt_pasals2 += '<div class="text-primary" style="cursor:pointer" onclick="showMorePasal(' + n + ')">lihat lebih lengkap</div>';
                 }
                 for (var j = 0; j < sortPasal.length; j++) {//TODO: remove later
                     sortPasal[j].dokumens = [];
@@ -1268,17 +1273,16 @@ $role = $this->session->userdata['user']['role'];
                 }
             }
             var percentImp = (upImp * 100 / imp).toFixed();
-            console.log(percentImp);
             $('#table-pemenuhan').append('<tr ' + (ps.parent == null ? 'class="table-success"' : '') + '>'
                     + '<td>' + ps.fullname + '</td>'
                     + '<td>' + (ps.sort_desc == null ? '' : ps.sort_desc) + '</td>'
                     + '<td class="text-center">' + ps.index_documents.length + '</td>'
                     + '<td class="text-center"><span class="badge badge-' + percentColor(sortPasal[i].pemenuhanDocument) + '">' + sortPasal[i].pemenuhanDocument + '%</span></td>'
                     + '<td class="text-center">' + imp + '</td>'
-                    + '<td class="text-center">' + (imp == 0?'-':'<span class="badge badge-' + percentColor(percentImp) + '">' + percentImp + '%</span>') + '</td>'
+                    + '<td class="text-center">' + (imp == 0 ? '-' : '<span class="badge badge-' + percentColor(percentImp) + '">' + percentImp + '%</span>') + '</td>'
 //                        + '<td class="text-center">' + '<span class="badge badge-' + upImp + '">' + (+d.pemenuhan_imp).toFixed() + '%</span>' + '</td>'
 //                        + '<td class="text-center">' + d.upload + ' - ' + d.unupload + '</td>'//data upload & unupload
-                            + '</tr>');
+                    + '</tr>');
         }
     }
     function pemenuhanDocument(index) {
@@ -1397,10 +1401,12 @@ $role = $this->session->userdata['user']['role'];
             m.find('.input-url').attr('required');
         }
     });
-    function initUpdateDocument() {
-        var m = $('#modalDokumen');
-        m.find('.group-radio-dokumen').show();
-        m.find('.group-label-dokumen').hide();
+    function showMorePasal(index) {
+        var m = $('#modalShowMorePasal');
+        m.modal('show');
+        var d = sortDokumen[index];
+        m.find('.modal-title').text(d.judul);
+        m.find('.modal-body').html(d.txt_pasals);
     }
     function detailDocument(index) {
         var d = sortDokumen[index];
@@ -1428,7 +1434,7 @@ $role = $this->session->userdata['user']['role'];
             txt_doc = d.url;
         }
         var data = {
-            Pasal: d.txt_pasals,
+            Pasal: d.txt_pasals2,
             Nomor: d.nomor,
             Judul: d.judul,
             'Pembuat Dokumen': (d.index_creator == null ? '-' : personil[d.index_creator].fullname),
