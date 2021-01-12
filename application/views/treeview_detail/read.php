@@ -42,6 +42,7 @@ $role = $this->session->userdata['user']['role'];
                     <li class="nav-item"><a data-toggle="tab" href="#tab-pemenuhan" class="nav-link active">Pemenuhan</a></li>
                     <li class="nav-item"><a data-toggle="tab" href="#tab-pasal" class="nav-link">Pasal</a></li>
                     <li class="nav-item"><a data-toggle="tab" href="#tab-dokumen" class="nav-link">Dokumen</a></li>
+                    <!--<li class="nav-item"><a data-toggle="tab" href="#tab-test" class="nav-link">Dokumen Test</a></li>-->
                     <li class="nav-item"><a data-toggle="tab" href="#tab-distribusi" class="nav-link">Distribusi</a></li>
                     <li class="nav-item"><a data-toggle="tab" href="#tab-tugas" class="nav-link">Tugas</a></li>
                     <li class="nav-item"><a data-toggle="tab" href="#tab-jadwal" class="nav-link">Jadwal</a></li>
@@ -49,6 +50,7 @@ $role = $this->session->userdata['user']['role'];
                     <!--<li class="nav-item"><a data-toggle="tab" href="#tab-base" class="nav-link">Base</a></li>-->
                 </ul>
                 <div class="tab-content">
+                    <div class="tab-pane" id="tab-test" role="tabpanel"></div>
                     <!--PEMENUHAN-->
                     <div class="tab-pane" id="tab-pemenuhan" role="tabpanel">
                         <table class="table table-striped">
@@ -83,7 +85,7 @@ $role = $this->session->userdata['user']['role'];
                     </div>
                     <!--DOKUMEN-->
                     <div class="tab-pane" id="tab-dokumen" role="tabpanel">
-                        <table class="table table-striped">
+                        <table class="table table-striped" id="tb-document">
                             <thead>
                                 <tr>
                                     <th>No</th>
@@ -867,6 +869,7 @@ $role = $this->session->userdata['user']['role'];
         $('.select-2').select2();
         $('.radio-ulangi-jadwal[value=TIDAK]').click();
         $('.input-path').hide();
+        tbDocument = $('#tb-document').DataTable();
     });
     function afterReady() {}
     var anggota;
@@ -993,8 +996,18 @@ $role = $this->session->userdata['user']['role'];
             getDokumen();
         });
     }
+    function loadPage(url, container) {
+        $(container).html('Loading Data...');
+        $.get('manajemen_dokumen/' + url, null, function (data) {
+            $(container).html(data);
+        }).fail(function () {
+            $(container).html('Error load data');
+        });
+    }
     function getDokumen() {
+        loadPage('dokumen_tabel', '#tab-test');
         $.getJSON('<?php echo site_url($module); ?>/get_dokumen', {'perusahaan': perusahaan, 'standar': standar}, function (data) {
+            tbDocument.clear();
             $('#table-dokumen').empty();
             $('#table-distribusi').empty();
             $('.select-dokumen').empty();
@@ -1033,7 +1046,6 @@ $role = $this->session->userdata['user']['role'];
                         sortPasal[j].dokumens.push(n);
                     }
                 }
-                var btnDelete = '<span class="text-secondary fa fa-trash"></span>';
                 var idDis = d.distribusi;
                 var userDis = d.user_distribusi;
                 var strUserDis = '';
@@ -1073,20 +1085,18 @@ $role = $this->session->userdata['user']['role'];
                         }
                     }
                 }
-                btnDelete = '<span class="text-danger fa fa-trash" onclick="initHapusDokumen(' + n + ')"></span>';
-                $('#table-dokumen').append('<tr>'
-                        + '<td>' + d.nomor + '</td>'
-                        + '<td>' + d.judul + '</td>'
-                        + '<td>' + d.txt_pasals2 + '</td>'
-                        + '<td>' + (d.versi == 0 | d.versi == null ? '-' : d.versi) + '</td>'
-                        + '<td>Level ' + (d.jenis == null ? '-' : d.jenis) + '</td>'
-                        + '<td>' + (d.klasifikasi == null ? '-' : d.klasifikasi) + '</td>'
-                        + '<td class="col-aksi">'
-                        + '<span class="text-primary fa fa-info-circle" onclick="detailDocument(' + n + ')" title="Detail"></span>&nbsp'
-                        + '<span class="text-primary fa fa-edit" onclick="editDokumen(' + n + ')"></span>&nbsp'
-                        + btnDelete
-                        + '</td>'
-                        + '</tr>');
+                var btnDelete = '<span class="text-danger fa fa-trash" onclick="initHapusDokumen(' + n + ')"></span>';
+                tbDocument.row.add([
+                    d.nomor,
+                    d.judul,
+                    d.txt_pasals2,
+                    (d.versi == 0 | d.versi == null ? '-' : d.versi),
+                    (d.jenis == null ? '-' : d.jenis),
+                    (d.klasifikasi == null ? '-' : d.klasifikasi),
+                    '<span class="text-primary fa fa-info-circle" onclick="detailDocument(' + n + ')" title="Detail"></span>&nbsp'
+                            + '<span class="text-primary fa fa-edit" onclick="editDokumen(' + n + ')"></span>&nbsp'
+                            + btnDelete
+                ]);
                 $('.select-dokumen').append('<option value="' + d.id + '">' + d.judul + '</option>');
                 $('.select-2-document').append('<option value="' + d.id + '">' + d.judul + '</option>');
                 if (d.jenis < 4 & d.jenis >= 1) {
@@ -1107,9 +1117,10 @@ $role = $this->session->userdata['user']['role'];
                 d.index_tugas = [];
                 sortDokumen.push(d);
             }
-            if (nDoc == 0) {
-                $('#table-distribusi').html('<tr><td colspan="6" class="text-center text-danger">Upload dan pilih jenis dokumen level 1-3 untuk melakukan distribusi dokumen dan penambahan tugas</td></tr>');
-            }
+//            if (nDoc == 0) {
+//                $('#table-distribusi').html('<tr><td colspan="6" class="text-center text-danger">Upload dan pilih jenis dokumen level 1-3 untuk melakukan distribusi dokumen dan penambahan tugas</td></tr>');
+//            }
+            tbDocument.draw()
             getTugas();
         });
     }
@@ -1268,7 +1279,6 @@ $role = $this->session->userdata['user']['role'];
                             upImp++;
                         }
                         imp++;
-
                     }
                 }
             }
@@ -1434,13 +1444,13 @@ $role = $this->session->userdata['user']['role'];
             txt_doc = d.url;
         }
         var data = {
-            Pasal: d.txt_pasals2,
             Nomor: d.nomor,
+            Pasal: d.txt_pasals2,
+            'Letak Pasal Pada Dokumen': (d.deskripsi == null ? '-' : d.deskripsi),
             Judul: d.judul,
             'Pembuat Dokumen': (d.index_creator == null ? '-' : personil[d.index_creator].fullname),
             'Jenis Dokumen': (d.jenis == null ? '-' : d.jenis),
             'Klasifikasi': (d.klasifikasi == null ? '-' : d.klasifikasi),
-            'Letak Pasal Pada Dokumen': (d.deskripsi == null ? '-' : d.deskripsi),
             'Versi Dokumen': (d.versi == null ? '-' : d.versi),
             'Dokumen Terkait': doc_terkait,
             'Dokumen': link + '<div class="no-wrap" style="width:85%">' + txt_doc + '</div>',

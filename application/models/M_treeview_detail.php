@@ -178,7 +178,6 @@ class M_treeview_detail extends CI_Model {
         $this->db->join('document_terkait dt', 'dt.induk = d.id', 'LEFT');
         $this->db->where('d.id_company = ' . $this->input->get('perusahaan'));
         $this->db->where('p.id_standard = ' . $this->input->get('standar'));
-        $this->db->order_by('p.id');
         $this->db->group_by('d.id');
         $result = $this->db->get('document d')->result_array();
         $fields = ['distribusi', 'user_distribusi', 'personil_distribusi_id', 'dokumen_pasal', 'document_terkait'];

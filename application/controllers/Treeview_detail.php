@@ -37,6 +37,7 @@ class Treeview_detail extends MY_Controller {
     }
 
     function pasal() {
+        $this->session->set_userdata('md_standard',$this->input->get('standar'));
         $this->ajax_request();
         echo json_encode($this->model->pasal());
     }
