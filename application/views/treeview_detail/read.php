@@ -1005,7 +1005,7 @@ $role = $this->session->userdata['user']['role'];
         });
     }
     function getDokumen() {
-        loadPage('dokumen_tabel', '#tab-test');
+//        loadPage('dokumen_tabel', '#tab-test');
         $.getJSON('<?php echo site_url($module); ?>/get_dokumen', {'perusahaan': perusahaan, 'standar': standar}, function (data) {
             tbDocument.clear();
             $('#table-dokumen').empty();
