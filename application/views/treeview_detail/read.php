@@ -85,7 +85,7 @@ $role = $this->session->userdata['user']['role'];
                     </div>
                     <!--DOKUMEN-->
                     <div class="tab-pane" id="tab-dokumen" role="tabpanel">
-                        <table class="table table-striped" id="tb-document">
+                        <table class="table table-striped" id="table-document">
                             <thead>
                                 <tr>
                                     <th>No</th>
@@ -97,12 +97,12 @@ $role = $this->session->userdata['user']['role'];
                                     <th class="col-aksi" style="min-width: 70px">Aksi</th>
                                 </tr>
                             </thead>
-                            <tbody id="table-dokumen"></tbody>
+                            <tbody></tbody>
                         </table>
                     </div>
                     <!--DISTRIBUSI-->
                     <div class="tab-pane" id="tab-distribusi" role="tabpanel">
-                        <table class="table table-striped">
+                        <table class="table table-striped" id="table-distribusi">
                             <thead>
                                 <tr>
                                     <th>Nomor Dokumen</th>
@@ -113,13 +113,13 @@ $role = $this->session->userdata['user']['role'];
                                     <th class="col-aksi" style="min-width: 70px">Aksi</th>
                                 </tr>
                             </thead>
-                            <tbody id="table-distribusi"></tbody>
+                            <tbody></tbody>
                         </table>
                     </div>
                     <!--TUGAS-->
                     <div class="tab-pane" id="tab-tugas" role="tabpanel">
                         <div class="table-responsive">
-                            <table class="table table-striped">
+                            <table class="table table-striped" id="table-tugas">
                                 <thead>
                                     <tr>
                                         <th>Judul Dokumen</th>
@@ -130,7 +130,7 @@ $role = $this->session->userdata['user']['role'];
                                         <th class="col-aksi" style="min-width: 70px">Aksi</th>
                                     </tr>
                                 </thead>
-                                <tbody id="table-tugas"></tbody>
+                                <tbody></tbody>
                             </table>
                         </div>
                     </div>
@@ -869,7 +869,15 @@ $role = $this->session->userdata['user']['role'];
         $('.select-2').select2();
         $('.radio-ulangi-jadwal[value=TIDAK]').click();
         $('.input-path').hide();
-        tbDocument = $('#tb-document').DataTable();
+        var dataTableConfig = {
+            "order": [],
+            "search": {
+                "smart": false
+            }
+        }
+        tbDocument = $('#table-document').DataTable(dataTableConfig);
+        tbDistribusi = $('#table-distribusi').DataTable(dataTableConfig);
+        tbTugas = $('#table-tugas').DataTable(dataTableConfig);
     });
     function afterReady() {}
     var anggota;
@@ -1008,8 +1016,7 @@ $role = $this->session->userdata['user']['role'];
 //        loadPage('dokumen_tabel', '#tab-test');
         $.getJSON('<?php echo site_url($module); ?>/get_dokumen', {'perusahaan': perusahaan, 'standar': standar}, function (data) {
             tbDocument.clear();
-            $('#table-dokumen').empty();
-            $('#table-distribusi').empty();
+            tbDistribusi.clear();
             $('.select-dokumen').empty();
             $('.select-2-document').empty();
             $('.select-dokumen').append('<option value="">-- -- --</option>');
@@ -1101,33 +1108,29 @@ $role = $this->session->userdata['user']['role'];
                 $('.select-2-document').append('<option value="' + d.id + '">' + d.judul + '</option>');
                 if (d.jenis < 4 & d.jenis >= 1) {
                     nDoc++;
-                    $('#table-distribusi').append('<tr>'
-                            + '<td>' + d.nomor + '</td>'
-                            + '<td>' + d.judul + '</td>'
-                            + '<td>' + (d.jenis == null ? '-' : 'Level ' + d.jenis) + '</td>'
-                            + '<td>' + d.creator_name + '</td>'
-                            + '<td>' + strUserDis + '</td>'
-                            + '<td class="col-aksi">'
-                            + '<span class="text-primary fa fa-info-circle" title="Detail" onclick="detailDistribusi(' + n + ')"></span>&nbsp'
-                            + '<span class="text-primary fa fa-edit" title="Edit" onclick="editDistribusi(' + n + ')"></span>'
-                            + '</td>'
-                            + '</tr>');
+                    tbDistribusi.row.add([
+                        d.nomor,
+                        d.judul,
+                        (d.jenis == null ? '-' : 'Level ' + d.jenis),
+                        d.creator_name,
+                        strUserDis,
+                        '<span class="text-primary fa fa-info-circle" title="Detail" onclick="detailDistribusi(' + n + ')"></span>&nbsp'
+                                + '<span class="text-primary fa fa-edit" title="Edit" onclick="editDistribusi(' + n + ')"></span>'
+                    ]);
                 }
                 n++;
                 d.index_tugas = [];
                 sortDokumen.push(d);
             }
-//            if (nDoc == 0) {
-//                $('#table-distribusi').html('<tr><td colspan="6" class="text-center text-danger">Upload dan pilih jenis dokumen level 1-3 untuk melakukan distribusi dokumen dan penambahan tugas</td></tr>');
-//            }
-            tbDocument.draw()
+            tbDocument.draw();
+            tbDistribusi.draw();
             getTugas();
         });
     }
     function getTugas() {
         $.getJSON('<?php echo site_url($module); ?>/get_tugas', {perusahaan: perusahaan, standar: standar}, function (data) {
             sortTugas = [];
-            $('#table-tugas').empty();
+            tbTugas.clear();
             $('.input-form-terkait').empty();
             $('.input-form-terkait').append('<option value="">-- form terkait --</option>');
             var nDoc = 0;
@@ -1135,16 +1138,14 @@ $role = $this->session->userdata['user']['role'];
                 var d = sortDokumen[i];
                 if (d.jenis < 4 & d.jenis >= 1) {
                     nDoc++;
-                    $('#table-tugas').append('<tr>'
-                            + '<td>' + d.judul + '</td>'
-                            + '<td></td>'
-                            + '<td></td>'
-                            + '<td></td>'
-                            + '<td></td>'
-                            + '<td class="col-aksi">'
-                            + '<span class="text-primary fa fa-plus" title="Tambah" onclick="initCreateTugas(' + i + ')"></span>'
-                            + '</td>'
-                            + '</tr>');
+                    tbTugas.row.add([
+                        d.judul,
+                        '',
+                        '',
+                        '',
+                        '',
+                        '<span class="text-primary fa fa-plus" title="Tambah" onclick="initCreateTugas(' + i + ')"></span>'
+                    ]);
                     for (var j = 0; j < data.length; j++) {
                         var t = data[j];
                         if (t.id_document == d.id) {
@@ -1166,18 +1167,16 @@ $role = $this->session->userdata['user']['role'];
                                     t.index_form_terkait = k;
                                 }
                             }
-                            $('#table-tugas').append('<tr>'
-                                    + '<td></td>'
-                                    + '<td>' + t.nama + '</td>'
-                                    + '<td>' + (t.index_form_terkait == null ? '-' : sortDokumen[t.index_form_terkait].judul) + '</td>'
-                                    + '<td><span class="badge badge-secondary">' + t.sifat + '</span></td>'
-                                    + '<td>' + t.txt_personil + '</td>'
-                                    + '<td class="col-aksi">'
-                                    + '<span class="text-primary fa fa-info-circle" title="Detail" onclick="detailTugas(' + sortTugas.length + ')"></span>&nbsp'
-                                    + '<span class="text-primary fa fa-edit" title="Edit" onclick="initEditTugas(' + sortTugas.length + ')"></span>&nbsp'
-                                    + '<span class="text-danger fa fa-trash" title="Hapus" onclick="initDeleteTugas(' + sortTugas.length + ')"></span>'
-                                    + '</td>'
-                                    + '</tr>');
+                            tbTugas.row.add([
+                                '',
+                                t.nama,
+                                (t.index_form_terkait == null ? '-' : sortDokumen[t.index_form_terkait].judul),
+                                '<span class="badge badge-secondary">' + t.sifat + '</span>',
+                                t.txt_personil,
+                                '<span class="text-primary fa fa-info-circle" title="Detail" onclick="detailTugas(' + sortTugas.length + ')"></span>&nbsp'
+                                        + '<span class="text-primary fa fa-edit" title="Edit" onclick="initEditTugas(' + sortTugas.length + ')"></span>&nbsp'
+                                        + '<span class="text-danger fa fa-trash" title="Hapus" onclick="initDeleteTugas(' + sortTugas.length + ')"></span>'
+                            ]);
                             t.indexJadwal = [];
                             sortTugas.push(t);
                         }
@@ -1186,9 +1185,7 @@ $role = $this->session->userdata['user']['role'];
                     $('.input-form-terkait').append('<option value="' + d.id + '">' + d.judul + '</option>');
                 }
             }
-            if (nDoc == 0) {
-                $('#table-tugas').html('<tr><td colspan="6" class="text-center text-danger">Upload dan pilih jenis dokumen level 1-3 untuk melakukan distribusi dokumen dan penambahan tugas</td></tr>');
-            }
+            tbTugas.draw();
             getJadwal();
         });
     }
