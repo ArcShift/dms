@@ -137,7 +137,7 @@ $role = $this->session->userdata['user']['role'];
                     <!--JADWAL-->
                     <div class="tab-pane" id="tab-jadwal" role="tabpanel">
                         <div class="table-responsive">
-                            <table class="table table-striped">
+                            <table class="table table-striped" id="table-jadwal">
                                 <thead>
                                     <tr>
                                         <th>Dokumen</th>
@@ -148,13 +148,13 @@ $role = $this->session->userdata['user']['role'];
                                         <th class="col-aksi" style="min-width: 70px">Aksi</th>
                                     </tr>
                                 </thead>
-                                <tbody id="table-jadwal"></tbody>
+                                <tbody></tbody>
                             </table>
                         </div>
                     </div>
                     <!--IMPLEMENTASI-->
                     <div class="tab-pane" id="tab-implementasi" role="tabpanel">
-                        <table class="table">
+                        <table class="table" id="table-implementasi">
                             <thead>
                                 <tr>
                                     <th>Tugas</th>
@@ -165,7 +165,7 @@ $role = $this->session->userdata['user']['role'];
                                     <th class="text-center">Bukti</th>
                                 </tr>
                             </thead>
-                            <tbody id="table-implementasi"></tbody>
+                            <tbody></tbody>
                         </table>
                     </div>
                     <div class="tab-pane" id="tab-base" role="tabpanel">Base</div>
@@ -878,6 +878,8 @@ $role = $this->session->userdata['user']['role'];
         tbDocument = $('#table-document').DataTable(dataTableConfig);
         tbDistribusi = $('#table-distribusi').DataTable(dataTableConfig);
         tbTugas = $('#table-tugas').DataTable(dataTableConfig);
+        tbJadwal = $('#table-jadwal').DataTable(dataTableConfig);
+        tbImplementasi = $('#table-implementasi').DataTable(dataTableConfig);
     });
     function afterReady() {}
     var anggota;
@@ -1191,20 +1193,20 @@ $role = $this->session->userdata['user']['role'];
     }
     function getJadwal() {
         $.getJSON('<?= site_url($module); ?>/get_jadwal', {'perusahaan': perusahaan, 'standar': standar}, function (data) {
-            $('#table-jadwal').empty();
-            $('#table-implementasi').empty();
+            tbJadwal.clear();
+            tbImplementasi.clear();
             sortJadwal = [];
             var n = 0;
             for (var i = 0; i < sortTugas.length; i++) {
                 var t = sortTugas[i];
-                $('#table-jadwal').append('<tr>'
-                        + '<td>' + sortDokumen[t.index_document].judul + '</td>'
-                        + '<td>' + t.nama + '</td>'
-                        + '<td>' + (t.index_form_terkait == null ? '-' : sortDokumen[t.index_form_terkait].judul) + '</td>'
-                        + '<td>---</td>'
-                        + '<td>---</td>'
-                        + '<td><span class="text-primary fa fa-plus" title="Tambah" onclick="initCreateJadwal(' + i + ')"></span></td>'
-                        + '</tr>');
+                tbJadwal.row.add([
+                    sortDokumen[t.index_document].judul,
+                    t.nama,
+                    (t.index_form_terkait == null ? '-' : sortDokumen[t.index_form_terkait].judul),
+                    '---',
+                    '---',
+                    '<span class="text-primary fa fa-plus" title="Tambah" onclick="initCreateJadwal(' + i + ')"></span>'
+                ]);
                 for (var j = 0; j < data.length; j++) {
                     var jd = data[j];
                     if (jd.id_tugas == t.id) {
@@ -1220,29 +1222,26 @@ $role = $this->session->userdata['user']['role'];
                             }
                             diffDate = new Date(jd.upload_date).getDate() - new Date(jd.tanggal).getDate();
                         }
-                        $('#table-jadwal').append('<tr>'
-                                + '<td>---</td>'
-                                + '<td>---</td>'
-                                + '<td>---</td>'
-                                + '<td>' + (jd.periode == null ? '-' : (jd.periode + 'AN')) + '</td>'
-                                + '<td>' + jd.tanggal + '</td>'
-                                + '<td>'
-                                + '<span class="text-primary fa fa-info-circle" title="Detail" onclick="detailJadwal(' + n + ')"></span> '
-                                + '<span class="text-primary fa fa-edit" title="Edit" onclick="editJadwal(' + n + ')"></span> '
-                                + '<span class="text-danger fa fa-trash" title="Hapus" onclick="initDeleteJadwal(' + n + ')"></span>'
-                                + '</td>'
-                                + '</tr>');
-                        $('#table-implementasi').append('<tr>'
-                                + '<td>' + t.nama + '</td>'
-                                + '<td>' + t.txt_personil + '</td>'
-                                + '<td>' + jd.tanggal + '</td>'
-                                + '<td>' + jd.status + '</td>'
-                                + '<td>' + diffDate + '</td>'
-                                + '<td>'
-                                + '<span class="text-primary fa fa-info-circle" title="Detail" onclick="detailJadwal(' + n + ')"></span> '
-                                + '<span class="text-primary fa fa-upload" title="Edit" onclick="initUploadImplementasi(' + n + ')"></span> '
-                                + '</td>'
-                                + '</tr>');
+                        tbJadwal.row.add([
+                            '---',
+                            '---',
+                            '---',
+                            (jd.periode == null ? '-' : (jd.periode + 'AN')),
+                            jd.tanggal,
+                            '<span class="text-primary fa fa-info-circle" title="Detail" onclick="detailJadwal(' + n + ')"></span> '
+                                    + '<span class="text-primary fa fa-edit" title="Edit" onclick="editJadwal(' + n + ')"></span> '
+                                    + '<span class="text-danger fa fa-trash" title="Hapus" onclick="initDeleteJadwal(' + n + ')"></span>'
+                        ]);
+                        tbImplementasi.row.add([
+                            t.nama,
+                            t.txt_personil,
+                            jd.tanggal,
+                            jd.status,
+                            diffDate,
+                            '<span class="text-primary fa fa-info-circle" title="Detail" onclick="detailJadwal(' + n + ')"></span> '
+                                    + '<span class="text-primary fa fa-upload" title="Edit" onclick="initUploadImplementasi(' + n + ')"></span> '
+
+                        ]);
                         jd.indexTugas = i;
                         sortTugas[i].indexJadwal.push(n);
                         sortJadwal.push(jd);
@@ -1250,6 +1249,8 @@ $role = $this->session->userdata['user']['role'];
                     }
                 }
             }
+            tbJadwal.draw();
+            tbImplementasi.draw();
             getPemenuhan();
         });
     }
