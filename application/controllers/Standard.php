@@ -51,6 +51,10 @@ class Standard extends MY_Controller {
                 } else {
                     $this->data['msgError'] = $this->db->error()['message'];
                 }
+            }elseif ($this->input->post('sortUp')) {
+                $this->model->sort_up();
+            }elseif ($this->input->post('sortDown')) {
+                die('sortDown');
             }
         }
         $this->data['list'] = json_encode($this->models->reads());

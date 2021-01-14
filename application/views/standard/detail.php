@@ -245,9 +245,9 @@
     function sortUp(item) {
         var id = $(item).parent().attr('id');
         $('<form method="post"><input name="sortUp" value="'+ id +'"></form>').appendTo('body').submit();
-        console.log(item);
     }
     function sortDown(item) {
-        console.log(item);
+        var id = $(item).parent().attr('id');
+        $('<form method="post"><input name="sortDown" value="'+ id +'"></form>').appendTo('body').submit();
     }
 </script>

@@ -17,6 +17,9 @@ $role = $this->session->userdata['user']['role'];
         white-space: nowrap;
         overflow: hidden;
     }
+    .col-aksi{
+        width: 75px;
+    }
 </style>
 <div class="main-card mb-3 card">
     <div class="card-body">
@@ -53,23 +56,23 @@ $role = $this->session->userdata['user']['role'];
                     <div class="tab-pane" id="tab-test" role="tabpanel"></div>
                     <!--PEMENUHAN-->
                     <div class="tab-pane" id="tab-pemenuhan" role="tabpanel">
-                        <table class="table table-striped">
+                        <table class="table table-striped" id="table-pemenuhan">
                             <thead>
                                 <tr>
-                                    <th class="col-sm-4">Pasal</th>
-                                    <th class="col-sm-4">Judul</th>
-                                    <th class="col-sm-2 text-center">Jumlah<br/>Dokumen</th>
-                                    <th class="col-sm-2 text-center">Pemenuhan<br/>Dokumen</th>
-                                    <th class="col-sm-2 text-center">Jumlah<br/>Jadwal</th>
-                                    <th class="col-sm-2 text-center">Pemenuhan<br/>Implementasi</th>
+                                    <th>Pasal</th>
+                                    <th>Judul</th>
+                                    <th class="col-sm-1">Jumlah<br/>Dokumen</th>
+                                    <th class="col-sm-1">Pemenuhan<br/>Dokumen</th>
+                                    <th class="col-sm-1">Jumlah<br/>Jadwal</th>
+                                    <th class="col-sm-1 dt-body-right">Pemenuhan<br/>Implementasi</th>
                                 </tr>
                             </thead>
-                            <tbody id="table-pemenuhan"></tbody>
+                            <tbody></tbody>
                         </table>
                     </div>
                     <!--PASAL-->
                     <div class="tab-pane" id="tab-pasal" role="tabpanel">
-                        <table class="table table-striped">
+                        <table class="table table-striped" id="table-pasal">
                             <thead>
                                 <tr>
                                     <th>Pasal</th>
@@ -77,10 +80,10 @@ $role = $this->session->userdata['user']['role'];
                                     <th>Sub Judul</th>
                                     <th>Deskripsi</th>
                                     <th>Dok</th>
-                                    <th class="col-aksi" style="min-width: 50px">Aksi</th>
+                                    <th style="min-width: 0px">Aksi</th>
                                 </tr>
                             </thead>
-                            <tbody id="table-pasal"></tbody>
+                            <tbody></tbody>
                         </table>
                     </div>
                     <!--DOKUMEN-->
@@ -871,14 +874,22 @@ $role = $this->session->userdata['user']['role'];
         $('.input-path').hide();
         var dataTableConfig = {
             "order": [],
+            "ordering": false,
+            "paging": false,
             "search": {
                 "smart": false
-            }
+            },
+            "bInfo": false,
+            "bLengthChange": true,
+           
         }
-        tbDocument = $('#table-document').DataTable(dataTableConfig);
-        tbDistribusi = $('#table-distribusi').DataTable(dataTableConfig);
+        tbPemenuhan = $('#table-pemenuhan').DataTable(dataTableConfig);
+        tbPasal = $('#table-pasal').DataTable(dataTableConfig);
         tbTugas = $('#table-tugas').DataTable(dataTableConfig);
         tbJadwal = $('#table-jadwal').DataTable(dataTableConfig);
+        dataTableConfig['ordering'] = true;
+        tbDocument = $('#table-document').DataTable(dataTableConfig);
+        tbDistribusi = $('#table-distribusi').DataTable(dataTableConfig);
         tbImplementasi = $('#table-implementasi').DataTable(dataTableConfig);
     });
     function afterReady() {}
@@ -983,29 +994,31 @@ $role = $this->session->userdata['user']['role'];
                 sortPasal[i] = s;
             }
             $('#tab-base').empty();
-            $('#table-pasal').empty();
+            tbPasal.clear();
             $('.select-pasal, .select-2-pasal').empty();
             $('.select-pasal').append('<option value="">-- pilih pasal --</option>');
             for (var i = 0; i < sortPasal.length; i++) {
                 var d = sortPasal[i];
-                $('#table-pasal').append('<tr ' + (d.parent == null ? 'class="table-success"' : '') + '>'
-                        + '<td>' + d.fullname + '</td>'
-                        + '<td>' + (d.sort_desc == null ? '-' : d.sort_desc) + '</td>'
-                        + '<td>' + (d.subtitle == null ? '-' : d.subtitle) + '</td>'
-                        + '<td style="white-space: pre-wrap">' + (d.long_desc == null ? '-' : d.long_desc) + '</td>'
-                        + '<td>' + d.doc + '</td>'
-                        + '<td class="col-aksi">'
-                        + '<span class="fa fa-info-circle text-primary" onclick="detailPasal(' + i + ')" title="Detail"></span>&nbsp'
-                        + (d.child == '0' ? '<span class="fa fa-upload text-primary" onclick="initAddDocument(' + i + ')" title="Upload"></span>&nbsp' : '')
-                        + '</td>'
-                        + '</tr>');
+                var tr = tbPasal.row.add([
+                    d.fullname,
+                    (d.sort_desc == null ? '-' : d.sort_desc),
+                    (d.subtitle == null ? '-' : d.subtitle),
+                    '<p style="white-space: pre-wrap">' + (d.long_desc == null ? '-' : d.long_desc) + '</p>',
+                    '-',
+                    '<span class="fa fa-info-circle text-primary" onclick="detailPasal(' + i + ')" title="Detail"></span>&nbsp'
+                            + (d.child == '0' ? '<span class="fa fa-upload text-primary" onclick="initAddDocument(' + i + ')" title="Upload"></span>&nbsp' : '')
+                ]).node();
+                if (d.parent == null) {
+                    $(tr).addClass('table-success');
+                }
                 if (d.child == 0) {
                     $('.select-pasal, .select-2-pasal').append('<option value="' + d.id + '">' + d.fullname + '</option>');
                 }
             }
+            tbPasal.draw();
             getDokumen();
-        });
-    }
+        }); 
+   }
     function loadPage(url, container) {
         $(container).html('Loading Data...');
         $.get('manajemen_dokumen/' + url, null, function (data) {
@@ -1258,7 +1271,7 @@ $role = $this->session->userdata['user']['role'];
         if (role == 'anggota') {
             $('.col-aksi').remove();
         }
-        $('#table-pemenuhan').empty();
+        tbPemenuhan.clear();
         for (var i = 0; i < sortPasal.length; i++) {
             var ps = sortPasal[i];
             if (ps.parent == null) {
@@ -1281,17 +1294,24 @@ $role = $this->session->userdata['user']['role'];
                 }
             }
             var percentImp = (upImp * 100 / imp).toFixed();
-            $('#table-pemenuhan').append('<tr ' + (ps.parent == null ? 'class="table-success"' : '') + '>'
-                    + '<td>' + ps.fullname + '</td>'
-                    + '<td>' + (ps.sort_desc == null ? '' : ps.sort_desc) + '</td>'
-                    + '<td class="text-center">' + ps.index_documents.length + '</td>'
-                    + '<td class="text-center"><span class="badge badge-' + percentColor(sortPasal[i].pemenuhanDocument) + '">' + sortPasal[i].pemenuhanDocument + '%</span></td>'
-                    + '<td class="text-center">' + imp + '</td>'
-                    + '<td class="text-center">' + (imp == 0 ? '-' : '<span class="badge badge-' + percentColor(percentImp) + '">' + percentImp + '%</span>') + '</td>'
-//                        + '<td class="text-center">' + '<span class="badge badge-' + upImp + '">' + (+d.pemenuhan_imp).toFixed() + '%</span>' + '</td>'
-//                        + '<td class="text-center">' + d.upload + ' - ' + d.unupload + '</td>'//data upload & unupload
-                    + '</tr>');
+            var td = tbPemenuhan.row.add([
+                ps.fullname,
+                (ps.sort_desc == null ? '' : ps.sort_desc),
+                ps.index_documents.length,
+                '<span class="badge badge-' + percentColor(sortPasal[i].pemenuhanDocument) + '">' + Math.round(sortPasal[i].pemenuhanDocument) + '%</span>',
+                imp,
+                (imp == 0 ? '-' : '<span class="badge badge-' + percentColor(percentImp) + '">' + percentImp + '%</span>')
+            ]);
+//            $('#table-pemenuhan').append('<tr ' + (ps.parent == null ? 'class="table-success"' : '') + '>'
+//                    + '<td>' + ps.fullname + '</td>'
+//                    + '<td>' + (ps.sort_desc == null ? '' : ps.sort_desc) + '</td>'
+//                    + '<td class="text-center">' + ps.index_documents.length + '</td>'
+//                    + '<td class="text-center"><span class="badge badge-' + percentColor(sortPasal[i].pemenuhanDocument) + '">' + sortPasal[i].pemenuhanDocument + '%</span></td>'
+//                    + '<td class="text-center">' + imp + '</td>'
+//                    + '<td class="text-center">' + (imp == 0 ? '-' : '<span class="badge badge-' + percentColor(percentImp) + '">' + percentImp + '%</span>') + '</td>'
+//                    + '</tr>');
         }
+        tbPemenuhan.draw();
     }
     function pemenuhanDocument(index) {
         var p = sortPasal[index];
@@ -1304,7 +1324,6 @@ $role = $this->session->userdata['user']['role'];
                 sumPemenuhan += sortPasal[child].pemenuhanDocument;
             }
             percent = sumPemenuhan / p.index_childs.length;
-
         } else {
             if (p.index_documents.length == 0) {
                 percent = 0;
@@ -1338,10 +1357,6 @@ $role = $this->session->userdata['user']['role'];
             listPasalDocuments(ic);
             Array.prototype.push.apply(p.index_child_documents, sortPasal[ic].index_child_documents);
         }
-        //TODO: remove duplicate index_child_documents
-        var td = $('#table-pasal tr:nth-child(' + (index + 1) + ') td:nth-child(5)');
-        td.text(p.index_child_documents.length);
-        sortPasal[index] = p;
     }
     var role = '<?= $role ?>';
     function detailPasal(index) {
@@ -1690,7 +1705,6 @@ $role = $this->session->userdata['user']['role'];
         m.modal('show');
         m.find('.input-tugas').val(t.nama);
         m.find('.input-id-tugas').val(t.id);
-
     }
     function tambahTanggal() {
         $('<tr class="addictional-date group-input-unrepeat"><td><button type="button" class="btn btn-sm btn-danger fa fa-trash" onclick="hapusTanggalJadwal(this)"></button></td><td>' +
@@ -1735,7 +1749,6 @@ $role = $this->session->userdata['user']['role'];
             $('#tglMulaiJadwal').text('Tanggal');
         }
     });
-
     function detailJadwal(index) {
         var m = $('#modalJadwal');
         var j = sortJadwal[index];
