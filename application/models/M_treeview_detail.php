@@ -132,7 +132,7 @@ class M_treeview_detail extends CI_Model {
 
     private function editDocumentTerkait() {
         $document = $this->input->post('id');
-        if (!empty($this->input->post('penerima'))) {
+        if (!empty($this->input->post('documents'))) {
             $input = $this->input->post('documents');
             $this->db->where('induk', $document);
             $result = $this->db->get('document_terkait')->result_array();

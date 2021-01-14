@@ -146,8 +146,8 @@
             <span class="index d-none"></span>
             <span class="desc d-none"></span>
             <?php if ($activeModule['acc_update']) { ?>
-                <span class="fa fa-angle-double-up text-success" onclick="sortUp(this)" title="ke atas"></span>
-                <span class="fa fa-angle-double-down text-success" onclick="sortDown(this)" title="ke bawah"></span>
+                <!--<span class="fa fa-angle-double-up text-success" onclick="sortUp(this)" title="ke atas"></span>-->
+                <!--<span class="fa fa-angle-double-down text-success" onclick="sortDown(this)" title="ke bawah"></span>-->
             <?php } ?>
             <?php if ($activeModule['acc_create']) { ?>
                 <span class="fa fa-plus text-primary" onclick="add(this)" title="Tambah"></span>
@@ -167,6 +167,7 @@
     </ul>
 </div>
 <script>
+    //fix sorted child data 
     list = <?php echo $list ?>;
     for (var i = 0; i < list.length; i++) {
         var l = list[i];
