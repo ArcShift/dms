@@ -1691,7 +1691,6 @@ $role = $this->session->userdata['user']['role'];
                 } catch (e) {
                     $('#modalNotif .modal-message').html(data);
                 }
-
             },
             error: function (data) {
                 $('#modalNotif .modal-title').text('Error');

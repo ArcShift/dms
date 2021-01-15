@@ -3,12 +3,13 @@
 class M_login extends CI_Model {
 
     function login() {
-        $this->db->select('u.*, r.name AS role, r.title, uk.id_company');
+        $this->db->select('u.*, r.name AS role, r.title, uk.id_company, c.name AS perusahaan');
         $this->db->where('u.username', $this->input->post('user'));
         $this->db->where('u.pass', md5($this->input->post('pass')));
         $this->db->join('role r', 'r.id=u.id_role');
-        $this->db->join('personil p', 'p.id=u.id_personil', 'LEFT');
-        $this->db->join('unit_kerja uk', 'uk.id=p.id_unit_kerja', 'LEFT');
+        $this->db->join('personil p', 'p.id = u.id_personil', 'LEFT');
+        $this->db->join('unit_kerja uk', 'uk.id = p.id_unit_kerja', 'LEFT');
+        $this->db->join('company c', 'c.id = uk.id_company', 'LEFT');
         $result = $this->db->get('users u');
         if ($result->num_rows()) {
             $result = $result->row_array();
