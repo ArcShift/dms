@@ -36,12 +36,13 @@ class M_dashboard extends CI_Model {
     }
 
     function grafik_pasal() {
-        $this->db->order_by('id', 'DESC');
-        $r= $this->db->get('standard')->row_array();
+//        $this->db->order_by('id', 'DESC');
+//        $r= $this->db->get('standard')->row_array();
         $this->db->select('p.*, COUNT(dp.id) AS doc');
         $this->db->join('document_pasal dp', 'dp.id_pasal = p.id', 'LEFT');
         $this->db->group_by('p.sort_index');
-        $this->db->where('p.id_standard = '.$r['id']);
+        $this->db->where('p.id_standard = 10');
+//        $this->db->where('p.id_standard = '.$r['id']);
         return $this->db->get('pasal p')->result_array();
     }
 
