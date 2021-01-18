@@ -79,7 +79,7 @@ $role = $this->session->userdata['user']['role'];
                                     <th>Judul</th>
                                     <th>Sub Judul</th>
                                     <th>Deskripsi</th>
-                                    <th>Dok</th>
+                                    <!--<th>Dok</th>-->
                                     <th style="min-width: 0px">Aksi</th>
                                 </tr>
                             </thead>
@@ -881,7 +881,7 @@ $role = $this->session->userdata['user']['role'];
             },
             "bInfo": false,
             "bLengthChange": true,
-           
+
         }
         tbPemenuhan = $('#table-pemenuhan').DataTable(dataTableConfig);
         tbPasal = $('#table-pasal').DataTable(dataTableConfig);
@@ -1004,7 +1004,7 @@ $role = $this->session->userdata['user']['role'];
                     (d.sort_desc == null ? '-' : d.sort_desc),
                     (d.subtitle == null ? '-' : d.subtitle),
                     '<p style="white-space: pre-wrap">' + (d.long_desc == null ? '-' : d.long_desc) + '</p>',
-                    '-',
+//                    '',
                     '<span class="fa fa-info-circle text-primary" onclick="detailPasal(' + i + ')" title="Detail"></span>&nbsp'
                             + (d.child == '0' ? '<span class="fa fa-upload text-primary" onclick="initAddDocument(' + i + ')" title="Upload"></span>&nbsp' : '')
                 ]).node();
@@ -1017,8 +1017,8 @@ $role = $this->session->userdata['user']['role'];
             }
             tbPasal.draw();
             getDokumen();
-        }); 
-   }
+        });
+    }
     function loadPage(url, container) {
         $(container).html('Loading Data...');
         $.get('manajemen_dokumen/' + url, null, function (data) {
@@ -1357,6 +1357,10 @@ $role = $this->session->userdata['user']['role'];
             listPasalDocuments(ic);
             Array.prototype.push.apply(p.index_child_documents, sortPasal[ic].index_child_documents);
         }
+        sortPasal[index].index_child_documents = sortPasal[index].index_child_documents.filter(onlyUnique);
+    }
+    function onlyUnique(value, index, self) {
+        return self.indexOf(value) === index;
     }
     var role = '<?= $role ?>';
     function detailPasal(index) {
