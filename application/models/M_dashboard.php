@@ -34,16 +34,22 @@ class M_dashboard extends CI_Model {
         $this->db->join('unit_kerja uk', 'uk.id = p.id_unit_kerja AND uk.id_company = ' . $this->company);
         return $this->db->count_all_results('users u');
     }
-
+    function company_standard($c) {
+        $this->db->join('company_standard cs', 'cs.id_standard = s.id AND cs.id_company = '.$c);
+        return $this->db->get('standard s')->result_array();
+    }
     function grafik_pasal() {
 //        $this->db->order_by('id', 'DESC');
 //        $r= $this->db->get('standard')->row_array();
         $this->db->select('p.*, COUNT(dp.id) AS doc');
         $this->db->join('document_pasal dp', 'dp.id_pasal = p.id', 'LEFT');
+        $this->db->join('document d', 'd.id = dp.id_document AND d.id_company = '.$this->input->get('company'), 'LEFT');
         $this->db->group_by('p.sort_index');
-        $this->db->where('p.id_standard = 10');
+        $this->db->where('p.id_standard', $this->input->get('standard'));
 //        $this->db->where('p.id_standard = '.$r['id']);
-        return $this->db->get('pasal p')->result_array();
+        return 
+        $this->db->get('pasal p')->result_array();
+        $this->db->last_query();
     }
 
 }

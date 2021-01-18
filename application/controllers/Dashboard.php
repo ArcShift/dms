@@ -29,8 +29,18 @@ class Dashboard extends MY_Controller {
             array('company' => 'N', 'name' => 'unit_kerja', 'title' => 'Unit Kerja', 'color' => 'mixed-hopes', 'icon' => 'building', 'value' => $this->model->count('unit_kerja')),
             array('company' => 'Y', 'name' => 'personil', 'title' => 'Personil', 'color' => 'night-fade', 'icon' => 'building', 'value' => $this->model->count('personil')),
         );
-        $this->data['grafik']= json_encode($this->model->grafik_pasal());
+        $company = $this->db->get('company')->result_array();
+        foreach ($company as $k => $c) {
+            $company[$k]['standard'] = $this->model->company_standard($c['id']);
+        }
+        $this->data['company'] = $company;
+//        $this->data['grafik'] = json_encode($this->model->grafik_pasal());
         $this->render('read');
+    }
+
+    function grafik() {
+//        echo $this->model->grafik_pasal();
+        echo json_encode($this->model->grafik_pasal());
     }
 
 }
