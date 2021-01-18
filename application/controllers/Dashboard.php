@@ -39,7 +39,8 @@ class Dashboard extends MY_Controller {
     }
 
     function grafik() {
-//        echo $this->model->grafik_pasal();
+//        $this->model->grafik_pasal();
+//        echo $this->db->last_query();
         echo json_encode($this->model->grafik_pasal());
     }
 

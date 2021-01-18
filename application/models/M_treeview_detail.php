@@ -194,12 +194,31 @@ class M_treeview_detail extends CI_Model {
 
     function delete_document() {
         $id = $this->input->post('id');
-//        $this->db->where('id_document', $this->input->post('id'));
-//        $this->db->delete('jadwal');
-//        $this->db->where('id', $this->input->post('id'));
-//        $result = $this->db->get('document')->row_array();
-//        $this->db->where('id_document', $id);
-//        if ($this->db->delete('distribusi')) {
+        $this->db->where('id_document', $id);
+        $result = $this->db->get('tugas')->result_array();
+        //jadwal & penerima tugas
+        foreach ($result as $k => $r) {
+            $this->db->where('id_tugas', $r['id']);
+            $this->db->delete('jadwal');
+            $this->db->where('id_tugas', $r['id']);
+            $this->db->delete('penerima_tugas');
+        }
+        $this->db->where('id_document', $id);
+        $this->db->delete('tugas');
+        $this->db->where('form_terkait', $id);
+        $this->db->set('form_terkait', null);
+        $this->db->update('tugas');
+        //Distribusi
+        $this->db->where('id_document', $id);
+        $this->db->delete('distribusi');
+        //Dokumen Terkait
+        $this->db->where('contoh', $id);
+        $this->db->set('contoh', null);
+        $this->db->update('document');
+        $this->db->where('induk', $id);
+        $this->db->or_where('terkait', $id);
+        $this->db->delete('document_terkait');
+        //Dokumen Pasal & dokumen
         $this->db->where('id_document', $id);
         if ($this->db->delete('document_pasal')) {
             $this->db->where('id', $id);

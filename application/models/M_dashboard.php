@@ -39,17 +39,13 @@ class M_dashboard extends CI_Model {
         return $this->db->get('standard s')->result_array();
     }
     function grafik_pasal() {
-//        $this->db->order_by('id', 'DESC');
-//        $r= $this->db->get('standard')->row_array();
         $this->db->select('p.*, COUNT(dp.id) AS doc');
         $this->db->join('document_pasal dp', 'dp.id_pasal = p.id', 'LEFT');
         $this->db->join('document d', 'd.id = dp.id_document AND d.id_company = '.$this->input->get('company'), 'LEFT');
         $this->db->group_by('p.sort_index');
         $this->db->where('p.id_standard', $this->input->get('standard'));
-//        $this->db->where('p.id_standard = '.$r['id']);
-        return 
-        $this->db->get('pasal p')->result_array();
-        $this->db->last_query();
+        $this->db->order_by('p.id');
+        return $this->db->get('pasal p')->result_array();
     }
 
 }
