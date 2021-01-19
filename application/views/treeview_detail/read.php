@@ -259,20 +259,6 @@ $role = $this->session->userdata['user']['role'];
         </form>
     </div>
 </div>
-<!--MODAL SHOW MORE PASAL-->
-<div class="modal fade" id="modalShowMorePasal">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Nama Dokumen</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body modal-message"></div>
-        </div>
-    </div>
-</div>
 <!--MODAL DETAIL DOCUMENT-->
 <div class="modal fade" id="modalDetailDocument">
     <div class="modal-dialog" role="document">
@@ -546,6 +532,20 @@ $role = $this->session->userdata['user']['role'];
                 <button class="btn btn-primary" data-dismiss="modal">Batal</button>
                 <button class="btn btn-danger" onclick="hapusDokumen()">Hapus</button>
             </div>
+        </div>
+    </div>
+</div>
+<!--MODAL SHOW MORE PASAL-->
+<div class="modal fade" id="modalShowMorePasal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Nama Dokumen</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body modal-message"></div>
         </div>
     </div>
 </div>

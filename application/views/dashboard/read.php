@@ -1,10 +1,29 @@
 <!--<div class="row">
     <div class="col-md-12">
-        <img width="100%" class="rounded" align="right" src="<?php // echo base_url('assets/images/dms-header.jpg')            ?>" alt="no picture">
+        <img width="100%" class="rounded" align="right" src="<?php // echo base_url('assets/images/dms-header.jpg')                    ?>" alt="no picture">
     </div>
 </div>
 <br/>-->
 <div id="container" class="card-body">
+    <div class="row">
+        <div class="col-sm-6"></div>
+        <div class="col-sm-3">
+            <select class="form-control" id="selectCompany">
+                <option>~ Pilih Perusahaan ~</option>
+                <?php foreach ($company as $k => $c) { ?>
+                    <option value="<?= $c['id'] ?>"><?= $c['name'] ?></option>
+                <?php } ?>
+            </select>
+        </div>
+        <div class="col-sm-3">
+            <select class="form-control" id="selectStandar">
+                <option>~ Pilih Standar ~</option>
+            </select>
+        </div>
+    </div>
+</div>
+<div id="container" class="card-body">
+
     <?php // print_r($company) ?>
     <!--TAB-->
     <ul class="nav nav-tabs">
@@ -40,7 +59,7 @@
                 <div class="card mb-3 widget-content bg-<?= $b['color'] ?>">
                     <div class="widget-content-wrapper text-white">
                         <!--                    <div>
-                                                <i class="fa fa-<?php // $b['icon']                               ?>"></i>&nbsp;
+                                                <i class="fa fa-<?php // $b['icon']                                       ?>"></i>&nbsp;
                                             </div>-->
                         <div class="widget-content-left">
                             <div class="widget-heading"><?= $b['title'] ?></div>
@@ -57,6 +76,15 @@
 </div>
 <script>
     function afterReady() {}
+    $('#selectCompany').change(function () {
+        $.getJSON('<?= site_url('dashboard/standard') ?>', {company: $(this).val()}, function (data) {
+            $('#selectStandar').empty();
+            $('#selectStandar').append('<option>~ pilih standar ~</option>');
+            for (var i = 0; i < data.length; i++) {
+                $('#selectStandar').append('<option ' + data[i].id + '>' + data[i].name + '</option>');
+            }
+        });
+    });
     function getGrafik(company, standard) {
         $.getJSON('<?= site_url('dashboard/grafik') ?>', {company: company, standard: standard}, function (data) {
             console.log(data);
@@ -72,7 +100,7 @@
             chart.update();
         });
     }
-//    var pasal = <?php // echo $grafik  ?>;
+//    var pasal = <?php // echo $grafik          ?>;
 //    var labelData = [];
 //    var docData = [];
 //    for (var i = 0; i < pasal.length; i++) {

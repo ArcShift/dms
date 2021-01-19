@@ -38,6 +38,13 @@ class Dashboard extends MY_Controller {
         $this->render('read');
     }
 
+    function standard() {
+     $this->db->select('s.*');
+     $this->db->join('company_standard cs', 'cs.id_standard = s.id');
+     $this->db->where('cs.id_company', $this->input->get('company'));
+     $result=$this->db->get('standard s')->result_array();
+     echo json_encode($result);
+    }
     function grafik() {
 //        $this->model->grafik_pasal();
 //        echo $this->db->last_query();
