@@ -317,7 +317,7 @@ $role = $this->session->userdata['user']['role'];
                             <tr>
                                 <td>Pembuat Dokumen</td>
                                 <td>
-                                    <select class="form-control select-personil" name="creator"></select>
+                                    <select class="form-control select-personil select-creator" name="creator"></select>
                                 </td>
                             </tr>
                             <tr>
@@ -829,6 +829,7 @@ $role = $this->session->userdata['user']['role'];
             $.post('<?php echo site_url($module); ?>/personil', {'perusahaan': $(this).val()}, function (data) {
                 personil = JSON.parse(data);
                 $('.select-personil').empty();
+                    $('.select-creator').append('<option value="">---</option>');
                 for (var i = 0; i < personil.length; i++) {
                     var p = personil[i];
                     $('.select-personil').append('<option value="' + p.id + '">' + p.fullname + '</option>');
