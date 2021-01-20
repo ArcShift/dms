@@ -52,7 +52,6 @@ class M_dashboard extends CI_Model {
             $result[$k]['doc']= $this->db->count_all_results('document_pasal dp');
         }
         return $result;
-        
     }
 
 }

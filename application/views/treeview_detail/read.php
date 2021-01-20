@@ -27,13 +27,13 @@ $role = $this->session->userdata['user']['role'];
             <div class="col-sm-6"></div>
             <div class="col-sm-3">
                 <select id="perusahaan" class="form-control" name="perusahaan" required="">
-                <?php if ($role == 'admin') { ?>
-                    <option value="">~ Pilih Perusahaan ~</option>
-                <?php } ?>
-                <?php foreach ($company as $c) { ?>
-                    <option value="<?php echo $c['id'] ?>" <?php echo $c['id'] == $this->input->post('role') ? 'selected' : ''; ?>><?php echo $c['name'] ?></option>
-                <?php } ?>
-            </select>
+                    <?php if ($role == 'admin') { ?>
+                        <option value="">~ Pilih Perusahaan ~</option>
+                    <?php } ?>
+                    <?php foreach ($company as $c) { ?>
+                        <option value="<?php echo $c['id'] ?>" <?php echo $c['id'] == $this->input->post('role') ? 'selected' : ''; ?>><?php echo $c['name'] ?></option>
+                    <?php } ?>
+                </select>
             </div>
             <div class="col-sm-3">
                 <select id="standar" class="form-control" name="perusahaan" required=""></select>
@@ -564,7 +564,7 @@ $role = $this->session->userdata['user']['role'];
                     </div>
                     <div class="form-group">
                         <label>Form Terkait</label>
-                        <select class="form-control input-field input-form-terkait" name="form_terkait" required=""></select>
+                        <select class="form-control input-field input-form-terkait" name="form_terkait"></select>
                     </div>
                     <div class="form-group">
                         <label>Sifat</label>
@@ -1186,6 +1186,7 @@ $role = $this->session->userdata['user']['role'];
         }
         tbPemenuhan.clear();
         for (var i = 0; i < sortPasal.length; i++) {
+            sortPasal[i].pemenuhanImplementasi = 0;
             var ps = sortPasal[i];
             if (ps.parent == null) {
                 listPasalDocuments(i);
@@ -1207,22 +1208,17 @@ $role = $this->session->userdata['user']['role'];
                 }
             }
             var percentImp = (upImp * 100 / imp).toFixed();
-            var td = tbPemenuhan.row.add([
+            var tr = tbPemenuhan.row.add([
                 ps.fullname,
                 (ps.sort_desc == null ? '' : ps.sort_desc),
                 ps.index_documents.length,
                 '<span class="badge badge-' + percentColor(sortPasal[i].pemenuhanDocument) + '">' + Math.round(sortPasal[i].pemenuhanDocument) + '%</span>',
                 imp,
                 (imp == 0 ? '-' : '<span class="badge badge-' + percentColor(percentImp) + '">' + percentImp + '%</span>')
-            ]);
-//            $('#table-pemenuhan').append('<tr ' + (ps.parent == null ? 'class="table-success"' : '') + '>'
-//                    + '<td>' + ps.fullname + '</td>'
-//                    + '<td>' + (ps.sort_desc == null ? '' : ps.sort_desc) + '</td>'
-//                    + '<td class="text-center">' + ps.index_documents.length + '</td>'
-//                    + '<td class="text-center"><span class="badge badge-' + percentColor(sortPasal[i].pemenuhanDocument) + '">' + sortPasal[i].pemenuhanDocument + '%</span></td>'
-//                    + '<td class="text-center">' + imp + '</td>'
-//                    + '<td class="text-center">' + (imp == 0 ? '-' : '<span class="badge badge-' + percentColor(percentImp) + '">' + percentImp + '%</span>') + '</td>'
-//                    + '</tr>');
+            ]).node();
+            if (ps.parent == null) {
+                $(tr).addClass('table-success');
+            }
         }
         tbPemenuhan.draw();
     }
@@ -1240,11 +1236,16 @@ $role = $this->session->userdata['user']['role'];
         } else {
             if (p.index_documents.length == 0) {
                 percent = 0;
+                percentImp = 0;
             } else {
                 percent = 100;
+                percentImp = countImplementasi();
             }
         }
         sortPasal[index].pemenuhanDocument = percent;
+    }
+    function countImplementasi() {
+        return 0; //jumlah dokumen
     }
     function percentColor(num) {
         num = parseInt(num);
@@ -1261,7 +1262,7 @@ $role = $this->session->userdata['user']['role'];
         }
         return col;
     }
-    function listPasalDocuments(index) {
+    function listPasalDocuments(index) {//untuk menampilkan jumlah pasal
         var p = sortPasal[index];
         p.index_child_documents = [];
         Array.prototype.push.apply(p.index_child_documents, p.index_documents);

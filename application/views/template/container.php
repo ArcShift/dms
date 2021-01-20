@@ -176,6 +176,7 @@
                                 <li class="app-sidebar__heading">STANDAR</li>
                                 <li id="menu-standard">-</li>
                                 <li id="menu-company_standard">-</li>
+                                <li id="menu-management_hope">-</li>
                                 <li id="menu-treeview_detail">-</li>
                                 <li id="menu-document_search">-</li>
                                 <?php foreach ($this->session->userdata('module') as $key => $m) { ?>
