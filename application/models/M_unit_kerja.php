@@ -12,7 +12,7 @@ class M_unit_kerja extends CI_Model {
     }
 
     function read() {
-        $this->db->select('u.id, u.name, u.jenis, c.name AS company, COUNT(p.id) AS personil');
+        $this->db->select('u.id, u.name, c.name AS company, COUNT(p.id) AS personil');
         $this->db->join('company c', 'u.id_company=c.id');
         $this->db->join('personil p', 'p.id_unit_kerja=u.id', 'LEFT');
         if ($this->session->userdata['user']['role'] == 'pic') {
@@ -25,7 +25,6 @@ class M_unit_kerja extends CI_Model {
     function create() {
         $this->db->set('id_company', $this->input->post('perusahaan'));
         $this->db->set('name', $this->input->post('nama'));
-        $this->db->set('jenis', $this->input->post('jenis'));
         return $this->db->insert($this->table);
     }
 
@@ -35,7 +34,6 @@ class M_unit_kerja extends CI_Model {
     }
     function update() {
         $this->db->set('name', $this->input->post('nama'));
-        $this->db->set('jenis', $this->input->post('jenis'));
         $this->db->where('id', $this->input->post('id'));
         return $this->db->update('unit_kerja');
     }

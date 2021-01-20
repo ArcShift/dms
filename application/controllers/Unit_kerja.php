@@ -37,7 +37,6 @@ class Unit_kerja extends MY_Controller {
         } elseif ($this->input->post('edit')) {
             
             $this->form_validation->set_rules('nama', 'Nama', 'required');
-            $this->form_validation->set_rules('jenis', 'Jenis', 'required');
             if ($this->form_validation->run()) {
                 if ($this->model->update()) {
                     $this->session->set_flashdata('msgSuccess', 'Data berhasil diedit');

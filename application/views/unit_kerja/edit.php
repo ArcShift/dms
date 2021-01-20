@@ -9,17 +9,6 @@
                     <?php echo form_error('nama'); ?>
                 </div>
             </div>
-            <div class="form-group">
-                <label>Jenis</label>
-                <select id="jenis" class="form-control <?php echo form_error('jenis') != "" ? "is-invalid" : "" ?>" name="jenis">
-                    <option value="">-- Jenis --</option>
-                    <option value="PEMBUAT">Pembuat Dokumen</option>
-                    <option value="PENERIMA">Penerima Dokumen</option>
-                </select>
-                <div class="error invalid-feedback">
-                    <?php echo form_error('jenis'); ?>
-                </div>
-            </div>
         </div>
         <div class="d-block text-right card-footer">
             <a class="mr-2 btn btn-primary" href="<?php echo site_url($module) ?>">Kembali</a>

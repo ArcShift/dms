@@ -317,7 +317,7 @@ $role = $this->session->userdata['user']['role'];
                             <tr>
                                 <td>Pembuat Dokumen</td>
                                 <td>
-                                    <select class="form-control select-anggota" name="creator"></select>
+                                    <select class="form-control select-personil" name="creator"></select>
                                 </td>
                             </tr>
                             <tr>
@@ -805,7 +805,6 @@ $role = $this->session->userdata['user']['role'];
         tbImplementasi = $('#table-implementasi').DataTable(dataTableConfig);
     });
     function afterReady() {}
-    var anggota;
     var pesonil;
     var sortDokumen;
     $('#perusahaan').change(function (s) {
@@ -816,15 +815,6 @@ $role = $this->session->userdata['user']['role'];
                 $('#standar').append('<option value="">~ Pilih Standar ~</option>');
                 for (var i = 0; i < d.length; i++) {
                     $('#standar').append('<option value="' + d[i].id + '">' + d[i].name + '</option>');
-                }
-            });
-            $.post('<?php echo site_url($module); ?>/anggota', {'perusahaan': $(this).val()}, function (data) {
-                anggota = JSON.parse(data);
-                $('.select-anggota').empty();
-                $('.select-anggota').append('<option value="">---</option>');
-                for (var i = 0; i < anggota.length; i++) {
-                    var a = anggota[i];
-                    $('.select-anggota').append('<option value="' + a.id + '">' + a.fullname + '</option>');
                 }
             });
             $.post('<?php echo site_url($module); ?>/unit_kerja', {'perusahaan': $(this).val()}, function (data) {
@@ -996,13 +986,13 @@ $role = $this->session->userdata['user']['role'];
                         }
                     }
                 }
-                for (var k = 0; k < anggota.length; k++) {
+                for (var j = 0; j < personil.length; j++) {
                     if (d.creator == null) {
                         d.index_creator = null;
                         d.creator_name = '-';
-                    } else if (d.creator === anggota[k].id) {
-                        d.index_creator = k;
-                        d.creator_name = anggota[k].fullname;
+                    } else if (d.creator === personil[j].id) {
+                        d.index_creator = j;
+                        d.creator_name = personil[j].fullname;
                     }
                 }
                 d.index_form_terkait = null;
@@ -1400,7 +1390,7 @@ $role = $this->session->userdata['user']['role'];
         m.find('.select-pasal').val(d.id_pasal);
         m.find('.input-nomor').val(d.nomor);
         m.find('.input-judul').val(d.judul);
-        m.find('.select-anggota').val(d.creator);
+        m.find('.select-personil').val(d.creator);
         m.find('.select-jenis').val(d.jenis);
         m.find('.select-klasifikasi').val(d.klasifikasi);
         m.find('.select-dokumen').val(d.contoh);

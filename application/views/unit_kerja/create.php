@@ -21,16 +21,6 @@
                 <input class="form-control" name="nama" required="" placeholder="Nama">
             </div>
         </div>
-        <div class="modal-body">
-            <div class="form-group">
-                <label>Jenis</label>
-                <select class="form-control" name="jenis" required="">
-                    <option value="">-- Jenis --</option>
-                    <option value="PEMBUAT">Pembuat Dokumen</option>
-                    <option value="PENERIMA">Penerima Dokumen</option>
-                </select>
-            </div>
-        </div>
         <div class="modal-footer">
             <a class="btn btn-primary" href="<?php echo site_url($module) ?>">Batal</a>
             <button class="btn btn-primary" name="buat" value="ok">Tambah</button>
