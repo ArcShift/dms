@@ -5,7 +5,7 @@ class M_account extends CI_Model {
     private $table = 'users';
 
     function get() {
-        $this->db->select('u.username, p.fullname, u.photo, r.title AS role, u.id_role, uk.name AS unit_kerja, uk.jenis, c.name AS perusahaan');
+        $this->db->select('u.username, p.fullname, u.photo, r.title AS role, u.id_role, uk.name AS unit_kerja, c.name AS perusahaan');
         $this->db->where('u.id', $this->session->userdata('user')['id']);
         $this->db->join('role r', 'r.id=u.id_role');
         $this->db->join('personil p', 'p.id=u.id_personil', 'LEFT');
