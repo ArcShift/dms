@@ -829,7 +829,7 @@ $role = $this->session->userdata['user']['role'];
             $.post('<?php echo site_url($module); ?>/personil', {'perusahaan': $(this).val()}, function (data) {
                 personil = JSON.parse(data);
                 $('.select-personil').empty();
-                    $('.select-creator').append('<option value="">---</option>');
+                $('.select-creator').append('<option value="">---</option>');
                 for (var i = 0; i < personil.length; i++) {
                     var p = personil[i];
                     $('.select-personil').append('<option value="' + p.id + '">' + p.fullname + '</option>');
@@ -987,13 +987,15 @@ $role = $this->session->userdata['user']['role'];
                         }
                     }
                 }
-                for (var j = 0; j < personil.length; j++) {
-                    if (d.creator == null) {
-                        d.index_creator = null;
-                        d.creator_name = '-';
-                    } else if (d.creator === personil[j].id) {
-                        d.index_creator = j;
-                        d.creator_name = personil[j].fullname;
+                if (d.creator == null) {
+                    d.index_creator = null;
+                    d.creator_name = '-';
+                } else {
+                    for (var j = 0; j < personil.length; j++) {
+                        if (d.creator === personil[j].id) {
+                            d.index_creator = j;
+                            d.creator_name = personil[j].fullname;
+                        }
                     }
                 }
                 d.index_form_terkait = null;

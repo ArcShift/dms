@@ -1,6 +1,6 @@
 <!--<div class="row">
     <div class="col-md-12">
-        <img width="100%" class="rounded" align="right" src="<?php // echo base_url('assets/images/dms-header.jpg')                                ?>" alt="no picture">
+        <img width="100%" class="rounded" align="right" src="<?php // echo base_url('assets/images/dms-header.jpg')                                 ?>" alt="no picture">
     </div>
 </div>
 <br/>-->
@@ -36,7 +36,7 @@
                 <div class="card mb-3 widget-content bg-<?= $b['color'] ?>">
                     <div class="widget-content-wrapper text-white">
                         <!--                    <div>
-                                                <i class="fa fa-<?php // $b['icon']                                                   ?>"></i>&nbsp;
+                                                <i class="fa fa-<?php // $b['icon']                                                    ?>"></i>&nbsp;
                                             </div>-->
                         <div class="widget-content-left">
                             <div class="widget-heading"><?= $b['title'] ?></div>
@@ -80,15 +80,17 @@
             }
             var labels = [];
             var gData = [];
+            var hopeData = [];
             for (var i = 0; i < data.length; i++) {
                 var d = data[i];
                 if (d.parent == null) {
                     labels.push(d.name);
                     getPercent(i);
                     gData.push(pasal[i].percent);
+                    hopeData.push(d.harapan);
                 }
             }
-            newGraph(labels, gData);
+            newGraph(labels, gData, hopeData);
         });
     });
     var pasal = []
@@ -109,7 +111,8 @@
         }
         pasal[index] = p;
     }
-    function newGraph(labels, data) {
+    function newGraph(labels, data, harapan) {
+        console.log(harapan);
         $('#divGraph').empty();
         $('#divGraph').append('<canvas id="myChart" height="100"></canvas>');
         var ctx = document.getElementById('myChart');
@@ -121,6 +124,11 @@
                         label: 'Dokumen',
                         data: data,
                         borderColor: 'rgba(255, 0, 0, 1)',
+                        borderWidth: 1
+                    }, {
+                        label: 'Harapan',
+                        data: harapan,
+                        borderColor: 'rgba(0, 255, 0, 1)',
                         borderWidth: 1
                     }]
             },

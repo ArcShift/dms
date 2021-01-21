@@ -34,10 +34,12 @@ class M_dashboard extends CI_Model {
         $this->db->join('unit_kerja uk', 'uk.id = p.id_unit_kerja AND uk.id_company = ' . $this->company);
         return $this->db->count_all_results('users u');
     }
+
     function company_standard($c) {
-        $this->db->join('company_standard cs', 'cs.id_standard = s.id AND cs.id_company = '.$c);
+        $this->db->join('company_standard cs', 'cs.id_standard = s.id AND cs.id_company = ' . $c);
         return $this->db->get('standard s')->result_array();
     }
+
     function grafik_pasal() {
 //        $this->db->select('p.*, COUNT(dp.id) ');
 //        $this->db->join('document_pasal dp', 'dp.id_pasal = p.id', 'LEFT');
@@ -47,9 +49,17 @@ class M_dashboard extends CI_Model {
 //        $this->db->order_by('p.id');
         $result = $this->db->get('pasal p')->result_array();
         foreach ($result as $k => $r) {
-        $this->db->join('document d', 'd.id = dp.id_document AND d.id_company = '.$this->input->get('company'));
-        $this->db->where('dp.id_pasal', $r['id']);
-            $result[$k]['doc']= $this->db->count_all_results('document_pasal dp');
+            $this->db->join('document d', 'd.id = dp.id_document AND d.id_company = ' . $this->input->get('company'));
+            $this->db->where('dp.id_pasal', $r['id']);
+            $result[$k]['doc'] = $this->db->count_all_results('document_pasal dp');
+            $this->db->where('id_company', $this->input->get('company'));
+            $this->db->where('id_pasal', $r['id']);
+            $row = $this->db->get('hope')->row_array();
+            if (empty($row)) {
+                $result[$k]['harapan'] = 0;
+            } else {
+                $result[$k]['harapan'] = $row['persentase'];
+            }
         }
         return $result;
     }
