@@ -1291,14 +1291,9 @@ $role = $this->session->userdata['user']['role'];
             } else {
                 link = '<a class="btn btn-primary btn-sm fa fa-search" target="_blank" href="' + d.url + '"></a>';
             }
-            var pasals = '';
-            for (var j = 0; j < d.index_dokumen_pasal.length; j++) {
-                var idx = d.index_dokumen_pasal[j];
-                pasals += '<div><span class="badge badge-secondary">' + sortPasal[idx].fullname + '</span></div>';
-            }
             m.find('.files').append('<tr>'
                     + '<td>' + d.judul + '</td>'
-                    + '<td>' + pasals + '</td>'
+                    + '<td>' + d.txt_pasal2 + '</td>'
                     + '<td style="white-space: pre-wrap">' + (d.deskripsi == null ? '-' : d.deskripsi) + '</td>'
                     + '<td>' + link
                     + '&nbsp<span class="btn btn-danger btn-sm fa fa-trash" onclick="initHapusDokumen(' + p.index_documents[i] + ')"></span>'
@@ -1319,6 +1314,7 @@ $role = $this->session->userdata['user']['role'];
         m.find('.input-pasal').val(sortPasal[index].fullname);
         m.find('.input-pasal-id').val(sortPasal[index].id);
         m.find('.input-company-id').val(perusahaan);
+        m.find('.input-url, .input-file').hide();
     }
     $('#formUploadDocument').on("submit", function (e) {
         e.preventDefault();
@@ -1330,14 +1326,14 @@ $role = $this->session->userdata['user']['role'];
         m.find('.input-path').val('');
         if (type === 'FILE') {
             m.find('.input-file').show();
-            m.find('.input-file').add('required');
+            m.find('.input-file').prop('required', true);
             m.find('.input-url').hide();
-            m.find('.input-url').removeAttr('required');
+            m.find('.input-url').prop('required', false);
         } else if (type === 'URL') {
             m.find('.input-file').hide();
-            m.find('.input-file').removeAttr('required');
+            m.find('.input-file').prop('required', false);
             m.find('.input-url').show();
-            m.find('.input-url').attr('required');
+            m.find('.input-url').prop('required', true);
         }
     });
     function showMorePasal(index) {
@@ -1415,7 +1411,7 @@ $role = $this->session->userdata['user']['role'];
         } else if (d.type_doc == 'URL') {
             m.find('.label-path').val(d.url);
             m.find('.input-group-append').val('<a class="btn btn-outline-primary btn-sm pull-right fa fa-search" onclick="previewDocument()"></i>');
-        }else{
+        } else {
             m.find('.label-path').val('-');
         }
         m.find('input, select, textarea').prop('disabled', true);

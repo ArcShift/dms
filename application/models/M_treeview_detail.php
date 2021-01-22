@@ -552,6 +552,8 @@ class M_treeview_detail extends CI_Model {
         return $this->db->update('jadwal');
     }
 
+    private $pasal = [];
+
     function getPemenuhan() {
         $this->db->select('p.*,COUNT(p2.id) AS child, COUNT(dp.id) AS doc, GROUP_CONCAT(DISTINCT d.id) AS docs, COUNT(DISTINCT t.id) AS tugas, COUNT(DISTINCT j.id) AS jadwal,  GROUP_CONCAT(DISTINCT j.id) AS jadwals, SUM(IF(j.upload_date <= j.tanggal AND j.upload_date IS NOT NULL,1,0)) AS jadwal_ok');
         $this->db->join('pasal p2', 'p2.parent = p.id', 'LEFT');
@@ -565,7 +567,20 @@ class M_treeview_detail extends CI_Model {
         $pasal = $this->db->get('pasal p')->result_array();
         echo $this->db->last_query();
         foreach ($pasal as $k => $p) {
-//            if()
+            $pasal[$k]['indexChild'] = [];
+            if ($pasal[$k]['parent'] == null) {
+                $pasal[$k]['indexParent'] = null;
+            }
+            foreach ($pasal as $k2 => $p2) {
+                if ($p['id'] === $p2['parent']) {
+                    $pasal[$k2]['indexParent'] = $k;
+                    array_push($pasal[$k]['indexChild'], $k2);
+                }
+            }
+        }
+        $this->pasal = $pasal;
+        foreach ($this->pasal as $k => $p) {
+            
         }
         return $pasal;
     }

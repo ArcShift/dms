@@ -215,8 +215,11 @@ class Treeview_detail extends MY_Controller {
         $result = $this->model->getPemenuhan();
         echo '<table border="1"><thead><tr>'
             . '<td>Index</td>'
+            . '<td>sortIndex</td>'
             . '<td>Pasal</td>'
             . '<td>child</td>'
+            . '<td>indexParent</td>'
+            . '<td>indexChild</td>'
             . '<td>cDoc</td>'
             . '<td>listDoc</td>'
             . '<td>tugas</td>'
@@ -226,9 +229,12 @@ class Treeview_detail extends MY_Controller {
         . '</tr></thead><tbody>';
         foreach ($result as $k => $r) {
             echo '<tr>'
+            . '<td>' .$k. '</td>'
             . '<td>' .$r['sort_index']. '</td>'
             . '<td>' . $r['name'] . '</td>'
             . '<td>' . $r['child'] . '</td>'
+            . '<td>' . $r['indexParent'] . '</td>'
+            . '<td>' . implode(',', $r['indexChild']) . '</td>'
             . '<td>' . $r['doc'] . '</td>'
             . '<td>' . $r['docs'] . '</td>'
             . '<td>' . $r['tugas'] . '</td>'
