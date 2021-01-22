@@ -169,8 +169,8 @@ class M_treeview_detail extends CI_Model {
 
     function read_document() {
         $this->db->select("d.*, COUNT(DISTINCT cd.id) AS child_document,GROUP_CONCAT(DISTINCT dt.terkait) AS document_terkait, GROUP_CONCAT(DISTINCT dp.id_pasal) AS dokumen_pasal, GROUP_CONCAT(DISTINCT ds.id) AS distribusi, GROUP_CONCAT(DISTINCT pld.id) AS personil_distribusi_id, GROUP_CONCAT(DISTINCT CONCAT(pld.fullname,' - ', ukd.name)) AS user_distribusi");
-        $this->db->join('pasal p', 'p.id = d.id_pasal');
-        $this->db->join('document_pasal dp', 'dp.id_document = d.id', 'LEFT');
+        $this->db->join('document_pasal dp', 'dp.id_document = d.id');
+        $this->db->join('pasal p', 'p.id = dp.id_pasal');
         $this->db->join('document cd', 'cd.contoh = d.id', 'LEFT');
         $this->db->join('users u', 'u.id = d.creator', 'LEFT');
         $this->db->join('company c', 'c.id = d.id_company', 'LEFT');
@@ -550,6 +550,33 @@ class M_treeview_detail extends CI_Model {
         }
         $this->db->where('id', $this->input->post('id'));
         return $this->db->update('jadwal');
+    }
+
+    function getPemenuhan() {
+        $this->db->select('p.*, COUNT(DISTINCT dp.id) AS doc, GROUP_CONCAT(DISTINCT d.id) AS docs, COUNT(DISTINCT t.id) AS tugas, COUNT(DISTINCT j.id) AS jadwal,  GROUP_CONCAT(DISTINCT j.id) AS jadwals');
+        $this->db->join('document_pasal dp', 'dp.id_pasal = p.id', 'LEFT');
+        $this->db->join('document d', 'd.id = dp.id_document AND d.id_company = ' . $this->input->get('company'), 'LEFT');
+        $this->db->join('tugas t', 't.id_document d.id = dp.id_document', 'LEFT');
+        $this->db->join('jadwal j', 'j.id_tugas = t.id', 'LEFT');
+        $this->db->where('p.id_standard', $this->input->get('standard'));
+        $this->db->order_by('p.sort_index');
+        $this->db->group_by('p.sort_index');
+        $pasal = $this->db->get('pasal p')->result_array();
+        foreach ($pasal as $k => $p) {
+            $pasal[$k]['jadwal_ok'] = 0;
+            $jadwal = explode(',', $p['jadwals']);
+            if (!empty($jadwal[0])) {
+                foreach ($jadwal as $k2 => $j) {
+                    $this->db->where('id', $j);
+                    $jd = $this->db->get('jadwal')->row_array();
+                    print_r($jd);
+                    if ($jd['upload_date'] <= $jd['tanggal'] & $jd['upload_date'] != null) {
+                        $pasal[$k]['jadwal_ok']++;
+                    }
+                }
+            }
+        }
+        return $pasal;
     }
 
 }

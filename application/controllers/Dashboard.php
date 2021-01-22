@@ -34,7 +34,6 @@ class Dashboard extends MY_Controller {
             $company[$k]['standard'] = $this->model->company_standard($c['id']);
         }
         $this->data['company'] = $company;
-//        $this->data['grafik'] = json_encode($this->model->grafik_pasal());
         $this->render('read');
     }
 
@@ -46,8 +45,6 @@ class Dashboard extends MY_Controller {
      echo json_encode($result);
     }
     function grafik() {
-//        $this->model->grafik_pasal();
-//        echo $this->db->last_query();
         echo json_encode($this->model->grafik_pasal());
     }
 

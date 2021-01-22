@@ -41,17 +41,14 @@ class M_dashboard extends CI_Model {
     }
 
     function grafik_pasal() {
-//        $this->db->select('p.*, COUNT(dp.id) ');
-//        $this->db->join('document_pasal dp', 'dp.id_pasal = p.id', 'LEFT');
-//        $this->db->join('document d', 'd.id = dp.id_document AND d.id_company = '.$this->input->get('company'), 'LEFT');
-//        $this->db->group_by('p.sort_index');
         $this->db->where('p.id_standard', $this->input->get('standard'));
-//        $this->db->order_by('p.id');
         $result = $this->db->get('pasal p')->result_array();
         foreach ($result as $k => $r) {
+            //DOKUMEN
             $this->db->join('document d', 'd.id = dp.id_document AND d.id_company = ' . $this->input->get('company'));
             $this->db->where('dp.id_pasal', $r['id']);
             $result[$k]['doc'] = $this->db->count_all_results('document_pasal dp');
+            //HARAPAN
             $this->db->where('id_company', $this->input->get('company'));
             $this->db->where('id_pasal', $r['id']);
             $row = $this->db->get('hope')->row_array();
@@ -60,6 +57,9 @@ class M_dashboard extends CI_Model {
             } else {
                 $result[$k]['harapan'] = $row['persentase'];
             }
+            //IMPLEMENTASI
+            
+            $result[$k]['implementasi'] = $this->db->count_all_result('jadwal j');
         }
         return $result;
     }

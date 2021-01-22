@@ -37,7 +37,7 @@ class Treeview_detail extends MY_Controller {
     }
 
     function pasal() {
-        $this->session->set_userdata('md_standard',$this->input->get('standar'));
+        $this->session->set_userdata('md_standard', $this->input->get('standar'));
         $this->ajax_request();
         echo json_encode($this->model->pasal());
     }
@@ -151,6 +151,7 @@ class Treeview_detail extends MY_Controller {
         }
         echo json_encode($result);
     }
+
     function jadwal() {
         $this->ajax_request();
         if ($this->model->schedule()) {
@@ -208,6 +209,33 @@ class Treeview_detail extends MY_Controller {
             $status['message'] = $this->upload->display_errors();
         }
         echo json_encode($status);
+    }
+
+    function get_pemenuhan() {
+        $result = $this->model->getPemenuhan();
+        echo '<table border="1"><thead><tr>'
+            . '<td>Index</td>'
+            . '<td>Pasal</td>'
+            . '<td>cDoc</td>'
+            . '<td>listDoc</td>'
+            . '<td>tugas</td>'
+            . '<td>Jadwal</td>'
+            . '<td>Jadwals</td>'
+            . '<td>Jadwal OK</td>'
+        . '</tr></thead><tbody>';
+        foreach ($result as $k => $r) {
+            echo '<tr>'
+            . '<td>' .$r['sort_index']. '</td>'
+            . '<td>' . $r['name'] . '</td>'
+            . '<td>' . $r['doc'] . '</td>'
+            . '<td>' . $r['docs'] . '</td>'
+            . '<td>' . $r['tugas'] . '</td>'
+            . '<td>' . $r['jadwal'] . '</td>'
+            . '<td>' . $r['jadwals'] . '</td>'
+            . '<td>' . $r['jadwal_ok'] . '</td>'
+            . '</tr>';
+        }
+        echo '</tbody></table>';
     }
 
 }

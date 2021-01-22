@@ -66,6 +66,7 @@ $role = $this->session->userdata['user']['role'];
                                     <th class="col-sm-1">Pemenuhan<br/>Dokumen</th>
                                     <th class="col-sm-1">Jumlah<br/>Jadwal</th>
                                     <th class="col-sm-1 dt-body-right">Pemenuhan<br/>Implementasi</th>
+                                    <th class="col-sm-1 dt-body-right">Pemenuhan<br/>Implementasi</th>
                                 </tr>
                             </thead>
                             <tbody></tbody>
@@ -374,7 +375,7 @@ $role = $this->session->userdata['user']['role'];
                                     <div class="input-group mb-3 group-label-dokumen">
                                         <input class="form-control label-path" readonly="">
                                         <div class="input-group-append">
-                                            <i class="btn btn-outline-danger btn-sm pull-right fa fa-trash"></i>
+                                            <i class="btn btn-outline-danger btn-sm pull-right fa fa-trash" onclick="initEditPathDocument()"></i>
                                         </div>
                                     </div>
                                 </td>
@@ -1207,7 +1208,8 @@ $role = $this->session->userdata['user']['role'];
                 ps.index_documents.length,
                 '<span class="badge badge-' + percentColor(sortPasal[i].pemenuhanDocument) + '">' + Math.round(sortPasal[i].pemenuhanDocument) + '%</span>',
                 imp,
-                (imp == 0 ? '-' : '<span class="badge badge-' + percentColor(percentImp) + '">' + percentImp + '%</span>')
+                (imp == 0 ? '-' : '<span class="badge badge-' + percentColor(percentImp) + '">' + percentImp + '%</span>'),
+                sortPasal[i].pemenuhanImp,
             ]).node();
             if (ps.parent == null) {
                 $(tr).addClass('table-success');
@@ -1216,6 +1218,7 @@ $role = $this->session->userdata['user']['role'];
         tbPemenuhan.draw();
     }
     function pemenuhanDocument(index) {
+        sortPasal[index].pemenuhanImp = 0;
         var p = sortPasal[index];
         var sumPemenuhan = 0;
         var percent = 0;
@@ -1232,12 +1235,14 @@ $role = $this->session->userdata['user']['role'];
                 percentImp = 0;
             } else {
                 percent = 100;
-                percentImp = countImplementasi();
+                percentImp = countImplementasi(p.index_documents);
             }
         }
         sortPasal[index].pemenuhanDocument = percent;
+        sortPasal[index].pemenuhanImp = percentImp;
     }
     function countImplementasi() {
+//        console.log
         return 0; //jumlah dokumen
     }
     function percentColor(num) {
@@ -1419,6 +1424,11 @@ $role = $this->session->userdata['user']['role'];
         m.find('input, select, textarea').prop('disabled', false);
         m.find('.input-path').prop('required', false);
         m.find('.fa-trash').show();
+    }
+    function initEditPathDocument() {
+        var m = $('#modalDokumen');
+        m.find('.group-label-dokumen').hide();
+        m.find('.group-radio-dokumen').show();
     }
     function initHapusDokumen(index) {
         var m = $('#modalDeleteDokumen');
