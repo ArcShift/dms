@@ -1415,6 +1415,8 @@ $role = $this->session->userdata['user']['role'];
         } else if (d.type_doc == 'URL') {
             m.find('.label-path').val(d.url);
             m.find('.input-group-append').val('<a class="btn btn-outline-primary btn-sm pull-right fa fa-search" onclick="previewDocument()"></i>');
+        }else{
+            m.find('.label-path').val('-');
         }
         m.find('input, select, textarea').prop('disabled', true);
         m.find('.btn-submit').show();
