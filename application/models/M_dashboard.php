@@ -53,13 +53,13 @@ class M_dashboard extends CI_Model {
             $this->db->where('id_pasal', $r['id']);
             $row = $this->db->get('hope')->row_array();
             if (empty($row)) {
-                $result[$k]['harapan'] = 0;
+                $result[$k]['harapan'] = 70;
             } else {
                 $result[$k]['harapan'] = $row['persentase'];
             }
             //IMPLEMENTASI
             
-            $result[$k]['implementasi'] = $this->db->count_all_result('jadwal j');
+//            $result[$k]['implementasi'] = $this->db->count_all_results('jadwal j');
         }
         return $result;
     }

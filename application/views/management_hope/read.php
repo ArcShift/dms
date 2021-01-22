@@ -94,7 +94,7 @@ $company = $this->db->get('company')->result_array();
                 var d = data[i];
                 $('#table').append('<tr>'
                         + '<td>' + d.name + '</td>'
-                        + '<td class="text-center">' + d.persentase + '</td>'
+                        + '<td class="text-center">' + (d.persentase==null?'70':d.persentase) + '</td>'
                         + '<td class="text-center"><i class="text-primary fa fa-edit" onclick="edit(' + i + ')")></i></td>'
                         + '</tr>');
             }
