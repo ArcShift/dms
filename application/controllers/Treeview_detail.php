@@ -210,8 +210,10 @@ class Treeview_detail extends MY_Controller {
         }
         echo json_encode($status);
     }
-
     function get_pemenuhan() {
+        echo json_encode($this->model->getPemenuhan());
+    }
+    function get_pemenuhan_test() {
         $result = $this->model->getPemenuhan();
         echo '<table border="1"><thead><tr>'
             . '<td>Index</td>'
@@ -220,7 +222,8 @@ class Treeview_detail extends MY_Controller {
             . '<td>child</td>'
             . '<td>indexParent</td>'
             . '<td>indexChild</td>'
-            . '<td>cDoc</td>'
+            . '<td>Doc</td>'
+            . '<td>pemenuhan Doc</td>'
             . '<td>listDoc</td>'
             . '<td>tugas</td>'
             . '<td>Jadwal</td>'
@@ -236,11 +239,13 @@ class Treeview_detail extends MY_Controller {
             . '<td>' . $r['indexParent'] . '</td>'
             . '<td>' . implode(',', $r['indexChild']) . '</td>'
             . '<td>' . $r['doc'] . '</td>'
+            . '<td>' . $r['pemenuhanDoc'] . '%</td>'
             . '<td>' . $r['docs'] . '</td>'
             . '<td>' . $r['tugas'] . '</td>'
             . '<td>' . $r['jadwal'] . '</td>'
             . '<td>' . $r['jadwals'] . '</td>'
             . '<td>' . $r['jadwal_ok'] . '</td>'
+            . '<td>' . $r['pemenuhanImp'] . '%</td>'
             . '</tr>';
         }
         echo '</tbody></table>';

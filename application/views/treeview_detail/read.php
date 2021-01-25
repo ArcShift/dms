@@ -62,11 +62,10 @@ $role = $this->session->userdata['user']['role'];
                                 <tr>
                                     <th>Pasal</th>
                                     <th>Judul</th>
-                                    <th class="col-sm-1">Jumlah<br/>Dokumen</th>
-                                    <th class="col-sm-1">Pemenuhan<br/>Dokumen</th>
-                                    <th class="col-sm-1">Jumlah<br/>Jadwal</th>
-                                    <th class="col-sm-1 dt-body-right">Pemenuhan<br/>Implementasi</th>
-                                    <th class="col-sm-1 dt-body-right">Pemenuhan<br/>Implementasi</th>
+                                    <th class="col-sm-1 text-center">Jumlah<br/>Dokumen</th>
+                                    <th class="col-sm-1 text-center">Pemenuhan<br/>Dokumen</th>
+                                    <th class="col-sm-1 text-center">Jumlah<br/>Jadwal</th>
+                                    <th class="col-sm-1 text-center">Pemenuhan<br/>Implementasi</th>
                                 </tr>
                             </thead>
                             <tbody></tbody>
@@ -1175,47 +1174,31 @@ $role = $this->session->userdata['user']['role'];
         });
     }
     function getPemenuhan() {
-        if (role == 'anggota') {
-            $('.col-aksi').remove();
-        }
-        tbPemenuhan.clear();
-        for (var i = 0; i < sortPasal.length; i++) {
-            sortPasal[i].pemenuhanImplementasi = 0;
-            var ps = sortPasal[i];
-            if (ps.parent == null) {
-                listPasalDocuments(i);
-                pemenuhanDocument(i);
-            }
-            var imp = 0;
-            var upImp = 0;
-            for (var j = 0; j < ps.index_documents.length; j++) {
-                var doc = sortDokumen[ps.index_documents[j]];
-                for (var k = 0; k < doc.index_tugas.length; k++) {
-                    var tgs = sortTugas[doc.index_tugas[k]];
-                    for (var l = 0; l < tgs.indexJadwal.length; l++) {
-                        var jd = sortJadwal[tgs.indexJadwal[l]];
-                        if (jd.status == 'selesai') {
-                            upImp++;
-                        }
-                        imp++;
-                    }
+        $.getJSON('<?= site_url($module); ?>/get_pemenuhan', {'company': perusahaan, 'standard': standar}, function (data) {
+            console.log(data);
+            tbPemenuhan.clear();
+            for (var i = 0; i < sortPasal.length; i++) {
+                sortPasal[i].pemenuhanImplementasi = 0;
+                var ps = sortPasal[i];
+                var d = data[i];
+                if (ps.parent == null) {
+                    listPasalDocuments(i);
+                    pemenuhanDocument(i);
+                }
+                var tr = tbPemenuhan.row.add([
+                    ps.fullname,
+                    (ps.sort_desc == null ? '' : ps.sort_desc),
+                    '<div class="text-center">'+d.doc+'</div>',
+                    '<div class="text-center"><span class="badge badge-' + percentColor(d.pemenuhanDoc) + '">' + d.pemenuhanDoc + '%</span></div>',
+                    '<div class="text-center">'+d.jadwal+'</div>',
+                    '<div class="text-center"><span class="badge badge-' + percentColor(d.pemenuhanImp) + '">' + d.pemenuhanImp + '%</span></div>',
+                ]).node();
+                if (ps.parent == null) {
+                    $(tr).addClass('table-success');
                 }
             }
-            var percentImp = (upImp * 100 / imp).toFixed();
-            var tr = tbPemenuhan.row.add([
-                ps.fullname,
-                (ps.sort_desc == null ? '' : ps.sort_desc),
-                ps.index_documents.length,
-                '<span class="badge badge-' + percentColor(sortPasal[i].pemenuhanDocument) + '">' + Math.round(sortPasal[i].pemenuhanDocument) + '%</span>',
-                imp,
-                (imp == 0 ? '-' : '<span class="badge badge-' + percentColor(percentImp) + '">' + percentImp + '%</span>'),
-                sortPasal[i].pemenuhanImp,
-            ]).node();
-            if (ps.parent == null) {
-                $(tr).addClass('table-success');
-            }
-        }
-        tbPemenuhan.draw();
+            tbPemenuhan.draw();
+        });
     }
     function pemenuhanDocument(index) {
         sortPasal[index].pemenuhanImp = 0;

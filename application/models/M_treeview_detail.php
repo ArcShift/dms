@@ -567,7 +567,6 @@ class M_treeview_detail extends CI_Model {
         $this->db->order_by('p.sort_index');
         $this->db->group_by('p.sort_index');
         $pasal = $this->db->get('pasal p')->result_array();
-        echo $this->db->last_query();
         foreach ($pasal as $k => $p) {
             $pasal[$k]['indexChild'] = [];
             if ($pasal[$k]['parent'] == null) {
@@ -582,9 +581,35 @@ class M_treeview_detail extends CI_Model {
         }
         $this->pasal = $pasal;
         foreach ($this->pasal as $k => $p) {
-            
+            if ($p['parent'] == null) {
+                $this->persentasePemenuhan($k);
+            }
         }
-        return $pasal;
+        return $this->pasal;
+    }
+
+    function persentasePemenuhan($index) {
+        $p = $this->pasal[$index];
+        $pemenuhanDoc = 0;
+        $pemenuhanImp = 0;
+        if (!empty($p['indexChild'])) {
+            foreach ($p['indexChild'] as $k => $c) {
+                $this->persentasePemenuhan($c);
+                $pemenuhanDoc += $this->pasal[$c]['pemenuhanDoc'];
+                $pemenuhanImp += $this->pasal[$c]['pemenuhanImp'];
+            }
+            $pemenuhanDoc = round($pemenuhanDoc/ count($p['indexChild']), 2); 
+            $pemenuhanImp = round($pemenuhanImp/ count($p['indexChild']), 2); 
+        } else {
+            if ($p['doc'] != 0) {
+                $pemenuhanDoc = 100;
+            }
+            if ($p['jadwal_ok']!=0){
+                $pemenuhanImp = round($p['jadwal_ok']*100/$p['jadwal'],2);
+            }
+        }
+        $this->pasal[$index]['pemenuhanDoc'] = $pemenuhanDoc;
+        $this->pasal[$index]['pemenuhanImp'] = $pemenuhanImp;
     }
 
 }

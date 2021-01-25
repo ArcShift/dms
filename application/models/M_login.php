@@ -14,6 +14,10 @@ class M_login extends CI_Model {
         if ($result->num_rows()) {
             $result = $result->row_array();
             $this->session->set_userdata('user', $result);
+            $this->db->where('id', $result['id_company']);
+            $company = $this->db->get('company')->row_array();
+            $this->session->set_userdata('company', $company);
+            
             return true;
         } else {
             return false;

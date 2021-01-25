@@ -27,7 +27,7 @@ class Dashboard extends MY_Controller {
             array('company' => 'Y', 'name' => 'diterapkan', 'title' => 'Diterapkan', 'subtitle' => 'Dokumen Sudah Diupload', 'color' => 'happy-green', 'icon' => 'building', 'value' => '-'),
 //            array('company' => 'N', 'name' => 'income', 'title' => 'Pemasukan', 'color' => 'happy-itmeo', 'icon' => 'building', 'value' => 'Rp. -'),
 //            array('company' => 'Y', 'name' => 'progress', 'title' => 'Progress', 'subtitle' => 'Pemenuhan Total', 'color' => 'malibu-beach', 'icon' => 'building', 'value' => '- %'),
-            //==
+                //==
         );
         $company = $this->db->get('company')->result_array();
         foreach ($company as $k => $c) {
@@ -36,14 +36,27 @@ class Dashboard extends MY_Controller {
         $this->data['company'] = $company;
         $this->render('read');
     }
-
-    function standard() {
-     $this->db->select('s.*');
-     $this->db->join('company_standard cs', 'cs.id_standard = s.id');
-     $this->db->where('cs.id_company', $this->input->get('company'));
-     $result=$this->db->get('standard s')->result_array();
-     echo json_encode($result);
+    function detail(){
+        $this->render('detail');
     }
+    function standard() {
+        $this->db->where('id', $this->input->get('company'));
+        $company = $this->db->get('company')->row_array();
+        $this->session->set_userdata('activeCompany', $company);
+        $this->db->select('s.*');
+        $this->db->join('company_standard cs', 'cs.id_standard = s.id');
+        $this->db->where('cs.id_company', $this->input->get('company'));
+        $result = $this->db->get('standard s')->result_array();
+        echo json_encode($result);
+    }
+
+    function set_standard() {
+        $this->db->where($this->input->get('standard'));
+        $standard = $this->db->get('standard')->row_array();
+        $this->session->set_userdata('activeStandard', $standard);
+        redirect('dashboard');
+    }
+
     function grafik() {
         echo json_encode($this->model->grafik_pasal());
     }
