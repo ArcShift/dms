@@ -36,32 +36,40 @@ class M_dashboard extends CI_Model {
     }
 
     function company_standard($c) {
+        $this->db->select('s.*');
         $this->db->join('company_standard cs', 'cs.id_standard = s.id AND cs.id_company = ' . $c);
         return $this->db->get('standard s')->result_array();
     }
 
-    function grafik_pasal() {
-        $this->db->where('p.id_standard', $this->input->get('standard'));
-        $result = $this->db->get('pasal p')->result_array();
-        foreach ($result as $k => $r) {
-            //DOKUMEN
-            $this->db->join('document d', 'd.id = dp.id_document AND d.id_company = ' . $this->input->get('company'));
-            $this->db->where('dp.id_pasal', $r['id']);
-            $result[$k]['doc'] = $this->db->count_all_results('document_pasal dp');
-            //HARAPAN
-            $this->db->where('id_company', $this->input->get('company'));
-            $this->db->where('id_pasal', $r['id']);
-            $row = $this->db->get('hope')->row_array();
-            if (empty($row)) {
-                $result[$k]['harapan'] = 70;
-            } else {
-                $result[$k]['harapan'] = $row['persentase'];
-            }
-            //IMPLEMENTASI
-            
-//            $result[$k]['implementasi'] = $this->db->count_all_results('jadwal j');
-        }
-        return $result;
+//
+//    function grafik_pasal() {
+//        $this->db->where('p.id_standard', $this->input->get('standard'));
+//        $result = $this->db->get('pasal p')->result_array();
+//        foreach ($result as $k => $r) {
+//            //DOKUMEN
+//            $this->db->join('document d', 'd.id = dp.id_document AND d.id_company = ' . $this->input->get('company'));
+//            $this->db->where('dp.id_pasal', $r['id']);
+//            $result[$k]['doc'] = $this->db->count_all_results('document_pasal dp');
+//            //HARAPAN
+//            $this->db->where('id_company', $this->input->get('company'));
+//            $this->db->where('id_pasal', $r['id']);
+//            $row = $this->db->get('hope')->row_array();
+//            if (empty($row)) {
+//                $result[$k]['harapan'] = 70;
+//            } else {
+//                $result[$k]['harapan'] = $row['persentase'];
+//            }
+//            //IMPLEMENTASI
+//            
+////            $result[$k]['implementasi'] = $this->db->count_all_results('jadwal j');
+//        }
+//        return $result;
+//    }
+
+    function getDefaultStandard($company) {
+        $this->db->select('s.*');
+        $this->db->join('company_standard cs', 'cs.id_standard = s.id AND cs.id_company = ' . $company);
+        return $this->db->get('standard s')->row_array();
     }
 
 }

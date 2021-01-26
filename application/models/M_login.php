@@ -16,8 +16,12 @@ class M_login extends CI_Model {
             $this->session->set_userdata('user', $result);
             $this->db->where('id', $result['id_company']);
             $company = $this->db->get('company')->row_array();
-            $this->session->set_userdata('company', $company);
-            
+            $this->session->set_userdata('company', $company); //REMOVE LATER
+            if (!empty($result['id_company'])) {
+                $this->db->where('id', $result['id_company']);
+            }
+            $company = $this->db->get('company')->row_array();
+            $this->session->set_userdata('activeCompany', $company);
             return true;
         } else {
             return false;

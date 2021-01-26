@@ -556,14 +556,14 @@ class M_treeview_detail extends CI_Model {
 
     private $pasal = [];
 
-    function getPemenuhan() {
+    function getPemenuhan($company, $standard) {
         $this->db->select('p.*,COUNT(p2.id) AS child, COUNT(dp.id) AS doc, GROUP_CONCAT(DISTINCT d.id) AS docs, COUNT(DISTINCT t.id) AS tugas, COUNT(DISTINCT j.id) AS jadwal,  GROUP_CONCAT(DISTINCT j.id) AS jadwals, SUM(IF(j.upload_date <= j.tanggal AND j.upload_date IS NOT NULL,1,0)) AS jadwal_ok');
         $this->db->join('pasal p2', 'p2.parent = p.id', 'LEFT');
         $this->db->join('document_pasal dp', 'dp.id_pasal = p.id', 'LEFT');
-        $this->db->join('document d', 'd.id = dp.id_document AND d.id_company = ' . $this->input->get('company'), 'LEFT');
+        $this->db->join('document d', 'd.id = dp.id_document AND d.id_company = ' . $company, 'LEFT');
         $this->db->join('tugas t', 't.id_document = d.id', 'LEFT');
         $this->db->join('jadwal j', 'j.id_tugas = t.id', 'LEFT');
-        $this->db->where('p.id_standard', $this->input->get('standard'));
+        $this->db->where('p.id_standard', $standard);
         $this->db->order_by('p.sort_index');
         $this->db->group_by('p.sort_index');
         $pasal = $this->db->get('pasal p')->result_array();

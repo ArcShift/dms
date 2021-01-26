@@ -211,7 +211,7 @@ class Treeview_detail extends MY_Controller {
         echo json_encode($status);
     }
     function get_pemenuhan() {
-        echo json_encode($this->model->getPemenuhan());
+        echo json_encode($this->model->getPemenuhan($this->input->get('company'),$this->input->get('standard')));
     }
     function get_pemenuhan_test() {
         $result = $this->model->getPemenuhan();
