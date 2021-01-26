@@ -3,6 +3,7 @@ if (empty($this->session->activeCompany)) {
     echo 'Belum ada perusahaan';
 } else {
     $activeStandard = $this->session->userdata('activeStandard');
+    $g2 = json_decode($progressImp);
     ?>
     <div class="app-page-title">
         <div class="page-title-wrapper">
@@ -107,7 +108,6 @@ if (empty($this->session->activeCompany)) {
                     <div class="card-body">
                         <h5 class="card-title">Nilai Pemenuhan Dokumen dan Implementasi</h5>
                         <canvas id="chartPemenuhan"></canvas>
-                        <!--<canvas id="radar-chart"></canvas>-->
                     </div>
                 </div>
             </div>
@@ -134,7 +134,7 @@ if (empty($this->session->activeCompany)) {
                     <div class="tab-content">
                         <div class="tab-pane fade active show" id="tab-eg-55">
                             <div class="card-body">
-                                <canvas id="chart-area"></canvas>
+                                <canvas id="chartProgressImp"></canvas>
                             </div>
                         </div>
                         <div class="pt-2 card-body">
@@ -144,7 +144,7 @@ if (empty($this->session->activeCompany)) {
                                         <div class="widget-content-outer">
                                             <div class="widget-content-wrapper">
                                                 <div class="widget-content-left">
-                                                    <div class="widget-numbers fsize-3 text-muted">63%</div>
+                                                    <div class="widget-numbers fsize-3 text-muted"><?= $g2[1]->percent ?>%</div>
                                                 </div>
                                                 <div class="widget-content-right">
                                                     <div class="text-muted opacity-6">Terlambat</div>
@@ -152,7 +152,7 @@ if (empty($this->session->activeCompany)) {
                                             </div>
                                             <div class="widget-progress-wrapper mt-1">
                                                 <div class="progress-bar-sm progress-bar-animated-alt progress">
-                                                    <div class="progress-bar bg-danger" role="progressbar" aria-valuenow="63" aria-valuemin="0" aria-valuemax="100" style="width: 63%;"></div>
+                                                    <div class="progress-bar bg-danger" role="progressbar" aria-valuenow="<?= $g2[1]->percent ?>" aria-valuemin="0" aria-valuemax="100" style="width: <?= $g2[1]->percent ?>%;"></div>
                                                 </div>
                                             </div>
                                         </div>
@@ -163,7 +163,7 @@ if (empty($this->session->activeCompany)) {
                                         <div class="widget-content-outer">
                                             <div class="widget-content-wrapper">
                                                 <div class="widget-content-left">
-                                                    <div class="widget-numbers fsize-3 text-muted">32%</div>
+                                                    <div class="widget-numbers fsize-3 text-muted"><?= $g2[4]->percent ?>%</div>
                                                 </div>
                                                 <div class="widget-content-right">
                                                     <div class="text-muted opacity-6">Selesai</div>
@@ -171,7 +171,7 @@ if (empty($this->session->activeCompany)) {
                                             </div>
                                             <div class="widget-progress-wrapper mt-1">
                                                 <div class="progress-bar-sm progress-bar-animated-alt progress">
-                                                    <div class="progress-bar bg-success" role="progressbar" aria-valuenow="32" aria-valuemin="0" aria-valuemax="100" style="width: 32%;"></div>
+                                                    <div class="progress-bar bg-success" role="progressbar" aria-valuenow="<?= $g2[4]->percent ?>" aria-valuemin="0" aria-valuemax="100" style="width: <?= $g2[4]->percent ?>%;"></div>
                                                 </div>
                                             </div>
                                         </div>
@@ -182,7 +182,7 @@ if (empty($this->session->activeCompany)) {
                                         <div class="widget-content-outer">
                                             <div class="widget-content-wrapper">
                                                 <div class="widget-content-left">
-                                                    <div class="widget-numbers fsize-3 text-muted">71%</div>
+                                                    <div class="widget-numbers fsize-3 text-muted"><?= $g2[5]->percent ?>%</div>
                                                 </div>
                                                 <div class="widget-content-right">
                                                     <div class="text-muted opacity-6">Mendatang</div>
@@ -190,7 +190,7 @@ if (empty($this->session->activeCompany)) {
                                             </div>
                                             <div class="widget-progress-wrapper mt-1">
                                                 <div class="progress-bar-sm progress-bar-animated-alt progress">
-                                                    <div class="progress-bar bg-primary" role="progressbar" aria-valuenow="71" aria-valuemin="0" aria-valuemax="100" style="width: 71%;"></div>
+                                                    <div class="progress-bar bg-primary" role="progressbar" aria-valuenow="<?= $g2[5]->percent ?>" aria-valuemin="0" aria-valuemax="100" style="width: <?= $g2[5]->percent ?>%;"></div>
                                                 </div>
                                             </div>
                                         </div>
@@ -201,7 +201,7 @@ if (empty($this->session->activeCompany)) {
                                         <div class="widget-content-outer">
                                             <div class="widget-content-wrapper">
                                                 <div class="widget-content-left">
-                                                    <div class="widget-numbers fsize-3 text-muted">41%</div>
+                                                    <div class="widget-numbers fsize-3 text-muted"><?= $g2[3]->percent ?>%</div>
                                                 </div>
                                                 <div class="widget-content-right">
                                                     <div class="text-muted opacity-6">Hari Ini</div>
@@ -209,7 +209,7 @@ if (empty($this->session->activeCompany)) {
                                             </div>
                                             <div class="widget-progress-wrapper mt-1">
                                                 <div class="progress-bar-sm progress-bar-animated-alt progress">
-                                                    <div class="progress-bar bg-warning" role="progressbar" aria-valuenow="41" aria-valuemin="0" aria-valuemax="100" style="width: 41%;"></div>
+                                                    <div class="progress-bar bg-warning" role="progressbar" aria-valuenow="<?= $g2[3]->percent ?>" aria-valuemin="0" aria-valuemax="100" style="width: <?= $g2[3]->percent ?>%;"></div>
                                                 </div>
                                             </div>
                                         </div>
@@ -402,7 +402,7 @@ if (empty($this->session->activeCompany)) {
                                             <div class="widget-content-wrapper">
                                                 <div class="widget-content-left mr-3">
                                                     <div class="widget-content-left">
-                                                        <img width="40" class="rounded-circle" src="assets/images/avatars/4.jpg" alt="">
+                                                        <!--<img width="40" class="rounded-circle" src="assets/images/avatars/4.jpg" alt="">-->
                                                     </div>
                                                 </div>
                                                 <div class="widget-content-left flex2">
@@ -428,7 +428,7 @@ if (empty($this->session->activeCompany)) {
                                             <div class="widget-content-wrapper">
                                                 <div class="widget-content-left mr-3">
                                                     <div class="widget-content-left">
-                                                        <img width="40" class="rounded-circle" src="assets/images/avatars/3.jpg" alt="">
+                                                        <!--<img width="40" class="rounded-circle" src="assets/images/avatars/3.jpg" alt="">-->
                                                     </div>
                                                 </div>
                                                 <div class="widget-content-left flex2">
@@ -454,7 +454,7 @@ if (empty($this->session->activeCompany)) {
                                             <div class="widget-content-wrapper">
                                                 <div class="widget-content-left mr-3">
                                                     <div class="widget-content-left">
-                                                        <img width="40" class="rounded-circle" src="assets/images/avatars/2.jpg" alt="">
+<!--                                                        <img width="40" class="rounded-circle" src="assets/images/avatars/2.jpg" alt="">-->
                                                     </div>
                                                 </div>
                                                 <div class="widget-content-left flex2">
@@ -480,7 +480,7 @@ if (empty($this->session->activeCompany)) {
                                             <div class="widget-content-wrapper">
                                                 <div class="widget-content-left mr-3">
                                                     <div class="widget-content-left">
-                                                        <img width="40" class="rounded-circle" src="assets/images/avatars/1.jpg" alt=""></div>
+<!--                                                        <img width="40" class="rounded-circle" src="assets/images/avatars/1.jpg" alt=""></div>-->
                                                 </div>
                                                 <div class="widget-content-left flex2">
                                                     <div class="widget-heading">Vinnie Wagstaff</div>
@@ -510,7 +510,6 @@ if (empty($this->session->activeCompany)) {
             </div>
         </div>
         <script>
-            console.log(<?= $progressImp ?>);
             var pemenuhan = <?= $pemenuhan ?>;
             var label = [];
             var doc = [];
@@ -530,28 +529,26 @@ if (empty($this->session->activeCompany)) {
                 data: {
                     labels: label,
                     datasets: [{
-                            label: 'Dokumen',
-                            data: doc,
-                            borderColor: 'rgba(255, 0, 0, 1)',
-                            borderWidth: 1
-                        }, {
                             label: 'Harapan',
                             data: hope,
-                            borderColor: 'rgba(0, 255, 0, 1)',
-                            borderWidth: 1
+                            backgroundColor: 'rgba(255, 0, 0, 0.2)',
+                            borderColor: 'rgb(255, 0, 0)',
+                            pointBackgroundColor: 'rgb(255, 0, 0)',
+                        }, {
+                            label: 'Dokumen',
+                            data: doc,
+                            backgroundColor: 'rgba(0, 0, 255, 0.2)',
+                            borderColor: 'rgb(0, 0, 255)',
+                            pointBackgroundColor: 'rgb(0, 0, 255)',
                         }, {
                             label: 'Implementasi',
                             data: imp,
-                            borderColor: 'rgba(0, 0, 255, 1)',
-                            borderWidth: 1
+                            backgroundColor: 'rgba(255, 255, 0, 0.2)',
+                            borderColor: 'rgb(255, 255, 0)',
+                            pointBackgroundColor: 'rgb(255, 255, 0)',
                         }]
                 },
                 options: {
-        //                    title: {
-        //                        display: true,
-        //                        text: 'Grafik Pemenuhan Dokumen dan Standar',
-        //                        position: 'bottom',
-        //                    },
                     scale: {
                         angleLines: {
                             display: false
@@ -570,6 +567,28 @@ if (empty($this->session->activeCompany)) {
                 }
                 return Math.round(sum / arr.length);
             }
+            var progressImp = <?= $progressImp ?>;
+            var data = [];
+            var label = [];
+            for (var i = 0; i < progressImp.length; i++) {
+                var p = progressImp[i];
+                if (i != 0) {
+                    data.push(p.count);
+                    label.push(p.status);
+                }
+            }
+
+            chartProgress = new Chart(document.getElementById('chartProgressImp'), {
+                type: 'pie',
+                data: {
+                    datasets: [{
+                            data: data,
+                            backgroundColor: ['#d92550', 'rgb(255,165,0)', 'rgb(255, 255, 0)', '#3ac47d', '#3f6ad8'],
+                        }],
+                    labels: label,
+                },
+                options: {}
+            });
         </script>
     <?php } ?>
     <script>

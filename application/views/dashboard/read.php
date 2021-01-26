@@ -90,7 +90,7 @@
                 <div class="card mb-3 widget-content bg-<?= $b['color'] ?>">
                     <div class="widget-content-wrapper text-white">
                         <!--                    <div>
-                                                <i class="fa fa-<?php // $b['icon']                                                                            ?>"></i>&nbsp;
+                                                <i class="fa fa-<?php // $b['icon']                                                                             ?>"></i>&nbsp;
                                             </div>-->
                         <div class="widget-content-left">
                             <div class="widget-heading"><?= $b['title'] ?></div>
@@ -110,28 +110,28 @@
         $('.app-page-title').first().hide();
     }
     function selectCompany(id, name) {
-            company = id;
-            $.getJSON('<?= site_url('dashboard/standard') ?>', {company: id}, function (data) {
-                $('#company-title').text(name);
-                $('#standard-title').text('~ Pilih Standar ~');
-                $(".dropdown-menu").removeClass('show');
-                $("#ul-standard").empty();
-                for (var i = 0; i < data.length; i++) {
-                    $("#ul-standard").append('<li class="nav-item">'
-                            + '<a href="javascript:selectStandard(' + data[i].id + ')" class="nav-link">'
-                            //                            + '<a href="javascript:selectStandard(' + data[i].id + ')" class="nav-link">'
-                            + '<i class="nav-link-icon lnr-inbox"></i>'
-                            + '<span>' + data[i].name + '</span>'
-                            + '</a>'
-                            + '</li>');
-                }
+        company = id;
+        $.getJSON('<?= site_url('dashboard/standard') ?>', {company: id}, function (data) {
+            $('#company-title').text(name);
+            $('#standard-title').text('~ Pilih Standar ~');
+            $(".dropdown-menu").removeClass('show');
+            $("#ul-standard").empty();
+            for (var i = 0; i < data.length; i++) {
+                $("#ul-standard").append('<li class="nav-item">'
+                        + '<a href="javascript:selectStandard(' + data[i].id + ')" class="nav-link">'
+                        //                            + '<a href="javascript:selectStandard(' + data[i].id + ')" class="nav-link">'
+                        + '<i class="nav-link-icon lnr-inbox"></i>'
+                        + '<span>' + data[i].name + '</span>'
+                        + '</a>'
+                        + '</li>');
             }
-            );
         }
+        );
+    }
 <?php if (empty($this->session->user['id_company'])) { ?>
-        
-<?php }else{ ?>
-     selectCompany(<?= $this->session->company['id']?>, <?= $this->session->company['name']?>);
+
+<?php } else { ?>
+        selectCompany(<?= $this->session->company['id'] ?>, <?= $this->session->company['name'] ?>);
 <?php } ?>
     function selectStandard(id) {
         $.getJSON('<?= site_url('dashboard/grafik') ?>', {company: company, standard: id}, function (data) {
@@ -206,8 +206,9 @@
                     }, {
                         label: 'Harapan',
                         data: harapan,
-                        borderColor: 'rgba(0, 255, 0, 1)',
-                        borderWidth: 1
+                        backgroundColor: o(window.chartColors.red).alpha(.2).rgbString(),
+                        borderColor: window.chartColors.red,
+                        pointBackgroundColor: window.chartColors.red,
                     }, {
                         label: 'Implementasi',
                         data: imp,
