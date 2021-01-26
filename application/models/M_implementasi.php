@@ -5,7 +5,7 @@ class M_implementasi extends CI_Model {
     function progress($company, $standard) {
         $progress = [
             ['status' => 'all', 'where' => 'j.id IS NOT NULL'],
-            ['status' => 'Terlambat', 'where' => 'j.upload_date > j.tanggal OR (DATE(j.tanggal)>CURDATE() AND j.upload_date IS NULL)'],
+            ['status' => 'Terlambat', 'where' => 'j.upload_date > j.tanggal OR (DATE(j.tanggal)<CURDATE() AND j.upload_date IS NULL)'],
             ['status' => 'Hari Ini', 'where' => 'j.upload_date IS NULL AND DATE(j.tanggal) = CURDATE()'],
             ['status' => 'Besok', 'where' => 'j.upload_date IS NULL AND DATE(j.tanggal) = CURDATE() + INTERVAL 1 DAY'],
             ['status' => 'Selesai', 'where' => 'j.upload_date <= j.tanggal'],
