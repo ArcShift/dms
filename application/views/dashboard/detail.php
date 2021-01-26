@@ -3,7 +3,6 @@ if (empty($this->session->activeCompany)) {
     echo 'Belum ada perusahaan';
 } else {
     $activeStandard = $this->session->userdata('activeStandard');
-    $g2 = json_decode($progressImp);
     ?>
     <div class="app-page-title">
         <div class="page-title-wrapper">
@@ -73,6 +72,7 @@ if (empty($this->session->activeCompany)) {
     if (empty($activeStandard)) {
         echo 'Perusahaan ini belum memiliki standar';
     } else {
+        $g2 = json_decode($progressImp);
         ?>
         <div class="row">
             <div class="col-sm-6">
@@ -228,17 +228,16 @@ if (empty($this->session->activeCompany)) {
                             Distribusi Pasal dan Dokumen
                         </div>
                         <div class="btn-actions-pane-right">
-                            <div class="nav">
-                                <a href="javascript:void(0);" class="border-0 btn-pill btn-wide btn-transition active btn btn-outline-alternate">1</a>
-                                <a href="javascript:void(0);" class="ml-1 btn-pill btn-wide border-0 btn-transition  btn btn-outline-alternate second-tab-toggle-alt">2</a>
-                                <a href="javascript:void(0);" class="ml-1 btn-pill btn-wide border-0 btn-transition  btn btn-outline-alternate second-tab-toggle-alt">3</a>
-                            </div>
+                            <!--                            <div class="nav">
+                                                            <a href="javascript:void(0);" class="border-0 btn-pill btn-wide btn-transition active btn btn-outline-alternate">1</a>
+                                                            <a href="javascript:void(0);" class="ml-1 btn-pill btn-wide border-0 btn-transition  btn btn-outline-alternate second-tab-toggle-alt">2</a>
+                                                            <a href="javascript:void(0);" class="ml-1 btn-pill btn-wide border-0 btn-transition  btn btn-outline-alternate second-tab-toggle-alt">3</a>
+                                                        </div>-->
                         </div>
                     </div>
                     <div class="tab-content">
-                        <div class="tab-pane fade active show" id="tab-eg-55">
-
-                            <div class="card-body"><h6 class="">-</h6>
+                        <div class="tab-pane fade active show">
+                            <div class="card-body">
                                 <table class="mb-0 table table-striped">
                                     <thead>
                                         <tr>
@@ -250,69 +249,20 @@ if (empty($this->session->activeCompany)) {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <th scope="row">1</th>
-                                            <td>IT</td>
-                                            <td>Pasal 1</td>
-                                            <td class="text-center">13</td>
-                                            <td class="text-center">17</td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">2</th>
-                                            <td>Pengadaan</td>
-                                            <td>Pasal 2</td>
-                                            <td class="text-center">36</td>
-                                            <td class="text-center">76</td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">3</th>
-                                            <td>Sumber Daya Manusia</td>
-                                            <td>Pasal 3</td>
-                                            <td class="text-center">24</td>
-                                            <td class="text-center">54</td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">4</th>
-                                            <td>Administrasi</td>
-                                            <td>Pasal 4</td>
-                                            <td class="text-center">20</td>
-                                            <td class="text-center">14</td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row">5</th>
-                                            <td>General Affair</td>
-                                            <td>Pasal 5</td>
-                                            <td class="text-center">19</td>
-                                            <td class="text-center">13</td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row"></th>
-                                            <td></td>
-                                            <td>Pasal 6</td>
-                                            <td class="text-center">19</td>
-                                            <td class="text-center">12</td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row"></th>
-                                            <td></td>
-                                            <td>Pasal 7</td>
-                                            <td class="text-center">10</td>
-                                            <td class="text-center">3</td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row"></th>
-                                            <td></td>
-                                            <td>Pasal 8</td>
-                                            <td class="text-center">2</td>
-                                            <td class="text-center">1</td>
-                                        </tr>
-                                        <tr>
-                                            <th scope="row"></th>
-                                            <td></td>
-                                            <td>Pasal 9</td>
-                                            <td class="text-center">13</td>
-                                            <td class="text-center">8</td>
-                                        </tr>
+                                        <?php
+                                        $i = 0;
+                                        $pImp = json_decode($pemenuhan);
+                                        while ($i < count($unitKerja) | $i < count($pImp)) {
+                                            ?>
+                                            <tr>
+                                                <th><?= empty($unitKerja[$i])?'':$i+1 ?></th>
+                                                <td><?= empty($unitKerja[$i])?'':$unitKerja[$i]['name'] ?></td>
+                                                <td><?= empty($pImp[$i])?'':$pImp[$i]->name ?></td>
+                                                <td class="text-center"><?= empty($pImp[$i])?'':$pImp[$i]->doc ?></td>
+                                                <td class="text-center"><?= empty($pImp[$i])?'':$pImp[$i]->jadwal ?></td>
+                                            </tr>
+                                        <?php $i++ ?>
+                                        <?php } ?>
                                     </tbody>
                                 </table>
                             </div>
@@ -454,7 +404,7 @@ if (empty($this->session->activeCompany)) {
                                             <div class="widget-content-wrapper">
                                                 <div class="widget-content-left mr-3">
                                                     <div class="widget-content-left">
-<!--                                                        <img width="40" class="rounded-circle" src="assets/images/avatars/2.jpg" alt="">-->
+        <!--                                                        <img width="40" class="rounded-circle" src="assets/images/avatars/2.jpg" alt="">-->
                                                     </div>
                                                 </div>
                                                 <div class="widget-content-left flex2">
@@ -480,14 +430,14 @@ if (empty($this->session->activeCompany)) {
                                             <div class="widget-content-wrapper">
                                                 <div class="widget-content-left mr-3">
                                                     <div class="widget-content-left">
-<!--                                                        <img width="40" class="rounded-circle" src="assets/images/avatars/1.jpg" alt=""></div>-->
-                                                </div>
-                                                <div class="widget-content-left flex2">
-                                                    <div class="widget-heading">Vinnie Wagstaff</div>
-                                                    <div class="widget-subheading opacity-7">IT</div>
+        <!--                                                        <img width="40" class="rounded-circle" src="assets/images/avatars/1.jpg" alt=""></div>-->
+                                                    </div>
+                                                    <div class="widget-content-left flex2">
+                                                        <div class="widget-heading">Vinnie Wagstaff</div>
+                                                        <div class="widget-subheading opacity-7">IT</div>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
                                     </td>
                                     <td class="text-center">Backup Data Pengguna Aplikasi</td>
                                     <td class="text-center">Pasal 8</td>

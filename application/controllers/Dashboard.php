@@ -67,8 +67,10 @@ class Dashboard extends MY_Controller {
                 }
                 $this->data['pemenuhan'] = json_encode($parentPemenuhan);
                 $this->load->model('M_implementasi', 'm_imp');
-                $this->data['progressImp']= json_encode($this->m_imp->progress($company['id']));
+                $this->data['progressImp']= json_encode($this->m_imp->progress($company['id'], $standard['id']));
             }
+            $this->db->where('id_company', $company['id']);
+            $this->data['unitKerja']= $this->db->get('unit_kerja')->result_array();
         }
         $this->render('detail');
     }
