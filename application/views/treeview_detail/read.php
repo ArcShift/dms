@@ -447,20 +447,6 @@ $role = $this->session->userdata['user']['role'];
         </div>
     </div>
 </div>
-<!--MODAL SHOW MORE PASAL-->
-<div class="modal fade" id="modalShowMorePasal">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Nama Dokumen</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body modal-message"></div>
-        </div>
-    </div>
-</div>
 <!-- MODAL DISTRIBUSI -->
 <div class="modal fade" id="modalDistribusi" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -946,7 +932,7 @@ $role = $this->session->userdata['user']['role'];
                 var d = data[i];
                 d.index_dokumen_pasal = [];
                 d.txt_pasals = '';
-                d.txt_pasals2 = '';
+                d.txt_pasals2 = '<div class="more-pasal-parent">';
                 var n2 = 0;
                 for (var j = 0; j < d.dokumen_pasal.length; j++) {
                     for (var k = 0; k < sortPasal.length; k++) {
@@ -954,16 +940,20 @@ $role = $this->session->userdata['user']['role'];
                             d.index_dokumen_pasal.push(k);
                             sortPasal[k].index_documents.push(i);
                             d.txt_pasals += '<div><span class="badge badge-secondary">' + sortPasal[k].fullname + '</span></div>';
-                            if (n2 < 10) {
-                                d.txt_pasals2 += '<div><span class="badge badge-secondary">' + sortPasal[k].fullname + '</span></div>';
+                            if (n2 == 10) {
+                                d.txt_pasals2 += '<div class="text-primary btn-show-more-pasal" style="cursor:pointer" onclick="showMorePasal(this)">lihat lebih lengkap</div>'
+                                        + '<div class="more-pasal-child" style="display: none">'
+                                        + '<div class="text-primary btn-hide" style="cursor:pointer" onclick="hideMorePasal(this)">Sembunyikan</div>'
                             }
+                            d.txt_pasals2 += '<div><span class="badge badge-secondary">' + sortPasal[k].fullname + '</span></div>';
                             n2++;
                         }
                     }
                 }
                 if (n2 > 10) {
-                    d.txt_pasals2 += '<div class="text-primary" style="cursor:pointer" onclick="showMorePasal(' + n + ')">lihat lebih lengkap</div>';
+                    d.txt_pasals2 += '</div>';
                 }
+                d.txt_pasals2 += '</div>';
                 for (var j = 0; j < sortPasal.length; j++) {//TODO: remove later
                     sortPasal[j].dokumens = [];
                     var p = sortPasal[j];
@@ -1188,9 +1178,9 @@ $role = $this->session->userdata['user']['role'];
                 var tr = tbPemenuhan.row.add([
                     ps.fullname,
                     (ps.sort_desc == null ? '' : ps.sort_desc),
-                    '<div class="text-center">'+d.doc+'</div>',
+                    '<div class="text-center">' + d.doc + '</div>',
                     '<div class="text-center"><span class="badge badge-' + percentColor(d.pemenuhanDoc) + '">' + d.pemenuhanDoc + '%</span></div>',
-                    '<div class="text-center">'+d.jadwal+'</div>',
+                    '<div class="text-center">' + d.jadwal + '</div>',
                     '<div class="text-center"><span class="badge badge-' + percentColor(d.pemenuhanImp) + '">' + d.pemenuhanImp + '%</span></div>',
                 ]).node();
                 if (ps.parent == null) {
@@ -1319,12 +1309,15 @@ $role = $this->session->userdata['user']['role'];
             m.find('.input-url').prop('required', true);
         }
     });
-    function showMorePasal(index) {
-        var m = $('#modalShowMorePasal');
-        m.modal('show');
-        var d = sortDokumen[index];
-        m.find('.modal-title').text(d.judul);
-        m.find('.modal-body').html(d.txt_pasals);
+    function showMorePasal(elem) {
+        var p = $(elem).parents('.more-pasal-parent');
+        p.find('.more-pasal-child').show();
+        $(elem).hide();
+    }
+    function hideMorePasal(elem) {
+        var p = $(elem).parents('.more-pasal-parent');
+        p.find('.more-pasal-child').hide();
+        p.find('.btn-show-more-pasal').show();
     }
     function detailDocument(index) {
         var d = sortDokumen[index];
