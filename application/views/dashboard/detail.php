@@ -510,7 +510,7 @@ if (empty($this->session->activeCompany)) {
             </div>
         </div>
         <script>
-            console.log(<?= $pemenuhan ?>);
+            console.log(<?= $progressImp ?>);
             var pemenuhan = <?= $pemenuhan ?>;
             var label = [];
             var doc = [];

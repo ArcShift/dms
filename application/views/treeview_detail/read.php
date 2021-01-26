@@ -1276,7 +1276,7 @@ $role = $this->session->userdata['user']['role'];
             }
             m.find('.files').append('<tr>'
                     + '<td>' + d.judul + '</td>'
-                    + '<td>' + d.txt_pasal2 + '</td>'
+                    + '<td>' + d.txt_pasals2 + '</td>'
                     + '<td style="white-space: pre-wrap">' + (d.deskripsi == null ? '-' : d.deskripsi) + '</td>'
                     + '<td>' + link
                     + '&nbsp<span class="btn btn-danger btn-sm fa fa-trash" onclick="initHapusDokumen(' + p.index_documents[i] + ')"></span>'
