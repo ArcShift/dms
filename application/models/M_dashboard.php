@@ -23,12 +23,6 @@ class M_dashboard extends CI_Model {
         return $this->db->count_all_results('standard s');
     }
 
-    function terlambat() {
-//        $this->db->where('(date < CURDATE() AND file IS NULL) OR (file IS NOT NULL AND date < upload_date)');
-//        return $this->db->count_all_results('schedule');
-        return 0;
-    }
-
     function count_user_company() {
         $this->db->join('personil p', 'p.id = u.id_personil');
         $this->db->join('unit_kerja uk', 'uk.id = p.id_unit_kerja AND uk.id_company = ' . $this->company);
@@ -41,35 +35,22 @@ class M_dashboard extends CI_Model {
         return $this->db->get('standard s')->result_array();
     }
 
-//
-//    function grafik_pasal() {
-//        $this->db->where('p.id_standard', $this->input->get('standard'));
-//        $result = $this->db->get('pasal p')->result_array();
-//        foreach ($result as $k => $r) {
-//            //DOKUMEN
-//            $this->db->join('document d', 'd.id = dp.id_document AND d.id_company = ' . $this->input->get('company'));
-//            $this->db->where('dp.id_pasal', $r['id']);
-//            $result[$k]['doc'] = $this->db->count_all_results('document_pasal dp');
-//            //HARAPAN
-//            $this->db->where('id_company', $this->input->get('company'));
-//            $this->db->where('id_pasal', $r['id']);
-//            $row = $this->db->get('hope')->row_array();
-//            if (empty($row)) {
-//                $result[$k]['harapan'] = 70;
-//            } else {
-//                $result[$k]['harapan'] = $row['persentase'];
-//            }
-//            //IMPLEMENTASI
-//            
-////            $result[$k]['implementasi'] = $this->db->count_all_results('jadwal j');
-//        }
-//        return $result;
-//    }
-
     function getDefaultStandard($company) {
         $this->db->select('s.*');
         $this->db->join('company_standard cs', 'cs.id_standard = s.id AND cs.id_company = ' . $company);
         return $this->db->get('standard s')->row_array();
+    }
+
+    function distribusi($company, $standard) {
+        $this->db->select('uk.*, COUNT(d.id) AS doc, COUNT(j.id) AS imp');
+        $this->db->join('company c', 'c.id = uk.id_company AND c.id = '.$company);
+        $this->db->join('personil p', 'p.id_unit_kerja = uk.id', 'LEFT');
+        $this->db->join('distribusi ds', 'ds.id_personil = p.id', 'LEFT');
+        $this->db->join('document d', 'd.id = ds.id_document', 'LEFT');
+        $this->db->join('tugas t', 't.id_document = d.id', 'LEFT');
+        $this->db->join('jadwal j', 'j.id_tugas = t.id', 'LEFT');
+        $this->db->group_by('uk.id');
+        return $this->db->get('unit_kerja uk')->result_array();
     }
 
 }

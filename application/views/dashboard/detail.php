@@ -73,6 +73,7 @@ if (empty($this->session->activeCompany)) {
         echo 'Perusahaan ini belum memiliki standar';
     } else {
         $g2 = json_decode($progressImp);
+        $pImp = json_decode($pemenuhan);
         ?>
         <div class="row">
             <div class="col-sm-6">
@@ -227,13 +228,7 @@ if (empty($this->session->activeCompany)) {
                             <i class="header-icon lnr-rocket icon-gradient bg-tempting-azure"> </i>
                             Distribusi Pasal dan Dokumen
                         </div>
-                        <div class="btn-actions-pane-right">
-                            <!--                            <div class="nav">
-                                                            <a href="javascript:void(0);" class="border-0 btn-pill btn-wide btn-transition active btn btn-outline-alternate">1</a>
-                                                            <a href="javascript:void(0);" class="ml-1 btn-pill btn-wide border-0 btn-transition  btn btn-outline-alternate second-tab-toggle-alt">2</a>
-                                                            <a href="javascript:void(0);" class="ml-1 btn-pill btn-wide border-0 btn-transition  btn btn-outline-alternate second-tab-toggle-alt">3</a>
-                                                        </div>-->
-                        </div>
+                        <div class="btn-actions-pane-right"></div>
                     </div>
                     <div class="tab-content">
                         <div class="tab-pane fade active show">
@@ -243,23 +238,18 @@ if (empty($this->session->activeCompany)) {
                                         <tr>
                                             <th>#</th>
                                             <th>Unit Kerja</th>
-                                            <th>Dokumen</th>
-                                            <th>Implementasi</th>
+                                            <th class="text-center">Dokumen</th>
+                                            <th class="text-center">Implementasi</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <?php
-                                        $i = 0;
-                                        $pImp = json_decode($pemenuhan);
-                                        while ($i < count($unitKerja) | $i < count($pImp)) {
-                                            ?>
+                                        <?php foreach ($distribusi as $k => $d) { ?>
                                             <tr>
-                                                <th><?= empty($unitKerja[$i]) ? '' : $i + 1 ?></th>
-                                                <td><?= empty($unitKerja[$i]) ? '' : $unitKerja[$i]['name'] ?></td>
-                                                <td class="text-center"><?= empty($pImp[$i]) ? '' : $pImp[$i]->doc ?></td>
-                                                <td class="text-center"><?= empty($pImp[$i]) ? '' : $pImp[$i]->jadwal ?></td>
+                                                <th><?= $k + 1 ?></th>
+                                                <td><?= $d['name'] ?></td>
+                                                <td class="text-center"><?= $d['doc'] ?></td>
+                                                <td class="text-center"><?= $d['imp'] ?></td>
                                             </tr>
-                                            <?php $i++ ?>
                                         <?php } ?>
                                     </tbody>
                                 </table>
@@ -295,7 +285,7 @@ if (empty($this->session->activeCompany)) {
                                 <div class="widget-subheading">Unit kerja terkait</div>
                             </div>
                             <div class="widget-content-right">
-                                <div class="widget-numbers text-warning"><?= count($unitKerja) ?></div>
+                                <div class="widget-numbers text-warning"><?= count($distribusi) ?></div>
                             </div>
                         </div>
                     </div>
