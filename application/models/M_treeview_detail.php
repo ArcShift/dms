@@ -564,8 +564,8 @@ class M_treeview_detail extends CI_Model {
         $this->db->join('tugas t', 't.id_document = d.id', 'LEFT');
         $this->db->join('jadwal j', 'j.id_tugas = t.id', 'LEFT');
         $this->db->where('p.id_standard', $standard);
-        $this->db->order_by('p.sort_index');
-        $this->db->group_by('p.sort_index');
+        $this->db->order_by('p.id');
+        $this->db->group_by('p.id');
         $pasal = $this->db->get('pasal p')->result_array();
         foreach ($pasal as $k => $p) {
             $pasal[$k]['indexChild'] = [];
@@ -587,7 +587,9 @@ class M_treeview_detail extends CI_Model {
         }
         return $this->pasal;
     }
-
+    function getPemenuhan2($param) {
+        
+    }
     function persentasePemenuhan($index) {
         $p = $this->pasal[$index];
         $pemenuhanDoc = 0;
