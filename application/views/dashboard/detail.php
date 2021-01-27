@@ -238,12 +238,11 @@ if (empty($this->session->activeCompany)) {
                     <div class="tab-content">
                         <div class="tab-pane fade active show">
                             <div class="card-body">
-                                <table class="mb-0 table table-striped">
+                                <table class="mb-0 table table-striped" id="tableDistribusi">
                                     <thead>
                                         <tr>
                                             <th>#</th>
                                             <th>Unit Kerja</th>
-                                            <th>Pasal</th>
                                             <th>Dokumen</th>
                                             <th>Implementasi</th>
                                         </tr>
@@ -255,13 +254,12 @@ if (empty($this->session->activeCompany)) {
                                         while ($i < count($unitKerja) | $i < count($pImp)) {
                                             ?>
                                             <tr>
-                                                <th><?= empty($unitKerja[$i])?'':$i+1 ?></th>
-                                                <td><?= empty($unitKerja[$i])?'':$unitKerja[$i]['name'] ?></td>
-                                                <td><?= empty($pImp[$i])?'':$pImp[$i]->name ?></td>
-                                                <td class="text-center"><?= empty($pImp[$i])?'':$pImp[$i]->doc ?></td>
-                                                <td class="text-center"><?= empty($pImp[$i])?'':$pImp[$i]->jadwal ?></td>
+                                                <th><?= empty($unitKerja[$i]) ? '' : $i + 1 ?></th>
+                                                <td><?= empty($unitKerja[$i]) ? '' : $unitKerja[$i]['name'] ?></td>
+                                                <td class="text-center"><?= empty($pImp[$i]) ? '' : $pImp[$i]->doc ?></td>
+                                                <td class="text-center"><?= empty($pImp[$i]) ? '' : $pImp[$i]->jadwal ?></td>
                                             </tr>
-                                        <?php $i++ ?>
+                                            <?php $i++ ?>
                                         <?php } ?>
                                     </tbody>
                                 </table>
@@ -297,7 +295,7 @@ if (empty($this->session->activeCompany)) {
                                 <div class="widget-subheading">Unit kerja terkait</div>
                             </div>
                             <div class="widget-content-right">
-                                <div class="widget-numbers text-warning">4</div>
+                                <div class="widget-numbers text-warning"><?= count($unitKerja) ?></div>
                             </div>
                         </div>
                     </div>
@@ -312,7 +310,7 @@ if (empty($this->session->activeCompany)) {
                                 <div class="widget-subheading">Pasal aktif yang diterapkan</div>
                             </div>
                             <div class="widget-content-right">
-                                <div class="widget-numbers text-danger">14</div>
+                                <div class="widget-numbers text-danger"><?= count($pImp) ?></div>
                             </div>
                         </div>
                     </div>
@@ -539,6 +537,14 @@ if (empty($this->session->activeCompany)) {
                 },
                 options: {}
             });
+            var dataTableConfig = {
+                "order": [],
+                "ordering": false,
+                "searching": false,
+                "info": false,
+                "lengthChange": false
+            }
+            $('#tableDistribusi').DataTable(dataTableConfig);
         </script>
     <?php } ?>
     <script>

@@ -779,7 +779,6 @@ $role = $this->session->userdata['user']['role'];
             },
             "bInfo": false,
             "bLengthChange": true,
-
         }
         tbPemenuhan = $('#table-pemenuhan').DataTable(dataTableConfig);
         tbPasal = $('#table-pasal').DataTable(dataTableConfig);
