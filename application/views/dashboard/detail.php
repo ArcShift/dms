@@ -275,7 +275,7 @@ if (empty($this->session->activeCompany)) {
                                 <div class="widget-subheading">Personil yang terdaftar</div>
                             </div>
                             <div class="widget-content-right">
-                                <div class="widget-numbers text-success">17</div>
+                                <div class="widget-numbers text-success"><?= $countPersonil ?></div>
                             </div>
                         </div>
                     </div>
@@ -290,7 +290,7 @@ if (empty($this->session->activeCompany)) {
                                 <div class="widget-subheading">Unit kerja terkait</div>
                             </div>
                             <div class="widget-content-right">
-                                <div class="widget-numbers text-warning"><?= count($distribusi) ?></div>
+                                <div class="widget-numbers text-warning"><?= $countUnitKerja ?></div>
                             </div>
                         </div>
                     </div>
