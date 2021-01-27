@@ -180,7 +180,7 @@ $role = $this->session->userdata['user']['role'];
 </div>
 <!--MODAL DETAIL PASAL-->
 <div class="modal fade" id="modalDetailPasal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-dialog modal-xl" style="max-width:900px">
         <form>
             <div class="modal-content">
                 <div class="modal-header">
@@ -195,7 +195,7 @@ $role = $this->session->userdata['user']['role'];
                             <tr>
                                 <th>Judul Dokumen</th>
                                 <th>Pasal Terkait</th>
-                                <th>Letak Pasal<br>pada Dokumen</th>
+                                <th style="width: 40%">Letak Pasal pada Dokumen</th>
                                 <th style="width: 90px">Aksi</th>
                             </tr>
                         </thead>
@@ -927,6 +927,7 @@ $role = $this->session->userdata['user']['role'];
             sortDokumen = [];
             var n = 0;
             var nDoc = 0;
+            var descLimit = 160;
             for (var i = 0; i < data.length; i++) {
                 var d = data[i];
                 d.index_dokumen_pasal = [];
@@ -938,11 +939,19 @@ $role = $this->session->userdata['user']['role'];
                         if (d.dokumen_pasal[j] == sortPasal[k].id) {
                             d.index_dokumen_pasal.push(k);
                             sortPasal[k].index_documents.push(i);
+                            if (d.deskripsi.length > descLimit) {
+                                d.custom_deskripsi = '<div class="desc-parent">' + d.deskripsi.substring(0, descLimit);
+                                d.custom_deskripsi += '<span class="desc-more" style="display: none">' + d.deskripsi.substring(descLimit) 
+                                        + '<div class="text-primary btn-less" style="cursor:pointer" onclick="hideMoreDesc(this)">Sembunyikan</div></span>';
+                                d.custom_deskripsi += '<div class="text-primary btn-more" style="cursor:pointer" onclick="showMoreDesc(this)">lihat lebih lengkap</div>';
+                                d.custom_deskripsi += '</div>';
+                            } else {
+                                d.custom_deskripsi = d.deskripsi;
+                            }
                             d.txt_pasals += '<div><span class="badge badge-secondary">' + sortPasal[k].fullname + '</span></div>';
                             if (n2 == 10) {
                                 d.txt_pasals2 += '<div class="text-primary btn-show-more-pasal" style="cursor:pointer" onclick="showMorePasal(this)">lihat lebih lengkap</div>'
                                         + '<div class="more-pasal-child" style="display: none">'
-                                        + '<div class="text-primary btn-hide" style="cursor:pointer" onclick="hideMorePasal(this)">Sembunyikan</div>'
                             }
                             d.txt_pasals2 += '<div><span class="badge badge-secondary">' + sortPasal[k].fullname + '</span></div>';
                             n2++;
@@ -950,7 +959,7 @@ $role = $this->session->userdata['user']['role'];
                     }
                 }
                 if (n2 > 10) {
-                    d.txt_pasals2 += '</div>';
+                    d.txt_pasals2 += '<div class="text-primary btn-hide" style="cursor:pointer" onclick="hideMorePasal(this)">Sembunyikan</div></div>';
                 }
                 d.txt_pasals2 += '</div>';
                 for (var j = 0; j < sortPasal.length; j++) {//TODO: remove later
@@ -1164,7 +1173,6 @@ $role = $this->session->userdata['user']['role'];
     }
     function getPemenuhan() {
         $.getJSON('<?= site_url($module); ?>/get_pemenuhan', {'company': perusahaan, 'standard': standar}, function (data) {
-            console.log(data);
             tbPemenuhan.clear();
             for (var i = 0; i < sortPasal.length; i++) {
                 sortPasal[i].pemenuhanImplementasi = 0;
@@ -1266,7 +1274,7 @@ $role = $this->session->userdata['user']['role'];
             m.find('.files').append('<tr>'
                     + '<td>' + d.judul + '</td>'
                     + '<td>' + d.txt_pasals2 + '</td>'
-                    + '<td style="white-space: pre-wrap">' + (d.deskripsi == null ? '-' : d.deskripsi) + '</td>'
+                    + '<td style="white-space: pre-wrap">' + (d.custom_deskripsi) + '</td>'
                     + '<td>' + link
                     + '&nbsp<span class="btn btn-danger btn-sm fa fa-trash" onclick="initHapusDokumen(' + p.index_documents[i] + ')"></span>'
                     + '</td>'
@@ -1317,6 +1325,18 @@ $role = $this->session->userdata['user']['role'];
         var p = $(elem).parents('.more-pasal-parent');
         p.find('.more-pasal-child').hide();
         p.find('.btn-show-more-pasal').show();
+    }
+    function showMoreDesc(elem) {
+        var p = $(elem).parents('.desc-parent');
+        p.find('.desc-more').show();
+        $(elem).hide();
+        p.find('.btn-less').show();
+    }
+    function hideMoreDesc(elem) {
+        var p = $(elem).parents('.desc-parent');
+        p.find('.desc-more').hide();
+        $(elem).hide();
+        p.find('.btn-more').show();
     }
     function detailDocument(index) {
         var d = sortDokumen[index];
