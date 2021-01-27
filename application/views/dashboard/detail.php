@@ -4,6 +4,11 @@ if (empty($this->session->activeCompany)) {
 } else {
     $activeStandard = $this->session->userdata('activeStandard');
     ?>
+    <style>
+        #tableDistribusi_paginate{
+            margin-top: 20px;
+        }
+    </style>
     <div class="app-page-title">
         <div class="page-title-wrapper">
             <div class="page-title-heading">
@@ -532,7 +537,7 @@ if (empty($this->session->activeCompany)) {
                 "searching": false,
                 "info": false,
                 "lengthChange": false,
-                "pageLength": 8,
+                "pageLength": 7,
             }
             $('#tableDistribusi').DataTable(dataTableConfig);
         </script>
