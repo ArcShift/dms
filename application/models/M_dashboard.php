@@ -43,10 +43,11 @@ class M_dashboard extends CI_Model {
 
     function distribusi($company, $standard) {
         $this->db->select('uk.*, COUNT(d.id) AS doc, COUNT(j.id) AS imp');
-        $this->db->join('company c', 'c.id = uk.id_company AND c.id = '.$company);
+        $this->db->join('company c', 'c.id = uk.id_company AND c.id = ' . $company);
         $this->db->join('personil p', 'p.id_unit_kerja = uk.id', 'LEFT');
         $this->db->join('distribusi ds', 'ds.id_personil = p.id', 'LEFT');
         $this->db->join('document d', 'd.id = ds.id_document', 'LEFT');
+        $this->db->join('pasal ps', 'ps.id = d.id_pasal AND ps.id_standard = ' . $standard);
         $this->db->join('tugas t', 't.id_document = d.id', 'LEFT');
         $this->db->join('jadwal j', 'j.id_tugas = t.id', 'LEFT');
         $this->db->group_by('uk.id');
