@@ -606,7 +606,7 @@ if ($role == 'anggota') {
                             <tr>
                                 <td id="tglMulaiJadwal">Tanggal</td>
                                 <td>
-                                    <input class="form-control input-jadwal" name="tanggal[]" required="">
+                                    <input class="form-control input-jadwal" autocomplete="off" name="tanggal[]" required="">
                                 </td>
                             </tr>
                             <tr id="group-add-date" class="group-input-unrepeat d-none">
