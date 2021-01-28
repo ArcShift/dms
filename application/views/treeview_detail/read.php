@@ -1187,7 +1187,7 @@ if ($role == 'anggota') {
                             }
                             var btnDetail = '<span class="text-primary fa fa-info-circle" title="Detail" onclick="detailJadwal(' + n + ')"></span> ';
                             var btnEdit = '<span class="text-primary fa fa-edit" title="Edit" onclick="editJadwal(' + n + ')"></span> ';
-                            var btnHapus = '<span class="text-danger fa fa-trash" title="Hapus" onclick="initDeleteJadwal(' + n + ')"></span>';
+                            var btnDelete = '<span class="text-danger fa fa-trash" title="Hapus" onclick="initDeleteJadwal(' + n + ')"></span>';
                             tbJadwal.row.add([
                                 '---',
                                 '---',
