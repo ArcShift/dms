@@ -1161,53 +1161,62 @@ if ($role == 'anggota') {
                         show = true;
                     }
                 }
-                tbJadwal.row.add([
-                    sortDokumen[t.index_document].judul,
-                    t.nama,
-                    (t.index_form_terkait == null ? '-' : sortDokumen[t.index_form_terkait].judul),
-                    '---',
-                    '---',
-                    '<span class="text-primary fa fa-plus" title="Tambah" onclick="initCreateJadwal(' + i + ')"></span>'
-                ]);
-                for (var j = 0; j < data.length; j++) {
-                    var jd = data[j];
-                    if (jd.id_tugas == t.id) {
-                        jd.status = '-';
-                        var diffDate = '-';
-                        if (jd.path && jd.upload_date && jd.doc_type) {
-                            if (new Date(jd.upload_date) > new Date(jd.tanggal)) {
-                                jd.status = 'terlambat';
-                                uploadStatus = '<span class="badge badge-danger">Terlambat</span>';
-                            } else {
-                                jd.status = 'selesai';
-                                uploadStatus = '<span class="badge badge-primary">Selesai</span>';
+                if (show) {
+                    tbJadwal.row.add([
+                        sortDokumen[t.index_document].judul,
+                        t.nama,
+                        (t.index_form_terkait == null ? '-' : sortDokumen[t.index_form_terkait].judul),
+                        '---',
+                        '---',
+                        (role == 'anggota' ? '' : '<span class="text-primary fa fa-plus" title="Tambah" onclick="initCreateJadwal(' + i + ')"></span>')
+                    ]);
+                    for (var j = 0; j < data.length; j++) {
+                        var jd = data[j];
+                        if (jd.id_tugas == t.id) {
+                            jd.status = '-';
+                            var diffDate = '-';
+                            if (jd.path && jd.upload_date && jd.doc_type) {
+                                if (new Date(jd.upload_date) > new Date(jd.tanggal)) {
+                                    jd.status = 'terlambat';
+                                    uploadStatus = '<span class="badge badge-danger">Terlambat</span>';
+                                } else {
+                                    jd.status = 'selesai';
+                                    uploadStatus = '<span class="badge badge-primary">Selesai</span>';
+                                }
+                                diffDate = new Date(jd.upload_date).getDate() - new Date(jd.tanggal).getDate();
                             }
-                            diffDate = new Date(jd.upload_date).getDate() - new Date(jd.tanggal).getDate();
+                            var btnDetail = '<span class="text-primary fa fa-info-circle" title="Detail" onclick="detailJadwal(' + n + ')"></span> ';
+                            var btnEdit = '<span class="text-primary fa fa-edit" title="Edit" onclick="editJadwal(' + n + ')"></span> ';
+                            var btnHapus = '<span class="text-danger fa fa-trash" title="Hapus" onclick="initDeleteJadwal(' + n + ')"></span>';
+                            tbJadwal.row.add([
+                                '---',
+                                '---',
+                                '---',
+                                (jd.periode == null ? '-' : (jd.periode + 'AN')),
+                                jd.tanggal,
+                                btnDetail + (role == 'anggota' ? '' : btnEdit + btnDelete),
+                            ]);
+                            var btnPreview = '';
+                            if (jd.doc_type == 'FILE') {
+                                btnPreview = '<a class="text-primary fa fa-download" target="_blank" href="<?= base_url('upload/implementasi') ?>/' + jd.path + '"></a>';
+                            } else if (jd.doc_type == 'URL') {
+                                btnPreview = '<a class="text-primary fa fa-search" target="_blank" href="' + jd.path + '"></a>';
+                            }
+                            tbImplementasi.row.add([
+                                t.nama,
+                                t.txt_personil,
+                                jd.tanggal,
+                                jd.status,
+                                diffDate,
+                                '<span class="text-primary fa fa-info-circle" title="Detail" onclick="detailJadwal(' + n + ')"></span> '
+                                        + '<span class="text-primary fa fa-upload" title="Edit" onclick="initUploadImplementasi(' + n + ')"></span> '
+                                + btnPreview
+                            ]);
+                            jd.indexTugas = i;
+                            sortTugas[i].indexJadwal.push(n);
+                            sortJadwal.push(jd);
+                            n++;
                         }
-                        tbJadwal.row.add([
-                            '---',
-                            '---',
-                            '---',
-                            (jd.periode == null ? '-' : (jd.periode + 'AN')),
-                            jd.tanggal,
-                            '<span class="text-primary fa fa-info-circle" title="Detail" onclick="detailJadwal(' + n + ')"></span> '
-                                    + '<span class="text-primary fa fa-edit" title="Edit" onclick="editJadwal(' + n + ')"></span> '
-                                    + '<span class="text-danger fa fa-trash" title="Hapus" onclick="initDeleteJadwal(' + n + ')"></span>'
-                        ]);
-                        tbImplementasi.row.add([
-                            t.nama,
-                            t.txt_personil,
-                            jd.tanggal,
-                            jd.status,
-                            diffDate,
-                            '<span class="text-primary fa fa-info-circle" title="Detail" onclick="detailJadwal(' + n + ')"></span> '
-                                    + '<span class="text-primary fa fa-upload" title="Edit" onclick="initUploadImplementasi(' + n + ')"></span> '
-
-                        ]);
-                        jd.indexTugas = i;
-                        sortTugas[i].indexJadwal.push(n);
-                        sortJadwal.push(jd);
-                        n++;
                     }
                 }
             }
