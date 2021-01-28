@@ -1076,6 +1076,7 @@ if ($role == 'anggota') {
                 var d = sortDokumen[i];
                 if (d.jenis < 4 & d.jenis >= 1) {
                     nDoc++;
+                    var show = true;
                     if (role == 'anggota') {
                         show = false;
                         if ($.inArray(idPersonil + '', d.personil_distribusi_id) >= 0) {
@@ -1153,6 +1154,13 @@ if ($role == 'anggota') {
             var n = 0;
             for (var i = 0; i < sortTugas.length; i++) {
                 var t = sortTugas[i];
+                var show = true;
+                if (role == 'anggota') {
+                    show = false;
+                    if ($.inArray(idPersonil + '', t.personil) >= 0) {
+                        show = true;
+                    }
+                }
                 tbJadwal.row.add([
                     sortDokumen[t.index_document].judul,
                     t.nama,
