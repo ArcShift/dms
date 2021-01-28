@@ -288,7 +288,7 @@
                 $('#modalContainer').append($('.modal'));
                 $('.input-jadwal').datepicker({
                     format: 'dd-mm-yyyy',
-                    startDate: new Date(),
+//                    startDate: new Date(),
                     autoclose: true,
                 });
                 $('.data-table').DataTable();
