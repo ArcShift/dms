@@ -1644,7 +1644,7 @@ if ($role == 'anggota') {
                 '</td></tr>').insertBefore('#group-add-date');
         $('.input-jadwal').datepicker({
             format: 'dd-mm-yyyy',
-            startDate: new Date(),
+//            startDate: new Date(),
             autoclose: true,
         });
     }
