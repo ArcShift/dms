@@ -1076,14 +1076,22 @@ if ($role == 'anggota') {
                 var d = sortDokumen[i];
                 if (d.jenis < 4 & d.jenis >= 1) {
                     nDoc++;
-                    tbTugas.row.add([
-                        d.judul,
-                        '',
-                        '',
-                        '',
-                        '',
-                        '<span class="text-primary fa fa-plus" title="Tambah" onclick="initCreateTugas(' + i + ')"></span>'
-                    ]);
+                    if (role == 'anggota') {
+                        show = false;
+                        if ($.inArray(idPersonil + '', d.personil_distribusi_id) >= 0) {
+                            show = true;
+                        }
+                    }
+                    if (show) {
+                        tbTugas.row.add([
+                            d.judul,
+                            '',
+                            '',
+                            '',
+                            '',
+                            (role == 'anggota' ? '' : '<span class="text-primary fa fa-plus" title="Tambah" onclick="initCreateTugas(' + i + ')"></span>'),
+                        ]);
+                    }
                     for (var j = 0; j < data.length; j++) {
                         var t = data[j];
                         if (t.id_document == d.id) {
@@ -1105,16 +1113,26 @@ if ($role == 'anggota') {
                                     t.index_form_terkait = k;
                                 }
                             }
-                            tbTugas.row.add([
-                                '',
-                                t.nama,
-                                (t.index_form_terkait == null ? '-' : sortDokumen[t.index_form_terkait].judul),
-                                '<span class="badge badge-secondary">' + t.sifat + '</span>',
-                                t.txt_personil,
-                                '<span class="text-primary fa fa-info-circle" title="Detail" onclick="detailTugas(' + sortTugas.length + ')"></span>&nbsp'
-                                        + '<span class="text-primary fa fa-edit" title="Edit" onclick="initEditTugas(' + sortTugas.length + ')"></span>&nbsp'
-                                        + '<span class="text-danger fa fa-trash" title="Hapus" onclick="initDeleteTugas(' + sortTugas.length + ')"></span>'
-                            ]);
+                            var show = true;
+                            if (role == 'anggota') {
+                                show = false;
+                                if ($.inArray(idPersonil + '', t.personil) >= 0) {
+                                    show = true;
+                                }
+                            }
+                            var btnDetail = '<span class="text-primary fa fa-info-circle" title="Detail" onclick="detailTugas(' + sortTugas.length + ')"></span>&nbsp';
+                            var btnEdit = '<span class="text-primary fa fa-edit" title="Edit" onclick="initEditTugas(' + sortTugas.length + ')"></span>&nbsp';
+                            var btnHapus = '<span class="text-danger fa fa-trash" title="Hapus" onclick="initDeleteTugas(' + sortTugas.length + ')"></span>';
+                            if (show) {
+                                tbTugas.row.add([
+                                    '',
+                                    t.nama,
+                                    (t.index_form_terkait == null ? '-' : sortDokumen[t.index_form_terkait].judul),
+                                    '<span class="badge badge-secondary">' + t.sifat + '</span>',
+                                    t.txt_personil,
+                                    (role == 'anggota' ? btnDetail : btnDetail + btnEdit + btnHapus),
+                                ]);
+                            }
                             t.indexJadwal = [];
                             sortTugas.push(t);
                         }
