@@ -338,109 +338,39 @@ if (empty($this->session->activeCompany)) {
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td class="text-center text-muted">#345</td>
-                                    <td>
-                                        <div class="widget-content p-0">
-                                            <div class="widget-content-wrapper">
-                                                <div class="widget-content-left mr-3">
-                                                    <div class="widget-content-left">
-                                                        <!--<img width="40" class="rounded-circle" src="assets/images/avatars/4.jpg" alt="">-->
-                                                    </div>
-                                                </div>
-                                                <div class="widget-content-left flex2">
-                                                    <div class="widget-heading">John Doe</div>
-                                                    <div class="widget-subheading opacity-7">IT</div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="text-center">Melakukan Back Up Server</td>
-                                    <td class="text-center">Pasal 8</td>
-                                    <td class="text-center">
-                                        <div class="badge badge-success">Completed</div>
-                                    </td>
-                                    <td class="text-center">
-                                        <button type="button" id="PopoverCustomT-1" class="btn btn-primary btn-sm">Details</button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="text-center text-muted">#347</td>
-                                    <td>
-                                        <div class="widget-content p-0">
-                                            <div class="widget-content-wrapper">
-                                                <div class="widget-content-left mr-3">
-                                                    <div class="widget-content-left">
-                                                        <!--<img width="40" class="rounded-circle" src="assets/images/avatars/3.jpg" alt="">-->
-                                                    </div>
-                                                </div>
-                                                <div class="widget-content-left flex2">
-                                                    <div class="widget-heading">Ruben Tillman</div>
-                                                    <div class="widget-subheading opacity-7">SDM</div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="text-center">Membuat Matriks Kompetensi</td>
-                                    <td class="text-center">Pasal 6</td>
-                                    <td class="text-center">
-                                        <div class="badge badge-success">Completed</div>
-                                    </td>
-                                    <td class="text-center">
-                                        <button type="button" id="PopoverCustomT-2" class="btn btn-primary btn-sm">Details</button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="text-center text-muted">#321</td>
-                                    <td>
-                                        <div class="widget-content p-0">
-                                            <div class="widget-content-wrapper">
-                                                <div class="widget-content-left mr-3">
-                                                    <div class="widget-content-left">
-        <!--                                                        <img width="40" class="rounded-circle" src="assets/images/avatars/2.jpg" alt="">-->
-                                                    </div>
-                                                </div>
-                                                <div class="widget-content-left flex2">
-                                                    <div class="widget-heading">Elliot Huber</div>
-                                                    <div class="widget-subheading opacity-7">GA</div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="text-center">Melakukan Review Jadwal Perawatan</td>
-                                    <td class="text-center">Pasal 8</td>
-                                    <td class="text-center">
-                                        <div class="badge badge-danger">Terlambat</div>
-                                    </td>
-                                    <td class="text-center">
-                                        <button type="button" id="PopoverCustomT-3" class="btn btn-primary btn-sm">Details</button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="text-center text-muted">#55</td>
-                                    <td>
-                                        <div class="widget-content p-0">
-                                            <div class="widget-content-wrapper">
-                                                <div class="widget-content-left mr-3">
-                                                    <div class="widget-content-left">
-        <!--                                                        <img width="40" class="rounded-circle" src="assets/images/avatars/1.jpg" alt=""></div>-->
-                                                    </div>
+                                <?php foreach ($listTugas as $k => $t) { ?>
+                                    <tr>
+                                        <td class="text-center text-muted"><?= $k + 1 ?></td>
+                                        <td>
+                                            <div class="widget-content p-0">
+                                                <div class="widget-content-wrapper">
                                                     <div class="widget-content-left flex2">
-                                                        <div class="widget-heading">Vinnie Wagstaff</div>
-                                                        <div class="widget-subheading opacity-7">IT</div>
+                                                        <div class="widget-heading"><?= $t['name'] ?></div>
+                                                        <div class="widget-subheading opacity-7"><?= $t['unit_kerja'] ?></div>
                                                     </div>
                                                 </div>
                                             </div>
-                                    </td>
-                                    <td class="text-center">Backup Data Pengguna Aplikasi</td>
-                                    <td class="text-center">Pasal 8</td>
-                                    <td class="text-center">
-                                        <div class="badge badge-info">Menunggu</div>
-                                    </td>
-                                    <td class="text-center">
-                                        <button type="button" id="PopoverCustomT-4" class="btn btn-primary btn-sm">Details</button>
-                                    </td>
-                                </tr>
+                                        </td>
+                                        <td class="text-center"><?= $t['tugas'] ?></td>
+                                        <td class="text-center"><?= $t['pasal'] ?></td>
+                                        <?php
+                                        $status = '-';
+                                        if ($t['upload_date'] > $t['tanggal']) {
+                                            $status = '<div class="badge badge-danger">Terlambat</div>';
+                                        } else if ($t['upload_date'] == null) {
+                                            $status = '<div class="badge badge-info">Menunggu</div>';
+                                        }else{
+                                            $status = '<div class="badge badge-success">Selesai</div>';
+                                        }
+                                        ?>
+                                        <td class="text-center">
+                                            <?= $status ?>
+                                        </td>
+                                        <td class="text-center">
+                                            <button type="button" class="btn btn-primary btn-sm">Details</button>
+                                        </td>
+                                    </tr>
+                                <?php } ?>
                             </tbody>
                         </table>
                     </div>
