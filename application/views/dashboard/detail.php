@@ -326,7 +326,7 @@ if (empty($this->session->activeCompany)) {
                     </div>
                     <div class="card-body">Total Tugas: 11, Selesai: 9</div>
                     <div class="table-responsive">
-                        <table class="align-middle mb-0 table table-borderless table-striped table-hover">
+                        <table class="align-middle mb-0 table table-borderless table-striped table-hover" id="tableTugas">
                             <thead>
                                 <tr>
                                     <th class="text-center">#</th>
@@ -450,7 +450,6 @@ if (empty($this->session->activeCompany)) {
                     label.push(p.status);
                 }
             }
-
             chartProgress = new Chart(document.getElementById('chartProgressImp'), {
                 type: 'pie',
                 data: {
@@ -470,6 +469,7 @@ if (empty($this->session->activeCompany)) {
                 "pageLength": 7,
             }
             $('#tableDistribusi').DataTable(dataTableConfig);
+            $('#tableTugas').DataTable(dataTableConfig);
         </script>
     <?php } ?>
     <script>
