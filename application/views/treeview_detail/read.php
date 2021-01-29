@@ -1672,6 +1672,8 @@ if ($role == 'anggota') {
         m.modal('show');
         m.find('.input-tugas').val(t.nama);
         m.find('.input-id-tugas').val(t.id);
+        $('#formCreateJadwal').trigger('reset');
+        $('.group-input-repeat').addClass('d-none');
     }
     function tambahTanggal() {
         $('<tr class="addictional-date group-input-unrepeat"><td><button type="button" class="btn btn-sm btn-danger fa fa-trash" onclick="hapusTanggalJadwal(this)"></button></td><td>' +
@@ -1755,6 +1757,8 @@ if ($role == 'anggota') {
         m.find('.input-id').val(j.id);
         m.find('.input-tugas').val(sortTugas[j.indexTugas].nama);
         m.find('.input-jadwal').val(j.tanggal);
+        $('#formUploadImplementasi').trigger('reset');
+        m.find('.input-url, .input-file').hide();
     }
     $('#formUploadImplementasi').submit(function (e) {
         e.preventDefault();
