@@ -324,61 +324,58 @@ if (empty($this->session->activeCompany)) {
                             </div>
                         </div>
                     </div>
-                    <div class="card-body">Total Tugas: 11, Selesai: 9</div>
-                    <div class="table-responsive">
-                        <table class="align-middle mb-0 table table-borderless table-striped table-hover" id="tableTugas">
-                            <thead>
-                                <tr>
-                                    <th class="text-center">#</th>
-                                    <th>Personil</th>
-                                    <th class="text-center">Tugas</th>
-                                    <th class="text-center">Pasal</th>
-                                    <th class="text-center">Status</th>
-                                    <th class="text-center">Aksi</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php foreach ($listTugas as $k => $t) { ?>
+                    <div class="card-body">Total Tugas: 11, Selesai: 9
+                        <div class="table-responsive">
+                            <table class="align-middle mb-0 table table-borderless table-striped table-hover" id="tableTugas">
+                                <thead>
                                     <tr>
-                                        <td class="text-center text-muted"><?= $k + 1 ?></td>
-                                        <td>
-                                            <div class="widget-content p-0">
-                                                <div class="widget-content-wrapper">
-                                                    <div class="widget-content-left flex2">
-                                                        <div class="widget-heading"><?= $t['name'] ?></div>
-                                                        <div class="widget-subheading opacity-7"><?= $t['unit_kerja'] ?></div>
+                                        <th class="text-center">#</th>
+                                        <th>Personil</th>
+                                        <th class="text-center">Tugas</th>
+                                        <th class="text-center">Pasal</th>
+                                        <th class="text-center">Status</th>
+                                        <th class="text-center">Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php foreach ($listTugas as $k => $t) { ?>
+                                        <tr>
+                                            <td class="text-center text-muted"><?= $k + 1 ?></td>
+                                            <td>
+                                                <div class="widget-content p-0">
+                                                    <div class="widget-content-wrapper">
+                                                        <div class="widget-content-left flex2">
+                                                            <div class="widget-heading"><?= $t['name'] ?></div>
+                                                            <div class="widget-subheading opacity-7"><?= $t['unit_kerja'] ?></div>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        </td>
-                                        <td class="text-center"><?= $t['tugas'] ?></td>
-                                        <td class="text-center"><?= $t['pasal'] ?></td>
-                                        <?php
-                                        $status = '-';
-                                        if ($t['upload_date'] > $t['tanggal']) {
-                                            $status = '<div class="badge badge-danger">Terlambat</div>';
-                                        } else if ($t['upload_date'] == null) {
-                                            $status = '<div class="badge badge-info">Menunggu</div>';
-                                        }else{
-                                            $status = '<div class="badge badge-success">Selesai</div>';
-                                        }
-                                        ?>
-                                        <td class="text-center">
-                                            <?= $status ?>
-                                        </td>
-                                        <td class="text-center">
-                                            <button type="button" class="btn btn-primary btn-sm">Details</button>
-                                        </td>
-                                    </tr>
-                                <?php } ?>
-                            </tbody>
-                        </table>
+                                            </td>
+                                            <td class="text-center"><?= $t['tugas'] ?></td>
+                                            <td class="text-center"><?= $t['pasal'] ?></td>
+                                            <?php
+                                            $status = '-';
+                                            if ($t['upload_date'] > $t['tanggal']) {
+                                                $status = '<div class="badge badge-danger">Terlambat</div>';
+                                            } else if ($t['upload_date'] == null) {
+                                                $status = '<div class="badge badge-info">Menunggu</div>';
+                                            } else {
+                                                $status = '<div class="badge badge-success">Selesai</div>';
+                                            }
+                                            ?>
+                                            <td class="text-center">
+                                                <?= $status ?>
+                                            </td>
+                                            <td class="text-center">
+                                                <button type="button" class="btn btn-primary btn-sm">Details</button>
+                                            </td>
+                                        </tr>
+                                    <?php } ?>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-                    <div class="d-block text-center card-footer">
-                        <!-- <button class="mr-2 btn-icon btn-icon-only btn btn-outline-danger"><i class="pe-7s-trash btn-icon-wrapper"> </i></button>
-                        <button class="btn-wide btn btn-success">Save</button> -->
-                        <button class="mr-2 btn-icon btn-icon-only btn btn-outline-info"><i class="pe-7s-right-arrow btn-icon-wrapper"> </i></button>
-                    </div>
+                    <div class="d-block text-center card-footer"></div>
                 </div>
             </div>
         </div>
@@ -469,6 +466,7 @@ if (empty($this->session->activeCompany)) {
                 "pageLength": 7,
             }
             $('#tableDistribusi').DataTable(dataTableConfig);
+            dataTableConfig.pageLength = 5;
             $('#tableTugas').DataTable(dataTableConfig);
         </script>
     <?php } ?>
