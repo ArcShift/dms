@@ -324,7 +324,8 @@ if (empty($this->session->activeCompany)) {
                             </div>
                         </div>
                     </div>
-                    <div class="card-body">Total Tugas: 11, Selesai: 9
+                    <div class="card-body">Total Tugas: <?= count($listTugas) ?>,
+                        <!--Selesai: <span id="countFinishTask">-</span>-->
                         <div class="table-responsive">
                             <table class="align-middle mb-0 table table-borderless table-striped table-hover" id="tableTugas">
                                 <thead>
@@ -338,7 +339,10 @@ if (empty($this->session->activeCompany)) {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <?php foreach ($listTugas as $k => $t) { ?>
+                                    <?php
+                                    $countFinish = 0;
+                                    foreach ($listTugas as $k => $t) {
+                                        ?>
                                         <tr>
                                             <td class="text-center text-muted"><?= $k + 1 ?></td>
                                             <td>
@@ -352,7 +356,7 @@ if (empty($this->session->activeCompany)) {
                                                 </div>
                                             </td>
                                             <td class="text-center"><?= $t['tugas'] ?></td>
-                                            <td class="text-center"><?= $t['pasal'] ?></td>
+                                            <td class="text-center"><?= $t['tanggal'] ?></td>
                                             <?php
                                             $status = '-';
                                             if ($t['upload_date'] > $t['tanggal']) {
@@ -361,6 +365,7 @@ if (empty($this->session->activeCompany)) {
                                                 $status = '<div class="badge badge-info">Menunggu</div>';
                                             } else {
                                                 $status = '<div class="badge badge-success">Selesai</div>';
+                                                $countFinish++;
                                             }
                                             ?>
                                             <td class="text-center">

@@ -1173,17 +1173,19 @@ if ($role == 'anggota') {
                     for (var j = 0; j < data.length; j++) {
                         var jd = data[j];
                         if (jd.id_tugas == t.id) {
-                            jd.status = '-';
+                            jd.status = 'menunggu';
                             var diffDate = '-';
+                            uploadStatus = '<span class="badge badge-primary">Menunggu</span>';
                             if (jd.path && jd.upload_date && jd.doc_type) {
+                                diffDate = new Date(jd.upload_date) - new Date(jd.tanggal);
+                                diffDate = Math.ceil(diffDate / (1000 * 60 * 60 * 24)); 
                                 if (new Date(jd.upload_date) > new Date(jd.tanggal)) {
                                     jd.status = 'terlambat';
                                     uploadStatus = '<span class="badge badge-danger">Terlambat</span>';
                                 } else {
                                     jd.status = 'selesai';
-                                    uploadStatus = '<span class="badge badge-primary">Selesai</span>';
+                                    uploadStatus = '<span class="badge badge-success">Selesai</span>';
                                 }
-                                diffDate = new Date(jd.upload_date).getDate() - new Date(jd.tanggal).getDate();
                             }
                             var btnDetail = '<span class="text-primary fa fa-info-circle" title="Detail" onclick="detailJadwal(' + n + ')"></span> ';
                             var btnEdit = '<span class="text-primary fa fa-edit" title="Edit" onclick="editJadwal(' + n + ')"></span> ';
@@ -1198,7 +1200,7 @@ if ($role == 'anggota') {
                             ]);
                             var btnPreview = '';
                             if (jd.doc_type == 'FILE') {
-                                btnPreview = '<a class="text-primary fa fa-download" target="_blank" href="<?= base_url('upload/implementasi') ?>/' + jd.path + '"></a>';
+                                btnPreview = '<a class="text-primary fa fa-download" href="<?= base_url('upload/implementasi') ?>/' + jd.path + '"></a>';
                             } else if (jd.doc_type == 'URL') {
                                 btnPreview = '<a class="text-primary fa fa-search" target="_blank" href="' + jd.path + '"></a>';
                             }
@@ -1206,8 +1208,8 @@ if ($role == 'anggota') {
                                 t.nama,
                                 t.txt_personil,
                                 jd.tanggal,
-                                jd.status,
-                                diffDate,
+                                '<div class="text-center">'+uploadStatus+'</div>',
+                                 '<div class="text-center">'+(diffDate>=0?diffDate+' Hari':'-')+'</div>',
                                 '<span class="text-primary fa fa-info-circle" title="Detail" onclick="detailJadwal(' + n + ')"></span> '
                                         + '<span class="text-primary fa fa-upload" title="Edit" onclick="initUploadImplementasi(' + n + ')"></span> '
                                 + btnPreview
@@ -1667,13 +1669,13 @@ if ($role == 'anggota') {
         });
     }
     function initCreateJadwal(index) {
+        $('#formCreateJadwal').trigger('reset');
         var m = $('#modalCreateJadwal');
         var t = sortTugas[index];
         m.modal('show');
-        m.find('.input-tugas').val(t.nama);
+        m.find('.group-input-repeat').addClass('d-none');
+        m.find('.input-tugas').val(t.nama); 
         m.find('.input-id-tugas').val(t.id);
-        $('#formCreateJadwal').trigger('reset');
-        $('.group-input-repeat').addClass('d-none');
     }
     function tambahTanggal() {
         $('<tr class="addictional-date group-input-unrepeat"><td><button type="button" class="btn btn-sm btn-danger fa fa-trash" onclick="hapusTanggalJadwal(this)"></button></td><td>' +
@@ -1751,13 +1753,13 @@ if ($role == 'anggota') {
         });
     }
     function initUploadImplementasi(index) {
+        $('#formUploadImplementasi').trigger('reset');
         var j = sortJadwal[index];
         var m = $('#modalUploadImplementasi');
         m.modal('show');
         m.find('.input-id').val(j.id);
         m.find('.input-tugas').val(sortTugas[j.indexTugas].nama);
         m.find('.input-jadwal').val(j.tanggal);
-        $('#formUploadImplementasi').trigger('reset');
         m.find('.input-url, .input-file').hide();
     }
     $('#formUploadImplementasi').submit(function (e) {
