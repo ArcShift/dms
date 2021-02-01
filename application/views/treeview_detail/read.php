@@ -554,9 +554,18 @@ if ($role == 'anggota') {
                         <label>Tugas</label>
                         <input class="form-control input-field input-tugas" name="tugas" required="">
                     </div>
-                    <div class="form-group">
+                    <div class="form-group item-edit">
                         <label>Form Terkait</label>
                         <select class="form-control input-field input-form-terkait" name="form_terkait"></select>
+                    </div>
+                    <div class="form-group item-view group-form-terkait">
+                        <label>Form Terkait</label>
+                        <div class="input-group">
+                            <input class="form-control input-detail-form-terkait" readonly="">
+                            <div class="input-group-append">
+                                <i class="btn btn-outline-primary btn-sm pull-right fa fa-search" onclick=""></i>
+                            </div>
+                        </div>
                     </div>
                     <div class="form-group">
                         <label>Sifat</label>
@@ -574,8 +583,8 @@ if ($role == 'anggota') {
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-                    <button type="submit" class="btn btn-primary btn-modif btn-save">Simpan</button>
-                    <button type="submit" class="btn btn-danger btn-modif btn-delete" name="delete">Hapus</button>
+                    <button type="submit" class="btn btn-primary item-edit btn-save">Simpan</button>
+                    <button type="submit" class="btn btn-danger item-edit btn-delete" name="delete">Hapus</button>
                 </div>
             </div>
         </form>
@@ -714,6 +723,14 @@ if ($role == 'anggota') {
                     <div class="form-group">
                         <label>Tanggal</label>
                         <input class="form-control input-field input-jadwal" name="tanggal">
+                    </div>
+                    <div class="form-group detail-jadwal">
+                        <label>Status</label>
+                        <input class="form-control input-field input-status">
+                    </div>
+                    <div class="form-group detail-jadwal">
+                        <label>Sifat</label>
+                        <input class="form-control input-field input-sifat">
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -1596,6 +1613,7 @@ if ($role == 'anggota') {
         m.find('.input-field').prop('disabled', false);
         m.find('.btn-save').show();
         m.find('.btn-delete').hide();
+        m.find('.item-view').hide();
         loadUserDistribusi(index);
     }
     $('#formTugas').on("submit", function (e) {
@@ -1612,8 +1630,22 @@ if ($role == 'anggota') {
         m.find('.input-tugas').val(t.nama);
         m.find('.input-sifat').val(t.sifat);
         m.find('.input-form-terkait').val(t.form_terkait);
+        m.find('.item-view').show();
+        if (t.form_terkait != null) {
+            var dt = sortDokumen[t.index_form_terkait];
+            m.find('.input-detail-form-terkait').val(dt.judul);
+            m.find('.input-group-append').empty();
+            if(dt.type_doc== 'FILE'){
+            m.find('.input-group-append').append('<a class="btn btn-outline-primary btn-sm pull-right fa fa-download" href="<?= base_url('upload/dokumen') ?>/' + dt.file + '"></a>');
+            }else if (dt.type_doc== 'URL'){
+            m.find('.input-group-append').append('<a class="btn btn-outline-primary btn-sm pull-right fa fa-search" href="' + dt.url + '"></a>');
+                
+            }
+        } else {
+            m.find('.group-form-terkait').hide();
+        }
         m.find('.input-field').prop('disabled', true);
-        m.find('.btn-modif').hide();
+        m.find('.item-edit').hide();
         loadUserDistribusi(t.index_document);
         m.find('.select-2').val(t.personil).trigger('change');
     }
@@ -1625,7 +1657,9 @@ if ($role == 'anggota') {
         m.find('.input-id').val(t.id);
         m.find('.input-document-id').val(t.id_document);
         m.find('.input-field').prop('disabled', false);
-        m.find('.btn-save').show();
+        m.find('.item-view').hide();
+        m.find('.item-edit').show();
+        m.find('.btn-delete').hide();
     }
     function initDeleteTugas(index) {
         detailTugas(index);
@@ -1732,13 +1766,17 @@ if ($role == 'anggota') {
     function detailJadwal(index) {
         var m = $('#modalJadwal');
         var j = sortJadwal[index];
+        var t = sortTugas[j.indexTugas];
         m.modal('show');
         m.find('.modal-title').text('Detail Jadwal');
         m.find('.input-tugas').val(sortTugas[j.indexTugas].nama);
         m.find('.input-jadwal').val(j.tanggal);
+        m.find('.input-status').val(j.status);
+        m.find('.input-sifat').val(t.sifat);
         m.find('.select-periode').val(j.periode);
         m.find('.input-field').prop('disabled', true);
         m.find('.btn-submit').hide();
+        m.find('.detail-jadwal').show();
     }
     function editJadwal(index) {
         detailJadwal(index);
@@ -1747,6 +1785,7 @@ if ($role == 'anggota') {
         m.find('.input-id').val(sortJadwal[index].id);
         m.find('.input-field').prop('disabled', false);
         m.find('.btn-save').show();
+        m.find('.detail-jadwal').hide();
     }
     function initDeleteJadwal(index) {
         detailJadwal(index);
