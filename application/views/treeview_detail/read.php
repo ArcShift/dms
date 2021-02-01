@@ -1178,7 +1178,7 @@ if ($role == 'anggota') {
                             uploadStatus = '<span class="badge badge-primary">Menunggu</span>';
                             if (jd.path && jd.upload_date && jd.doc_type) {
                                 diffDate = new Date(jd.upload_date) - new Date(jd.tanggal);
-                                diffDate = Math.ceil(diffDate / (1000 * 60 * 60 * 24)); 
+                                diffDate = Math.ceil(diffDate / (1000 * 60 * 60 * 24));
                                 if (new Date(jd.upload_date) > new Date(jd.tanggal)) {
                                     jd.status = 'terlambat';
                                     uploadStatus = '<span class="badge badge-danger">Terlambat</span>';
@@ -1208,11 +1208,11 @@ if ($role == 'anggota') {
                                 t.nama,
                                 t.txt_personil,
                                 jd.tanggal,
-                                '<div class="text-center">'+uploadStatus+'</div>',
-                                 '<div class="text-center">'+(diffDate>=0?diffDate+' Hari':'-')+'</div>',
+                                '<div class="text-center">' + uploadStatus + '</div>',
+                                '<div class="text-center">' + (diffDate > 0 ? diffDate + ' Hari' : '-') + '</div>',
                                 '<span class="text-primary fa fa-info-circle" title="Detail" onclick="detailJadwal(' + n + ')"></span> '
                                         + '<span class="text-primary fa fa-upload" title="Edit" onclick="initUploadImplementasi(' + n + ')"></span> '
-                                + btnPreview
+                                        + btnPreview
                             ]);
                             jd.indexTugas = i;
                             sortTugas[i].indexJadwal.push(n);
@@ -1674,7 +1674,7 @@ if ($role == 'anggota') {
         var t = sortTugas[index];
         m.modal('show');
         m.find('.group-input-repeat').addClass('d-none');
-        m.find('.input-tugas').val(t.nama); 
+        m.find('.input-tugas').val(t.nama);
         m.find('.input-id-tugas').val(t.id);
     }
     function tambahTanggal() {
