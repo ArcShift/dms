@@ -9,6 +9,60 @@ if (empty($this->session->activeCompany)) {
             margin-top: 20px;
         }
     </style>
+
+    <!--MODAL TUGAS-->
+    <div class="modal fade" id="modalTugas">
+        <div class="modal-dialog" role="document">
+            <form id="formTugas">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Detail Tugas</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <dl>
+                            <dt>Tugas</dt>
+                            <dd id="tugas-nama">value</dd>
+                        </dl>
+                        <dl>
+                            <dt>Tanggal Jadwal</dt>
+                            <dd id="tugas-tanggal">value</dd>
+                        </dl>
+                        <dl>
+                            <dt>Dokumen</dt>
+                            <dd id="tugas-dokumen">value</dd>
+                        </dl>
+                        <dl>
+                            <dt>Form Terkait</dt>
+                            <dd id="tugas-form-terkait">value</dd>
+                        </dl>
+                        <dl>
+                            <dt>Sifat</dt>
+                            <dd id="tugas-sifat">value</dd>
+                        </dl>
+                        <dl>
+                            <dt>PIC Pelaksana</dt>
+                            <dd id="tugas-pic">value</dd>
+                        </dl>
+                        <dl>
+                            <dt>Status</dt>
+                            <dd id="tugas-status">value</dd>
+                        </dl>
+                        <dl>
+                            <dt>Preview Dokumen</dt>
+                            <dd id="tugas-preview">value</dd>
+                        </dl>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <div class="app-page-title">
         <div class="page-title-wrapper">
             <div class="page-title-heading">
@@ -315,17 +369,25 @@ if (empty($this->session->activeCompany)) {
         <div class="row">
             <div class="col-md-12">
                 <div class="main-card mb-3 card">
-                    <div class="card-header">Tugas Hari Ini
+                    <div class="card-header">Tugas <?= $periode_tugas ?> Ini
                         <div class="btn-actions-pane-right">
                             <div role="group" class="btn-group-sm btn-group">
-                                <button class="active btn btn-focus">Hari ini</button>
-                                <button class="active btn btn-focus">Minggu ini</button>
-                                <button class="active btn btn-focus">Bulan ini</button>
+                                <button class="<?= $periode_tugas == 'hari' ? 'active':'' ?> btn btn-focus" onclick="window.location.href='<?= site_url($module.'?periode_tugas=hari'); ?>'">Hari ini</button>
+                                <button class="<?= $periode_tugas == 'minggu' ? 'active':'' ?> btn btn-focus" onclick="window.location.href='<?= site_url($module.'?periode_tugas=minggu'); ?>'">Minggu ini</button>
+                                <button class="<?= $periode_tugas == 'bulan' ? 'active':'' ?> btn btn-focus" onclick="window.location.href='<?= site_url($module.'?periode_tugas=bulan'); ?>'">Bulan ini</button>
                             </div>
                         </div>
                     </div>
-                    <div class="card-body">Total Tugas: <?= count($listTugas) ?>,
-                        <!--Selesai: <span id="countFinishTask">-</span>-->
+                    <?php
+                    // menghitung tugas selesai
+                    $totalSelesai = 0;
+                    foreach ($listTugas as $k => $t) {
+                        if ($t['upload_date'] != null) {
+                            $totalSelesai++;
+                        }
+                    }
+                    ?>
+                    <div class="card-body">Total Tugas: <?= count($listTugas) ?>, Selesai: <?= $totalSelesai ?>
                         <div class="table-responsive">
                             <table class="align-middle mb-0 table table-borderless table-striped table-hover" id="tableTugas">
                                 <thead>
@@ -333,16 +395,13 @@ if (empty($this->session->activeCompany)) {
                                         <th class="text-center">#</th>
                                         <th>Personil</th>
                                         <th class="text-center">Tugas</th>
-                                        <th class="text-center">Pasal</th>
+                                        <th class="text-center">Tanggal</th>
                                         <th class="text-center">Status</th>
                                         <th class="text-center">Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <?php
-                                    $countFinish = 0;
-                                    foreach ($listTugas as $k => $t) {
-                                        ?>
+                                    <?php foreach ($listTugas as $k => $t) { ?>
                                         <tr>
                                             <td class="text-center text-muted"><?= $k + 1 ?></td>
                                             <td>
@@ -359,20 +418,46 @@ if (empty($this->session->activeCompany)) {
                                             <td class="text-center"><?= $t['tanggal'] ?></td>
                                             <?php
                                             $status = '-';
+                                            $statusString = '-';
                                             if ($t['upload_date'] > $t['tanggal']) {
                                                 $status = '<div class="badge badge-danger">Terlambat</div>';
+                                                $statusString = 'Terlambat';
                                             } else if ($t['upload_date'] == null) {
                                                 $status = '<div class="badge badge-info">Menunggu</div>';
+                                                $statusString = 'Menunggu';
                                             } else {
                                                 $status = '<div class="badge badge-success">Selesai</div>';
-                                                $countFinish++;
+                                                $statusString = 'Selesai';
+                                            }
+                                            $url_document = '-';
+                                            if ($t['file'] !== null) {
+                                                $url_document = $t['file'];
+                                            } else if ($t['url'] !== null) {
+                                                $url_document = $t['url'];
+                                            }
+                                            // form terkait
+                                            $formTerkait = '';
+                                            $this->db->reset_query();
+                                            $tugas = $this->db->select('*')->from('tugas')->where('id', $t['id_tugas'])->get()->row();
+                                            if ($tugas->form_terkait) {
+                                                $formTerkait = $this->db->select('*')->from('document')->where('id', $tugas->form_terkait)->get()->row()->judul;
                                             }
                                             ?>
                                             <td class="text-center">
                                                 <?= $status ?>
                                             </td>
                                             <td class="text-center">
-                                                <button type="button" class="btn btn-primary btn-sm">Details</button>
+                                                <button type="button" class="btn btn-primary btn-sm" 
+                                                onclick="detailTugas(
+                                                '<?= $t['tugas'] ?>',
+                                                '<?= $t['tanggal'] ?>',
+                                                '<?= $t['judul'] ?>',
+                                                '<?= $formTerkait ?>',
+                                                '<?= $t['sifat']?>',
+                                                '<?= $t['name'] ?>',
+                                                '<?= $statusString ?>',
+                                                '<?= $url_document ?>'
+                                                )">Detail Tugas</button>
                                             </td>
                                         </tr>
                                     <?php } ?>
@@ -468,11 +553,24 @@ if (empty($this->session->activeCompany)) {
                 "searching": false,
                 "info": false,
                 "lengthChange": false,
-                "pageLength": 7,
+                "pageLength": 10,
             }
             $('#tableDistribusi').DataTable(dataTableConfig);
             dataTableConfig.pageLength = 5;
             $('#tableTugas').DataTable(dataTableConfig);
+
+            function detailTugas(tugas, tanggal, dokumen, form_terkait, sifat, pic, status, preview) {
+                var m = $('#modalTugas');
+                m.find('#tugas-nama').text(tugas);
+                m.find('#tugas-tanggal').text(tanggal);
+                m.find('#tugas-dokumen').text(dokumen);
+                m.find('#tugas-form-terkait').text(form_terkait);
+                m.find('#tugas-sifat').text(sifat);
+                m.find('#tugas-pic').text(pic);
+                m.find('#tugas-status').text(status);
+                m.find('#tugas-preview').html('<a href="'+preview+'">'+preview+'</a>');
+                m.modal('show');
+            }
         </script>
     <?php } ?>
     <script>

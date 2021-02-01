@@ -24,6 +24,11 @@ class Dashboard extends MY_Controller {
         }
         $company = $this->session->activeCompany;
         $standard = $this->session->activeStandard;
+        $periode_tugas = 'hari';
+        if ($this->input->get('periode_tugas')) {
+            $periode_tugas = $this->input->get('periode_tugas');
+        }
+        $this->data['periode_tugas']= $periode_tugas;
         if (!empty($company)) {
             $this->data['companies'] = $this->db->get('company')->result_array();
             $this->data['company_standard'] = $this->model->company_standard($company['id']);
@@ -47,7 +52,7 @@ class Dashboard extends MY_Controller {
                 $this->db->where('uk.id_company', $company['id']);
                 $this->db->join('unit_kerja uk', 'uk.id = p.id_unit_kerja');
                 $this->data['countPersonil']= $this->db->count_all_results('personil p');
-                $this->data['listTugas']= $this->model->listTugas($company['id'], $standard['id']);
+                $this->data['listTugas']= $this->model->listTugas($company['id'], $standard['id'], $periode_tugas);
             }
             $this->db->where('id_company', $company['id']);
         }
