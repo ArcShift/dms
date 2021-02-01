@@ -1327,14 +1327,23 @@ if ($role == 'anggota') {
             } else {
                 link = '<a class="btn btn-primary btn-sm fa fa-search" target="_blank" href="' + d.url + '"></a>';
             }
-            m.find('.files').append('<tr>'
-                    + '<td>' + d.judul + '</td>'
-                    + '<td>' + d.txt_pasals2 + '</td>'
-                    + '<td style="white-space: pre-wrap">' + (d.custom_deskripsi) + '</td>'
-                    + '<td>' + link
-                    + '&nbsp<span class="btn btn-danger btn-sm fa fa-trash" onclick="initHapusDokumen(' + p.index_documents[i] + ')"></span>'
-                    + '</td>'
-                    + '</tr>');
+            var show = true;
+            if (role == 'anggota') {
+                show = false;
+                if ($.inArray(idPersonil + '', d.personil_distribusi_id) >= 0) {
+                    show = true;
+                }
+            }
+            if (show) {
+                m.find('.files').append('<tr>'
+                        + '<td>' + d.judul + '</td>'
+                        + '<td>' + d.txt_pasals2 + '</td>'
+                        + '<td style="white-space: pre-wrap">' + (d.custom_deskripsi) + '</td>'
+                        + '<td>' + link
+                        + '&nbsp<span class="btn btn-danger btn-sm fa fa-trash" onclick="initHapusDokumen(' + p.index_documents[i] + ')"></span>'
+                        + '</td>'
+                        + '</tr>');
+            }
         }
     }
     $('.formDokumen').on("submit", function (e) {
