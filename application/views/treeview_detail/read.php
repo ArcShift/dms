@@ -101,7 +101,7 @@ if ($role == 'anggota') {
                                     <th>No</th>
                                     <th>Judul</th>
                                     <th>Pasal</th>
-                                    <th>Versi</th>
+                                    <th>Revisi</th>
                                     <th>Level</th>
                                     <th>Klasifikasi</th>
                                     <th class="col-aksi" style="min-width: 70px">Aksi</th>
@@ -355,7 +355,7 @@ if ($role == 'anggota') {
                                 </td>
                             </tr>
                             <tr>
-                                <td>Versi Dokumen</td>
+                                <td>Revisi Dokumen</td>
                                 <td>
                                     <input class="form-control input-versi" name="versi">
                                 </td>
@@ -1471,7 +1471,7 @@ if ($role == 'anggota') {
             'Pembuat Dokumen': (d.index_creator == null ? '-' : personil[d.index_creator].fullname),
             'Jenis Dokumen': (d.jenis == null ? '-' : d.jenis),
             'Klasifikasi': (d.klasifikasi == null ? '-' : d.klasifikasi),
-            'Versi Dokumen': (d.versi == null ? '-' : d.versi),
+            'Revisi Dokumen': (d.versi == null ? '-' : d.versi),
             'Dokumen Terkait': doc_terkait,
             'Dokumen': link + '<div class="no-wrap" style="width:85%">' + txt_doc + '</div>',
         }

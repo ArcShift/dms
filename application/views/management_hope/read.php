@@ -1,7 +1,7 @@
 <?php
 $company = $this->db->get('company')->result_array();
 ?>
-<div class="main-card mb-3 card">   
+<div class="main-card mb-3 card">
     <div class="card-body">
         <div class="row">
             <div class="col-sm-6"></div>
@@ -116,4 +116,9 @@ $company = $this->db->get('company')->result_array();
             $('#selectStandar').change();
         });
     });
+    <?php if(isset($this->session->user['id_company'])){?>
+        $('#selectCompany').hide();
+        $('#selectCompany').val(<?= $this->session->user['id_company']?>);
+        $('#selectCompany').change();
+    <?php } ?>
 </script>
