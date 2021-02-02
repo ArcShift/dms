@@ -46,7 +46,6 @@ class Dashboard extends MY_Controller {
                 $this->load->model('M_implementasi', 'm_imp');
                 $this->data['progressImp'] = json_encode($this->m_imp->progress($company['id'], $standard['id']));
                 $this->data['distribusi'] = $this->model->distribusi($company['id'], $standard['id']);
-//                $this->data['taskPersonil']= 
                 $this->db->where('uk.id_company', $company['id']);
                 $this->data['countUnitKerja']= $this->db->count_all_results('unit_kerja uk');
                 $this->db->where('uk.id_company', $company['id']);

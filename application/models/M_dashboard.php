@@ -121,10 +121,11 @@ class M_dashboard extends CI_Model {
     }
 
     function listTugas($company, $standard, $periode_tugas) {
-        $this->db->select('p.fullname AS name, uk.name AS unit_kerja, t.nama AS tugas, ps.name AS pasal, j.tanggal, j.upload_date, j.id AS id_jadwal, d.judul, t.id AS id_tugas, t.sifat, d.file, d.url');
+        $this->db->select('p.fullname AS name, u.photo, uk.name AS unit_kerja, t.nama AS tugas, ps.name AS pasal, j.tanggal, j.upload_date, j.id AS id_jadwal, d.judul, t.id AS id_tugas, t.sifat, d.file, d.url');
         $this->db->join('tugas t', 't.id = j.id_tugas');
         $this->db->join('penerima_tugas pt', 'pt.id_tugas = t.id');
         $this->db->join('personil p', 'p.id = pt.id_personil');
+        $this->db->join('users u', 'u.id_personil = p.id', 'LEFT');
         $this->db->join('unit_kerja uk', 'uk.id = p.id_unit_kerja AND uk.id_company = ' . $company);
         $this->db->join('document d', 'd.id = t.id_document');
         $this->db->join('document_pasal dp', 'dp.id_document = d.id');

@@ -372,9 +372,9 @@ if (empty($this->session->activeCompany)) {
                     <div class="card-header">Tugas <?= $periode_tugas ?> Ini
                         <div class="btn-actions-pane-right">
                             <div role="group" class="btn-group-sm btn-group">
-                                <button class="<?= $periode_tugas == 'hari' ? 'active':'' ?> btn btn-focus" onclick="window.location.href='<?= site_url($module.'?periode_tugas=hari'); ?>'">Hari ini</button>
-                                <button class="<?= $periode_tugas == 'minggu' ? 'active':'' ?> btn btn-focus" onclick="window.location.href='<?= site_url($module.'?periode_tugas=minggu'); ?>'">Minggu ini</button>
-                                <button class="<?= $periode_tugas == 'bulan' ? 'active':'' ?> btn btn-focus" onclick="window.location.href='<?= site_url($module.'?periode_tugas=bulan'); ?>'">Bulan ini</button>
+                                <button class="<?= $periode_tugas == 'hari' ? 'active' : '' ?> btn btn-focus" onclick="window.location.href = '<?= site_url($module . '?periode_tugas=hari'); ?>'">Hari ini</button>
+                                <button class="<?= $periode_tugas == 'minggu' ? 'active' : '' ?> btn btn-focus" onclick="window.location.href = '<?= site_url($module . '?periode_tugas=minggu'); ?>'">Minggu ini</button>
+                                <button class="<?= $periode_tugas == 'bulan' ? 'active' : '' ?> btn btn-focus" onclick="window.location.href = '<?= site_url($module . '?periode_tugas=bulan'); ?>'">Bulan ini</button>
                             </div>
                         </div>
                     </div>
@@ -407,6 +407,11 @@ if (empty($this->session->activeCompany)) {
                                             <td>
                                                 <div class="widget-content p-0">
                                                     <div class="widget-content-wrapper">
+                                                        <div class="widget-content-left mr-3">
+                                                            <div class="widget-content-left">
+                                                                <img class="rounded-circle" src="<?= !empty($t['photo'])? base_url('upload/profile_photo/'.$t['photo']):base_url('assets/images/default_user.jpg') ?>" alt="" width="40">
+                                                            </div>
+                                                        </div>
                                                         <div class="widget-content-left flex2">
                                                             <div class="widget-heading"><?= $t['name'] ?></div>
                                                             <div class="widget-subheading opacity-7"><?= $t['unit_kerja'] ?></div>
@@ -448,16 +453,16 @@ if (empty($this->session->activeCompany)) {
                                             </td>
                                             <td class="text-center">
                                                 <button type="button" class="btn btn-primary btn-sm" 
-                                                onclick="detailTugas(
-                                                '<?= $t['tugas'] ?>',
-                                                '<?= $t['tanggal'] ?>',
-                                                '<?= $t['judul'] ?>',
-                                                '<?= $formTerkait ?>',
-                                                '<?= $t['sifat']?>',
-                                                '<?= $t['name'] ?>',
-                                                '<?= $statusString ?>',
-                                                '<?= $url_document ?>'
-                                                )">Detail Tugas</button>
+                                                        onclick="detailTugas(
+                                                                            '<?= $t['tugas'] ?>',
+                                                                            '<?= $t['tanggal'] ?>',
+                                                                            '<?= $t['judul'] ?>',
+                                                                            '<?= $formTerkait ?>',
+                                                                            '<?= $t['sifat'] ?>',
+                                                                            '<?= $t['name'] ?>',
+                                                                            '<?= $statusString ?>',
+                                                                            '<?= $url_document ?>'
+                                                                            )">Detail Tugas</button>
                                             </td>
                                         </tr>
                                     <?php } ?>
@@ -568,7 +573,7 @@ if (empty($this->session->activeCompany)) {
                 m.find('#tugas-sifat').text(sifat);
                 m.find('#tugas-pic').text(pic);
                 m.find('#tugas-status').text(status);
-                m.find('#tugas-preview').html('<a href="'+preview+'">'+preview+'</a>');
+                m.find('#tugas-preview').html('<a href="' + preview + '">' + preview + '</a>');
                 m.modal('show');
             }
         </script>
