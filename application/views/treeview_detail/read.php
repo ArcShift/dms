@@ -1581,6 +1581,7 @@ if ($role == 'anggota') {
         var d = sortDokumen[index];
         m.modal('show');
         m.find('.label-pasal').html(d.txt_pasals);
+        m.find('form').trigger("reset");
         m.find('.label-judul').text(d.judul);
         m.find('.label-jenis').text('Level ' + d.jenis);
         m.find('.label-klasifikasi').text(d.klasifikasi);
@@ -1594,6 +1595,7 @@ if ($role == 'anggota') {
         m.find('.input-dokumen-id').val(d.id);
         m.find('.group-detail').hide();
         m.find('.group-edit').show();
+        m.find('.select-2').val(d.personil_distribusi_id).trigger('change');
     }
     $('#distribusi-unit-kerja').change(function () {
         var slct = $('#modalDistribusi').find('.select-personil');
@@ -1820,7 +1822,7 @@ if ($role == 'anggota') {
         var bukti = '-';
         if (j.doc_type == 'FILE') {
             bukti = '<a class="btn btn-outline-primary btn-sm pull-right fa fa-download" href="<?= base_url('upload/implementasi') ?>/' + j.path + '"></a>';
-        }        else if (j.doc_type == 'URL'){
+        } else if (j.doc_type == 'URL') {
             bukti = '<a class="btn btn-outline-primary btn-sm pull-right fa fa-search" href="' + j.path + '"></a>'
         }
         var data = {
