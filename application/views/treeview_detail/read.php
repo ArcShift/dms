@@ -783,6 +783,23 @@ if ($role == 'anggota') {
         </form>
     </div>
 </div>
+<!--MODAL DETAIL-->
+<div class="modal fade" id="modalDetail">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body"></div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" data-dismiss="modal">Tutup</button>
+            </div>
+        </div>
+    </div>
+</div>
 <script>
     $(document).ready(function () {
         if (role != 'admin') {
@@ -1221,13 +1238,14 @@ if ($role == 'anggota') {
                             } else if (jd.doc_type == 'URL') {
                                 btnPreview = '<a class="text-primary fa fa-search" target="_blank" href="' + jd.path + '"></a>';
                             }
+                            jd.keterlambatan =diffDate > 0 ? diffDate + ' Hari' : '-';
                             tbImplementasi.row.add([
                                 t.nama,
                                 t.txt_personil,
                                 jd.tanggal,
                                 '<div class="text-center">' + uploadStatus + '</div>',
-                                '<div class="text-center">' + (diffDate > 0 ? diffDate + ' Hari' : '-') + '</div>',
-                                '<span class="text-primary fa fa-info-circle" title="Detail" onclick="detailJadwal(' + n + ')"></span> '
+                                '<div class="text-center">' + jd.keterlambatan + '</div>',
+                                '<span class="text-primary fa fa-info-circle" title="Detail" onclick="detailImplementasi(' + n + ')"></span> '
                                         + '<span class="text-primary fa fa-upload" title="Edit" onclick="initUploadImplementasi(' + n + ')"></span> '
                                         + btnPreview
                             ]);
@@ -1635,11 +1653,11 @@ if ($role == 'anggota') {
             var dt = sortDokumen[t.index_form_terkait];
             m.find('.input-detail-form-terkait').val(dt.judul);
             m.find('.input-group-append').empty();
-            if(dt.type_doc== 'FILE'){
-            m.find('.input-group-append').append('<a class="btn btn-outline-primary btn-sm pull-right fa fa-download" href="<?= base_url('upload/dokumen') ?>/' + dt.file + '"></a>');
-            }else if (dt.type_doc== 'URL'){
-            m.find('.input-group-append').append('<a class="btn btn-outline-primary btn-sm pull-right fa fa-search" href="' + dt.url + '"></a>');
-                
+            if (dt.type_doc == 'FILE') {
+                m.find('.input-group-append').append('<a class="btn btn-outline-primary btn-sm pull-right fa fa-download" href="<?= base_url('upload/dokumen') ?>/' + dt.file + '"></a>');
+            } else if (dt.type_doc == 'URL') {
+                m.find('.input-group-append').append('<a class="btn btn-outline-primary btn-sm pull-right fa fa-search" href="' + dt.url + '"></a>');
+
             }
         } else {
             m.find('.group-form-terkait').hide();
@@ -1763,7 +1781,41 @@ if ($role == 'anggota') {
             $('#tglMulaiJadwal').text('Tanggal');
         }
     });
+    
     function detailJadwal(index) {
+        var m = $('#modalDetail');
+        var j = sortJadwal[index];
+        var t = sortTugas[j.indexTugas];
+        m.modal('show');
+        m.find('.modal-title').text('Detail Jadwal');
+        m.find('.modal-body').empty();
+        var data = {
+            Dokumen: sortDokumen[t.index_document].judul,
+            Tugas: t.nama,
+            'Form Terkait': (t.index_form_terkait == undefined? '-': sortDokumen[t.index_form_terkait].judul),
+            Sifat: t.sifat,
+            Jadwal: j.tanggal,
+            Periode: (j.periode==null?'-':j.periode),
+        };
+        for (var key in data) {
+            m.find('.modal-body').append('<div class="row"><div class="col-sm-4"><label>' + key + '</label></div><div class="col-sm-8">' + data[key] + '</div></div>');
+        }
+    }
+    function detailImplementasi(index){
+        detailJadwal(index);
+         var j = sortJadwal[index];
+        var data= {
+            Status: j.status,
+            Keterlambatan: j.keterlambatan,
+            Bukti: j.path,
+        };
+        var m = $('#modalDetail');
+        m.find('.modal-title').text('Detail Implementasi');
+        for (var key in data) {
+            m.find('.modal-body').append('<div class="row"><div class="col-sm-4"><label>' + key + '</label></div><div class="col-sm-8">' + data[key] + '</div></div>');
+        }
+    }
+    function initEditJadwal(index) {
         var m = $('#modalJadwal');
         var j = sortJadwal[index];
         var t = sortTugas[j.indexTugas];
@@ -1779,7 +1831,7 @@ if ($role == 'anggota') {
         m.find('.detail-jadwal').show();
     }
     function editJadwal(index) {
-        detailJadwal(index);
+        initEditJadwal(index);
         var m = $('#modalJadwal');
         m.find('.modal-title').text('Edit Jadwal');
         m.find('.input-id').val(sortJadwal[index].id);
