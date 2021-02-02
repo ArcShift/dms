@@ -1238,7 +1238,7 @@ if ($role == 'anggota') {
                             } else if (jd.doc_type == 'URL') {
                                 btnPreview = '<a class="text-primary fa fa-search" target="_blank" href="' + jd.path + '"></a>';
                             }
-                            jd.keterlambatan =diffDate > 0 ? diffDate + ' Hari' : '-';
+                            jd.keterlambatan = diffDate > 0 ? diffDate + ' Hari' : '-';
                             tbImplementasi.row.add([
                                 t.nama,
                                 t.txt_personil,
@@ -1781,7 +1781,7 @@ if ($role == 'anggota') {
             $('#tglMulaiJadwal').text('Tanggal');
         }
     });
-    
+
     function detailJadwal(index) {
         var m = $('#modalDetail');
         var j = sortJadwal[index];
@@ -1789,25 +1789,44 @@ if ($role == 'anggota') {
         m.modal('show');
         m.find('.modal-title').text('Detail Jadwal');
         m.find('.modal-body').empty();
+        var dt_txt = '-';
+        if (t.form_terkait != null) {
+            var dt = sortDokumen[t.index_form_terkait];
+            dt_txt = dt.judul;
+            if (dt.type_doc == 'FILE') {
+                dt_txt += '<a class="btn btn-outline-primary btn-sm pull-right fa fa-download" href="<?= base_url('upload/dokumen') ?>/' + dt.file + '"></a>';
+            } else if (dt.type_doc == 'URL') {
+                dt_txt += '<a class="btn btn-outline-primary btn-sm pull-right fa fa-search" href="' + dt.url + '"></a>';
+            }
+        } else {
+            m.find('.group-form-terkait').hide();
+        }
         var data = {
             Dokumen: sortDokumen[t.index_document].judul,
             Tugas: t.nama,
-            'Form Terkait': (t.index_form_terkait == undefined? '-': sortDokumen[t.index_form_terkait].judul),
+            'Form Terkait': dt_txt,
             Sifat: t.sifat,
+            Pelaksana: t.txt_personil,
             Jadwal: j.tanggal,
-            Periode: (j.periode==null?'-':j.periode),
+            Periode: (j.periode == null ? '-' : j.periode),
         };
         for (var key in data) {
             m.find('.modal-body').append('<div class="row"><div class="col-sm-4"><label>' + key + '</label></div><div class="col-sm-8">' + data[key] + '</div></div>');
         }
     }
-    function detailImplementasi(index){
+    function detailImplementasi(index) {
         detailJadwal(index);
-         var j = sortJadwal[index];
-        var data= {
+        var j = sortJadwal[index];
+        var bukti = '-';
+        if (j.doc_type == 'FILE') {
+            bukti = '<a class="btn btn-outline-primary btn-sm pull-right fa fa-download" href="<?= base_url('upload/implementasi') ?>/' + j.path + '"></a>';
+        }        else if (j.doc_type == 'URL'){
+            bukti = '<a class="btn btn-outline-primary btn-sm pull-right fa fa-search" href="' + j.path + '"></a>'
+        }
+        var data = {
             Status: j.status,
             Keterlambatan: j.keterlambatan,
-            Bukti: j.path,
+            Bukti: bukti,
         };
         var m = $('#modalDetail');
         m.find('.modal-title').text('Detail Implementasi');
@@ -1840,7 +1859,7 @@ if ($role == 'anggota') {
         m.find('.detail-jadwal').hide();
     }
     function initDeleteJadwal(index) {
-        detailJadwal(index);
+        initDetailJadwal(index);
         var m = $('#modalJadwal');
         m.find('.modal-title').text('Modal Jadwal');
         m.find('.btn-delete').show();
