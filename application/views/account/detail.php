@@ -58,8 +58,7 @@
                 </div>
             </form>
         </div>
-    </div>
-    <div class="col-sm-6">
+        <br/>
         <div class="card">
             <form method="post" enctype="multipart/form-data">
                 <div class="card-header">
@@ -76,7 +75,8 @@
                 </div>
             </form>
         </div>       
-        <br/>
+    </div>
+    <div class="col-sm-6">
         <div class="card">
             <form method="post">        
                 <div class="card-header">
