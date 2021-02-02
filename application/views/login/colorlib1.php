@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <title><?= $this->config->item('app_short_name') . ' - ' . $this->config->item('app_name') ?></title>
+        <title><?= $this->config->item('short_app_name') . ' - ' . $this->config->item('app_name') ?></title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <!--===============================================================================================-->	
