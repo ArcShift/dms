@@ -22,10 +22,6 @@
                         <input class="form-control" value="<?php echo $data['unit_kerja'] ?>" disabled="">
                     </div>
                     <div class="form-group">
-                        <label>Jenis</label>
-                        <input class="form-control" value="<?php echo $data['jenis'] ?> DOKUMEN" disabled="">
-                    </div>
-                    <div class="form-group">
                         <label>Perusahaan</label>
                         <input class="form-control" value="<?php echo $data['perusahaan'] ?>" disabled="">
                     </div>
@@ -72,7 +68,7 @@
                 <div class="card-body">
                     <img class="rounded-circle text-right" src="<?php echo base_url('upload/profile_photo/' . $data['photo']) ?>" alt="" width="100">
                     <div class="form-group">
-                        <input class="form-control" name="foto" type="file" required="">
+                        <input class="form-control" name="foto" type="file" required="" accept=".gif,.jpg,.png">
                     </div>
                 </div>
                 <div class="d-block card-footer text-right">
