@@ -409,7 +409,7 @@ if (empty($this->session->activeCompany)) {
                                                     <div class="widget-content-wrapper">
                                                         <div class="widget-content-left mr-3">
                                                             <div class="widget-content-left">
-                                                                <img class="rounded-circle" src="<?= !empty($t['photo'])? base_url('upload/profile_photo/'.$t['photo']):base_url('assets/images/default_user.jpg') ?>" alt="" width="40">
+                                                                <img class="rounded-circle" src="<?= !empty($t['photo']) ? base_url('upload/profile_photo/' . $t['photo']) : base_url('assets/images/default_user.jpg') ?>" alt="" width="40">
                                                             </div>
                                                         </div>
                                                         <div class="widget-content-left flex2">
@@ -454,15 +454,15 @@ if (empty($this->session->activeCompany)) {
                                             <td class="text-center">
                                                 <button type="button" class="btn btn-primary btn-sm" 
                                                         onclick="detailTugas(
-                                                                            '<?= $t['tugas'] ?>',
-                                                                            '<?= $t['tanggal'] ?>',
-                                                                            '<?= $t['judul'] ?>',
-                                                                            '<?= $formTerkait ?>',
-                                                                            '<?= $t['sifat'] ?>',
-                                                                            '<?= $t['name'] ?>',
-                                                                            '<?= $statusString ?>',
-                                                                            '<?= $url_document ?>'
-                                                                            )">Detail Tugas</button>
+                                                                        '<?= $t['tugas'] ?>',
+                                                                        '<?= $t['tanggal'] ?>',
+                                                                        '<?= $t['judul'] ?>',
+                                                                        '<?= $formTerkait ?>',
+                                                                        '<?= $t['sifat'] ?>',
+                                                                        '<?= $t['name'] ?>',
+                                                                        '<?= $statusString ?>',
+                                                                        '<?= $url_document ?>'
+                                                                        )">Detail Tugas</button>
                                             </td>
                                         </tr>
                                     <?php } ?>
