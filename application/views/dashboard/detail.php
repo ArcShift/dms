@@ -285,7 +285,7 @@ if (empty($this->session->activeCompany)) {
                     <div class="card-header-tab card-header">
                         <div class="card-header-title">
                             <i class="header-icon lnr-rocket icon-gradient bg-tempting-azure"> </i>
-                            Distribusi Pasal dan Dokumen
+                            Distribusi Dokumen dan Implementasi
                         </div>
                         <div class="btn-actions-pane-right"></div>
                     </div>
