@@ -615,7 +615,8 @@ class M_treeview_detail extends CI_Model {
                 if ($p['jadwal'] != 0) {
                     $impStatus = true;
                 }
-            } else if ($p['jadwal_ok'] != 0) {
+            }
+            if ($p['jadwal_ok'] != 0) {
                 $pemenuhanImp = round($p['jadwal_ok'] * 100 / $p['jadwal'], 2);
             }
         }
