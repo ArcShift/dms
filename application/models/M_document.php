@@ -10,11 +10,17 @@ class M_document extends CI_Model {
         $this->db->join('pasal p', 'd.id_pasal = p.id');
         $this->db->join('standard s', 's.id = p.id_standard');
         $this->db->join('distribusi ds', 'd.id = ds.id_document', 'LEFT');
-        if ($this->input->get('perusahaan')) {
-            $this->db->join('unit_kerja ukc', 'ukc.id = pc.id_unit_kerja');
-            $this->db->join('company cc', 'cc.id = ukc.id_company');
-            $this->db->where('cc.id', $this->input->get('perusahaan'));
+        if (isset($this->session->user['id_company'])) {
+            $company = $this->session->user['id_company'];
+        } else if ($this->input->get('perusahaan')) {
+            $company = $this->input->get('perusahaan');
+        }
+        if (isset($company)) {
+            $this->db->where('d.id_company', $company);
             if ($this->input->get('creator')) {
+                $this->db->join('unit_kerja ukc', 'ukc.id = pc.id_unit_kerja');
+                $this->db->join('company cc', 'cc.id = ukc.id_company');
+                $this->db->where('cc.id', $company);
                 $cr = explode('_', $this->input->get('creator'));
                 if ($cr[0] == 'uk') {
                     $this->db->where('ukc.id', $cr[1]);

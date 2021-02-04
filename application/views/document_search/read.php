@@ -26,15 +26,17 @@
                             <option value="">-- -- --</option>
                         </select>
                     </div>
-                    <div class="form-group">
-                        <label>Perusahaan</label>
-                        <select class="form-control" name="perusahaan" id="selectPerusahaan">
-                            <option value="">-- -- --</option>
-                            <?php foreach ($perusahaan as $p) { ?>
-                                <option value="<?= $p['id'] ?>" <?= $this->input->get('perusahaan') == $p['id'] ? 'selected' : '' ?>><?= $p['name'] ?></option>
-                            <?php } ?>
-                        </select>
-                    </div>
+                    <?php if (!isset($this->session->user['id_company'])) { ?>
+                        <div class="form-group">
+                            <label>Perusahaan</label>
+                            <select class="form-control" name="perusahaan" id="selectPerusahaan">
+                                <option value="">-- -- --</option>
+                                <?php foreach ($perusahaan as $p) { ?>
+                                    <option value="<?= $p['id'] ?>" <?= $this->input->get('perusahaan') == $p['id'] ? 'selected' : '' ?>><?= $p['name'] ?></option>
+                                <?php } ?>
+                            </select>
+                        </div>
+                    <?php } ?>
                     <div class="form-group">
                         <label>Pembuat Dokumen</label>
                         <select class="form-control select-ukp" name="creator"></select>
