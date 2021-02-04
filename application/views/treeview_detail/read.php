@@ -199,6 +199,7 @@ if ($role == 'anggota') {
                     <table class="table">
                         <thead>
                             <tr>
+                                <th>No</th>
                                 <th>Judul Dokumen</th>
                                 <th>Pasal Terkait</th>
                                 <th style="width: 40%">Letak Pasal pada Dokumen</th>
@@ -678,7 +679,7 @@ if ($role == 'anggota') {
                             <tr class="group-input-repeat">
                                 <td>Tanggal Selesai</td>
                                 <td>
-                                    <input class="form-control input-jadwal" name="tanggal_selesai" required="">
+                                    <input class="form-control input-jadwal" autocomplete="off" name="tanggal_selesai" required="">
                                 </td>
                             </tr>
                             <tr class="group-input-repeat">
@@ -1268,53 +1269,28 @@ if ($role == 'anggota') {
             for (var i = 0; i < sortPasal.length; i++) {
                 sortPasal[i].pemenuhanImplementasi = 0;
                 var ps = sortPasal[i];
-                var d = data[i];
-                if (ps.parent == null) {
+                if (ps.parent == null) {//data detail dokumen
                     listPasalDocuments(i);
-                    pemenuhanDocument(i);
                 }
-                var tr = tbPemenuhan.row.add([
-                    ps.fullname,
-                    (ps.sort_desc == null ? '' : ps.sort_desc),
-                    '<div class="text-center">' + d.doc + '</div>',
-                    '<div class="text-center"><span class="badge badge-' + percentColor(d.pemenuhanDoc) + '">' + d.pemenuhanDoc + '%</span></div>',
-                    '<div class="text-center">' + d.jadwal + '</div>',
-                    '<div class="text-center"><span class="badge badge-' + percentColor(d.pemenuhanImp) + '">' + d.pemenuhanImp + '%</span></div>',
-                ]).node();
+                for (var j = 0; j < data.length; j++) {
+                    var d = data[j];
+                    if (d.id == ps.id) {
+                        var tr = tbPemenuhan.row.add([
+                            ps.fullname,
+                            (ps.sort_desc == null ? '' : ps.sort_desc),
+                            '<div class="text-center">' + d.doc + '</div>',
+                            '<div class="text-center"><span class="badge badge-' + percentColor(d.pemenuhanDoc) + '">' + d.pemenuhanDoc + '%</span></div>',
+                            '<div class="text-center">' + d.jadwal + '</div>',
+                            '<div class="text-center"><span class="badge badge-' + percentColor(d.pemenuhanImp) + '">' + d.pemenuhanImp + '%</span></div>',
+                        ]).node();
+                    }
+                }
                 if (ps.parent == null) {
                     $(tr).addClass('table-success');
                 }
             }
             tbPemenuhan.draw();
         });
-    }
-    function pemenuhanDocument(index) {
-        sortPasal[index].pemenuhanImp = 0;
-        var p = sortPasal[index];
-        var sumPemenuhan = 0;
-        var percent = 0;
-        if (p.index_childs.length != 0) {
-            for (var i = 0; i < p.index_childs.length; i++) {
-                var child = p.index_childs[i];
-                pemenuhanDocument(child);
-                sumPemenuhan += sortPasal[child].pemenuhanDocument;
-            }
-            percent = sumPemenuhan / p.index_childs.length;
-        } else {
-            if (p.index_documents.length == 0) {
-                percent = 0;
-                percentImp = 0;
-            } else {
-                percent = 100;
-                percentImp = countImplementasi(p.index_documents);
-            }
-        }
-        sortPasal[index].pemenuhanDocument = percent;
-        sortPasal[index].pemenuhanImp = percentImp;
-    }
-    function countImplementasi() {
-//        console.log
-        return 0; //jumlah dokumen
     }
     function percentColor(num) {
         num = parseInt(num);
@@ -1371,6 +1347,7 @@ if ($role == 'anggota') {
             }
             if (show) {
                 m.find('.files').append('<tr>'
+                        + '<td>' + (i + 1) + '</td>'
                         + '<td>' + d.judul + '</td>'
                         + '<td>' + d.txt_pasals2 + '</td>'
                         + '<td style="white-space: pre-wrap">' + (d.custom_deskripsi) + '</td>'
@@ -1861,7 +1838,7 @@ if ($role == 'anggota') {
         m.find('.detail-jadwal').hide();
     }
     function initDeleteJadwal(index) {
-        initDetailJadwal(index);
+        initEditJadwal(index);
         var m = $('#modalJadwal');
         m.find('.modal-title').text('Modal Jadwal');
         m.find('.btn-delete').show();
