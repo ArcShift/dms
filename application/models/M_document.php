@@ -6,8 +6,7 @@ class M_document extends CI_Model {
 
     function search() {
         $this->db->select('d.*, pc.fullname, COUNT(ds.id) AS distribusi');
-        $this->db->join('users uc', 'uc.id = d.creator', 'LEFT');
-        $this->db->join('personil pc', 'pc.id = uc.id_personil');
+        $this->db->join('personil pc', 'pc.id = d.creator', 'LEFT');
         $this->db->join('pasal p', 'd.id_pasal = p.id');
         $this->db->join('standard s', 's.id = p.id_standard');
         $this->db->join('distribusi ds', 'd.id = ds.id_document', 'LEFT');
