@@ -1280,8 +1280,8 @@ if ($role == 'anggota') {
                             (ps.sort_desc == null ? '' : ps.sort_desc),
                             '<div class="text-center">' + d.doc + '</div>',
                             '<div class="text-center"><span class="badge badge-' + percentColor(d.pemenuhanDoc) + '">' + d.pemenuhanDoc + '%</span></div>',
-                            '<div class="text-center">' + d.jadwal + '</div>',
-                            '<div class="text-center"><span class="badge badge-' + percentColor(d.pemenuhanImp) + '">' + d.pemenuhanImp + '%</span></div>',
+                            '<div class="text-center">' + (d.parent==null&d.doc==0?'':(d.impStatus ? d.jadwal : '-')) + '</div>',
+                            '<div class="text-center">' + (d.impStatus ? '<span class="badge badge-' + percentColor(d.pemenuhanImp) + '">' + d.pemenuhanImp + '%</span>' : '-') + '</div>',
                         ]).node();
                     }
                 }

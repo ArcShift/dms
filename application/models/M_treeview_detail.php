@@ -587,32 +587,41 @@ class M_treeview_detail extends CI_Model {
         }
         return $this->pasal;
     }
+
     function getPemenuhan2($param) {
         
     }
+
     function persentasePemenuhan($index) {
         $p = $this->pasal[$index];
         $pemenuhanDoc = 0;
         $pemenuhanImp = 0;
+        $impStatus = false;
         if (!empty($p['indexChild'])) {
             foreach ($p['indexChild'] as $k => $c) {
                 $this->persentasePemenuhan($c);
                 $pemenuhanDoc += $this->pasal[$c]['pemenuhanDoc'];
                 $pemenuhanImp += $this->pasal[$c]['pemenuhanImp'];
+                if ($this->pasal[$c]['impStatus']) {
+                    $impStatus = true;
+                }
             }
-            $pemenuhanDoc = round($pemenuhanDoc/ count($p['indexChild']), 2); 
-            $pemenuhanImp = round($pemenuhanImp/ count($p['indexChild']), 2); 
-            $this->pasal[$index]['doc']= '';
+            $pemenuhanDoc = round($pemenuhanDoc / count($p['indexChild']), 2);
+            $pemenuhanImp = round($pemenuhanImp / count($p['indexChild']), 2);
+            $this->pasal[$index]['doc'] = '';
         } else {
             if ($p['doc'] != 0) {
                 $pemenuhanDoc = 100;
-            }
-            if ($p['jadwal_ok']!=0){
-                $pemenuhanImp = round($p['jadwal_ok']*100/$p['jadwal'],2);
+                if ($p['jadwal'] != 0) {
+                    $impStatus = true;
+                }
+            } else if ($p['jadwal_ok'] != 0) {
+                $pemenuhanImp = round($p['jadwal_ok'] * 100 / $p['jadwal'], 2);
             }
         }
         $this->pasal[$index]['pemenuhanDoc'] = $pemenuhanDoc;
         $this->pasal[$index]['pemenuhanImp'] = $pemenuhanImp;
+        $this->pasal[$index]['impStatus'] = $impStatus;
     }
 
 }
