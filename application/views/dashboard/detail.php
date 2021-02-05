@@ -131,7 +131,6 @@ if (empty($this->session->activeCompany)) {
     if (empty($activeStandard)) {
         echo 'Perusahaan ini belum memiliki standar';
     } else {
-        print_r($progressImp);
         $g2 = json_decode($progressImp);
         $pImp = json_decode($pemenuhan);
         ?>
