@@ -9,7 +9,7 @@ if (empty($this->session->activeCompany)) {
             margin-top: 20px;
         }
     </style>
-
+    <script type="text/javascript" src="<?= base_url('assets/js/detect-zoom.min.js')   ?>"></script>
     <!--MODAL TUGAS-->
     <div class="modal fade" id="modalTugas">
         <div class="modal-dialog" role="document">
@@ -62,7 +62,6 @@ if (empty($this->session->activeCompany)) {
             </form>
         </div>
     </div>
-
     <div class="app-page-title">
         <div class="page-title-wrapper">
             <div class="page-title-heading">
@@ -93,9 +92,6 @@ if (empty($this->session->activeCompany)) {
                     <span id="company-title">
                         <?= $this->session->activeCompany['name'] ?>
                     </span>
-                    <!--                <div class="page-title-subheading">
-                                        Informasi penting seperti executive summary ditampilkan pada halaman dashboard ini.
-                                    </div>-->
                 </div>
             </div>
             <div class="page-title-actions">
@@ -174,7 +170,7 @@ if (empty($this->session->activeCompany)) {
         </div>
         <div class="row">
             <div class="col-md-12 col-lg-6">
-                <div class="mb-3 card" style="height: 560px">
+                <div class="mb-3 card div-zoom">
                     <div class="card-header-tab card-header-tab-animation card-header">
                         <div class="card-header-title">
                             <i class="header-icon lnr-apartment icon-gradient bg-love-kiss"> </i>
@@ -281,7 +277,7 @@ if (empty($this->session->activeCompany)) {
                 </div>
             </div>
             <div class="col-md-12 col-lg-6">
-                <div class="mb-3 card" style="height: 560px">
+                <div class="mb-3 card div-zoom">
                     <div class="card-header-tab card-header">
                         <div class="card-header-title">
                             <i class="header-icon lnr-rocket icon-gradient bg-tempting-azure"> </i>
@@ -475,6 +471,13 @@ if (empty($this->session->activeCompany)) {
             </div>
         </div>
         <script>
+            var zoom = detectZoom.zoom();
+            var device = detectZoom.device();
+            if (zoom > 0.7) {
+                $('.div-zoom').css('height', '560px');
+                console.log('zoom');
+            }
+            console.log(zoom, device);
             var pemenuhan = <?= $pemenuhan ?>;
             var label = [];
             var doc = [];
