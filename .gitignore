@@ -31,4 +31,3 @@ user_guide_src/cilexer/pycilexer.egg-info/*
 /application/config/
 /upload/
 !*.gitkeep
-/application/views/login/

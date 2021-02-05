@@ -47,7 +47,13 @@
             <div class="container-login100">
                 <div class="wrap-login100">
                     <form class="login100-form validate-form" method="post" style="padding-top: 0px">
-                        <img src="<?= base_url('assets/images/logo_monev2.png') ?>" style="width: 100%">
+                        <?php if ($this->config->item('loginLogo')) { ?>
+                            <img src="<?= base_url('assets/images/logo_monev2.png') ?>" style="width: 100%">
+                        <?php } else { ?>
+                            <span class="login100-form-title p-b-43" style="padding-top: 200px">
+                                <?php echo $this->config->item('app_name') ?>
+                            </span>
+                        <?php } ?>
                         <?php if ($this->input->post('login')) { ?>
                             <div class="alert alert-danger alert-dismissible">
                                 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
