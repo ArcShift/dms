@@ -48,7 +48,7 @@
                 <div class="wrap-login100">
                     <form class="login100-form validate-form" method="post" style="padding-top: 0px">
                         <?php if ($this->config->item('loginLogo')) { ?>
-                            <img src="<?= base_url('assets/images/logo_monev2.png') ?>" style="width: 100%">
+                            <img src="<?= base_url('assets/images/'.$this->config->item('loginLogo')) ?>" style="width: 100%">
                         <?php } else { ?>
                             <span class="login100-form-title p-b-43" style="padding-top: 200px">
                                 <?php echo $this->config->item('app_name') ?>
