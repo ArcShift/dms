@@ -11,7 +11,7 @@ class M_pasal extends CI_Model {
 
     function reads() {
         $this->db->where('id_standard', $this->session->userdata('treeview'));
-        $this->db->order_by('sort_index');
+//        $this->db->order_by('sort_index');
         return $this->db->get($this->table)->result_array();
     }
 
