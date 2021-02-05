@@ -17,12 +17,13 @@ class M_implementasi extends CI_Model {
             $this->db->join('pasal p', 'p.id = d.id_pasal AND p.id_standard = ' . $standard); //TODO: modiv to id standard
             $this->db->where($p['where'], null, false);
             $progress[$k]['count'] = $this->db->count_all_results('jadwal j');
-            $progress[$k]['query'] = $this->db->last_query();
+//            $progress[$k]['query'] = $this->db->last_query();
             if ($progress[0]['count'] == 0) {
                 $progress[$k]['percent'] = 0;
             } else {
                 $progress[$k]['percent'] = round($progress[$k]['count'] / $progress[0]['count'] * 100);
             }
+            $progress[$k]['where']= null;
         }
         return $progress;
     }

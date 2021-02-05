@@ -131,6 +131,7 @@ if (empty($this->session->activeCompany)) {
     if (empty($activeStandard)) {
         echo 'Perusahaan ini belum memiliki standar';
     } else {
+        print_r($progressImp);
         $g2 = json_decode($progressImp);
         $pImp = json_decode($pemenuhan);
         ?>
@@ -261,7 +262,7 @@ if (empty($this->session->activeCompany)) {
                                         <div class="widget-content-outer">
                                             <div class="widget-content-wrapper">
                                                 <div class="widget-content-left">
-                                                    <div class="widget-numbers fsize-3 text-muted"><?= $g2[3]->percent ?>%</div>
+                                                    <div class="widget-numbers fsize-3 text-muted"><?= $g2[2]->percent ?>%</div>
                                                 </div>
                                                 <div class="widget-content-right">
                                                     <div class="text-muted opacity-6">Hari Ini</div>
@@ -269,7 +270,7 @@ if (empty($this->session->activeCompany)) {
                                             </div>
                                             <div class="widget-progress-wrapper mt-1">
                                                 <div class="progress-bar-sm progress-bar-animated-alt progress">
-                                                    <div class="progress-bar bg-warning" role="progressbar" aria-valuenow="<?= $g2[3]->percent ?>" aria-valuemin="0" aria-valuemax="100" style="width: <?= $g2[3]->percent ?>%;"></div>
+                                                    <div class="progress-bar bg-warning" role="progressbar" aria-valuenow="<?= $g2[2]->percent ?>" aria-valuemin="0" aria-valuemax="100" style="width: <?= $g2[2]->percent ?>%;"></div>
                                                 </div>
                                             </div>
                                         </div>

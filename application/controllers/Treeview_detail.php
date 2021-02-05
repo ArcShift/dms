@@ -18,6 +18,7 @@ class Treeview_detail extends MY_Controller {
     function index() {
         $this->load->model('m_company');
         $this->data['company'] = $this->m_company->get();
+        $this->data['menuStandard']= true;
         $this->render('read');
     }
 
