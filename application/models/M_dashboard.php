@@ -56,8 +56,7 @@ class M_dashboard extends CI_Model {
         return $this->db->get('unit_kerja uk')->result_array();
     }
 
-    function distribusi($id_company, $id_standard)
-    {
+    function distribusi($id_company, $id_standard) {
         $arrResult = [];
         $unitKerjas = $this->db->select('*')->from('unit_kerja')->where('id_company', $id_company)->get()->result();
         foreach ($unitKerjas as $unitKerja) {
@@ -96,7 +95,7 @@ class M_dashboard extends CI_Model {
                     }
                 }
             }
-            $countDocumentAndTugas = count($arrDocument)+count($arrTugas);
+            $countDocumentAndTugas = count($arrDocument) + count($arrTugas);
             if ($countDocumentAndTugas > 0) {
                 $arrResult[] = [
                     'name' => $unitKerja->name,
@@ -130,6 +129,9 @@ class M_dashboard extends CI_Model {
         $this->db->join('document d', 'd.id = t.id_document');
         $this->db->join('document_pasal dp', 'dp.id_document = d.id');
         $this->db->join('pasal ps', 'ps.id = dp.id_pasal');
+        if ($this->role == 'anggota') {
+            $this->db->where('p.id', $this->session->user['id_personil']);
+        }
         switch ($periode_tugas) {
             case 'hari':
                 $this->db->where('tanggal', date('Y-m-d'));

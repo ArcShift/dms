@@ -21,12 +21,15 @@ class Dashboard extends MY_Controller {
             $activeStandard = $this->db->get('standard')->row_array();
             $this->session->set_userdata('activeStandard', $activeStandard);
             redirect();
+        } else if ($this->input->get('periode_tugas')) {//select standard
+            $this->session->set_userdata('periode_tugas', $this->input->get('periode_tugas'));
+            $periode_tugas = $this->input->get('periode_tugas');
+            redirect();
         }
+        $periode_tugas = isset($this->session->periode_tugas)?$this->session->periode_tugas:'hari';
         $company = $this->session->activeCompany;
         $standard = $this->session->activeStandard;
-        $periode_tugas = 'hari';
         if ($this->input->get('periode_tugas')) {
-            $periode_tugas = $this->input->get('periode_tugas');
         }
         $this->data['periode_tugas']= $periode_tugas;
         if (!empty($company)) {

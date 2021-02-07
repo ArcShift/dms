@@ -8,6 +8,7 @@ class MY_Controller extends CI_Controller {
     protected $data = array();
     protected $activeModule = null;
     protected $access = null;
+    public $role = null;
 
     public function __construct() {
         parent::__construct();
@@ -15,6 +16,7 @@ class MY_Controller extends CI_Controller {
             redirect('login');
         }
         $this->load->model("base_model", "b_model");
+        $this->role = $this->session->userdata['user']['role'];
     }
 
     protected function render($view, $includeModule = true, $blank = false) {
@@ -26,6 +28,7 @@ class MY_Controller extends CI_Controller {
         $this->data['module'] = $this->module;
         $this->data['activeModule'] = $this->activeModule;
         $this->data['subTitle'] = $this->subTitle;
+        $this->data['role'] = $this->role;
         switch ($view) {
             case 'edit':$this->access = 'update';
                 break;
