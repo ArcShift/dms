@@ -37,7 +37,7 @@ class Personil extends MY_Controller {
         } elseif ($this->input->post('edit')) {
             $result = $this->model->detail($this->input->post('edit'));
             $this->form_validation->set_rules('fullname', 'Nama Lengkap', 'required');
-            $this->form_validation->set_rules('id_unit_kerja', 'Unit Kerja', 'required');
+//            $this->form_validation->set_rules('id_unit_kerja', 'Unit Kerja', 'required');
             if ($this->form_validation->run()) {
                 if ($this->model->updateData()) {
                     $this->session->set_flashdata('msgSuccess', 'Data berhasil diedit');

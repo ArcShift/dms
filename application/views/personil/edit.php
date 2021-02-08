@@ -15,17 +15,17 @@
                     <?php echo form_error('fullname'); ?>
                 </div>
             </div>
-            <div class="form-group">
+<!--            <div class="form-group">
                 <label>Unit Kerja</label>
-                <select class="form-control <?php echo form_error('id_unit_kerja') != "" ? "is-invalid" : "" ?>" name="id_unit_kerja" required="">
+                <select class="form-control <?php // echo form_error('id_unit_kerja') != "" ? "is-invalid" : "" ?>" name="id_unit_kerja" required="">
                     <option value="">-- Unit Kerja --</option>
-                    <?php foreach ($uk as $u) { ?>
-                        <option value="<?= $u['id']?>" <?= $data['id_unit_kerja']==$u['id']?'selected':'' ?>><?= $u['name']?></option>
-                    <?php } ?>
+                    <?php // foreach ($uk as $u) { ?>
+                        <option value="<?php // echo $u['id']?>" <?php // echo $data['id_unit_kerja']==$u['id']?'selected':'' ?>><?= $u['name']?></option>
+                    <?php // } ?>
                 </select><div class="error invalid-feedback">
-                    <?php echo form_error('id_unit_kerja'); ?>
+                    <?php // echo form_error('id_unit_kerja'); ?>
                 </div>
-            </div>
+            </div>-->
         </div>
         <div class="d-block text-right card-footer">
             <a class="mr-2 btn btn-primary" href="<?php echo site_url($module) ?>">Kembali</a>

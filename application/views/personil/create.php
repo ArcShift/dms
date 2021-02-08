@@ -3,6 +3,7 @@
         <div class="modal-header">
         </div>
         <div class="modal-body">
+            <?php // if(!isset($this->session->user['id_company'])){ ?>
             <div class="form-group">
                 <label>Perusahaan</label>
                 <select class="form-control" name="perusahaan" id="perusahaan" required="">
@@ -14,14 +15,12 @@
                     <?php } ?>
                 </select>
             </div>
+            <?php // }?>
             <div class="form-group">
                 <label>Unit Kerja</label>
-                <select id="unitKerja" class="form-control <?php // echo form_error('company') != "" ? "is-invalid" : ""     ?>" name="unit_kerja">
+                <select id="unitKerja" class="form-control" name="unit_kerja[]" multiple="">
                     <option value="">-- Unit Kerja --</option>
                 </select>
-                <div class="error invalid-feedback">
-                    <?php // echo form_error('role'); ?>
-                </div>
             </div>
             <div class="form-group">
                 <label>Nama Lengkap</label>
@@ -45,8 +44,8 @@
             }
         });
     });
+    $('#unitKerja').select2();
     function afterReady() {
         $('#perusahaan').change();
-
     }
 </script>

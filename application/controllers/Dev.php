@@ -65,5 +65,25 @@ class Dev extends CI_Controller {
             }
         }
     }
+    function migration_unit_kerja(){
+        $this->db->select('p.*, uk.id_company');
+        $this->db->join('unit_kerja uk', 'uk.id = p.id_unit_kerja');
+        $personil = $this->db->get('personil p')->result_array();
+        foreach ($personil as $p) {
+            print_r($p);
+            echo '<br>';
+        //set perusahaan
+            $this->db->set('id_company', $p['id_company']);
+            $this->db->where('id', $p['id']);
+            $this->db->update('personil');
+        //set unit kerja
+            $this->db->set('id_unit_kerja', $p['id_unit_kerja']);
+            $this->db->set('id_personil', $p['id']);
+            $this->db->insert('position_personil');
+        //remove unit kerja
+            //TODO
+        }
+        echo 'success';
+    }
 
 }
