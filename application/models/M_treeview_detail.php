@@ -18,22 +18,23 @@ class M_treeview_detail extends CI_Model {
         return $this->db->get($this->table . ' p')->row_array();
     }
 
-    function member() {
-        $this->db->select('u.id, u.username, CONCAT(u.username, " - ", uk.name) AS fullname');
-//        $this->db->select('p.id, p.fullname AS name, CONCAT(p.fullname, " - ", uk.name) AS fullname');
-        $this->db->join('personil p', 'p.id=u.id_personil');
-        $this->db->join('unit_kerja uk', 'uk.id=p.id_unit_kerja');
-//        $this->db->join('role r', 'r.id=u.id_role AND r.name = "anggota"');
-//        $this->db->join('schedule s', 's.id_user=u.id AND m.id_pasal=' . $input['idPasal'], 'LEFT');
-        $this->db->where('uk.id_company', $this->input->post('perusahaan'));
-        return $this->db->get('users u')->result_array();
-    }
+//    function member() {
+//        $this->db->select('u.id, u.username, CONCAT(u.username, " - ", uk.name) AS fullname');
+////        $this->db->select('p.id, p.fullname AS name, CONCAT(p.fullname, " - ", uk.name) AS fullname');
+//        $this->db->join('personil p', 'p.id=u.id_personil');
+//        $this->db->join('unit_kerja uk', 'uk.id=p.id_unit_kerja');
+////        $this->db->join('role r', 'r.id=u.id_role AND r.name = "anggota"');
+////        $this->db->join('schedule s', 's.id_user=u.id AND m.id_pasal=' . $input['idPasal'], 'LEFT');
+//        $this->db->where('uk.id_company', $this->input->post('perusahaan'));
+//        return $this->db->get('users u')->result_array();
+//    }
 
     function personil() {
-        $this->db->select('p.id, p.id_unit_kerja, CONCAT(p.fullname, " - ", uk.name) AS fullname');
-        $this->db->join('unit_kerja uk', 'uk.id=p.id_unit_kerja');
-        $this->db->where('uk.id_company', $this->input->post('perusahaan'));
-        return $this->db->get('personil p')->result_array();
+        $this->db->select('pp.id,  pp.id_personil, pp.id_unit_kerja, CONCAT(p.fullname, " - ", uk.name) AS fullname');
+        $this->db->join('personil p', 'p.id=pp.id_personil');
+        $this->db->join('unit_kerja uk', 'uk.id=pp.id_unit_kerja');
+        $this->db->where('p.id_company', $this->input->post('perusahaan'));
+        return $this->db->get('position_personil pp')->result_array();
     }
 
     function unit_kerja() {
@@ -58,9 +59,9 @@ class M_treeview_detail extends CI_Model {
             $this->db->set('id_company', $this->input->post('company'));
         }
         if ($this->input->post('creator')) {
-            $this->db->set('creator', $this->input->post('creator'));
+            $this->db->set('pembuat', $this->input->post('creator'));
         } else {
-            $this->db->set('creator', null);
+            $this->db->set('pembuat', null);
         }
         $this->db->set('jenis', $this->input->post('jenis'));
         $this->db->set('klasifikasi', $this->input->post('klasifikasi'));
@@ -170,7 +171,7 @@ class M_treeview_detail extends CI_Model {
     }
 
     function read_document() {
-        $this->db->select("d.*, COUNT(DISTINCT cd.id) AS child_document,GROUP_CONCAT(DISTINCT dt.terkait) AS document_terkait, GROUP_CONCAT(DISTINCT dp.id_pasal) AS dokumen_pasal, GROUP_CONCAT(DISTINCT ds.id) AS distribusi, GROUP_CONCAT(DISTINCT pld.id) AS personil_distribusi_id, GROUP_CONCAT(DISTINCT CONCAT(pld.fullname,' - ', ukd.name)) AS user_distribusi");
+        $this->db->select("d.*, COUNT(DISTINCT cd.id) AS child_document,GROUP_CONCAT(DISTINCT dt.terkait) AS document_terkait, GROUP_CONCAT(DISTINCT dp.id_pasal) AS dokumen_pasal, GROUP_CONCAT(DISTINCT ds.id) AS distribusi,  GROUP_CONCAT(DISTINCT ds2.id_position_personil) AS distribution,GROUP_CONCAT(DISTINCT pld.id) AS personil_distribusi_id, GROUP_CONCAT(DISTINCT CONCAT(pld.fullname,' - ', ukd.name)) AS user_distribusi");
         $this->db->join('document_pasal dp', 'dp.id_document = d.id');
         $this->db->join('pasal p', 'p.id = dp.id_pasal');
         $this->db->join('document cd', 'cd.contoh = d.id', 'LEFT');
@@ -179,6 +180,7 @@ class M_treeview_detail extends CI_Model {
         $this->db->join('personil pl', 'pl.id = u.id_personil', 'LEFT');
         $this->db->join('unit_kerja uk', 'uk.id = pl.id_unit_kerja', 'LEFT');
         $this->db->join('distribusi ds', 'd.id = ds.id_document', 'LEFT');
+        $this->db->join('distribution ds2', 'd.id = ds2.id_document', 'LEFT');
         $this->db->join('personil pld', 'pld.id = ds.id_personil', 'LEFT');
         $this->db->join('unit_kerja ukd', 'ukd.id = pld.id_unit_kerja', 'LEFT');
         $this->db->join('document_terkait dt', 'dt.induk = d.id', 'LEFT');
@@ -186,7 +188,7 @@ class M_treeview_detail extends CI_Model {
         $this->db->where('p.id_standard = ' . $this->input->get('standar'));
         $this->db->group_by('d.id');
         $result = $this->db->get('document d')->result_array();
-        $fields = ['distribusi', 'user_distribusi', 'personil_distribusi_id', 'dokumen_pasal', 'document_terkait'];
+        $fields = ['distribusi', 'distribution', 'user_distribusi', 'personil_distribusi_id', 'dokumen_pasal', 'document_terkait'];
         for ($i = 0; $i < count($result); $i++) {
             foreach ($fields as $f) {
                 $result[$i][$f] = explode(',', $result[$i][$f]);
@@ -236,28 +238,16 @@ class M_treeview_detail extends CI_Model {
 //        }
         return false;
     }
-
-    function read_distribusi() {
-        $this->db->select('ds.*');
-        $this->db->join('document dc', 'dc.id = ds.id_document');
-        $this->db->join('pasal p', 'p.id = dc.id_pasal');
-        $this->db->join('personil ps', 'ps.id = ds.id_personil', 'LEFT');
-        $this->db->join('unit_kerja uk', 'uk.id = ps.id_unit_kerja', 'LEFT');
-        $this->db->where('uk.id_company = ' . $this->input->post('perusahaan'));
-        $this->db->where('p.id_standard = ' . $this->input->post('standar'));
-        return $this->db->get('distribusi ds')->result_array();
-    }
-
     function insert_distribusi() {
         $in = $this->input->post();
         foreach ($in['dist'] as $p) {
             $this->db->where('id_document', $in['dokumen']);
-            $this->db->where('id_personil', $p);
-            $count = $this->db->count_all_results('distribusi');
+            $this->db->where('id_position_personil', $p);
+            $count = $this->db->count_all_results('distribution');
             if ($count == 0) {
                 $this->db->set('id_document', $in['dokumen']);
-                $this->db->set('id_personil', $p);
-                if (!$this->db->insert('distribusi')) {
+                $this->db->set('id_position_personil', $p);
+                if (!$this->db->insert('distribution')) {
                     return false;
                 }
             }
@@ -271,10 +261,10 @@ class M_treeview_detail extends CI_Model {
     }
 
     function readsTugas() {
-        $this->db->select('t.*, GROUP_CONCAT(DISTINCT pt.id_personil) AS personil');
+        $this->db->select('t.*, GROUP_CONCAT(DISTINCT pt.id_position_personil) AS personil');
         $this->db->join('document d', 'd.id = t.id_document AND d.id_company = ' . $this->input->get('perusahaan'));
         $this->db->join('pasal p', 'p.id = d.id_pasal AND p.id_standard = ' . $this->input->get('standar'));
-        $this->db->join('penerima_tugas pt', 'pt.id_tugas = t.id', 'LEFT');
+        $this->db->join('personil_task pt', 'pt.id_tugas = t.id', 'LEFT');
         $this->db->group_by('t.id');
         $result = $this->db->get('tugas t')->result_array();
         for ($i = 0; $i < count($result); $i++) {
@@ -296,7 +286,7 @@ class M_treeview_detail extends CI_Model {
         if ($this->input->post('delete-id')) {//DELETE
             //DELETE pic PELAKSANA 
             $this->db->where('id_tugas', $this->input->post('delete-id'));
-            if ($this->db->delete('penerima_tugas')) {
+            if ($this->db->delete('personil_task')) {
                 $this->db->where('id', $this->input->post('delete-id'));
                 return $this->db->delete('tugas');
             }
@@ -314,8 +304,8 @@ class M_treeview_detail extends CI_Model {
                 if (!empty($this->input->post('penerima'))) {
                     foreach ($this->input->post('penerima') as $p) {
                         $this->db->set('id_tugas', $id_tugas);
-                        $this->db->set('id_personil', $p);
-                        if (!$this->db->insert('penerima_tugas')) {
+                        $this->db->set('id_position_personil', $p);
+                        if (!$this->db->insert('personil_task')) {
                             return false;
                         }
                     }
@@ -332,26 +322,26 @@ class M_treeview_detail extends CI_Model {
         if (!empty($this->input->post('penerima'))) {
             $input = $this->input->post('penerima');
             $this->db->where('id_tugas', $id_tugas);
-            $result = $this->db->get('penerima_tugas')->result_array();
+            $result = $this->db->get('personil_task')->result_array();
             $db = [];
             foreach ($result as $r) {
-                array_push($db, $r['id_personil']);
+                array_push($db, $r['id_position_personil']);
             }
             $remove = array_diff($db, $input);
             $add = array_diff($input, $db);
             foreach ($remove as $r) {
                 $this->db->where('id_tugas', $id_tugas);
-                $this->db->where('id_personil', $r);
-                $this->db->delete('penerima_tugas');
+                $this->db->where('id_position_personil', $r);
+                $this->db->delete('personil_task');
             }
             foreach ($add as $a) {
                 $this->db->set('id_tugas', $id_tugas);
-                $this->db->set('id_personil', $a);
-                $this->db->insert('penerima_tugas');
+                $this->db->set('id_position_personil', $a);
+                $this->db->insert('personil_task');
             }
         } else {//remove all data
             $this->db->where('id_tugas', $id_tugas);
-            return $this->db->delete('penerima_tugas');
+            return $this->db->delete('personil_task');
         }
         return true;
     }

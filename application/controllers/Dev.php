@@ -29,10 +29,10 @@ class Dev extends CI_Controller {
     function list($pasal, $sort_index = null) {
         for ($i = 0; $i < count($pasal); $i++) {
             $psl = $pasal[$i];
-            $idx = base_convert($i+1, 10, 36);
+            $idx = base_convert($i + 1, 10, 36);
             $idx = sprintf("%02s", strtoupper($idx));
-            if($sort_index!==null){
-                $idx = $sort_index.$idx;
+            if ($sort_index !== null) {
+                $idx = $sort_index . $idx;
             }
             $this->db->where('id', $psl['id']);
             $this->db->set('sort_index', $idx);
@@ -65,25 +65,67 @@ class Dev extends CI_Controller {
             }
         }
     }
-    function migration_unit_kerja(){
+
+    function migration_unit_kerja() {
         $this->db->select('p.*, uk.id_company');
         $this->db->join('unit_kerja uk', 'uk.id = p.id_unit_kerja');
         $personil = $this->db->get('personil p')->result_array();
         foreach ($personil as $p) {
             print_r($p);
             echo '<br>';
-        //set perusahaan
+            //set perusahaan
             $this->db->set('id_company', $p['id_company']);
             $this->db->where('id', $p['id']);
             $this->db->update('personil');
-        //set unit kerja
+            //set unit kerja
             $this->db->set('id_unit_kerja', $p['id_unit_kerja']);
             $this->db->set('id_personil', $p['id']);
             $this->db->insert('position_personil');
-        //remove unit kerja
+            //remove unit kerja
             //TODO
         }
         echo 'success';
     }
 
+    function migration_document_creator() {
+        $this->db->select('d.*, pp.id AS id_pembuat');
+        $this->db->where('creator IS NOT NULL');
+        $this->db->join('position_personil pp', 'pp.id_personil= d.creator');
+        $this->db->group_by('d.id');
+        $document = $this->db->get('document d')->result_array();
+        foreach ($document as $d) {
+            print_r($d);
+            echo '<br>';
+            $this->db->set('pembuat',$d['id_pembuat']);
+            $this->db->where('id', $d['id']);
+            $this->db->update('document');
+        }
+    }
+    function migration_distribution() {
+        $this->db->select('d.*, pp.id AS id_position_personil');
+        $this->db->join('position_personil pp', 'pp.id_personil= d.id_personil');
+        $this->db->group_by('d.id');
+        $dist =$this->db->get('distribusi d')->result_array();
+        echo count($dist);
+        foreach ($dist as $d) {
+            echo '<br>';
+            print_r($d);
+            $this->db->set('id_position_personil', $d['id_position_personil']);
+            $this->db->set('id_document', $d['id_document']);
+            $this->db->insert('distribution');
+        }
+    }
+    function migration_penerima_tugas() {
+        $this->db->select('pt.*, pp.id AS id_position_personil');
+        $this->db->join('position_personil pp', 'pp.id_personil = pt.id_personil');
+        $this->db->group_by('pt.id');
+        $penerima = $this->db->get('penerima_tugas pt')->result_array();
+        foreach ($penerima as $p) {
+            echo '<br>';
+            print_r($p);
+            $this->db->set('id_position_personil', $p['id_position_personil']);
+            $this->db->set('id_tugas', $p['id_tugas']);
+            $this->db->insert('personil_task');
+        }
+    }
 }

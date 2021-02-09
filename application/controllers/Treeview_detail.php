@@ -107,7 +107,6 @@ class Treeview_detail extends MY_Controller {
         } else {
             echo 'error';
         }
-        print_r($this->input->post());
     }
 
     function delete_distribusi() {

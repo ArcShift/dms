@@ -1017,7 +1017,7 @@ if ($role == 'anggota') {
                 var strUserDis = '';
                 d.txt_user_distribusi = '';
                 d.index_user_distribusi = [];
-                for (var j = 0; j < idDis.length; j++) {
+                for (var j = 0; j < idDis.length; j++) {//remove later
                     //TODO: FIX USER DISTRIBUSI
                     strUserDis += '<div><span class="text-danger fa fa-trash" title="Hapus" onclick="deleteUserDistribusi(' + idDis[j] + ')"></span>&nbsp' + userDis[j] + '</div>';
                     d.txt_user_distribusi += '<div>' + userDis[j] + '</div>';
@@ -1027,12 +1027,23 @@ if ($role == 'anggota') {
                         }
                     }
                 }
-                if (d.creator == null) {
+                d.indexDistribusi = [];
+                d.txtDistribusi = '';
+                for (var j = 0; j < d.distribution.length; j++) {
+                    for (var k = 0; k < personil.length; k++) {
+                        if (d.distribution[j] == personil[k].id) {
+                            d.indexDistribusi.push(k);
+                            d.txtDistribusi += '<div>' + personil[k].fullname + '</div>'
+                            break;
+                        }
+                    }
+                }
+                if (d.pembuat == null) {
                     d.index_creator = null;
                     d.creator_name = '-';
                 } else {
                     for (var j = 0; j < personil.length; j++) {
-                        if (d.creator === personil[j].id) {
+                        if (d.pembuat === personil[j].id) {
                             d.index_creator = j;
                             d.creator_name = personil[j].fullname;
                         }
@@ -1086,7 +1097,7 @@ if ($role == 'anggota') {
                             d.judul,
                             (d.jenis == null ? '-' : 'Level ' + d.jenis),
                             d.creator_name,
-                            (role == 'anggota' ? d.txt_user_distribusi : strUserDis),
+                            (role == 'anggota' ? d.txtDistribusi : d.txtDistribusi),
                             (role == 'anggota' ? btnDetail : btnDetail + btnEdit),
                         ]);
                     }
@@ -1280,7 +1291,7 @@ if ($role == 'anggota') {
                             (ps.sort_desc == null ? '' : ps.sort_desc),
                             '<div class="text-center">' + d.doc + '</div>',
                             '<div class="text-center"><span class="badge badge-' + percentColor(d.pemenuhanDoc) + '">' + d.pemenuhanDoc + '%</span></div>',
-                            '<div class="text-center">' + (d.parent==null&d.doc==0?'':(d.impStatus ? d.jadwal : '-')) + '</div>',
+                            '<div class="text-center">' + (d.parent == null & d.doc == 0 ? '' : (d.impStatus ? d.jadwal : '-')) + '</div>',
                             '<div class="text-center">' + (d.impStatus ? '<span class="badge badge-' + percentColor(d.pemenuhanImp) + '">' + d.pemenuhanImp + '%</span>' : '-') + '</div>',
                         ]).node();
                     }
@@ -1543,12 +1554,13 @@ if ($role == 'anggota') {
     }
     function detailDistribusi(index) {
         editDistribusi(index);
+        var d = sortDokumen[index];
         var m = $('#modalDistribusi');
         m.find('.group-detail').show();
         m.find('.group-edit').hide();
         m.find('.label-user-disrtibusi').empty();
 //        var user = sortDokumen[sortJadwal[index].index_dokumen].user_distribusi;
-        m.find('.label-user-distribusi').empty();
+        m.find('.label-user-distribusi').html(d.txtDistribusi);
 //        for (var i = 0; i < user.length; i++) {
 //            m.find('.label-user-distribusi').append('<div>' + user[i] + '</div>');
 //        }
@@ -1572,7 +1584,7 @@ if ($role == 'anggota') {
         m.find('.input-dokumen-id').val(d.id);
         m.find('.group-detail').hide();
         m.find('.group-edit').show();
-        m.find('.select-2').val(d.personil_distribusi_id).trigger('change');
+        m.find('.select-2').val(d.distribution).trigger('change');
     }
     $('#distribusi-unit-kerja').change(function () {
         var slct = $('#modalDistribusi').find('.select-personil');
@@ -1666,12 +1678,12 @@ if ($role == 'anggota') {
         m.find('.input-delete').val(t.id);
         m.find('.btn-delete').show();
     }
-    function loadUserDistribusi(idx_doc) {
-        var d = sortDokumen[idx_doc];
+    function loadUserDistribusi(idx) {
+        var d = sortDokumen[idx];
         var m = $('#modalTugas');
         m.find('.select-2').empty();
-        for (var i = 0; i < d.distribusi.length; i++) {
-            m.find('.select-2').append(new Option(personil[d.index_user_distribusi[i]].fullname, d.personil_distribusi_id[i], false, false));
+        for (var i = 0; i < d.distribution.length; i++) {
+            m.find('.select-2').append(new Option(personil[d.indexDistribusi[i]].fullname, personil[d.indexDistribusi[i]].id, false, false));
         }
         m.find('select-2').trigger('change');
     }
