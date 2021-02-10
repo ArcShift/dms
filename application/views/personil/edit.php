@@ -39,11 +39,19 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <?php foreach ($data['unit_kerja'] as $k => $uk) { ?>
+                    <?php foreach ($data['unit_kerja'] as $k => $uk) { 
+                        $countDocument = count($this->db->get_where('document', ['pembuat' => $uk['id_position_personil']])->result_array());
+                        $countDistribusi = count($this->db->get_where('distribution', ['id_position_personil' => $uk['id_position_personil']])->result_array());
+                        if($countDocument == 0 & $countDistribusi == 0){
+                            $data['unit_kerja'][$k]['saveDelete'] = true; 
+                        }else{
+                            $data['unit_kerja'][$k]['saveDelete'] = false;
+                        }
+                        ?>
                         <tr>
                             <td><?= $uk['name'] ?></td>
-                            <td class="text-center"><span class="badge badge-secondary"><?= count($this->db->get_where('document', ['pembuat' => $uk['id_position_personil']])->result_array()) ?></span></td>
-                            <td class="text-center"><span class="badge badge-secondary"><?= count($this->db->get_where('distribution', ['id_position_personil' => $uk['id_position_personil']])->result_array()) ?></span></td>
+                            <td class="text-center"><span class="badge badge-secondary"><?= $countDocument ?></span></td>
+                            <td class="text-center"><span class="badge badge-secondary"><?= $countDistribusi ?></span></td>
                             <td class="text-center">
                                 <span class="btn btn-outline-danger fa fa-trash" onclick="initDelete(<?= $k ?>)" title="Hapus"></span>
                             </td>
@@ -98,7 +106,10 @@
                 <div class="modal-body">
                     <div class="form-group">
                         <input class="input-id-personil" name="id_personil" value="<?= $data['id'] ?>" hidden="">
-                        <input class="input-nama form-control">
+                        <input class="input-nama form-control" readonly="">
+                    </div>
+                    <div class="div-warning text-danger">
+                        Personil dengan Unit kerja ini sudah terkait dengan dokumen / distribusi. Anda yakin ingin menghapusnya?
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -118,6 +129,11 @@
         var m = $('#modalDelete').modal('show');
         m.find('.input-nama').val(uk.name);
         m.find('.input-delete').val(uk.id_position_personil);
+        if(uk.saveDelete){
+            m.find('.div-warning').hide();
+        }else{
+            m.find('.div-warning').show();
+        }
     }
     var unitKerja = <?= json_encode($data['unit_kerja']) ?>
 </script>

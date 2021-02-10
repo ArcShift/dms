@@ -76,7 +76,7 @@ if ($role == 'anggota') {
                             </thead>
                             <tbody></tbody>
                         </table>
-                    </div>
+                    </div>  
                     <!--PASAL-->
                     <div class="tab-pane" id="tab-pasal" role="tabpanel">
                         <table class="table table-striped" id="table-pasal">
@@ -1216,6 +1216,7 @@ if ($role == 'anggota') {
                         '---',
                         (role == 'anggota' ? '' : '<span class="text-primary fa fa-plus" title="Tambah" onclick="initCreateJadwal(' + i + ')"></span>')
                     ]);
+                    var nJd = 0;
                     for (var j = 0; j < data.length; j++) {
                         var jd = data[j];
                         if (jd.id_tugas == t.id) {
@@ -1265,6 +1266,7 @@ if ($role == 'anggota') {
                             sortTugas[i].indexJadwal.push(n);
                             sortJadwal.push(jd);
                             n++;
+                            njd++;
                         }
                     }
                 }
