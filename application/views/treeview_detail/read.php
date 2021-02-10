@@ -1266,7 +1266,7 @@ if ($role == 'anggota') {
                             sortTugas[i].indexJadwal.push(n);
                             sortJadwal.push(jd);
                             n++;
-                            njd++;
+                            nJd++;
                         }
                     }
                 }
