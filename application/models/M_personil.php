@@ -48,18 +48,32 @@ class M_personil extends CI_Model {
     }
 
     function updateData() {
-        $input = $this->input->post();
-        $this->db->where('id', $input['id']);
-        $this->db->set('fullname', $input['fullname']);
-        $this->db->set('id_unit_kerja', $input['id_unit_kerja']);
+        $this->db->where('id', $this->input->post('edit'));
+        $this->db->set('fullname', $this->input->post('fullname'));
         return $this->db->update($this->table);
     }
 
     function detail($id) {
-        $this->db->select('p.*, uk.id_company');
-        $this->db->join('unit_kerja uk', 'uk.id = p.id_unit_kerja');
         $this->db->where('p.id', $id);
-        return $this->db->get($this->table . ' p')->row_array();
+        $r = $this->db->get($this->table . ' p')->row_array();
+        $this->db->select('uk.*, pp.id AS id_position_personil');
+        $this->db->join('unit_kerja uk', 'uk.id = pp.id_unit_kerja');
+        $this->db->where('pp.id_personil', $id);
+        $r['unit_kerja'] = $this->db->get('position_personil pp')->result_array();
+        $this->db->select('uk.*');
+        $this->db->join('position_personil pp','pp.id_unit_kerja = uk.id AND pp.id_personil = '.$id, 'LEFT');
+        $this->db->where('uk.id_company', $r['id_company']);
+        $this->db->where('pp.id IS NULL');
+        $r['excluded_unit_kerja'] = $this->db->get('unit_kerja uk')->result_array();
+        return $r;
     }
-
+    function delete_unit_kerja() {
+        $this->db->where('id', $this->input->post('delete'));
+        $this->db->delete('position_personil');
+    }
+    function add_unit_kerja() {
+        $this->db->set('id_personil', $this->session->idData);
+        $this->db->set('id_unit_kerja', $this->input->post('unit_kerja'));
+        $this->db->insert('position_personil');
+    }
 }

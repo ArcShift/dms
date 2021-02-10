@@ -33,6 +33,7 @@ class Personil extends MY_Controller {
     function edit() {
         $this->subTitle = 'Edit';
         if ($this->input->post('initEdit')) {
+            $this->session->set_userdata('idData', $this->input->post('initEdit'));
             $this->data['data'] = $this->model->detail($this->input->post('initEdit'));
         } elseif ($this->input->post('edit')) {
             $result = $this->model->detail($this->input->post('edit'));
@@ -45,14 +46,24 @@ class Personil extends MY_Controller {
                 } else {
                     $this->session->set_flashdata('msgError', $this->db->error()['message']);
                 }
-            }else{
+            } else {
                 die(validation_errors());
             }
             $this->data['data'] = $this->input->post();
-        } else {
-            redirect($this->module);
-        }
-        $this->data['uk'] = $this->model->unit_kerja($this->data['data']['id_company']);
+        } elseif ($this->input->post('delete')) {
+            $this->model->delete_unit_kerja();
+            $this->data['data'] = $this->model->detail($this->input->post('id_personil'));
+        } elseif ($this->input->post('add')) {
+                $this->model->add_unit_kerja();
+//            $this->data['data'] = $this->model->detail($this->input->post('id_personil'));
+        } 
+//        else {
+//            redirect($this->module);
+//        }
+        $this->data['data'] = $this->model->detail($this->session->idData);
+//            die($this->db->last_query());
+//            die(print_r($this->data['data']));
+//        $this->data['uk'] = $this->model->unit_kerja($this->data['data']['id_company']);
 //        die(print_r($this->data['data']));
 //        die(print_r($this->data['uk']));
         $this->render('edit');
