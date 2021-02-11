@@ -1,4 +1,5 @@
 <?php
+
 if (empty($this->session->activeCompany)) {
     echo 'Belum ada perusahaan';
 } else {
@@ -298,7 +299,7 @@ if (empty($this->session->activeCompany)) {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <?php foreach ($distribusi as $k => $d) { ?>
+                                        <?php foreach ($distribusi2 as $k => $d) { ?>
                                             <tr>
                                                 <th><?= $k + 1 ?></th>
                                                 <td><?= $d['name'] ?></td>

@@ -76,7 +76,7 @@ if ($role == 'anggota') {
                             </thead>
                             <tbody></tbody>
                         </table>
-                    </div>  
+                    </div>
                     <!--PASAL-->
                     <div class="tab-pane" id="tab-pasal" role="tabpanel">
                         <table class="table table-striped" id="table-pasal">
@@ -1237,14 +1237,29 @@ if ($role == 'anggota') {
                             var btnDetail = '<span class="text-primary fa fa-info-circle" title="Detail" onclick="detailJadwal(' + n + ')"></span> ';
                             var btnEdit = '<span class="text-primary fa fa-edit" title="Edit" onclick="editJadwal(' + n + ')"></span> ';
                             var btnDelete = '<span class="text-danger fa fa-trash" title="Hapus" onclick="initDeleteJadwal(' + n + ')"></span>';
-                            tbJadwal.row.add([
+                            if (nJd == 3) {
+                                tbJadwal.row.add([
+                                    '',
+                                    '',
+                                    '',
+                                    '<a class="text-primary jd-btn-more' + i + '" onclick="showMoreJadwal(' + i + ')">lihat lainnya</a>',
+                                    '',
+                                    '',
+                                ]);
+                            }
+                            var tr = tbJadwal.row.add([
                                 '---',
                                 '---',
                                 '---',
                                 (jd.periode == null ? '-' : (jd.periode + 'AN')),
                                 jd.tanggal,
                                 btnDetail + (role == 'anggota' ? '' : btnEdit + btnDelete),
-                            ]);
+                            ]).node();
+                            if (nJd >= 3) {
+                                $(tr).addClass('jadwal-more' + i);
+                                $(tr).addClass('jd-more');
+                            }
+                            console.log(tr);
                             var btnPreview = '';
                             if (jd.doc_type == 'FILE') {
                                 btnPreview = '<a class="text-primary fa fa-download" href="<?= base_url('upload/implementasi') ?>/' + jd.path + '"></a>';
@@ -1269,11 +1284,22 @@ if ($role == 'anggota') {
                             nJd++;
                         }
                     }
+                    if (nJd >= 3) {
+                                tbJadwal.row.add([
+                                    '',
+                                    '',
+                                    '',
+                                    '<a class="text-primary jd-more jadwal-more' + i + '" onclick="hideMoreJadwal(' + i + ')">sembunyikan</a>',
+                                    '',
+                                    '',
+                                ]);
+                            }
                 }
             }
             tbJadwal.draw();
             tbImplementasi.draw();
             getPemenuhan();
+            $('.jd-more').hide();
         });
     }
     function getPemenuhan() {
@@ -1878,4 +1904,13 @@ if ($role == 'anggota') {
         e.preventDefault();
         post(this, 'upload_bukti');
     });
+    function showMoreJadwal(index) {
+        $('.jadwal-more' + index).show();
+        $('.jd-btn-more' + index).hide();
+    }
+    function hideMoreJadwal(index) {
+        console.log(index);
+        $('.jadwal-more' + index).hide();
+        $('.jd-btn-more' + index).show();
+    }
 </script>

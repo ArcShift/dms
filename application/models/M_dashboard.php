@@ -55,7 +55,24 @@ class M_dashboard extends CI_Model {
         $this->db->group_by('uk.id');
         return $this->db->get('unit_kerja uk')->result_array();
     }
-
+    function distribusi2($company, $standard) {
+        $unitKerja = $this->db->where('id_company',$company)->get('unit_kerja')->result_array();
+        foreach ($unitKerja as $k => $uk) {
+            $this->db->select('COUNT(DISTINCT d.id) AS doc, COUNT(DISTINCT j.id) AS imp');
+            $this->db->join('tugas t', 't.id_document = d.id', 'LEFT');
+            $this->db->join('jadwal j', 'j.id_tugas = t.id', 'LEFT');
+            $this->db->join('distribution ds', 'ds.id_document = d.id');
+            $this->db->join('position_personil pp', 'pp.id = ds.id_position_personil', 'LEFT');
+            $this->db->join('pasal p', 'p.id = d.id_pasal', 'LEFT');
+            $this->db->where('d.id_company', $company);
+            $this->db->where('pp.id_unit_kerja', $uk['id']);
+            $this->db->where('p.id_standard', $standard);
+            $doc = $this->db->get('document d')->row_array();
+            $unitKerja[$k]['doc']= $doc['doc'];
+            $unitKerja[$k]['imp']= $doc['imp'];
+        }
+        return $unitKerja;
+    }
     function distribusi($id_company, $id_standard) {
         $arrResult = [];
         $unitKerjas = $this->db->select('*')->from('unit_kerja')->where('id_company', $id_company)->get()->result();
