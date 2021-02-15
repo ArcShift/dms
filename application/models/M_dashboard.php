@@ -55,8 +55,9 @@ class M_dashboard extends CI_Model {
         $this->db->group_by('uk.id');
         return $this->db->get('unit_kerja uk')->result_array();
     }
+
     function distribusi2($company, $standard) {
-        $unitKerja = $this->db->where('id_company',$company)->get('unit_kerja')->result_array();
+        $unitKerja = $this->db->where('id_company', $company)->get('unit_kerja')->result_array();
         foreach ($unitKerja as $k => $uk) {
             $this->db->select('COUNT(DISTINCT d.id) AS doc, COUNT(DISTINCT j.id) AS imp');
             $this->db->join('tugas t', 't.id_document = d.id', 'LEFT');
@@ -68,11 +69,12 @@ class M_dashboard extends CI_Model {
             $this->db->where('pp.id_unit_kerja', $uk['id']);
             $this->db->where('p.id_standard', $standard);
             $doc = $this->db->get('document d')->row_array();
-            $unitKerja[$k]['doc']= $doc['doc'];
-            $unitKerja[$k]['imp']= $doc['imp'];
+            $unitKerja[$k]['doc'] = $doc['doc'];
+            $unitKerja[$k]['imp'] = $doc['imp'];
         }
         return $unitKerja;
     }
+
     function distribusi($id_company, $id_standard) {
         $arrResult = [];
         $unitKerjas = $this->db->select('*')->from('unit_kerja')->where('id_company', $id_company)->get()->result();
@@ -136,16 +138,28 @@ class M_dashboard extends CI_Model {
         return $this->db->get('jadwal j')->result_array();
     }
 
+    function listTugas2($company, $standard, $periode_tugas) {
+        $this->db->select('j.*');
+        $this->db->join('tugas t', 't.id = j.id_tugas');
+        $this->db->join('personil_task pt', 'pt.id_tugas = t.id');
+        $this->db->get('jadwal j');
+//        echo $this->db->last_query().'<br>';
+//        die();
+    }
+
     function listTugas($company, $standard, $periode_tugas) {
         $this->db->select('p.fullname AS name, u.photo, uk.name AS unit_kerja, t.nama AS tugas, ps.name AS pasal, j.tanggal, j.upload_date, j.id AS id_jadwal, d.judul, t.id AS id_tugas, t.sifat, d.file, d.url');
         $this->db->join('tugas t', 't.id = j.id_tugas');
         $this->db->join('penerima_tugas pt', 'pt.id_tugas = t.id');
         $this->db->join('personil p', 'p.id = pt.id_personil');
+//        $this->db->join('personil_task pt', 'pt.id_tugas = t.id');
+//        $this->db->join('position_personil pp', 'pp.id = pt.id_position_personil');
+//        $this->db->join('personil p', 'p.id = pp.id_personil');
         $this->db->join('users u', 'u.id_personil = p.id', 'LEFT');
         $this->db->join('unit_kerja uk', 'uk.id = p.id_unit_kerja AND uk.id_company = ' . $company);
         $this->db->join('document d', 'd.id = t.id_document');
         $this->db->join('document_pasal dp', 'dp.id_document = d.id');
-        $this->db->join('pasal ps', 'ps.id = dp.id_pasal');
+        $this->db->join('pasal ps', 'ps.id = dp.id_pasal AND ps.id_standard = ' . $standard);
         if ($this->role == 'anggota') {
             $this->db->where('p.id', $this->session->user['id_personil']);
         }
@@ -162,6 +176,8 @@ class M_dashboard extends CI_Model {
                 $this->db->where('YEAR(tanggal)', date('Y'));
                 break;
         }
+//        $this->db->group_by('id_jadwal')->get('jadwal j')->result_array();
+//        die($this->db->last_query());
         return $this->db->group_by('id_jadwal')->get('jadwal j')->result_array();
     }
 

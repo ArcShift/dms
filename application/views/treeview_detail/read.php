@@ -801,12 +801,39 @@ if ($role == 'anggota') {
         </div>
     </div>
 </div>
+<!--SELECT COMPANY & STANDARD-->
+<div class="page-title-actions" id="selectCompanyStandar">
+    <div class="d-inline-block dropdown">
+        <button type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn-shadow dropdown-toggle btn btn-info">
+            <span class="btn-icon-wrapper pr-2 opacity-7">
+                <i class="fa fa-file fa-w-20"></i>
+            </span>
+            <span id="labelCurrentStandard"></span>
+            <?php //  empty($activeStandard) ? '-' : $activeStandard['name'] ?>
+        </button>
+        <div tabindex="-1" role="menu" aria-hidden="true" class="dropdown-menu dropdown-menu-right">
+            <ul class="nav flex-column" id="standard2">
+                <?php // foreach ($company_standard as $cs) { ?>
+                <li class="nav-item">
+                    <a href="<?php // site_url($module . '?standard=' . $cs['id']);       ?>" class="nav-link">
+                        <i class="nav-link-icon lnr-inbox"></i>
+                        <span>
+                            <?php // $cs['name'] ?>
+                        </span>
+                    </a>
+                </li>
+                <?php // } ?>
+            </ul>
+        </div>
+    </div>
+</div>
 <script>
     $(document).ready(function () {
         if (role != 'admin') {
             $('.group-select-perusahaan').hide();
             idPersonil = <?= $personil ?>;
         }
+        $('.page-title-wrapper').append($('#selectCompanyStandar'));
         $('#perusahaan').change();
         $('#tab-pemenuhan').addClass('active');
         $('.select-2').select2();
@@ -837,11 +864,24 @@ if ($role == 'anggota') {
     $('#perusahaan').change(function (s) {
         if ($(this).val()) {
             $.post('<?php echo site_url($module); ?>/standard', {'id': $(this).val()}, function (data) {
+                standards = JSON.parse(data);
                 var d = JSON.parse(data);
                 $('#standar').html('');
+                $('#standard2').empty();
                 $('#standar').append('<option value="">~ Pilih Standar ~</option>');
                 for (var i = 0; i < d.length; i++) {
                     $('#standar').append('<option value="' + d[i].id + '">' + d[i].name + '</option>');
+                    $('#standard2').append('<li class="nav-item">'
+                            + '<a class="nav-link" onclick="selectStandard(' + i + ')">'
+                            + d[i].name
+                            + '</a>'
+                            + '</li>');
+                }
+                if (d.length != 0) {
+                    $('#labelCurrentStandard').text(d[0].name);
+                    selectStandard(0);
+                } else {
+                    $('#labelCurrentStandard').text('-');
                 }
             });
             $.post('<?php echo site_url($module); ?>/unit_kerja', {'perusahaan': $(this).val()}, function (data) {
@@ -872,6 +912,12 @@ if ($role == 'anggota') {
             getPasal();
         }
     });
+    function selectStandard(index) {
+        standar = standards[index].id;
+        $('.dropdown-menu').removeClass('show');
+        $('#labelCurrentStandard').text(standards[index].name);
+        getPasal();
+    }
     function getPasal() {
         $.get('<?php echo site_url($module); ?>/pasal', {perusahaan: perusahaan, standar: standar}, function (data) {
             data = JSON.parse(data);
@@ -1285,15 +1331,15 @@ if ($role == 'anggota') {
                         }
                     }
                     if (nJd >= 3) {
-                                tbJadwal.row.add([
-                                    '',
-                                    '',
-                                    '',
-                                    '<a class="text-primary jd-more jadwal-more' + i + '" onclick="hideMoreJadwal(' + i + ')">sembunyikan</a>',
-                                    '',
-                                    '',
-                                ]);
-                            }
+                        tbJadwal.row.add([
+                            '',
+                            '',
+                            '',
+                            '<a class="text-primary jd-more jadwal-more' + i + '" onclick="hideMoreJadwal(' + i + ')">sembunyikan</a>',
+                            '',
+                            '',
+                        ]);
+                    }
                 }
             }
             tbJadwal.draw();
