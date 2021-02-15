@@ -27,24 +27,57 @@ if ($role == 'anggota') {
         width: 75px;
     }
 </style>
-<div class="main-card mb-3 card">   
-    <div class="card-body">
-        <div class="row">
-            <div class="col-sm-6"></div>
-            <div class="col-sm-3">
-                <select id="perusahaan" class="form-control" name="perusahaan" required="">
-                    <?php if ($role == 'admin') { ?>
-                        <option value="">~ Pilih Perusahaan ~</option>
-                    <?php } ?>
-                    <?php foreach ($company as $c) { ?>
-                        <option value="<?php echo $c['id'] ?>" <?php echo $c['id'] == $this->input->post('role') ? 'selected' : ''; ?>><?php echo $c['name'] ?></option>
-                    <?php } ?>
-                </select>
+<!--CUSTOM HEADER-->
+<div class="app-page-title">
+    <div class="page-title-wrapper">
+        <div class="page-title-heading">
+            <div class="page-title-icon">
+                <i class="fa fa-braille icon-gradient bg-mean-fruit">
+                </i>
             </div>
-            <div class="col-sm-3">
-                <select id="standar" class="form-control" name="perusahaan" required=""></select>
+            <?php if (empty($this->session->user['id_company'])) { ?>
+                <button type="button" title="Pilih Perusahaan" data-toggle="dropdown" class="btn-shadow mr-3 btn btn-dark">
+                    <i class="fa fa-angle-double-down"></i>
+                </button>
+                <div id="company-dropdown" tabindex="-1" role="menu" aria-hidden="true" class="dropdown-menu">
+                    <ul class="nav flex-column">
+                        <?php foreach ($company as $k => $c) { ?>
+                            <li class="nav-item">
+                                <a class="nav-link" onclick="selectCompany(<?= $c['id'] ?>, '<?= $c['name'] ?>')">
+                                    <i class="nav-link-icon lnr-inbox"></i>
+                                    <span>
+                                        <?= $c['name'] ?>
+                                    </span>
+                                </a>
+                            </li>
+                        <?php } ?>
+                    </ul>
+                </div>
+            <?php } ?>
+            <div>
+                <span id="labelCurrentCompany">
+                    <?= $this->session->activeCompany['name'] ?>
+                </span>
             </div>
         </div>
+        <div class="page-title-actions" id="selectCompanyStandar">
+            <div class="d-inline-block dropdown">
+                <button type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn-shadow dropdown-toggle btn btn-info">
+                    <span class="btn-icon-wrapper pr-2 opacity-7">
+                        <i class="fa fa-file fa-w-20"></i>
+                    </span>
+                    <span id="labelCurrentStandard"></span>
+                </button>
+                <div tabindex="-1" role="menu" aria-hidden="true" class="dropdown-menu dropdown-menu-right">
+                    <ul class="nav flex-column" id="standard2"></ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--CONTENT-->
+<div class="main-card mb-3 card">   
+    <div class="card-body">
         <div class="main-card mb-3 card">
             <div id="container" class="card-body">
                 <!--TAB-->
@@ -801,39 +834,13 @@ if ($role == 'anggota') {
         </div>
     </div>
 </div>
-<!--SELECT COMPANY & STANDARD-->
-<div class="page-title-actions" id="selectCompanyStandar">
-    <div class="d-inline-block dropdown">
-        <button type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn-shadow dropdown-toggle btn btn-info">
-            <span class="btn-icon-wrapper pr-2 opacity-7">
-                <i class="fa fa-file fa-w-20"></i>
-            </span>
-            <span id="labelCurrentStandard"></span>
-            <?php //  empty($activeStandard) ? '-' : $activeStandard['name'] ?>
-        </button>
-        <div tabindex="-1" role="menu" aria-hidden="true" class="dropdown-menu dropdown-menu-right">
-            <ul class="nav flex-column" id="standard2">
-                <?php // foreach ($company_standard as $cs) { ?>
-                <li class="nav-item">
-                    <a href="<?php // site_url($module . '?standard=' . $cs['id']);       ?>" class="nav-link">
-                        <i class="nav-link-icon lnr-inbox"></i>
-                        <span>
-                            <?php // $cs['name'] ?>
-                        </span>
-                    </a>
-                </li>
-                <?php // } ?>
-            </ul>
-        </div>
-    </div>
-</div>
 <script>
+    $('.app-page-title').first().hide();
     $(document).ready(function () {
         if (role != 'admin') {
             $('.group-select-perusahaan').hide();
             idPersonil = <?= $personil ?>;
         }
-        $('.page-title-wrapper').append($('#selectCompanyStandar'));
         $('#perusahaan').change();
         $('#tab-pemenuhan').addClass('active');
         $('.select-2').select2();
@@ -861,57 +868,48 @@ if ($role == 'anggota') {
     function afterReady() {}
     var pesonil;
     var sortDokumen;
-    $('#perusahaan').change(function (s) {
-        if ($(this).val()) {
-            $.post('<?php echo site_url($module); ?>/standard', {'id': $(this).val()}, function (data) {
-                standards = JSON.parse(data);
-                var d = JSON.parse(data);
-                $('#standar').html('');
-                $('#standard2').empty();
-                $('#standar').append('<option value="">~ Pilih Standar ~</option>');
-                for (var i = 0; i < d.length; i++) {
-                    $('#standar').append('<option value="' + d[i].id + '">' + d[i].name + '</option>');
-                    $('#standard2').append('<li class="nav-item">'
-                            + '<a class="nav-link" onclick="selectStandard(' + i + ')">'
-                            + d[i].name
-                            + '</a>'
-                            + '</li>');
-                }
-                if (d.length != 0) {
-                    $('#labelCurrentStandard').text(d[0].name);
-                    selectStandard(0);
-                } else {
-                    $('#labelCurrentStandard').text('-');
-                }
-            });
-            $.post('<?php echo site_url($module); ?>/unit_kerja', {'perusahaan': $(this).val()}, function (data) {
-                unitKerja = JSON.parse(data);
-                $('.select-unit-kerja').empty();
-                $('.select-unit-kerja').append('<option value="">-- Pilih Unit Kerja --</option>');
-                for (var i = 0; i < unitKerja.length; i++) {
-                    var uk = unitKerja[i];
-                    $('.select-unit-kerja').append('<option value="' + uk.id + '">' + uk.name + '</option>');
-                }
-            });
-            $.post('<?php echo site_url($module); ?>/personil', {'perusahaan': $(this).val()}, function (data) {
-                personil = JSON.parse(data);
-                $('.select-personil').empty();
-                $('.select-creator').append('<option value="">---</option>');
-                for (var i = 0; i < personil.length; i++) {
-                    var p = personil[i];
-                    $('.select-personil').append('<option value="' + p.id + '">' + p.fullname + '</option>');
-                }
-            });
-            perusahaan = $(this).val();
-        }
-    });
-    $('#standar').change(function (s) {
-        standar = $(this).val();
-        if (standar) {
-            $('#root span').text($('#standar option:selected').text());
-            getPasal();
-        }
-    });
+    function selectCompany(id, name) {
+        $.post('<?php echo site_url($module); ?>/standard', {'id': id}, function (data) {
+            standards = JSON.parse(data);
+            var d = JSON.parse(data);
+            $('#standard2').empty();
+            for (var i = 0; i < d.length; i++) {
+                $('#standard2').append('<li class="nav-item">'
+                        + '<a class="nav-link" onclick="selectStandard(' + i + ')">'
+                        + d[i].name
+                        + '</a>'
+                        + '</li>');
+            }
+            if (d.length != 0) {
+                $('#labelCurrentStandard').text(d[0].name);
+                selectStandard(0);
+            } else {
+                $('#labelCurrentStandard').text('-');
+            }
+        });
+        $.post('<?php echo site_url($module); ?>/unit_kerja', {'perusahaan': id}, function (data) {
+            unitKerja = JSON.parse(data);
+            $('.select-unit-kerja').empty();
+            $('.select-unit-kerja').append('<option value="">-- Pilih Unit Kerja --</option>');
+            for (var i = 0; i < unitKerja.length; i++) {
+                var uk = unitKerja[i];
+                $('.select-unit-kerja').append('<option value="' + uk.id + '">' + uk.name + '</option>');
+            }
+        });
+        $.post('<?php echo site_url($module); ?>/personil', {'perusahaan': id}, function (data) {
+            personil = JSON.parse(data);
+            $('.select-personil').empty();
+            $('.select-creator').append('<option value="">---</option>');
+            for (var i = 0; i < personil.length; i++) {
+                var p = personil[i];
+                $('.select-personil').append('<option value="' + p.id + '">' + p.fullname + '</option>');
+            }
+        });
+        perusahaan = id;
+        $('.dropdown-menu').removeClass('show');
+        $('#labelCurrentCompany').text(name);
+    }
+    selectCompany(<?= $company[0]['id'] ?>, '<?= $company[0]['name'] ?>')
     function selectStandard(index) {
         standar = standards[index].id;
         $('.dropdown-menu').removeClass('show');
@@ -1675,7 +1673,7 @@ if ($role == 'anggota') {
         e.preventDefault();
         $.post('<?php echo site_url($module); ?>/set_distribusi', $(this).serialize(), function (data) {
             $('#modalDistribusi').modal('hide');
-            $('#standar').change();
+            getPasal();
         });
     });
     function deleteUserDistribusi(id) {
