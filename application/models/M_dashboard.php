@@ -150,13 +150,11 @@ class M_dashboard extends CI_Model {
     function listTugas($company, $standard, $periode_tugas) {
         $this->db->select('p.fullname AS name, u.photo, uk.name AS unit_kerja, t.nama AS tugas, ps.name AS pasal, j.tanggal, j.upload_date, j.id AS id_jadwal, d.judul, t.id AS id_tugas, t.sifat, d.file, d.url');
         $this->db->join('tugas t', 't.id = j.id_tugas');
-        $this->db->join('penerima_tugas pt', 'pt.id_tugas = t.id');
-        $this->db->join('personil p', 'p.id = pt.id_personil');
-//        $this->db->join('personil_task pt', 'pt.id_tugas = t.id');
-//        $this->db->join('position_personil pp', 'pp.id = pt.id_position_personil');
-//        $this->db->join('personil p', 'p.id = pp.id_personil');
+        $this->db->join('personil_task pt', 'pt.id_tugas = t.id');
+        $this->db->join('position_personil pp', 'pp.id = pt.id_position_personil');
+        $this->db->join('personil p', 'p.id = pp.id_personil');
         $this->db->join('users u', 'u.id_personil = p.id', 'LEFT');
-        $this->db->join('unit_kerja uk', 'uk.id = p.id_unit_kerja AND uk.id_company = ' . $company);
+        $this->db->join('unit_kerja uk', 'uk.id = pp.id_unit_kerja AND uk.id_company = ' . $company);
         $this->db->join('document d', 'd.id = t.id_document');
         $this->db->join('document_pasal dp', 'dp.id_document = d.id');
         $this->db->join('pasal ps', 'ps.id = dp.id_pasal AND ps.id_standard = ' . $standard);
@@ -176,8 +174,6 @@ class M_dashboard extends CI_Model {
                 $this->db->where('YEAR(tanggal)', date('Y'));
                 break;
         }
-//        $this->db->group_by('id_jadwal')->get('jadwal j')->result_array();
-//        die($this->db->last_query());
         return $this->db->group_by('id_jadwal')->get('jadwal j')->result_array();
     }
 
