@@ -14,6 +14,7 @@ class Document_search extends MY_Controller {
         $this->data['standar'] = $this->model->standar();
         $this->data['perusahaan'] = $this->model->perusahaan();
         $this->data['data'] = $this->model->search();
+        $this->data['last'] = $this->db->last_query();
         $this->render('read');
     }
 
@@ -23,9 +24,12 @@ class Document_search extends MY_Controller {
         $this->access = 'read';
         $this->render('detail');
     }
-
+    function personil() {
+        $this->db->personil();
+    }
     function company() {//AJAX
-        $data = $this->model->creator($this->input->get('id'));
+//        $data = $this->model->creator($this->input->get('id'));
+        $data = $this->model->personil($this->input->get('id'));
         $id_uk = null;
         $sort = [];
         for ($i = 0; $i < count($data); $i++) {

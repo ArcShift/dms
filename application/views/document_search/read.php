@@ -1,5 +1,5 @@
 <?php
-//echo $this->db->last_query();
+echo $last;
 ?>
 <style>
     .select-parent{

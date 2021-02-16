@@ -6,10 +6,11 @@ class M_document extends CI_Model {
 
     function search() {
         $this->db->select('d.*, pc.fullname, COUNT(ds.id) AS distribusi');
-        $this->db->join('personil pc', 'pc.id = d.creator', 'LEFT');
+        $this->db->join('position_personil ppc', 'ppc.id = d.pembuat', 'LEFT');
+        $this->db->join('personil pc', 'pc.id = ppc.id_personil', 'LEFT');
         $this->db->join('pasal p', 'd.id_pasal = p.id');
         $this->db->join('standard s', 's.id = p.id_standard');
-        $this->db->join('distribusi ds', 'd.id = ds.id_document', 'LEFT');
+        $this->db->join('distribution ds', 'ds.id_document = d.id', 'LEFT');
         if (isset($this->session->user['id_company'])) {
             $company = $this->session->user['id_company'];
         } else if ($this->input->get('perusahaan')) {
@@ -18,23 +19,22 @@ class M_document extends CI_Model {
         if (isset($company)) {
             $this->db->where('d.id_company', $company);
             if ($this->input->get('creator')) {
-                $this->db->join('unit_kerja ukc', 'ukc.id = pc.id_unit_kerja');
-                $this->db->join('company cc', 'cc.id = ukc.id_company');
-                $this->db->where('cc.id', $company);
+                $this->db->join('unit_kerja ukc', 'ukc.id = ppc.id_unit_kerja');
                 $cr = explode('_', $this->input->get('creator'));
                 if ($cr[0] == 'uk') {
                     $this->db->where('ukc.id', $cr[1]);
                 } else if ($cr[0] == 'p') {
-                    $this->db->where('pc.id', $cr[1]);
+                    $this->db->where('ppc.id_personil', $cr[1]);
                 }
             }
             if ($this->input->get('penerima')) {
-                $this->db->join('personil pds', 'pds.id = ds.id_personil');
-                $this->db->join('unit_kerja ukds', 'ukds.id = pds.id_unit_kerja');
+                $this->db->join('position_personil ppds', 'ppds.id = ds.id_position_personil');
                 $cr = explode('_', $this->input->get('penerima'));
                 if ($cr[0] == 'uk') {
+                    $this->db->join('unit_kerja ukds', 'ukds.id = ppds.id_unit_kerja');
                     $this->db->where('ukds.id', $cr[1]);
                 } else if ($cr[0] == 'p') {
+                    $this->db->join('personil pds', 'pds.id = ppds.id_personil');
                     $this->db->where('pds.id', $cr[1]);
                 }
             }
@@ -99,6 +99,14 @@ class M_document extends CI_Model {
         $this->db->where('uk.id_company', $perusahaan);
         $this->db->order_by('p.id_unit_kerja');
         return $this->db->get('personil p')->result_array();
+    }
+
+    function personil($company) {
+        $this->db->select('pp.id_unit_kerja, uk.name AS unit_kerja, pp.id_personil,p.id, p.fullname');
+        $this->db->join('unit_kerja uk', 'uk.id = pp.id_unit_kerja');
+        $this->db->join('personil p', 'p.id = pp.id_personil');
+        $this->db->where('p.id_company', $company);
+        return $this->db->get('position_personil pp')->result_array();
     }
 
 }
