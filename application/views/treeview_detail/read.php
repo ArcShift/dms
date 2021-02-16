@@ -1183,6 +1183,7 @@ if ($role == 'anggota') {
                             (role == 'anggota' ? '' : '<span class="text-primary fa fa-plus" title="Tambah" onclick="initCreateTugas(' + i + ')"></span>'),
                         ]);
                     }
+                    var nTgs = 0;
                     for (var j = 0; j < data.length; j++) {
                         var t = data[j];
                         if (t.id_document == d.id) {
@@ -1214,19 +1215,44 @@ if ($role == 'anggota') {
                             var btnDetail = '<span class="text-primary fa fa-info-circle" title="Detail" onclick="detailTugas(' + sortTugas.length + ')"></span>&nbsp';
                             var btnEdit = '<span class="text-primary fa fa-edit" title="Edit" onclick="initEditTugas(' + sortTugas.length + ')"></span>&nbsp';
                             var btnHapus = '<span class="text-danger fa fa-trash" title="Hapus" onclick="initDeleteTugas(' + sortTugas.length + ')"></span>';
-                            if (show) {
+                            if (nTgs == 3) {
                                 tbTugas.row.add([
+                                    '',
+                                    '',
+                                    '',
+                                    '<a class="text-primary tgs-btn-more' + i + '" onclick="showMoreTugas(' + i + ')">lihat lainnya</a>',
+                                    '',
+                                    '',
+                                ]);
+                            }
+                            if (show) {
+                                var tr = tbTugas.row.add([
                                     '',
                                     t.nama,
                                     (t.index_form_terkait == null ? '-' : sortDokumen[t.index_form_terkait].judul),
                                     '<span class="badge badge-secondary">' + t.sifat + '</span>',
                                     t.txt_personil,
                                     (role == 'anggota' ? btnDetail : btnDetail + btnEdit + btnHapus),
-                                ]);
+                                ]).node();
+                                if (nTgs >= 3) {
+                                    $(tr).addClass('tgs-more' + i);
+                                    $(tr).addClass('tgs-more');
+                                }
+                                nTgs++;
                             }
                             t.indexJadwal = [];
                             sortTugas.push(t);
                         }
+                    }
+                    if (nTgs >= 3) {
+                        tbTugas.row.add([
+                            '',
+                            '',
+                            '',
+                            '<a class="text-primary tgs-more tgs-more' + i + '" onclick="hideMoreTugas(' + i + ')">sembunyikan</a>',
+                            '',
+                            '',
+                        ]);
                     }
                 } else if (d.jenis == 4) {
                     $('.input-form-terkait').append('<option value="' + d.id + '">' + d.judul + '</option>');
@@ -1234,6 +1260,7 @@ if ($role == 'anggota') {
             }
             tbTugas.draw();
             getJadwal();
+            $('.tgs-more').hide();
         });
     }
     function getJadwal() {
@@ -1303,7 +1330,6 @@ if ($role == 'anggota') {
                                 $(tr).addClass('jadwal-more' + i);
                                 $(tr).addClass('jd-more');
                             }
-                            console.log(tr);
                             var btnPreview = '';
                             if (jd.doc_type == 'FILE') {
                                 btnPreview = '<a class="text-primary fa fa-download" href="<?= base_url('upload/implementasi') ?>/' + jd.path + '"></a>';
@@ -1953,8 +1979,15 @@ if ($role == 'anggota') {
         $('.jd-btn-more' + index).hide();
     }
     function hideMoreJadwal(index) {
-        console.log(index);
         $('.jadwal-more' + index).hide();
         $('.jd-btn-more' + index).show();
+    }
+    function showMoreTugas(index) {
+        $('.tgs-more' + index).show();
+        $('.tgs-btn-more' + index).hide();
+    }
+    function hideMoreTugas(index) {
+        $('.tgs-more' + index).hide();
+        $('.tgs-btn-more' + index).show();
     }
 </script>
