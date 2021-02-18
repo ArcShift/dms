@@ -26,12 +26,13 @@ class Dashboard extends MY_Controller {
             $periode_tugas = $this->input->get('periode_tugas');
             redirect();
         }
-        $periode_tugas = isset($this->session->periode_tugas)?$this->session->periode_tugas:'hari';
+        $periode_tugas = isset($this->session->periode_tugas) ? $this->session->periode_tugas : 'hari';
         $company = $this->session->activeCompany;
         $standard = $this->session->activeStandard;
         if ($this->input->get('periode_tugas')) {
+            
         }
-        $this->data['periode_tugas']= $periode_tugas;
+        $this->data['periode_tugas'] = $periode_tugas;
         if (!empty($company)) {
             $this->data['companies'] = $this->db->get('company')->result_array();
             $this->data['company_standard'] = $this->model->company_standard($company['id']);
@@ -50,15 +51,36 @@ class Dashboard extends MY_Controller {
                 $this->data['progressImp'] = json_encode($this->m_imp->progress($company['id'], $standard['id']));
                 $this->data['distribusi2'] = $this->model->distribusi2($company['id'], $standard['id']);
                 $this->db->where('uk.id_company', $company['id']);
-                $this->data['countUnitKerja']= $this->db->count_all_results('unit_kerja uk');
+                $this->data['countUnitKerja'] = $this->db->count_all_results('unit_kerja uk');
                 $this->db->where('uk.id_company', $company['id']);
                 $this->db->join('unit_kerja uk', 'uk.id = p.id_unit_kerja');
-                $this->data['countPersonil']= $this->db->count_all_results('personil p');
-                $this->data['listTugas']= $this->model->listTugas($company['id'], $standard['id'], $periode_tugas);
+                $this->data['countPersonil'] = $this->db->count_all_results('personil p');
+                $this->data['listTugas'] = $this->model->listTugas($company['id'], $standard['id'], $periode_tugas);
             }
             $this->db->where('id_company', $company['id']);
         }
-        $this->render('detail');
+        $this->render('read');
+    }
+
+    function switch_company() {
+        if (empty($this->session->user['id_company'])) {
+            if ($this->input->get('company')) {
+                $this->db->where('id', $this->input->get('company'));
+                $activeCompany = $this->db->get('company')->row_array();
+                $this->session->set_userdata('activeCompany', $activeCompany);
+                $this->session->set_userdata('activeStandard', $this->model->getDefaultStandard($this->input->get('company')));
+                echo 'success';
+            }
+        }
+    }
+
+    function switch_standard() {
+        if ($this->input->get('standard')) {
+            $this->db->where('id', $this->input->get('standard'));
+            $activeStandard = $this->db->get('standard')->row_array();
+            $this->session->set_userdata('activeStandard', $activeStandard);
+            echo 'success';
+        }
     }
 
 }

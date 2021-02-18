@@ -1,5 +1,4 @@
 <?php
-
 if (empty($this->session->activeCompany)) {
     echo 'Belum ada perusahaan';
 } else {
@@ -10,7 +9,7 @@ if (empty($this->session->activeCompany)) {
             margin-top: 20px;
         }
     </style>
-    <script type="text/javascript" src="<?= base_url('assets/js/detect-zoom.min.js')   ?>"></script>
+    <script type="text/javascript" src="<?= base_url('assets/js/detect-zoom.min.js') ?>"></script>
     <!--MODAL TUGAS-->
     <div class="modal fade" id="modalTugas">
         <div class="modal-dialog" role="document">
@@ -402,19 +401,14 @@ if (empty($this->session->activeCompany)) {
                                         <tr>
                                             <td class="text-center text-muted"><?= $k + 1 ?></td>
                                             <td>
-                                                <div class="widget-content p-0">
-                                                    <div class="widget-content-wrapper">
-                                                        <div class="widget-content-left mr-3">
-                                                            <div class="widget-content-left">
-                                                                <img class="rounded-circle" src="<?= !empty($t['photo']) ? base_url('upload/profile_photo/' . $t['photo']) : base_url('assets/images/default_user.jpg') ?>" alt="" width="40">
-                                                            </div>
-                                                        </div>
-                                                        <div class="widget-content-left flex2">
-                                                            <div class="widget-heading"><?= $t['name'] ?></div>
-                                                            <div class="widget-subheading opacity-7"><?= $t['unit_kerja'] ?></div>
-                                                        </div>
-                                                    </div>
-                                                </div>
+                                                <ul>
+                                                <?php foreach ($t['pelaksana'] as $tp) { ?>
+                                                    <li>
+                                                        <b><?= $tp['nama'] ?></b>
+                                                        (<?= $tp['unit_kerja'] ?>)
+                                                    </li>
+                                                <?php } ?>
+                                                </ul>
                                             </td>
                                             <td class="text-center"><?= $t['tugas'] ?></td>
                                             <td class="text-center"><?= $t['tanggal'] ?></td>

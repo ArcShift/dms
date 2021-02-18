@@ -188,6 +188,7 @@ if ($this->input->get('standard')) {
                                 <li class="app-sidebar__heading">STANDAR</li>
                                 <li id="menu-standard">-</li>
                                 <li id="menu-company_standard">-</li>
+                                <li id="menu-akses_pasal">-</li>
                                 <li id="menu-management_hope">-</li>
                                 <li id="menu-treeview_detail">-</li>
                                 <li id="menu-document_search">-</li>
@@ -211,7 +212,7 @@ if ($this->input->get('standard')) {
                     <div class="app-main__inner">
                         <div class="app-page-title">
                             <div class="page-title-wrapper">
-                                <div class="page-title-heading">
+                                <div class="page-title-heading col-sm-6">
                                     <div class="page-title-icon">
                                         <i class="fa fa-<?= empty($activeModule['icon']) ? 'eye-slash' : $activeModule['icon'] ?> icon-gradient bg-mean-fruit">
                                         </i>
@@ -225,19 +226,43 @@ if ($this->input->get('standard')) {
                                 </div>
                                 <!--=========================-->
                                 <?php if (isset($menuStandard)) { ?>
+                                    <?php if (empty($this->session->user['id_company'])) { ?>
+                                        <button type="button" title="Pilih Perusahaan" data-toggle="dropdown" class="btn-shadow mr-3 btn btn-dark">
+                                            <i class="fa fa-angle-double-down"></i>
+                                        </button>
+                                        <div id="company-dropdown" tabindex="-1" role="menu" aria-hidden="true" class="dropdown-menu">
+                                            <ul class="nav flex-column">
+                                                <?php foreach ($companies as $k => $c) { ?>
+                                                    <li class="nav-item">
+                                                        <a class="nav-link" onclick="switchCompany(<?= $c['id'] ?>)">
+                                                            <i class="nav-link-icon lnr-inbox"></i>
+                                                            <span>
+                                                                <?= $c['name'] ?>
+                                                            </span>
+                                                        </a>
+                                                    </li>
+                                                <?php } ?>
+                                            </ul>
+                                        </div>
+                                    <?php } ?>
+                                    <div>
+                                        <span id="company-title">
+                                            <?= $this->session->activeCompany['name'] ?>
+                                        </span>
+                                    </div>
                                     <div class="page-title-actions">
                                         <div class="d-inline-block dropdown">
                                             <button type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn-shadow dropdown-toggle btn btn-info">
                                                 <span class="btn-icon-wrapper pr-2 opacity-7">
                                                     <i class="fa fa-file fa-w-20"></i>
                                                 </span>
-                                                <?= empty($activeStandard) ? '-' : $activeStandard['name'] ?>
+                                                <?= empty($this->session->activeStandard) ? '-' : $this->session->activeStandard['name'] ?>
                                             </button>
                                             <div tabindex="-1" role="menu" aria-hidden="true" class="dropdown-menu dropdown-menu-right">
                                                 <ul class="nav flex-column">
                                                     <?php foreach ($company_standard as $cs) { ?>
                                                         <li class="nav-item">
-                                                            <a href="<?= site_url($module . '?standard=' . $cs['id']); ?>" class="nav-link">
+                                                            <a class="nav-link" onclick="switchStandard(<?= $cs['id'] ?>)">
                                                                 <i class="nav-link-icon lnr-inbox"></i>
                                                                 <span>
                                                                     <?= $cs['name'] ?>
@@ -370,6 +395,20 @@ if ($this->input->get('standard')) {
                     window.location.href = "<?= site_url('document_search') ?>?judul=" + $('.search-input').val();
                 }
             });
+            function switchCompany(company) {
+                $.get('<?= site_url('dashboard/switch_company') ?>', {company: company}, function (data) {
+                    if(data == 'success'){
+                        location.reload();
+                    }
+                });
+            }
+            function switchStandard(standard) {
+                $.get('<?= site_url('dashboard/switch_standard') ?>', {standard: standard}, function (data) {
+                    if(data == 'success'){
+                        location.reload();
+                    }
+                });
+            }
         </script>
     </body>
 </html>

@@ -125,7 +125,6 @@ class M_dashboard extends CI_Model {
 //        }
 //        return $arrResult;
 //    }
-
 //    function listTugasDeleted($company, $standard) {
 //        $this->db->select('p.fullname AS name, uk.name AS unit_kerja, t.nama AS tugas, ps.name AS pasal, j.tanggal, j.upload_date');
 //        $this->db->join('tugas t', 't.id = j.id_tugas');
@@ -165,7 +164,16 @@ class M_dashboard extends CI_Model {
                 $this->db->where('YEAR(tanggal)', date('Y'));
                 break;
         }
-        return $this->db->group_by('id_jadwal')->get('jadwal j')->result_array();
+        $jadwal = $this->db->group_by('id_jadwal')->get('jadwal j')->result_array();
+        foreach ($jadwal as $k => $j) {
+            $this->db->select('p.fullname AS nama, uk.name AS unit_kerja');
+            $this->db->join('position_personil pp','pp.id = pt.id_position_personil');
+            $this->db->join('personil p','p.id = pp.id_personil');
+            $this->db->join('unit_kerja uk','uk.id = pp.id_unit_kerja');
+            $this->db->where('id_tugas', $j['id_tugas']);
+            $jadwal[$k]['pelaksana'] = $this->db->get('personil_task pt')->result_array();
+        }
+        return $jadwal;
     }
 
 }

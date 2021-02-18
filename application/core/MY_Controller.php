@@ -29,6 +29,11 @@ class MY_Controller extends CI_Controller {
         $this->data['activeModule'] = $this->activeModule;
         $this->data['subTitle'] = $this->subTitle;
         $this->data['role'] = $this->role;
+        if (isset($this->data['menuStandard'])) {
+            if (empty($this->session->user['id_company'])) {
+                $this->data['companies']= $this->db->get('company')->result_array();
+            }
+        }
         switch ($view) {
             case 'edit':$this->access = 'update';
                 break;
@@ -54,7 +59,6 @@ class MY_Controller extends CI_Controller {
             }
         }
     }
-
     function hapus($config) {
         if ($this->input->post('initHapus')) {
             $config['id'] = $this->input->post('initHapus');
@@ -78,5 +82,6 @@ class MY_Controller extends CI_Controller {
         $this->access = 'delete';
         $this->render('template/delete', FALSE);
     }
+    
 
 }
