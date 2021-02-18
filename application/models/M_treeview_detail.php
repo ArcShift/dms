@@ -44,12 +44,13 @@ class M_treeview_detail extends CI_Model {
     }
 
     function pasal() {
-        $this->db->select('p.*, COUNT(p2.id) AS child, pa.status');
+        $this->db->select('p.*, COUNT(p2.id) AS child');
+//        $this->db->select('p.*, COUNT(p2.id) AS child, pa.status');
         $this->db->join('pasal p2', 'p2.parent = p.id', 'LEFT');
-        $this->db->join('pasal_access pa', 'pa.id_pasal = p.id AND pa.id_company = ' . $this->input->get('perusahaan'), 'LEFT');
+//        $this->db->join('pasal_access pa', 'pa.id_pasal = p.id AND pa.id_company = ' . $this->input->get('perusahaan'), 'LEFT');
         $this->db->where('p.id_standard', $this->input->get('standar'));
         $this->db->group_by('p.id');
-        $this->db->where("pa.status <> 'disable'");
+//        $this->db->where("pa.status <=> 'DISABLE'", false);
         return $this->db->get('pasal p')->result_array();
     }
 
