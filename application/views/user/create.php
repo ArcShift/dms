@@ -5,7 +5,7 @@
                 <label>Role</label>
                 <select id="role" class="form-control <?php echo form_error('role') != "" ? "is-invalid" : "" ?>" name="role" required="">
                     <option value="">-- Role --</option>
-                    <?php foreach ($role as $r) { ?>
+                    <?php foreach ($roles as $r) { ?>
                         <option value="<?php echo $r['id'] ?>" <?php echo $r['id'] == $this->input->post('role') ? 'selected' : ''; ?>><?php echo $r['title'] ?></option>
                     <?php } ?>
                 </select>

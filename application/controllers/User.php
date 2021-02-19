@@ -8,7 +8,7 @@ class User extends MY_Controller {
         parent::__construct();
         $this->load->model("m_user", "model");
         $this->load->library('form_validation');
-        $this->data['role'] = $this->model->role();
+        $this->data['roles'] = $this->model->role();
     }
 
     function index() {
