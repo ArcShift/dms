@@ -250,30 +250,32 @@ if ($this->input->get('standard')) {
                                             <?= $this->session->activeCompany['name'] ?>
                                         </span>
                                     </div>
-                                    <div class="page-title-actions">
-                                        <div class="d-inline-block dropdown">
-                                            <button type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn-shadow dropdown-toggle btn btn-info">
-                                                <span class="btn-icon-wrapper pr-2 opacity-7">
-                                                    <i class="fa fa-file fa-w-20"></i>
-                                                </span>
-                                                <?= empty($this->session->activeStandard) ? '-' : $this->session->activeStandard['name'] ?>
-                                            </button>
-                                            <div tabindex="-1" role="menu" aria-hidden="true" class="dropdown-menu dropdown-menu-right">
-                                                <ul class="nav flex-column">
-                                                    <?php foreach ($company_standard as $cs) { ?>
-                                                        <li class="nav-item">
-                                                            <a class="nav-link" onclick="switchStandard(<?= $cs['id'] ?>)">
-                                                                <i class="nav-link-icon lnr-inbox"></i>
-                                                                <span>
-                                                                    <?= $cs['name'] ?>
-                                                                </span>
-                                                            </a>
-                                                        </li>
-                                                    <?php } ?>
-                                                </ul>
+                                    <?php if ($menuStandard === 'standard') { ?>
+                                        <div class="page-title-actions">
+                                            <div class="d-inline-block dropdown">
+                                                <button type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn-shadow dropdown-toggle btn btn-info">
+                                                    <span class="btn-icon-wrapper pr-2 opacity-7">
+                                                        <i class="fa fa-file fa-w-20"></i>
+                                                    </span>
+                                                    <?= empty($this->session->activeStandard) ? '-' : $this->session->activeStandard['name'] ?>
+                                                </button>
+                                                <div tabindex="-1" role="menu" aria-hidden="true" class="dropdown-menu dropdown-menu-right">
+                                                    <ul class="nav flex-column">
+                                                        <?php foreach ($company_standard as $cs) { ?>
+                                                            <li class="nav-item">
+                                                                <a class="nav-link" onclick="switchStandard(<?= $cs['id'] ?>)">
+                                                                    <i class="nav-link-icon lnr-inbox"></i>
+                                                                    <span>
+                                                                        <?= $cs['name'] ?>
+                                                                    </span>
+                                                                </a>
+                                                            </li>
+                                                        <?php } ?>
+                                                    </ul>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    <?php } ?>
                                 <?php } ?>
                                 <!--=========================-->
                             </div>
@@ -397,14 +399,14 @@ if ($this->input->get('standard')) {
             });
             function switchCompany(company) {
                 $.get('<?= site_url('dashboard/switch_company') ?>', {company: company}, function (data) {
-                    if(data == 'success'){
+                    if (data == 'success') {
                         location.reload();
                     }
                 });
             }
             function switchStandard(standard) {
                 $.get('<?= site_url('dashboard/switch_standard') ?>', {standard: standard}, function (data) {
-                    if(data == 'success'){
+                    if (data == 'success') {
                         location.reload();
                     }
                 });

@@ -9,7 +9,7 @@ class Akses_pasal extends MY_Controller {
     }
 
     function index() {
-        $this->data['menuStandard'] = true;
+        $this->data['menuStandard'] = 'standard';
         if ($this->input->post()) {
             $this->db->where('id_pasal', $this->input->post('pasal'));
             $this->db->where('id_company', $this->session->activeCompany['id']);

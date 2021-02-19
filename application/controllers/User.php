@@ -18,6 +18,7 @@ class User extends MY_Controller {
     }
 
     function create() {
+        $this->data['menuStandard'] = true;
         $this->subTitle = 'Create';
         $this->data['freePersonil'] = $this->model->freePersonil();
         if ($this->input->post('tambah')) {

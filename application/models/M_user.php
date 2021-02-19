@@ -80,6 +80,7 @@ class M_user extends CI_Model {
     function freePersonil() {
         $this->db->select('p.id, p.fullname');
         $this->db->where('u.id IS NULL');
+        $this->db->where('p.id_company', $this->session->activeCompany['id']);
         $this->db->join($this->table . ' u', 'u.id_personil=p.id', 'LEFT');
         return $this->db->get('personil p')->result_array();
     }

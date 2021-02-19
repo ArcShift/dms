@@ -556,7 +556,7 @@ if (empty($this->session->activeCompany)) {
                 "searching": false,
                 "info": false,
                 "lengthChange": false,
-                "pageLength": 10,
+                "pageLength": 9,
             }
             $('#tableDistribusi').DataTable(dataTableConfig);
             dataTableConfig.pageLength = 5;
