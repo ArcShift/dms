@@ -26,6 +26,9 @@ if ($role == 'anggota') {
     .col-aksi{
         width: 75px;
     }
+    .div-filter{
+        padding-bottom: 10px;
+    }
 </style>
 <!--CUSTOM HEADER-->
 <div class="app-page-title">
@@ -96,6 +99,12 @@ if ($role == 'anggota') {
                     <div class="tab-pane" id="tab-test" role="tabpanel"></div>
                     <!--PEMENUHAN-->
                     <div class="tab-pane" id="tab-pemenuhan" role="tabpanel">
+                        <div class="row div-filter">
+                            <div class="col-sm-3"></div>
+                            <div class="col-sm-3"></div>
+                            <div class="col-sm-3"></div>
+                            <div class="col-sm-3"></div>
+                        </div>
                         <table class="table table-striped" id="table-pemenuhan">
                             <thead>
                                 <tr>
@@ -112,6 +121,12 @@ if ($role == 'anggota') {
                     </div>
                     <!--PASAL-->
                     <div class="tab-pane" id="tab-pasal" role="tabpanel">
+                        <div class="row div-filter">
+                            <div class="col-sm-3"></div>
+                            <div class="col-sm-3"></div>
+                            <div class="col-sm-3"></div>
+                            <div class="col-sm-3"></div>
+                        </div>
                         <table class="table table-striped" id="table-pasal">
                             <thead>
                                 <tr>
@@ -128,6 +143,12 @@ if ($role == 'anggota') {
                     </div>
                     <!--DOKUMEN-->
                     <div class="tab-pane" id="tab-dokumen" role="tabpanel">
+                        <div class="row div-filter">
+                            <div class="col-sm-3"></div>
+                            <div class="col-sm-3"></div>
+                            <div class="col-sm-3"></div>
+                            <div class="col-sm-3"></div>
+                        </div>
                         <table class="table table-striped" id="table-document">
                             <thead>
                                 <tr>
@@ -145,9 +166,12 @@ if ($role == 'anggota') {
                     </div>
                     <!--DISTRIBUSI-->
                     <div class="tab-pane" id="tab-distribusi" role="tabpanel">
-                        <div class="row">
+                        <div class="row div-filter">
+                            <div class="col-sm-3"></div>
+                            <div class="col-sm-3"></div>
+                            <div class="col-sm-3"></div>
                             <div class="col-sm-3">
-                                <select class="form-control filter-unit-kerja" id="filterDistribusiUK"></select>
+                                <select class="form-control form-control-sm filter-unit-kerja" id="filterDistribusiUK"></select>
                             </div>
                         </div>
                         <table class="table table-striped" id="table-distribusi">
@@ -166,9 +190,12 @@ if ($role == 'anggota') {
                     </div>
                     <!--TUGAS-->
                     <div class="tab-pane" id="tab-tugas" role="tabpanel">
-                        <div class="row">
+                        <div class="row div-filter">
+                            <div class="col-sm-3"></div>
+                            <div class="col-sm-3"></div>
+                            <div class="col-sm-3"></div>
                             <div class="col-sm-3">
-                                <select class="form-control filter-unit-kerja" id="filterTugasUK"></select>
+                                <select class="form-control form-control-sm filter-unit-kerja" id="filterTugasUK"></select>
                             </div>
                         </div>
                         <div class="table-responsive">
@@ -189,28 +216,39 @@ if ($role == 'anggota') {
                     </div>
                     <!--JADWAL-->
                     <div class="tab-pane" id="tab-jadwal" role="tabpanel">
-                        <div class="row">
+                        <div class="row div-filter">
+                            <div class="col-sm-3"></div>
+                            <div class="col-sm-3"></div>
+                            <div class="col-sm-3"></div>
                             <div class="col-sm-3">
-                                <select class="form-control filter-unit-kerja" id="filterJadwalUK"></select>
+                                <select class="form-control form-control-sm filter-unit-kerja" id="filterJadwalUK"></select>
                             </div>
                         </div>
-                            <table class="table table-striped" id="table-jadwal">
-                                <thead>
-                                    <tr>
-                                        <th>Dokumen</th>
-                                        <th>Tugas</th>
-                                        <th>Form</th>
-                                        <th>Periode</th>
-                                        <th class="col-tgl">Jadwal</th>
-                                        <th>PIC Pelaksana</th>
-                                        <th class="col-aksi" style="min-width: 70px">Aksi</th>
-                                    </tr>
-                                </thead>
-                                <tbody></tbody>
-                            </table>
+                        <table class="table table-striped" id="table-jadwal">
+                            <thead>
+                                <tr>
+                                    <th>Dokumen</th>
+                                    <th>Tugas</th>
+                                    <th>Form</th>
+                                    <th>Periode</th>
+                                    <th class="col-tgl">Jadwal</th>
+                                    <th>PIC Pelaksana</th>
+                                    <th class="col-aksi" style="min-width: 70px">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
                     </div>
                     <!--IMPLEMENTASI-->
                     <div class="tab-pane" id="tab-implementasi" role="tabpanel">
+                        <div class="row div-filter">
+                            <div class="col-sm-3"></div>
+                            <div class="col-sm-3"></div>
+                            <div class="col-sm-3"></div>
+                            <div class="col-sm-3">
+                                <select class="form-control form-control-sm filter-unit-kerja" id="filterImplementasiUK"></select>
+                            </div>
+                        </div>
                         <table class="table" id="table-implementasi">
                             <thead>
                                 <tr>
@@ -869,7 +907,6 @@ if ($role == 'anggota') {
             },
             "bInfo": false,
             "bLengthChange": true,
-            "dom": '<"toolbar">frtip'
         }
         tbDocument = $('#table-document').DataTable(dataTableConfig);
         tbDistribusi = $('#table-distribusi').DataTable(dataTableConfig);
@@ -879,10 +916,11 @@ if ($role == 'anggota') {
         tbPasal = $('#table-pasal').DataTable(dataTableConfig);
         tbJadwal = $('#table-jadwal').DataTable(dataTableConfig);
         tbTugas = $('#table-tugas').DataTable(dataTableConfig);
-        $('#table-distribusi_filter').hide();
-        $('#table-tugas_filter').hide();
-        $('#table-jadwal_filter').hide();
-
+        $('.dataTables_filter').hide();
+        $('.dataTables_filter .form-control').attr('placeholder', 'Search');
+        $('.tab-pane').each(function (index) {
+            $(this).find('.div-filter .col-sm-3').eq(0).append($(this).find('.dataTables_filter .form-control'));
+        });
     });
     var pesonil;
     var sortDokumen;
@@ -2024,5 +2062,8 @@ if ($role == 'anggota') {
     });
     $('#filterDistribusiUK').change(function () {
         tbDistribusi.columns(4).search(this.value).draw();
+    });
+    $('#filterImplementasiUK').change(function () {
+        tbImplementasi.columns(1).search(this.value).draw();
     });
 </script>
