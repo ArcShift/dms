@@ -189,7 +189,6 @@ if ($role == 'anggota') {
                                 <select class="form-control filter-unit-kerja" id="filterJadwalUK"></select>
                             </div>
                         </div>
-                        <div class="table-responsive">
                             <table class="table table-striped" id="table-jadwal">
                                 <thead>
                                     <tr>
@@ -198,13 +197,12 @@ if ($role == 'anggota') {
                                         <th>Form</th>
                                         <th>Periode</th>
                                         <th class="col-tgl">Jadwal</th>
-                                        <th class="col-aksi" style="min-width: 70px">Aksi</th>
                                         <th>PIC Pelaksana</th>
+                                        <th class="col-aksi" style="min-width: 70px">Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody></tbody>
                             </table>
-                        </div>
                     </div>
                     <!--IMPLEMENTASI-->
                     <div class="tab-pane" id="tab-implementasi" role="tabpanel">
@@ -877,6 +875,7 @@ if ($role == 'anggota') {
         tbJadwal = $('#table-jadwal').DataTable(dataTableConfig);
         tbTugas = $('#table-tugas').DataTable(dataTableConfig);
         $('#table-tugas_filter').hide();
+        $('#table-jadwal_filter').hide();
 
     });
     var pesonil;
@@ -1301,8 +1300,8 @@ if ($role == 'anggota') {
                         (t.index_form_terkait == null ? '-' : sortDokumen[t.index_form_terkait].judul),
                         '---',
                         '---',
-                        (role == 'anggota' ? '' : '<span class="text-primary fa fa-plus" title="Tambah" onclick="initCreateJadwal(' + i + ')"></span>'),
                         '---',
+                        (role == 'anggota' ? '' : '<span class="text-primary fa fa-plus" title="Tambah" onclick="initCreateJadwal(' + i + ')"></span>'),
                     ]);
                     var nJd = 0;
                     for (var j = 0; j < data.length; j++) {
@@ -1342,8 +1341,8 @@ if ($role == 'anggota') {
                                 '---',
                                 (jd.periode == null ? '-' : (jd.periode + 'AN')),
                                 jd.tanggal,
-                                btnDetail + (role == 'anggota' ? '' : btnEdit + btnDelete),
                                 t.txt_personil,
+                                btnDetail + (role == 'anggota' ? '' : btnEdit + btnDelete),
                             ]).node();
                             if (nJd >= 3) {
                                 $(tr).addClass('jadwal-more' + i);
@@ -1419,7 +1418,7 @@ if ($role == 'anggota') {
                 }
             }
             tbPemenuhan.draw();
-            tbJadwal.columns(6).visible(false);
+//            tbJadwal.columns(6).visible(false);
         });
     }
     function percentColor(num) {
