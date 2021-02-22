@@ -161,6 +161,11 @@ if ($role == 'anggota') {
                     </div>
                     <!--TUGAS-->
                     <div class="tab-pane" id="tab-tugas" role="tabpanel">
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <select class="form-control filter-unit-kerja" id="filterTugasUK"></select>
+                            </div>
+                        </div>
                         <div class="table-responsive">
                             <table class="table table-striped" id="table-tugas">
                                 <thead>
@@ -179,6 +184,11 @@ if ($role == 'anggota') {
                     </div>
                     <!--JADWAL-->
                     <div class="tab-pane" id="tab-jadwal" role="tabpanel">
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <select class="form-control filter-unit-kerja" id="filterJadwalUK"></select>
+                            </div>
+                        </div>
                         <div class="table-responsive">
                             <table class="table table-striped" id="table-jadwal">
                                 <thead>
@@ -189,6 +199,7 @@ if ($role == 'anggota') {
                                         <th>Periode</th>
                                         <th class="col-tgl">Jadwal</th>
                                         <th class="col-aksi" style="min-width: 70px">Aksi</th>
+                                        <th>PIC Pelaksana</th>
                                     </tr>
                                 </thead>
                                 <tbody></tbody>
@@ -848,24 +859,26 @@ if ($role == 'anggota') {
         $('.input-path').hide();
         var dataTableConfig = {
             "order": [],
-            "ordering": false,
+            "ordering": true,
             "paging": false,
             "search": {
                 "smart": false
             },
             "bInfo": false,
             "bLengthChange": true,
+            "dom": '<"toolbar">frtip'
         }
-        tbPemenuhan = $('#table-pemenuhan').DataTable(dataTableConfig);
-        tbPasal = $('#table-pasal').DataTable(dataTableConfig);
-        tbTugas = $('#table-tugas').DataTable(dataTableConfig);
-        tbJadwal = $('#table-jadwal').DataTable(dataTableConfig);
-        dataTableConfig['ordering'] = true;
         tbDocument = $('#table-document').DataTable(dataTableConfig);
         tbDistribusi = $('#table-distribusi').DataTable(dataTableConfig);
         tbImplementasi = $('#table-implementasi').DataTable(dataTableConfig);
+        dataTableConfig['ordering'] = false;
+        tbPemenuhan = $('#table-pemenuhan').DataTable(dataTableConfig);
+        tbPasal = $('#table-pasal').DataTable(dataTableConfig);
+        tbJadwal = $('#table-jadwal').DataTable(dataTableConfig);
+        tbTugas = $('#table-tugas').DataTable(dataTableConfig);
+        $('#table-tugas_filter').hide();
+
     });
-    function afterReady() {}
     var pesonil;
     var sortDokumen;
     function selectCompany(id, name) {
@@ -890,10 +903,13 @@ if ($role == 'anggota') {
         $.post('<?php echo site_url($module); ?>/unit_kerja', {'perusahaan': id}, function (data) {
             unitKerja = JSON.parse(data);
             $('.select-unit-kerja').empty();
+            $('.filter-unit-kerja').empty();
             $('.select-unit-kerja').append('<option value="">-- Pilih Unit Kerja --</option>');
+            $('.filter-unit-kerja').append('<option value="">-- Pilih Unit Kerja --</option>');
             for (var i = 0; i < unitKerja.length; i++) {
                 var uk = unitKerja[i];
                 $('.select-unit-kerja').append('<option value="' + uk.id + '">' + uk.name + '</option>');
+                $('.filter-unit-kerja').append('<option value="' + uk.name + '">' + uk.name + '</option>');
             }
         });
         $.post('<?php echo site_url($module); ?>/personil', {'perusahaan': id}, function (data) {
@@ -1285,7 +1301,8 @@ if ($role == 'anggota') {
                         (t.index_form_terkait == null ? '-' : sortDokumen[t.index_form_terkait].judul),
                         '---',
                         '---',
-                        (role == 'anggota' ? '' : '<span class="text-primary fa fa-plus" title="Tambah" onclick="initCreateJadwal(' + i + ')"></span>')
+                        (role == 'anggota' ? '' : '<span class="text-primary fa fa-plus" title="Tambah" onclick="initCreateJadwal(' + i + ')"></span>'),
+                        '---',
                     ]);
                     var nJd = 0;
                     for (var j = 0; j < data.length; j++) {
@@ -1316,6 +1333,7 @@ if ($role == 'anggota') {
                                     '<a class="text-primary jd-btn-more' + i + '" onclick="showMoreJadwal(' + i + ')">lihat lainnya</a>',
                                     '',
                                     '',
+                                    '',
                                 ]);
                             }
                             var tr = tbJadwal.row.add([
@@ -1325,6 +1343,7 @@ if ($role == 'anggota') {
                                 (jd.periode == null ? '-' : (jd.periode + 'AN')),
                                 jd.tanggal,
                                 btnDetail + (role == 'anggota' ? '' : btnEdit + btnDelete),
+                                t.txt_personil,
                             ]).node();
                             if (nJd >= 3) {
                                 $(tr).addClass('jadwal-more' + i);
@@ -1360,6 +1379,7 @@ if ($role == 'anggota') {
                             '',
                             '',
                             '<a class="text-primary jd-more jadwal-more' + i + '" onclick="hideMoreJadwal(' + i + ')">sembunyikan</a>',
+                            '',
                             '',
                             '',
                         ]);
@@ -1399,6 +1419,7 @@ if ($role == 'anggota') {
                 }
             }
             tbPemenuhan.draw();
+            tbJadwal.columns(6).visible(false);
         });
     }
     function percentColor(num) {
@@ -1990,4 +2011,10 @@ if ($role == 'anggota') {
         $('.tgs-more' + index).hide();
         $('.tgs-btn-more' + index).show();
     }
+    $('#filterTugasUK').change(function () {
+        tbTugas.columns(4).search(this.value).draw();
+    });
+    $('#filterJadwalUK').change(function () {
+        tbJadwal.columns(6).search(this.value).draw();
+    });
 </script>
