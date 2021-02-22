@@ -145,6 +145,11 @@ if ($role == 'anggota') {
                     </div>
                     <!--DISTRIBUSI-->
                     <div class="tab-pane" id="tab-distribusi" role="tabpanel">
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <select class="form-control filter-unit-kerja" id="filterDistribusiUK"></select>
+                            </div>
+                        </div>
                         <table class="table table-striped" id="table-distribusi">
                             <thead>
                                 <tr>
@@ -874,6 +879,7 @@ if ($role == 'anggota') {
         tbPasal = $('#table-pasal').DataTable(dataTableConfig);
         tbJadwal = $('#table-jadwal').DataTable(dataTableConfig);
         tbTugas = $('#table-tugas').DataTable(dataTableConfig);
+        $('#table-distribusi_filter').hide();
         $('#table-tugas_filter').hide();
         $('#table-jadwal_filter').hide();
 
@@ -2015,5 +2021,8 @@ if ($role == 'anggota') {
     });
     $('#filterJadwalUK').change(function () {
         tbJadwal.columns(6).search(this.value).draw();
+    });
+    $('#filterDistribusiUK').change(function () {
+        tbDistribusi.columns(4).search(this.value).draw();
     });
 </script>
