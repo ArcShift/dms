@@ -11,8 +11,8 @@
             </div>
         </div>
         <div class="d-block text-right card-footer">
-            <a class="mr-2 btn btn-primary" href="<?php echo site_url($module) ?>">Kembali</a>
-            <button class="btn btn-primary pull-right" name="hapus" value="ok">Hapus</button>
+            <a class="mr-2 btn btn-outline-primary" href="<?php echo site_url($module) ?>">Kembali</a>
+            <button class="btn btn-outline-danger" name="hapus" value="ok">Hapus</button>
         </div>
     </form>
 </div>

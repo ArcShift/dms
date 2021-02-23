@@ -1095,7 +1095,7 @@ if ($role == 'anggota') {
                         if (d.dokumen_pasal[j] == sortPasal[k].id) {
                             d.index_dokumen_pasal.push(k);
                             sortPasal[k].index_documents.push(i);
-                            if (d.deskripsi.length > descLimit) {
+                            if (d.deskripsi.length > descLimit & d.deskripsi != null) {
                                 d.custom_deskripsi = '<div class="desc-parent">' + d.deskripsi.substring(0, descLimit);
                                 d.custom_deskripsi += '<span class="desc-more" style="display: none">' + d.deskripsi.substring(descLimit)
                                         + '<div class="text-primary btn-less" style="cursor:pointer" onclick="hideMoreDesc(this)">Sembunyikan</div></span>';
