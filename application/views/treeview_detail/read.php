@@ -169,7 +169,9 @@ if ($role == 'anggota') {
                         <div class="row div-filter">
                             <div class="col-sm-3"></div>
                             <div class="col-sm-3"></div>
-                            <div class="col-sm-3"></div>
+                            <div class="col-sm-3">
+                                <select class="form-control form-control-sm filter-personil" onchange="filterPersonil(this, tbDistribusi, 4)"></select>
+                            </div>
                             <div class="col-sm-3">
                                 <select class="form-control form-control-sm filter-unit-kerja" id="filterDistribusiUK"></select>
                             </div>
@@ -193,7 +195,9 @@ if ($role == 'anggota') {
                         <div class="row div-filter">
                             <div class="col-sm-3"></div>
                             <div class="col-sm-3"></div>
-                            <div class="col-sm-3"></div>
+                            <div class="col-sm-3">
+                                <select class="form-control form-control-sm filter-personil" onchange="filterPersonil(this, tbTugas, 4)"></select>
+                            </div>
                             <div class="col-sm-3">
                                 <select class="form-control form-control-sm filter-unit-kerja" id="filterTugasUK"></select>
                             </div>
@@ -219,7 +223,9 @@ if ($role == 'anggota') {
                         <div class="row div-filter">
                             <div class="col-sm-3"></div>
                             <div class="col-sm-3"></div>
-                            <div class="col-sm-3"></div>
+                            <div class="col-sm-3">
+                                <select class="form-control form-control-sm filter-personil" onchange="filterPersonil(this, tbJadwal, 5)"></select>
+                            </div>
                             <div class="col-sm-3">
                                 <select class="form-control form-control-sm filter-unit-kerja" id="filterJadwalUK"></select>
                             </div>
@@ -244,7 +250,9 @@ if ($role == 'anggota') {
                         <div class="row div-filter">
                             <div class="col-sm-3"></div>
                             <div class="col-sm-3"></div>
-                            <div class="col-sm-3"></div>
+                            <div class="col-sm-3">
+                                <select class="form-control form-control-sm filter-personil" onchange="filterPersonil(this, tbImplementasi, 1)"></select>
+                            </div>
                             <div class="col-sm-3">
                                 <select class="form-control form-control-sm filter-unit-kerja" id="filterImplementasiUK"></select>
                             </div>
@@ -958,10 +966,13 @@ if ($role == 'anggota') {
         $.post('<?php echo site_url($module); ?>/personil', {'perusahaan': id}, function (data) {
             personil = JSON.parse(data);
             $('.select-personil').empty();
+            $('.filter-personil').empty();
             $('.select-creator').append('<option value="">---</option>');
+            $('.filter-personil').append('<option value="">-- Pilih Personil --</option>');
             for (var i = 0; i < personil.length; i++) {
                 var p = personil[i];
                 $('.select-personil').append('<option value="' + p.id + '">' + p.fullname + '</option>');
+                $('.filter-personil').append('<option value="' + p.fullname + '">' + p.fullname + '</option>');
             }
         });
         perusahaan = id;
@@ -2066,4 +2077,7 @@ if ($role == 'anggota') {
     $('#filterImplementasiUK').change(function () {
         tbImplementasi.columns(1).search(this.value).draw();
     });
+    function filterPersonil(elem, table, index) {
+        table.columns(index).search(elem.value).draw();
+    }
 </script>
