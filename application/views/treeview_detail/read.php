@@ -170,10 +170,10 @@ if ($role == 'anggota') {
                             <div class="col-sm-3"></div>
                             <div class="col-sm-3"></div>
                             <div class="col-sm-3">
-                                <select class="form-control form-control-sm filter-personil" onchange="filterPersonil(this, tbDistribusi, 4)"></select>
+                                <select class="form-control form-control-sm filter-unit-kerja" onchange="filterUnitKerja(this, tbDistribusi, 4)"></select>
                             </div>
                             <div class="col-sm-3">
-                                <select class="form-control form-control-sm filter-unit-kerja" id="filterDistribusiUK"></select>
+                                <select class="form-control form-control-sm filter-personil" onchange="filterPersonil(this, tbDistribusi, 4)"></select>
                             </div>
                         </div>
                         <table class="table table-striped" id="table-distribusi">
@@ -196,10 +196,10 @@ if ($role == 'anggota') {
                             <div class="col-sm-3"></div>
                             <div class="col-sm-3"></div>
                             <div class="col-sm-3">
-                                <select class="form-control form-control-sm filter-personil" onchange="filterPersonil(this, tbTugas, 4)"></select>
+                                <select class="form-control form-control-sm filter-unit-kerja" onchange="filterUnitKerja(this, tbTugas, 4)"></select>
                             </div>
                             <div class="col-sm-3">
-                                <select class="form-control form-control-sm filter-unit-kerja" id="filterTugasUK"></select>
+                                <select class="form-control form-control-sm filter-personil" onchange="filterPersonil(this, tbTugas, 4)"></select>
                             </div>
                         </div>
                         <div class="table-responsive">
@@ -224,10 +224,10 @@ if ($role == 'anggota') {
                             <div class="col-sm-3"></div>
                             <div class="col-sm-3"></div>
                             <div class="col-sm-3">
-                                <select class="form-control form-control-sm filter-personil" onchange="filterPersonil(this, tbJadwal, 5)"></select>
+                                <select class="form-control form-control-sm filter-unit-kerja" onchange="filterUnitKerja(this, tbJadwal, 5)"></select>
                             </div>
                             <div class="col-sm-3">
-                                <select class="form-control form-control-sm filter-unit-kerja" id="filterJadwalUK"></select>
+                                <select class="form-control form-control-sm filter-personil" onchange="filterPersonil(this, tbJadwal, 5)"></select>
                             </div>
                         </div>
                         <table class="table table-striped" id="table-jadwal">
@@ -251,10 +251,10 @@ if ($role == 'anggota') {
                             <div class="col-sm-3"></div>
                             <div class="col-sm-3"></div>
                             <div class="col-sm-3">
-                                <select class="form-control form-control-sm filter-personil" onchange="filterPersonil(this, tbImplementasi, 1)"></select>
+                                <select class="form-control form-control-sm filter-unit-kerja" onchange="filterUnitKerja(this, tbImplementasi, 1)"></select>
                             </div>
                             <div class="col-sm-3">
-                                <select class="form-control form-control-sm filter-unit-kerja" id="filterImplementasiUK"></select>
+                                <select class="form-control form-control-sm filter-personil" onchange="filterPersonil(this, tbImplementasi, 1)"></select>
                             </div>
                         </div>
                         <table class="table" id="table-implementasi">
@@ -2065,18 +2065,19 @@ if ($role == 'anggota') {
         $('.tgs-more' + index).hide();
         $('.tgs-btn-more' + index).show();
     }
-    $('#filterTugasUK').change(function () {
-        tbTugas.columns(4).search(this.value).draw();
-    });
-    $('#filterJadwalUK').change(function () {
-        tbJadwal.columns(6).search(this.value).draw();
-    });
-    $('#filterDistribusiUK').change(function () {
-        tbDistribusi.columns(4).search(this.value).draw();
-    });
-    $('#filterImplementasiUK').change(function () {
-        tbImplementasi.columns(1).search(this.value).draw();
-    });
+    function filterUnitKerja(elem, table, index) {
+        table.columns(index).search(elem.value).draw();
+        var fp = $(elem).parents('.tab-pane').find('.filter-personil');
+        fp.empty();
+        fp.append('<option value="">-- Pilih Personil --</option>');
+        for (var i = 0; i < personil.length; i++) {
+            var p = personil[i];
+            if (p.fullname.includes(elem.value)) {
+                fp.append('<option value="' + p.fullname + '">' + p.fullname + '</option>');
+            }
+        }
+
+    }
     function filterPersonil(elem, table, index) {
         table.columns(index).search(elem.value).draw();
     }
