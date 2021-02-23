@@ -25,7 +25,11 @@
                             <td><?php echo $r['username'] ?></td>
                             <td><?php echo $r['fullname'] ?></td>
                             <td><?php echo $r['role'] ?></td>
-                            <td><?php echo $r['unit_kerja'] ?></td>
+                            <td>
+                                <?php foreach ($r['unit_kerja'] as $uk) { ?>
+                                    <span class="badge badge-secondary"><?= $uk['name'] ?></span>
+                                <?php } ?>
+                            </td>
                             <td><?php echo $r['company'] ?></td>
                             <td>
                                 <?php if ($activeModule['acc_update']) { ?>

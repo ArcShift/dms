@@ -24,16 +24,23 @@ class M_user extends CI_Model {
     }
 
     function read() {
-        $this->db->select('u.id, u.username, p.fullname, u.id_role, r.title AS role, p.id_unit_kerja, uk.name AS unit_kerja, c.name AS company');
+        $this->db->select('u.id, u.username, p.fullname, u.id_role, r.title AS role, c.name AS company, u.id_personil');
         $this->db->join('role r', 'r.id = u.id_role');
         $this->db->join('personil p', 'p.id = u.id_personil', 'LEFT');
-        $this->db->join('unit_kerja uk', 'uk.id = p.id_unit_kerja', 'LEFT');
-        $this->db->join('company c', 'c.id = uk.id_company', 'LEFT');
+        $this->db->join('company c', 'c.id = p.id_company', 'LEFT');
         if ($this->session->userdata('user')['role'] == 'pic') {
             $this->db->where('r.name', 'anggota');
             $this->db->where('c.id', $this->session->userdata['user']['id_company']);
         }
-        return $this->db->get($this->table . ' u')->result_array();
+        $data = $this->db->get($this->table . ' u')->result_array();
+        foreach ($data as $k => $d) {
+            $data[$k]['unit_kerja'] = [];
+            if (!empty($d['id_personil'])) {
+                $this->db->join('position_personil pp', 'pp.id_unit_kerja = uk.id AND pp.id_personil = ' . $d['id_personil']);
+                $data[$k]['unit_kerja'] = $this->db->get('unit_kerja uk')->result_array();
+            }
+        }
+        return $data;
     }
 
     function detail($id) {

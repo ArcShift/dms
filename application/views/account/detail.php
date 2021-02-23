@@ -19,7 +19,10 @@
                     </div>
                     <div class="form-group">
                         <label>Unit Kerja</label>
-                        <input class="form-control" value="<?php echo $data['unit_kerja'] ?>" disabled="">
+                        <br>
+                        <?php foreach ($data['unit_kerja'] as $uk) { ?>
+                            <span class="badge badge-secondary"><?= $uk['name'] ?></span>
+                        <?php } ?>
                     </div>
                     <div class="form-group">
                         <label>Perusahaan</label>
