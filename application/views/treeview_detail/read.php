@@ -1095,14 +1095,18 @@ if ($role == 'anggota') {
                         if (d.dokumen_pasal[j] == sortPasal[k].id) {
                             d.index_dokumen_pasal.push(k);
                             sortPasal[k].index_documents.push(i);
-                            if (d.deskripsi.length > descLimit & d.deskripsi != null) {
-                                d.custom_deskripsi = '<div class="desc-parent">' + d.deskripsi.substring(0, descLimit);
-                                d.custom_deskripsi += '<span class="desc-more" style="display: none">' + d.deskripsi.substring(descLimit)
-                                        + '<div class="text-primary btn-less" style="cursor:pointer" onclick="hideMoreDesc(this)">Sembunyikan</div></span>';
-                                d.custom_deskripsi += '<div class="text-primary btn-more" style="cursor:pointer" onclick="showMoreDesc(this)">lihat lebih lengkap</div>';
-                                d.custom_deskripsi += '</div>';
+                            if (d.deskripsi != null) {
+                                if (d.deskripsi.length > descLimit) {
+                                    d.custom_deskripsi = '<div class="desc-parent">' + d.deskripsi.substring(0, descLimit);
+                                    d.custom_deskripsi += '<span class="desc-more" style="display: none">' + d.deskripsi.substring(descLimit)
+                                            + '<div class="text-primary btn-less" style="cursor:pointer" onclick="hideMoreDesc(this)">Sembunyikan</div></span>';
+                                    d.custom_deskripsi += '<div class="text-primary btn-more" style="cursor:pointer" onclick="showMoreDesc(this)">lihat lebih lengkap</div>';
+                                    d.custom_deskripsi += '</div>';
+                                } else {
+                                    d.custom_deskripsi = d.deskripsi;
+                                }
                             } else {
-                                d.custom_deskripsi = d.deskripsi;
+                                d.custom_deskripsi = '-';
                             }
                             d.txt_pasals += '<div><span class="badge badge-secondary">' + sortPasal[k].fullname + '</span></div>';
                             if (n2 == 10) {
