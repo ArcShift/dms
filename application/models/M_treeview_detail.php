@@ -215,7 +215,7 @@ class M_treeview_detail extends CI_Model {
         $this->db->update('tugas');
         //Distribusi
         $this->db->where('id_document', $id);
-        $this->db->delete('distribusi');
+        $this->db->delete('distribution');
         //Dokumen Terkait
         $this->db->where('contoh', $id);
         $this->db->set('contoh', null);
@@ -255,7 +255,7 @@ class M_treeview_detail extends CI_Model {
 
     function delete_distribusi() {
         $this->db->where('id', $this->input->post('id'));
-        return $this->db->delete('distribusi');
+        return $this->db->delete('distribution');
     }
 
     function readsTugas() {

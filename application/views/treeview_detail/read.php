@@ -1744,9 +1744,9 @@ if ($role == 'anggota') {
         m.find('.input-pasal').val(sortPasal[d.index_pasal].fullname);
         m.find('.input-nomor').val(d.nomor);
         m.find('.input-judul').val(d.judul);
-        m.find('.input-distribusi').val(d.distribusi.length);
+        m.find('.input-distribusi').val(d.distribution.length);
         m.find('.input-jadwal').val(d.c_imp);
-        if (d.distribusi.length != 0 | d.child_document != 0) {
+        if (d.distribution.length != 0 | d.child_document != 0) {
             m.find('.alert').show();
         } else {
             m.find('.alert').hide();
