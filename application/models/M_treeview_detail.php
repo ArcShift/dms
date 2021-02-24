@@ -178,10 +178,7 @@ class M_treeview_detail extends CI_Model {
         $this->db->join('document_pasal dp', 'dp.id_document = d.id');
         $this->db->join('pasal p', 'p.id = dp.id_pasal');
         $this->db->join('document cd', 'cd.contoh = d.id', 'LEFT');
-        $this->db->join('users u', 'u.id = d.creator', 'LEFT');
         $this->db->join('company c', 'c.id = d.id_company', 'LEFT');
-        $this->db->join('personil pl', 'pl.id = u.id_personil', 'LEFT');
-        $this->db->join('unit_kerja uk', 'uk.id = pl.id_unit_kerja', 'LEFT');
         $this->db->join('distribution ds2', 'd.id = ds2.id_document', 'LEFT');
         $this->db->join('document_terkait dt', 'dt.induk = d.id', 'LEFT');
         $this->db->where('d.id_company = ' . $this->input->get('perusahaan'));
