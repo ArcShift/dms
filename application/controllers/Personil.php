@@ -74,7 +74,7 @@ class Personil extends MY_Controller {
             $this->db->where('id_personil', $this->input->post('id'));
             $this->db->delete('position_personil');
             $this->db->where('id_personil', $this->input->post('id'));
-            $this->db->delete('user');
+            $this->db->delete('users');
             $this->db->where('id', $this->input->post('id'));
             if ($this->db->delete('personil')) {
                 redirect($this->module);
