@@ -77,6 +77,7 @@ class Personil extends MY_Controller {
             $this->db->delete('users');
             $this->db->where('id', $this->input->post('id'));
             if ($this->db->delete('personil')) {
+                $this->session->set_flashdata('msgSuccess', 'Data berhasil dihapus');
                 redirect($this->module);
             }
         }

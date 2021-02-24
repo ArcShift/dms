@@ -930,8 +930,8 @@ if ($role == 'anggota') {
             $(this).find('.div-filter .col-sm-3').eq(0).append($(this).find('.dataTables_filter .form-control'));
         });
     });
+    function afterReady() {};
     var pesonil;
-    var sortDokumen;
     function selectCompany(id, name) {
         $.post('<?php echo site_url($module); ?>/standard', {'id': id}, function (data) {
             standards = JSON.parse(data);
@@ -1062,6 +1062,7 @@ if ($role == 'anggota') {
             }
             tbPasal.draw();
             getDokumen();
+            getPemenuhan();
         });
     }
     function loadPage(url, container) {
@@ -1074,7 +1075,10 @@ if ($role == 'anggota') {
     }
     function getDokumen() {
 //        loadPage('dokumen_tabel', '#tab-test');
+            console.log('s1');
         $.getJSON('<?php echo site_url($module); ?>/get_dokumen', {'perusahaan': perusahaan, 'standar': standar}, function (data) {
+            console.log('s2');
+            console.log(data);
             tbDocument.clear();
             tbDistribusi.clear();
             $('.select-dokumen').empty();
@@ -1130,20 +1134,20 @@ if ($role == 'anggota') {
                         sortPasal[j].dokumens.push(n);
                     }
                 }
-                var idDis = d.distribusi;
+                var idDis = d.distribution;
                 var userDis = d.user_distribusi;
                 var strUserDis = '';
                 d.txt_user_distribusi = '';
                 d.index_user_distribusi = [];
                 for (var j = 0; j < idDis.length; j++) {//remove later
                     //TODO: FIX USER DISTRIBUSI
-                    strUserDis += '<div><span class="text-danger fa fa-trash" title="Hapus" onclick="deleteUserDistribusi(' + idDis[j] + ')"></span>&nbsp' + userDis[j] + '</div>';
-                    d.txt_user_distribusi += '<div>' + userDis[j] + '</div>';
-                    for (var k = 0; k < personil.length; k++) {
-                        if (d.personil_distribusi_id[j] == personil[k].id) {
-                            d.index_user_distribusi.push(k);
-                        }
-                    }
+//                    strUserDis += '<div><span class="text-danger fa fa-trash" title="Hapus" onclick="deleteUserDistribusi(' + idDis[j] + ')"></span>&nbsp' + userDis[j] + '</div>';
+//                    d.txt_user_distribusi += '<div>' + userDis[j] + '</div>';
+//                    for (var k = 0; k < personil.length; k++) {
+//                        if (d.personil_distribusi_id[j] == personil[k].id) {
+//                            d.index_user_distribusi.push(k);
+//                        }
+//                    }
                 }
                 d.indexDistribusi = [];
                 d.txtDistribusi = '';
@@ -1203,6 +1207,7 @@ if ($role == 'anggota') {
                         (role == 'anggota' ? btnDetail : btnDetail + btnEdit + btnDelete),
                     ]);
                 }
+                console.log('sortDocument');
                 $('.select-dokumen').append('<option value="' + d.id + '">' + d.judul + '</option>');
                 $('.select-2-document').append('<option value="' + d.id + '">' + d.judul + '</option>');
                 var btnDetail = '<span class="text-primary fa fa-info-circle" title="Detail" onclick="detailDistribusi(' + n + ')"></span>&nbsp';
@@ -2085,4 +2090,33 @@ if ($role == 'anggota') {
     function filterPersonil(elem, table, index) {
         table.columns(index).search(elem.value).draw();
     }
+//    $.fn.dataTableExt.afnFiltering.push(
+//            function (oSettings, aData, iDataIndex) {
+//                var iFini = document.getElementById('fini').value;
+//                var iFfin = document.getElementById('ffin').value;
+//                var iStartDateCol = 6;
+//                var iEndDateCol = 7;
+//
+//                iFini = iFini.substring(6, 10) + iFini.substring(3, 5) + iFini.substring(0, 2);
+//                iFfin = iFfin.substring(6, 10) + iFfin.substring(3, 5) + iFfin.substring(0, 2);
+//
+//                var datofini = aData[iStartDateCol].substring(6, 10) + aData[iStartDateCol].substring(3, 5) + aData[iStartDateCol].substring(0, 2);
+//                var datoffin = aData[iEndDateCol].substring(6, 10) + aData[iEndDateCol].substring(3, 5) + aData[iEndDateCol].substring(0, 2);
+//
+//                if (iFini === "" && iFfin === "")
+//                {
+//                    return true;
+//                } else if (iFini <= datofini && iFfin === "")
+//                {
+//                    return true;
+//                } else if (iFfin >= datoffin && iFini === "")
+//                {
+//                    return true;
+//                } else if (iFini <= datofini && iFfin >= datoffin)
+//                {
+//                    return true;
+//                }
+//                return false;
+//            }
+//    );
 </script>

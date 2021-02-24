@@ -174,7 +174,7 @@ class M_treeview_detail extends CI_Model {
     }
 
     function read_document() {
-        $this->db->select("d.*, COUNT(DISTINCT cd.id) AS child_document,GROUP_CONCAT(DISTINCT dt.terkait) AS document_terkait, GROUP_CONCAT(DISTINCT dp.id_pasal) AS dokumen_pasal, GROUP_CONCAT(DISTINCT ds.id) AS distribusi,  GROUP_CONCAT(DISTINCT ds2.id_position_personil) AS distribution,GROUP_CONCAT(DISTINCT pld.id) AS personil_distribusi_id, GROUP_CONCAT(DISTINCT CONCAT(pld.fullname,' - ', ukd.name)) AS user_distribusi");
+        $this->db->select("d.*, COUNT(DISTINCT cd.id) AS child_document,GROUP_CONCAT(DISTINCT dt.terkait) AS document_terkait, GROUP_CONCAT(DISTINCT dp.id_pasal) AS dokumen_pasal, GROUP_CONCAT(DISTINCT ds2.id_position_personil) AS distribution");
         $this->db->join('document_pasal dp', 'dp.id_document = d.id');
         $this->db->join('pasal p', 'p.id = dp.id_pasal');
         $this->db->join('document cd', 'cd.contoh = d.id', 'LEFT');
@@ -182,16 +182,13 @@ class M_treeview_detail extends CI_Model {
         $this->db->join('company c', 'c.id = d.id_company', 'LEFT');
         $this->db->join('personil pl', 'pl.id = u.id_personil', 'LEFT');
         $this->db->join('unit_kerja uk', 'uk.id = pl.id_unit_kerja', 'LEFT');
-        $this->db->join('distribusi ds', 'd.id = ds.id_document', 'LEFT');
         $this->db->join('distribution ds2', 'd.id = ds2.id_document', 'LEFT');
-        $this->db->join('personil pld', 'pld.id = ds.id_personil', 'LEFT');
-        $this->db->join('unit_kerja ukd', 'ukd.id = pld.id_unit_kerja', 'LEFT');
         $this->db->join('document_terkait dt', 'dt.induk = d.id', 'LEFT');
         $this->db->where('d.id_company = ' . $this->input->get('perusahaan'));
         $this->db->where('p.id_standard = ' . $this->input->get('standar'));
         $this->db->group_by('d.id');
         $result = $this->db->get('document d')->result_array();
-        $fields = ['distribusi', 'distribution', 'user_distribusi', 'personil_distribusi_id', 'dokumen_pasal', 'document_terkait'];
+        $fields = [ 'distribution', 'dokumen_pasal', 'document_terkait'];
         for ($i = 0; $i < count($result); $i++) {
             foreach ($fields as $f) {
                 $result[$i][$f] = explode(',', $result[$i][$f]);
