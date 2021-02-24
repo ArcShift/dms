@@ -67,6 +67,13 @@ class M_personil extends CI_Model {
         $this->db->where('uk.id_company', $r['id_company']);
         $this->db->where('pp.id IS NULL');
         $r['excluded_unit_kerja'] = $this->db->get('unit_kerja uk')->result_array();
+        $this->db->select('d.*');
+        $this->db->join('position_personil pp', 'pp.id = d.id_position_personil AND pp.id_personil = ' . $id);
+        $r['dist'] = $this->db->get('distribution d')->result_array();
+        $this->db->join('position_personil pp', 'pp.id = d.pembuat AND pp.id_personil = ' . $id);
+        $r['creator'] = $this->db->get('document d')->result_array();
+        $this->db->join('position_personil pp', 'pp.id = pt.id_position_personil AND pp.id_personil = ' . $id);
+        $r['task'] = $this->db->get('personil_task pt')->result_array();
         return $r;
     }
 

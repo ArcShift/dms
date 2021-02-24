@@ -57,9 +57,33 @@ class Personil extends MY_Controller {
     }
 
     function delete() {
-        $config['table'] = 'personil';
-        $config['field'] = 'fullname';
-        parent::hapus($config);
+        $this->subTitle = 'Hapus';
+        if ($this->input->post('initHapus')) {
+            $this->session->set_userdata('delete', $this->input->post('initHapus'));
+        } else if ($this->input->post('hapus')) {
+            $data = $this->model->detail($this->session->delete);
+            foreach ($data['unit_kerja'] as $uk){
+                $this->db->set('pembuat', 'NULL', false);
+                $this->db->where('pembuat', $uk['id_position_personil']);
+                $this->db->update('document');
+                $this->db->where('id_position_personil', $uk['id_position_personil']);
+                $this->db->delete('distribution');
+                $this->db->where('id_position_personil', $uk['id_position_personil']);
+                $this->db->delete('personil_task');
+            }
+            $this->db->where('id_personil', $this->input->post('id'));
+            $this->db->delete('position_personil');
+            $this->db->where('id_personil', $this->input->post('id'));
+            $this->db->delete('user');
+            $this->db->where('id', $this->input->post('id'));
+            if ($this->db->delete('personil')) {
+                redirect($this->module);
+            }
+        }
+        $id = $this->session->delete;
+        $this->data['data'] = $this->model->detail($id);
+
+        $this->render('delete');
     }
 
     function unit_kerja() {
