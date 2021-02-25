@@ -218,38 +218,40 @@ if ($this->input->get('standard')) {
                                         </i>
                                     </div>
                                     <div>
-                                        <?= empty($activeModule['title']) ? ucfirst($module) : $activeModule['title']; ?>
-                                        <div class="page-title-subheading">
-                                            <?php echo $subTitle ?>
-                                        </div>
+                                        <?php if (isset($menuStandard)) { ?>
+                                            <?php if (empty($this->session->user['id_company'])) { ?>
+                                                <button type="button" title="Pilih Perusahaan" data-toggle="dropdown" class="btn-shadow mr-3 btn btn-dark">
+                                                    <i class="fa fa-angle-double-down"></i>
+                                                </button>
+                                                <div id="company-dropdown" tabindex="-1" role="menu" aria-hidden="true" class="dropdown-menu">
+                                                    <ul class="nav flex-column">
+                                                        <?php foreach ($companies as $k => $c) { ?>
+                                                            <li class="nav-item">
+                                                                <a class="nav-link" onclick="switchCompany(<?= $c['id'] ?>)">
+                                                                    <i class="nav-link-icon lnr-inbox"></i>
+                                                                    <span>
+                                                                        <?= $c['name'] ?>
+                                                                    </span>
+                                                                </a>
+                                                            </li>
+                                                        <?php } ?>
+                                                    </ul>
+                                                </div>
+                                            <?php } ?>
+                                                <span id="company-title">
+                                                    <?= $this->session->activeCompany['name'] ?>
+                                                </span>
+                                        <?php } else { ?>
+                                            <?= empty($activeModule['title']) ? ucfirst($module) : $activeModule['title']; ?>
+                                            <div class="page-title-subheading">
+                                                <?php echo $subTitle ?>
+                                            </div>
+                                        <?php } ?>
                                     </div>
                                 </div>
                                 <!--=========================-->
                                 <?php if (isset($menuStandard)) { ?>
-                                    <?php if (empty($this->session->user['id_company'])) { ?>
-                                        <button type="button" title="Pilih Perusahaan" data-toggle="dropdown" class="btn-shadow mr-3 btn btn-dark">
-                                            <i class="fa fa-angle-double-down"></i>
-                                        </button>
-                                        <div id="company-dropdown" tabindex="-1" role="menu" aria-hidden="true" class="dropdown-menu">
-                                            <ul class="nav flex-column">
-                                                <?php foreach ($companies as $k => $c) { ?>
-                                                    <li class="nav-item">
-                                                        <a class="nav-link" onclick="switchCompany(<?= $c['id'] ?>)">
-                                                            <i class="nav-link-icon lnr-inbox"></i>
-                                                            <span>
-                                                                <?= $c['name'] ?>
-                                                            </span>
-                                                        </a>
-                                                    </li>
-                                                <?php } ?>
-                                            </ul>
-                                        </div>
-                                    <?php } ?>
-                                    <div>
-                                        <span id="company-title">
-                                            <?= $this->session->activeCompany['name'] ?>
-                                        </span>
-                                    </div>
+
                                     <?php if ($menuStandard === 'standard') { ?>
                                         <div class="page-title-actions">
                                             <div class="d-inline-block dropdown">
