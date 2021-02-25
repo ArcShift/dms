@@ -382,7 +382,8 @@ class M_treeview_detail extends CI_Model {
     }
 
     function getJadwal() {
-        return $this->db->get('jadwal')->result_array();
+        $this->db->select("j.*, DATE_FORMAT(j.tanggal,'%d/%m/%Y') AS tgl");
+        return $this->db->get('jadwal j')->result_array();
     }
 
     function getImplementasi() {

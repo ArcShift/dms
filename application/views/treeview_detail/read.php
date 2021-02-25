@@ -7,6 +7,9 @@ if ($role == 'anggota') {
     $personil = $this->db->get('personil p')->row_array()['id'];
 }
 ?>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
 <style>
     .col-tgl{
         min-width: 110;
@@ -222,7 +225,9 @@ if ($role == 'anggota') {
                     <div class="tab-pane" id="tab-jadwal" role="tabpanel">
                         <div class="row div-filter">
                             <div class="col-sm-3"></div>
-                            <div class="col-sm-3"></div>
+                            <div class="col-sm-3">
+                                <input class="form-control form-control-sm pull-right datesearch" id="datesearchJd" placeholder="Search by date range..">
+                            </div>
                             <div class="col-sm-3">
                                 <select class="form-control form-control-sm filter-unit-kerja" onchange="filterUnitKerja(this, tbJadwal, 5)"></select>
                             </div>
@@ -249,7 +254,9 @@ if ($role == 'anggota') {
                     <div class="tab-pane" id="tab-implementasi" role="tabpanel">
                         <div class="row div-filter">
                             <div class="col-sm-3"></div>
-                            <div class="col-sm-3"></div>
+                            <div class="col-sm-3">
+                                <input class="form-control form-control-sm pull-right datesearch" id="datesearchImp" placeholder="Search by date range..">
+                            </div>
                             <div class="col-sm-3">
                                 <select class="form-control form-control-sm filter-unit-kerja" onchange="filterUnitKerja(this, tbImplementasi, 1)"></select>
                             </div>
@@ -1449,7 +1456,7 @@ if ($role == 'anggota') {
                                 '---',
                                 '---',
                                 (jd.periode == null ? '-' : (jd.periode + 'AN')),
-                                jd.tanggal,
+                                jd.tgl,
                                 t.txt_personil,
                                 btnDetail + (role == 'anggota' ? '' : btnEdit + btnDelete),
                             ]).node();
@@ -1467,7 +1474,7 @@ if ($role == 'anggota') {
                             tbImplementasi.row.add([
                                 t.nama,
                                 t.txt_personil,
-                                jd.tanggal,
+                                jd.tgl,
                                 '<div class="text-center">' + uploadStatus + '</div>',
                                 '<div class="text-center">' + jd.keterlambatan + '</div>',
                                 '<span class="text-primary fa fa-info-circle" title="Detail" onclick="detailImplementasi(' + n + ')"></span> '
@@ -2134,98 +2141,98 @@ if ($role == 'anggota') {
     function filterPersonil(elem, table, index) {
         table.columns(index).search(elem.value).draw();
     }
-//    $.fn.dataTableExt.afnFiltering.push(
-//            function (oSettings, aData, iDataIndex) {
-//                var iFini = document.getElementById('fini').value;
-//                var iFfin = document.getElementById('ffin').value;
-//                var iStartDateCol = 6;
-//                var iEndDateCol = 7;
-//
-//                iFini = iFini.substring(6, 10) + iFini.substring(3, 5) + iFini.substring(0, 2);
-//                iFfin = iFfin.substring(6, 10) + iFfin.substring(3, 5) + iFfin.substring(0, 2);
-//
-//                var datofini = aData[iStartDateCol].substring(6, 10) + aData[iStartDateCol].substring(3, 5) + aData[iStartDateCol].substring(0, 2);
-//                var datoffin = aData[iEndDateCol].substring(6, 10) + aData[iEndDateCol].substring(3, 5) + aData[iEndDateCol].substring(0, 2);
-//
-//                if (iFini === "" && iFfin === "")
-//                {
-//                    return true;
-//                } else if (iFini <= datofini && iFfin === "")
-//                {
-//                    return true;
-//                } else if (iFfin >= datoffin && iFini === "")
-//                {
-//                    return true;
-//                } else if (iFini <= datofini && iFfin >= datoffin)
-//                {
-//                    return true;
-//                }
-//                return false;
-//            }
-//    );
+//==============================================
+//fungsi untuk filtering data berdasarkan tanggal 
+    var start_date;
+    var end_date;
+    var DateFilterFunction = (function (oSettings, aData, iDataIndex) {
+        var dateStart = parseDateValue(start_date);
+        var dateEnd = parseDateValue(end_date);
+        //Kolom tanggal yang akan kita gunakan berada dalam urutan 2, karena dihitung mulai dari 0
+        //nama depan = 0
+        //nama belakang = 1
+        //tanggal terdaftar =2
+        var evalDate = parseDateValue(aData[4]);
+        if ((isNaN(dateStart) && isNaN(dateEnd)) ||
+                (isNaN(dateStart) && evalDate <= dateEnd) ||
+                (dateStart <= evalDate && isNaN(dateEnd)) ||
+                (dateStart <= evalDate && evalDate <= dateEnd))
+        {
+            return true;
+        }
+        return false;
+    });
+    var DateFilterFunction2 = (function (oSettings, aData, iDataIndex) {
+        var dateStart = parseDateValue(start_date);
+        var dateEnd = parseDateValue(end_date);
+        //Kolom tanggal yang akan kita gunakan berada dalam urutan 2, karena dihitung mulai dari 0
+        //nama depan = 0
+        //nama belakang = 1
+        //tanggal terdaftar =2
+        var evalDate = parseDateValue(aData[2]);
+        if ((isNaN(dateStart) && isNaN(dateEnd)) ||
+                (isNaN(dateStart) && evalDate <= dateEnd) ||
+                (dateStart <= evalDate && isNaN(dateEnd)) ||
+                (dateStart <= evalDate && evalDate <= dateEnd))
+        {
+            return true;
+        }
+        return false;
+    });
 
+    // fungsi untuk converting format tanggal dd/mm/yyyy menjadi format tanggal javascript menggunakan zona aktubrowser
+    function parseDateValue(rawDate) {
+        var dateArray = rawDate.split("/");
+        var parsedDate = new Date(dateArray[2], parseInt(dateArray[1]) - 1, dateArray[0]);  // -1 because months are from 0 to 11   
+        return parsedDate;
+    }
 
-////fungsi untuk filtering data berdasarkan tanggal 
-//    var start_date;
-//    var end_date;
-//    var DateFilterFunction = (function (oSettings, aData, iDataIndex) {
-//        var dateStart = parseDateValue(start_date);
-//        var dateEnd = parseDateValue(end_date);
-//        //Kolom tanggal yang akan kita gunakan berada dalam urutan 2, karena dihitung mulai dari 0
-//        //nama depan = 0
-//        //nama belakang = 1
-//        //tanggal terdaftar =2
-//        var evalDate = parseDateValue(aData[2]);
-//        if ((isNaN(dateStart) && isNaN(dateEnd)) ||
-//                (isNaN(dateStart) && evalDate <= dateEnd) ||
-//                (dateStart <= evalDate && isNaN(dateEnd)) ||
-//                (dateStart <= evalDate && evalDate <= dateEnd))
-//        {
-//            return true;
-//        }
-//        return false;
-//    });
-//
-//    // fungsi untuk converting format tanggal dd/mm/yyyy menjadi format tanggal javascript menggunakan zona aktubrowser
-//    function parseDateValue(rawDate) {
-//        var dateArray = rawDate.split("/");
-//        var parsedDate = new Date(dateArray[2], parseInt(dateArray[1]) - 1, dateArray[0]);  // -1 because months are from 0 to 11   
-//        return parsedDate;
-//    }
-//
-//    $(document).ready(function () {
-//        //konfigurasi DataTable pada tabel dengan id example dan menambahkan  div class dateseacrhbox dengan dom untuk meletakkan inputan daterangepicker
+    $(document).ready(function () {
+        //konfigurasi DataTable pada tabel dengan id example dan menambahkan  div class dateseacrhbox dengan dom untuk meletakkan inputan daterangepicker
 //        var $dTable = $('#example').DataTable({
 //            "dom": "<'row'<'col-sm-4'l><'col-sm-5' <'datesearchbox'>><'col-sm-3'f>>" +
 //                    "<'row'<'col-sm-12'tr>>" +
 //                    "<'row'<'col-sm-5'i><'col-sm-7'p>>"
 //        });
-//
-//        //menambahkan daterangepicker di dalam datatables
-//        $("div.datesearchbox").html('<div class="input-group"> <div class="input-group-addon"> <i class="glyphicon glyphicon-calendar"></i> </div><input type="text" class="form-control pull-right" id="datesearch" placeholder="Search by date range.."> </div>');
-//
+
+        //menambahkan daterangepicker di dalam datatables
+//        $("div.datesearchbox").html('<div class="input-group"> <div class="input-group-addon"> <i class="glyphicon glyphicon-calendar"></i> </div><input type="text" class="form-control form-control-sm pull-right datesearch" id="datesearch" placeholder="Search by date range.."> </div>');
+
 //        document.getElementsByClassName("datesearchbox")[0].style.textAlign = "right";
-//
-//        //konfigurasi daterangepicker pada input dengan id datesearch
-//        $('#datesearch').daterangepicker({
-//            autoUpdateInput: false
-//        });
-//
-//        //menangani proses saat apply date range
-//        $('#datesearch').on('apply.daterangepicker', function (ev, picker) {
-//            $(this).val(picker.startDate.format('DD/MM/YYYY') + ' - ' + picker.endDate.format('DD/MM/YYYY'));
-//            start_date = picker.startDate.format('DD/MM/YYYY');
-//            end_date = picker.endDate.format('DD/MM/YYYY');
-//            $.fn.dataTableExt.afnFiltering.push(DateFilterFunction);
-//            $dTable.draw();
-//        });
-//
-//        $('#datesearch').on('cancel.daterangepicker', function (ev, picker) {
-//            $(this).val('');
-//            start_date = '';
-//            end_date = '';
-//            $.fn.dataTable.ext.search.splice($.fn.dataTable.ext.search.indexOf(DateFilterFunction, 1));
-//            $dTable.draw();
-//        });
-//    });
+
+        //konfigurasi daterangepicker pada input dengan id datesearch
+        $('.datesearch').daterangepicker({
+            autoUpdateInput: false
+        });
+
+        //menangani proses saat apply date range
+        $('#datesearchJd').on('apply.daterangepicker', function (ev, picker) {
+            $(this).val(picker.startDate.format('DD/MM/YYYY') + ' - ' + picker.endDate.format('DD/MM/YYYY'));
+            start_date = picker.startDate.format('DD/MM/YYYY');
+            end_date = picker.endDate.format('DD/MM/YYYY');
+            $.fn.dataTableExt.afnFiltering.push(DateFilterFunction);
+            tbJadwal.draw();
+        });
+        $('#datesearchJd').on('cancel.daterangepicker', function (ev, picker) {
+            $(this).val('');
+            start_date = '';
+            end_date = '';
+            $.fn.dataTable.ext.search.splice($.fn.dataTable.ext.search.indexOf(DateFilterFunction, 1));
+            tbJadwal.draw();
+        });
+        $('#datesearchImp').on('apply.daterangepicker', function (ev, picker) {
+            $(this).val(picker.startDate.format('DD/MM/YYYY') + ' - ' + picker.endDate.format('DD/MM/YYYY'));
+            start_date = picker.startDate.format('DD/MM/YYYY');
+            end_date = picker.endDate.format('DD/MM/YYYY');
+            $.fn.dataTableExt.afnFiltering.push(DateFilterFunction2);
+            tbImplementasi.draw();
+        });
+        $('#datesearchImp').on('cancel.daterangepicker', function (ev, picker) {
+            $(this).val('');
+            start_date = '';
+            end_date = '';
+            $.fn.dataTable.ext.search.splice($.fn.dataTable.ext.search.indexOf(DateFilterFunction2, 1));
+            tbImplementasi.draw();
+        });
+    });
 </script>
