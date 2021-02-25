@@ -84,12 +84,12 @@ class M_document extends CI_Model {
     }
 
     function perusahaan() {
-        $this->db->select('c.id, c.name');
-        $this->db->join('unit_kerja uk', 'uk.id_company = c.id');
-        $this->db->join('personil p', 'p.id_unit_kerja = uk.id');
-        $this->db->join('users u', 'u.id_personil = p.id');
-        $this->db->join($this->table . ' d', 'd.creator = u.id');
-        $this->db->group_by('c.id');
+//        $this->db->select('c.id, c.name');
+//        $this->db->join('unit_kerja uk', 'uk.id_company = c.id');
+//        $this->db->join('personil p', 'p.id_unit_kerja = uk.id');
+//        $this->db->join('users u', 'u.id_personil = p.id');
+//        $this->db->join($this->table . ' d', 'd.creator = u.id');
+//        $this->db->group_by('c.id');
         return $this->db->get('company c')->result_array();
     }
 
