@@ -2043,9 +2043,9 @@ if ($role == 'anggota') {
         var j = sortJadwal[index];
         var bukti = '-';
         if (j.doc_type == 'FILE') {
-            bukti = j.path + '<a class="btn btn-outline-primary btn-sm pull-right fa fa-download" href="<?= base_url('upload/implementasi') ?>/' + j.path + '"></a>';
+            bukti = j.path + '<a class="btn btn-outline-primary btn-sm pull-right fa fa-download" target="_blank" href="<?= base_url('upload/implementasi') ?>/' + j.path + '"></a>';
         } else if (j.doc_type == 'URL') {
-            bukti = j.path + '<a class="btn btn-outline-primary btn-sm pull-right fa fa-search" href="' + j.path + '"></a>'
+            bukti = j.path + '<a class="btn btn-outline-primary btn-sm pull-right fa fa-search" target="_blank" href="' + j.path + '"></a>'
         }
         var data = {
             Status: j.status,
