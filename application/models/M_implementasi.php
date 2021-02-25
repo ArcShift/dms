@@ -16,8 +16,9 @@ class M_implementasi extends CI_Model {
             $this->db->join('document d', 'd.id = t.id_document AND d.id_company = ' . $company);
             $this->db->join('pasal p', 'p.id = d.id_pasal AND p.id_standard = ' . $standard); //TODO: modiv to id standard
             if ($this->role == 'anggota') {
-                $this->db->join('penerima_tugas pt', 'pt.id_tugas = t.id');
-                $this->db->where('pt.id_personil', $this->session->user['id_personil']);
+                $this->db->join('personil_task pt', 'pt.id_tugas = t.id');
+                $this->db->join('position_personil pp', 'pp.id = pt.id_personil_task');
+                $this->db->where('pp.id_personil', $this->session->user['id_personil']);
             }
             $this->db->where($p['where'], null, false); 
             $progress[$k]['count'] = $this->db->count_all_results('jadwal j');
