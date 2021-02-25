@@ -280,10 +280,10 @@ if (empty($this->session->activeCompany)) {
                 <div class="mb-3 card div-zoom">
                     <div class="card-header-tab card-header">
                         <div class="card-header-title">
-                            <i class="header-icon lnr-rocket icon-gradient bg-tempting-azure"> </i>
+                            <!--<i class="header-icon lnr-rocket icon-gradient bg-tempting-azure"> </i>-->
                             Distribusi Dokumen dan Implementasi
                         </div>
-                        <div class="btn-actions-pane-right"></div>
+                        <!--<div class="btn-actions-pane-right"></div>-->
                     </div>
                     <div class="tab-content">
                         <div class="tab-pane fade active show">
