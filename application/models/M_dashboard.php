@@ -75,7 +75,7 @@ class M_dashboard extends CI_Model {
             $this->db->join('personil_task pt', 'pt.id_tugas = t.id');
             $this->db->join('position_personil pp', 'pp.id = pt.id_position_personil AND pp.id_unit_kerja = '.$uk['id']);
             $this->db->join('document d', 'd.id = t.id_document');
-            $this->db->join('pasal p', 'p.id = d.id_pasal');
+            $this->db->join('pasal p', 'p.id = d.id_pasal AND p.id_standard = '.$standard);
             $unitKerja[$k]['imp'] = $this->db->count_all_results('jadwal j');
         }
         return $unitKerja;
