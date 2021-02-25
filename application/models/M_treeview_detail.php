@@ -282,7 +282,9 @@ class M_treeview_detail extends CI_Model {
             $this->db->set('form_terkait', $this->input->post('form_terkait'));
         }
         if ($this->input->post('delete-id')) {//DELETE
-            //DELETE pic PELAKSANA 
+            //DELETE pic PELAKSANA
+            $this->db->where('id_tugas',$this->input->post('delete-id'));
+            $this->db->delete('jadwal');
             $this->db->where('id_tugas', $this->input->post('delete-id'));
             if ($this->db->delete('personil_task')) {
                 $this->db->where('id', $this->input->post('delete-id'));
