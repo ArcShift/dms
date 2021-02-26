@@ -374,7 +374,7 @@ if ($role == 'anggota') {
             <input class="input-id" name="id" hidden="">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Details Dokumen</h5>
+                    <h5 class="modal-title">Detail Dokumen</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -1204,11 +1204,21 @@ if ($role == 'anggota') {
                 }
                 d.indexDistribusi = [];
                 d.txtDistribusi = '';
+                if (role == 'anggota') {
+                    d.show = false
+                } else {
+                    d.show = true
+                }
                 for (var j = 0; j < d.distribution.length; j++) {
                     for (var k = 0; k < personil.length; k++) {
                         if (d.distribution[j] == personil[k].id) {
                             d.indexDistribusi.push(k);
-                            d.txtDistribusi += '<div>' + personil[k].fullname + '</div>'
+                            d.txtDistribusi += '<div>' + personil[k].fullname + '</div>';
+                            if (role == 'anggota') {
+                                if (personil[k].id_personil == idPersonil) {
+                                    d.show = true;
+                                }
+                            }
                             break;
                         }
                     }
@@ -1243,13 +1253,7 @@ if ($role == 'anggota') {
                 var btnEdit = '<span class="text-primary fa fa-edit" onclick="editDokumen(' + n + ')"></span>&nbsp';
                 var btnDelete = '<span class="text-danger fa fa-trash" onclick="initHapusDokumen(' + n + ')"></span>';
                 var show = true;
-                if (role == 'anggota') {
-                    show = false;
-                    if ($.inArray(idPersonil + '', d.personil_distribusi_id) >= 0) {
-                        show = true;
-                    }
-                }
-                if (show) {
+                if (d.show) {
                     tbDocument.row.add([
                         d.nomor,
                         d.judul,
@@ -1259,14 +1263,12 @@ if ($role == 'anggota') {
                         (d.klasifikasi == null ? '-' : d.klasifikasi),
                         (role == 'anggota' ? btnDetail : btnDetail + btnEdit + btnDelete),
                     ]);
-                }
-                $('.select-dokumen').append('<option value="' + d.id + '">' + d.judul + '</option>');
-                $('.select-2-document').append('<option value="' + d.id + '">' + d.judul + '</option>');
-                var btnDetail = '<span class="text-primary fa fa-info-circle" title="Detail" onclick="detailDistribusi(' + n + ')"></span>&nbsp';
-                var btnEdit = '<span class="text-primary fa fa-edit" title="Edit" onclick="editDistribusi(' + n + ')"></span>';
-                if (d.jenis < 4 & d.jenis >= 1) {
-                    nDoc++;
-                    if (show) {
+                    $('.select-dokumen').append('<option value="' + d.id + '">' + d.judul + '</option>');
+                    $('.select-2-document').append('<option value="' + d.id + '">' + d.judul + '</option>');
+                    var btnDetail = '<span class="text-primary fa fa-info-circle" title="Detail" onclick="detailDistribusi(' + n + ')"></span>&nbsp';
+                    var btnEdit = '<span class="text-primary fa fa-edit" title="Edit" onclick="editDistribusi(' + n + ')"></span>';
+                    if (d.jenis < 4 & d.jenis >= 1) {
+                        nDoc++;
                         tbDistribusi.row.add([
                             d.nomor,
                             d.judul,
@@ -1275,6 +1277,7 @@ if ($role == 'anggota') {
                             (role == 'anggota' ? d.txtDistribusi : d.txtDistribusi),
                             (role == 'anggota' ? btnDetail : btnDetail + btnEdit),
                         ]);
+
                     }
                 }
                 n++;
@@ -1297,14 +1300,7 @@ if ($role == 'anggota') {
                 var d = sortDokumen[i];
                 if (d.jenis < 4 & d.jenis >= 1) {
                     nDoc++;
-                    var show = true;
-                    if (role == 'anggota') {
-                        show = false;
-                        if ($.inArray(idPersonil + '', d.personil_distribusi_id) >= 0) {
-                            show = true;
-                        }
-                    }
-                    if (show) {
+                    if (d.show) {
                         tbTugas.row.add([
                             d.judul,
                             '',
@@ -1320,13 +1316,24 @@ if ($role == 'anggota') {
                         if (t.id_document == d.id) {
                             t.index_document = i;
                             sortDokumen[i].index_tugas.push(sortTugas.length);
-                            t.index_personil = [];
+                            t.indexPelaksana = [];
                             t.txt_personil = '';
+                            if (role == 'anggota') {
+                                t.show = false
+                            } else {
+                                t.show = true
+                            }
                             for (var k = 0; k < t.personil.length; k++) {
                                 for (var l = 0; l < personil.length; l++) {
                                     if (t.personil[k] == personil[l].id) {
-                                        t.index_personil.push(l);
+                                        t.indexPelaksana.push(l);
                                         t.txt_personil += '<div>' + personil[l].fullname + '</div>';
+                                        if (role == 'anggota') {
+                                            if (personil[l].id_personil == idPersonil) {
+                                                t.show = true;
+                                            }
+                                        }
+                                        break;
                                     }
                                 }
                             }
@@ -1334,13 +1341,7 @@ if ($role == 'anggota') {
                             for (var k = 0; k < sortDokumen.length; k++) {
                                 if (t.form_terkait == sortDokumen[k].id) {
                                     t.index_form_terkait = k;
-                                }
-                            }
-                            var show = true;
-                            if (role == 'anggota') {
-                                show = false;
-                                if ($.inArray(idPersonil + '', t.personil) >= 0) {
-                                    show = true;
+                                    break;
                                 }
                             }
                             var btnDetail = '<span class="text-primary fa fa-info-circle" title="Detail" onclick="detailTugas(' + sortTugas.length + ')"></span>&nbsp';
@@ -1356,7 +1357,7 @@ if ($role == 'anggota') {
                                     '',
                                 ]);
                             }
-                            if (show) {
+                            if (t.show) {
                                 var tr = tbTugas.row.add([
                                     '',
                                     t.nama,
@@ -1402,14 +1403,7 @@ if ($role == 'anggota') {
             var n = 0;
             for (var i = 0; i < sortTugas.length; i++) {
                 var t = sortTugas[i];
-                var show = true;
-                if (role == 'anggota') {
-                    show = false;
-                    if ($.inArray(idPersonil + '', t.personil) >= 0) {
-                        show = true;
-                    }
-                }
-                if (show) {
+                if (t.show) {
                     tbJadwal.row.add([
                         sortDokumen[t.index_document].judul,
                         t.nama,
