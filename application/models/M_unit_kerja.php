@@ -37,5 +37,9 @@ class M_unit_kerja extends CI_Model {
         $this->db->where('id', $this->input->post('id'));
         return $this->db->update('unit_kerja');
     }
+    function jobdesk($id) {
+        $this->db->where('id_unit_kerja', $id);
+        return $this->db->get('jobdesk')->result_array();
+    }
 
 }
