@@ -18,17 +18,6 @@ class M_treeview_detail extends CI_Model {
         return $this->db->get($this->table . ' p')->row_array();
     }
 
-//    function member() {
-//        $this->db->select('u.id, u.username, CONCAT(u.username, " - ", uk.name) AS fullname');
-////        $this->db->select('p.id, p.fullname AS name, CONCAT(p.fullname, " - ", uk.name) AS fullname');
-//        $this->db->join('personil p', 'p.id=u.id_personil');
-//        $this->db->join('unit_kerja uk', 'uk.id=p.id_unit_kerja');
-////        $this->db->join('role r', 'r.id=u.id_role AND r.name = "anggota"');
-////        $this->db->join('schedule s', 's.id_user=u.id AND m.id_pasal=' . $input['idPasal'], 'LEFT');
-//        $this->db->where('uk.id_company', $this->input->post('perusahaan'));
-//        return $this->db->get('users u')->result_array();
-//    }
-
     function personil() {
         $this->db->select('pp.id,  pp.id_personil, pp.id_unit_kerja, CONCAT(p.fullname, " - ", uk.name) AS fullname');
         $this->db->join('personil p', 'p.id=pp.id_personil');
@@ -98,6 +87,7 @@ class M_treeview_detail extends CI_Model {
                 $id_document = $this->db->insert_id();
                 if (!empty($this->input->post('pasals'))) {
                     foreach ($this->input->post('pasals') as $k => $p) {
+                        $this->setLog('create_document', $id_document);
                         $this->db->set('id_document', $id_document);
                         $this->db->set('id_pasal', $p);
                         if (!$this->db->insert('document_pasal')) {
@@ -614,5 +604,11 @@ class M_treeview_detail extends CI_Model {
         $this->pasal[$index]['pemenuhanImp'] = $pemenuhanImp;
         $this->pasal[$index]['impStatus'] = $impStatus;
     }
-
+    private function setLog($code, $target) {
+        $type = $this->db->get_where('log_type',['code'=>$code])->row_array();
+        $this->db->set('id_log_type', $type['id']);
+        $this->db->set('id_user', $this->session->user['id']);
+        $this->db->set('target', $target);
+        $this->db->insert('log');
+    }
 }

@@ -14,12 +14,14 @@
                     <?php } ?>
                 </select>
             </div>
-        </div>
-        <div class="modal-body">
             <div class="form-group">
                 <label>Nama</label>
                 <input class="form-control" name="nama" required="" placeholder="Nama">
             </div>
+<!--            <div class="form-group">
+                <label class="">Tugas</label><br>
+                <select class="form-control" name="tugas[]" id="tugas" multiple="" style="width: 100%"></select>
+            </div>-->
         </div>
         <div class="modal-footer">
             <a class="btn btn-primary" href="<?php echo site_url($module) ?>">Batal</a>
@@ -27,3 +29,9 @@
         </div>
     </form>
 </div>
+<!--<script>
+$('#tugas').select2({
+    tags: true,
+    tokenSeparators: [',', ' ']
+})
+</script>-->

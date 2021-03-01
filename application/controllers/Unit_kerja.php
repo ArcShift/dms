@@ -21,7 +21,14 @@ class Unit_kerja extends MY_Controller {
         $this->subTitle = 'Create';
         if ($this->input->post('buat')) {
             if ($this->model->create()) {
-                redirect($this->module);
+                $id = $this->db->insert_id();
+                $this->session->set_userdata('idData', $id);
+//                foreach ($this->input->post('tugas') as $v) {
+//                    $this->db->set('id_unit_kerja', $id);
+//                    $this->db->set('name', $v);
+//                    $this->db->insert('jobdesk');
+//                }
+                redirect($this->module.'/edit');
             } else {
                 //SHOW ERROR
             }
@@ -44,15 +51,15 @@ class Unit_kerja extends MY_Controller {
                     $this->session->set_flashdata('msgError', $this->db->error()['message']);
                 }
             }
-        }elseif ($this->input->post('add')){
+        } elseif ($this->input->post('add')) {
             $this->db->set('id_unit_kerja', $this->session->idData);
             $this->db->set('name', $this->input->post('tugas'));
             $this->db->insert('jobdesk');
-        }elseif ($this->input->post('editJD')){
+        } elseif ($this->input->post('editJD')) {
             $this->db->where('id', $this->input->post('id'));
             $this->db->set('name', $this->input->post('nama'));
             $this->db->update('jobdesk');
-        }elseif ($this->input->post('delete')){
+        } elseif ($this->input->post('delete')) {
             $this->db->where('id', $this->input->post('id'));
             $this->db->delete('jobdesk');
         }
