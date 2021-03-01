@@ -23,11 +23,6 @@ class Unit_kerja extends MY_Controller {
             if ($this->model->create()) {
                 $id = $this->db->insert_id();
                 $this->session->set_userdata('idData', $id);
-//                foreach ($this->input->post('tugas') as $v) {
-//                    $this->db->set('id_unit_kerja', $id);
-//                    $this->db->set('name', $v);
-//                    $this->db->insert('jobdesk');
-//                }
                 redirect($this->module.'/edit');
             } else {
                 //SHOW ERROR

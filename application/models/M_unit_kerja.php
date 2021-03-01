@@ -12,9 +12,9 @@ class M_unit_kerja extends CI_Model {
     }
 
     function read() {
-        $this->db->select('u.id, u.name, c.name AS company, COUNT(p.id) AS personil');
+        $this->db->select('u.id, u.name, c.name AS company, COUNT(pp.id) AS personil');
         $this->db->join('company c', 'u.id_company=c.id');
-        $this->db->join('personil p', 'p.id_unit_kerja=u.id', 'LEFT');
+        $this->db->join('position_personil pp', 'pp.id_unit_kerja=u.id', 'LEFT');
         if ($this->session->userdata['user']['role'] == 'pic') {
             $this->db->where('c.id', $this->session->userdata['user']['id_company']);
         }
