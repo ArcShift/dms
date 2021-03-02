@@ -535,7 +535,12 @@ class M_treeview_detail extends CI_Model {
             $this->db->set('upload_date', date('Y-m-d'));
         }
         $this->db->where('id', $this->input->post('id'));
-        return $this->db->update('jadwal');
+        $this->db->update('jadwal');
+        $this->db->join('jadwal j', 'j.id_tugas = t.id');
+        $this->db->where('j.id', $j['id']);
+        $t =$this->db->get('tugas t')->row_array();
+        $this->setLog('Upload Implementasi: '. $t['nama'] .' ['.$j['tanggal'].']');
+        return true; 
     }
 
     private $pasal = [];

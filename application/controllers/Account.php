@@ -44,9 +44,9 @@ class Account extends MY_Controller {
             $config['max_height'] = 2000;
             $this->load->library('upload', $config);
             if ($this->upload->do_upload('foto')) {
-                if($this->model->update_foto()){
+                if ($this->model->update_foto()) {
                     $this->data['msgSuccess'] = 'Foto berhasil diubah';
-                }else{
+                } else {
                     $this->data['msgError'] = $this->db->error()['message'];
                 }
             } else {
@@ -65,6 +65,10 @@ class Account extends MY_Controller {
             $this->form_validation->set_message('check_pass', '{field} tidak sama');
             return false;
         }
+    }
+
+    function notif() {
+        $this->render('notif');
     }
 
     function logout() {

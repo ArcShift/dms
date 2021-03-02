@@ -114,8 +114,8 @@ if ($this->input->get('standard')) {
                             <div class="widget-content p-0">
                                 <div class="widget-content-wrapper">
                                     <div class="widget-content-left">
-                                        <div class="btn-group">                                            
-                                            <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="p-0 btn" onclick="userMenu()">
+                                        <div class="btn-group">                                 
+                                            <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="p-0 btn">
                                                 <img width="42" class="rounded-circle" src="<?php echo empty($this->session->userdata('user')['photo']) ? base_url('assets/images/default_user.jpg') : base_url('upload/profile_photo/' . $this->session->userdata('user')['photo']) ?>" alt="">
                                                 <i class="fa fa-angle-down ml-2 opacity-8"></i>
                                             </a>
@@ -185,6 +185,7 @@ if ($this->input->get('standard')) {
                                 <li id="menu-unit_kerja">-</li>
                                 <li id="menu-personil">-</li>
                                 <li id="menu-user">-</li>
+                                <li class="app-sidebar__heading">RIWAYAT</li>
                                 <li id="menu-log">-</li>
                                 <li class="app-sidebar__heading">STANDAR</li>
                                 <li id="menu-standard">-</li>

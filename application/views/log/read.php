@@ -1,4 +1,4 @@
-<?php 
+<?php
 //print_r($log);
 ?>
 <div class="card">
@@ -13,16 +13,16 @@
             </thead>
             <tbody>
                 <?php foreach ($log as $k => $v) { ?>
-                <tr>
-                    <td><?= $v['desc']?></td>
-                    <td><?= $v['username']?></td>
-                    <td><?= $v['waktu']?></td>
-                </tr>
-                <?php }?>
+                    <tr>
+                        <td><?= $v['desc'] ?></td>
+                        <td><?= $v['fullname'] ?> [<?= $v['title'] ?>]</td>
+                        <td><?= $v['waktu'] ?></td>
+                    </tr>
+                <?php } ?>
             </tbody>
         </table>
     </div>
 </div>
 <script>
-$('.table').DataTable();
+    $('.table').DataTable();
 </script>
