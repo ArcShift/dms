@@ -25,12 +25,6 @@ class M_dashboard extends CI_Model {
         return $this->db->count_all_results('standard s');
     }
 
-    function count_user_company() {
-        $this->db->join('personil p', 'p.id = u.id_personil');
-        $this->db->join('unit_kerja uk', 'uk.id = p.id_unit_kerja AND uk.id_company = ' . $this->company);
-        return $this->db->count_all_results('users u');
-    }
-
     function company_standard($c) {
         $this->db->select('s.*');
         $this->db->join('company_standard cs', 'cs.id_standard = s.id AND cs.id_company = ' . $c);
@@ -43,18 +37,18 @@ class M_dashboard extends CI_Model {
         return $this->db->get('standard s')->row_array();
     }
 
-    function distribusiDeleted($company, $standard) {
-        $this->db->select('uk.*, COUNT(d.id) AS doc, COUNT(j.id) AS imp');
-        $this->db->join('company c', 'c.id = uk.id_company AND c.id = ' . $company);
-        $this->db->join('personil p', 'p.id_unit_kerja = uk.id', 'LEFT');
-        $this->db->join('distribusi ds', 'ds.id_personil = p.id', 'LEFT');
-        $this->db->join('document d', 'd.id = ds.id_document', 'LEFT');
-        $this->db->join('pasal ps', 'ps.id = d.id_pasal AND ps.id_standard = ' . $standard);
-        $this->db->join('tugas t', 't.id_document = d.id', 'LEFT');
-        $this->db->join('jadwal j', 'j.id_tugas = t.id', 'LEFT');
-        $this->db->group_by('uk.id');
-        return $this->db->get('unit_kerja uk')->result_array();
-    }
+//    function distribusiDeleted($company, $standard) {
+//        $this->db->select('uk.*, COUNT(d.id) AS doc, COUNT(j.id) AS imp');
+//        $this->db->join('company c', 'c.id = uk.id_company AND c.id = ' . $company);
+//        $this->db->join('personil p', 'p.id_unit_kerja = uk.id', 'LEFT');
+//        $this->db->join('distribusi ds', 'ds.id_personil = p.id', 'LEFT');
+//        $this->db->join('document d', 'd.id = ds.id_document', 'LEFT');
+//        $this->db->join('pasal ps', 'ps.id = d.id_pasal AND ps.id_standard = ' . $standard);
+//        $this->db->join('tugas t', 't.id_document = d.id', 'LEFT');
+//        $this->db->join('jadwal j', 'j.id_tugas = t.id', 'LEFT');
+//        $this->db->group_by('uk.id');
+//        return $this->db->get('unit_kerja uk')->result_array();
+//    }
 
     function distribusi2($company, $standard) {
         $unitKerja = $this->db->where('id_company', $company)->get('unit_kerja')->result_array();

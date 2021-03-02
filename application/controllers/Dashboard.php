@@ -52,9 +52,8 @@ class Dashboard extends MY_Controller {
                 $this->data['distribusi2'] = $this->model->distribusi2($company['id'], $standard['id']);
                 $this->db->where('uk.id_company', $company['id']);
                 $this->data['countUnitKerja'] = $this->db->count_all_results('unit_kerja uk');
-                $this->db->where('uk.id_company', $company['id']);
-                $this->db->join('unit_kerja uk', 'uk.id = p.id_unit_kerja');
-                $this->data['countPersonil'] = $this->db->count_all_results('personil p');
+                $this->db->where('id_company', $company['id']);
+                $this->data['countPersonil'] = $this->db->count_all_results('personil');
                 $this->data['listTugas'] = $this->model->listTugas($company['id'], $standard['id'], $periode_tugas);
             }
             $this->db->where('id_company', $company['id']);
