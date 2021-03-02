@@ -1,5 +1,5 @@
 <?php 
-print_r($log);
+//print_r($log);
 ?>
 <div class="card">
     <div class="card-body">
@@ -14,8 +14,8 @@ print_r($log);
             <tbody>
                 <?php foreach ($log as $k => $v) { ?>
                 <tr>
-                    <td></td>
-                    <td></td>
+                    <td><?= $v['desc']?></td>
+                    <td><?= $v['username']?></td>
                     <td><?= $v['waktu']?></td>
                 </tr>
                 <?php }?>
@@ -23,3 +23,6 @@ print_r($log);
         </table>
     </div>
 </div>
+<script>
+$('.table').DataTable();
+</script>

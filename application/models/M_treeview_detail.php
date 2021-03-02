@@ -74,6 +74,7 @@ class M_treeview_detail extends CI_Model {
         if ($this->input->post('id')) {
             $this->db->where('id', $this->input->post('id'));
             if ($this->db->update('document')) {
+                $this->setLog('Mengubah dokumen ' . $this->input->post('judul'));
                 if ($this->editDokumenPasal()) {
                     return $this->editDocumentTerkait();
                 } else {
@@ -87,7 +88,7 @@ class M_treeview_detail extends CI_Model {
                 $id_document = $this->db->insert_id();
                 if (!empty($this->input->post('pasals'))) {
                     foreach ($this->input->post('pasals') as $k => $p) {
-                        $this->setLog('create_document', $id_document);
+                        $this->setLog('Membuat dokumen ' . $this->input->post('judul'));
                         $this->db->set('id_document', $id_document);
                         $this->db->set('id_pasal', $p);
                         if (!$this->db->insert('document_pasal')) {
@@ -175,7 +176,7 @@ class M_treeview_detail extends CI_Model {
         $this->db->where('p.id_standard = ' . $this->input->get('standar'));
         $this->db->group_by('d.id');
         $result = $this->db->get('document d')->result_array();
-        $fields = [ 'distribution', 'dokumen_pasal', 'document_terkait'];
+        $fields = ['distribution', 'dokumen_pasal', 'document_terkait'];
         for ($i = 0; $i < count($result); $i++) {
             foreach ($fields as $f) {
                 $result[$i][$f] = explode(',', $result[$i][$f]);
@@ -216,8 +217,10 @@ class M_treeview_detail extends CI_Model {
         //Dokumen Pasal & dokumen
         $this->db->where('id_document', $id);
         if ($this->db->delete('document_pasal')) {
+            $doc = $this->db->get_where('document', ['id' => $id])->row_array();
             $this->db->where('id', $id);
-            if ($this->db->delete('document') & !empty($result['file'])) {
+            if ($this->db->delete('document')) {
+                $this->setLog('Menghapus dokumen ' . $doc['judul']);
                 unlink(FCPATH . 'upload\\dokumen\\' . $result['file']);
                 return true;
             }
@@ -273,7 +276,7 @@ class M_treeview_detail extends CI_Model {
         }
         if ($this->input->post('delete-id')) {//DELETE
             //DELETE pic PELAKSANA
-            $this->db->where('id_tugas',$this->input->post('delete-id'));
+            $this->db->where('id_tugas', $this->input->post('delete-id'));
             $this->db->delete('jadwal');
             $this->db->where('id_tugas', $this->input->post('delete-id'));
             if ($this->db->delete('personil_task')) {
@@ -546,7 +549,7 @@ class M_treeview_detail extends CI_Model {
         $this->db->join('tugas t', 't.id_document = d.id', 'LEFT');
         $this->db->join('jadwal j', 'j.id_tugas = t.id', 'LEFT');
         $this->db->where('p.id_standard', $standard);
-         $this->db->where('pa.status IS NULL');
+        $this->db->where('pa.status IS NULL');
         $this->db->or_where('pa.status', 'ENABLE');
         $this->db->order_by('p.id');
         $this->db->group_by('p.id');
@@ -604,11 +607,14 @@ class M_treeview_detail extends CI_Model {
         $this->pasal[$index]['pemenuhanImp'] = $pemenuhanImp;
         $this->pasal[$index]['impStatus'] = $impStatus;
     }
-    private function setLog($code, $target) {
-        $type = $this->db->get_where('log_type',['code'=>$code])->row_array();
-        $this->db->set('id_log_type', $type['id']);
+
+    private function setLog($desc) {
+//        $type = $this->db->get_where('log_type',['code'=>$code])->row_array();
+//        $this->db->set('id_log_type', $type['id']);
         $this->db->set('id_user', $this->session->user['id']);
-        $this->db->set('target', $target);
+//        $this->db->set('target', $target);
+        $this->db->set('desc', $desc);
         $this->db->insert('log');
     }
+
 }

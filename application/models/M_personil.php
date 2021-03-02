@@ -18,8 +18,7 @@ class M_personil extends CI_Model {
     }
 
     function read() {
-        $this->db->select('p.id, p.fullname, u.username, p.id_unit_kerja, uk.name AS unit_kerja, c.name AS company');
-        $this->db->join('unit_kerja uk', 'uk.id = p.id_unit_kerja', 'LEFT');
+        $this->db->select('p.id, p.fullname, u.username, c.name AS company');
         $this->db->join('company c', 'c.id = p.id_company', 'LEFT');
         $this->db->join('users u', 'p.id = u.id_personil', 'LEFT');
         if ($this->session->userdata('user')['role'] == 'pic') {
