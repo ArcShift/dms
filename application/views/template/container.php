@@ -1,6 +1,6 @@
 <?php
+$this->db->get('users');
 $activeCompany = $this->session->activeCompany;
-$this->db->select('s.*');
 $this->db->join('company_standard cs', 'cs.id_standard = s.id AND cs.id_company = ' . $activeCompany['id']);
 $company_standard = $this->db->get('standard s')->result_array();
 if ($this->input->get('standard')) {

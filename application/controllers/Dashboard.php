@@ -56,7 +56,6 @@ class Dashboard extends MY_Controller {
                 $this->data['countPersonil'] = $this->db->count_all_results('personil');
                 $this->data['listTugas'] = $this->model->listTugas($company['id'], $standard['id'], $periode_tugas);
             }
-            $this->db->where('id_company', $company['id']);
         }
         $this->render('read');
     }

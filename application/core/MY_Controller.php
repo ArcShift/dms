@@ -20,6 +20,8 @@ class MY_Controller extends CI_Controller {
     }
 
     protected function render($view, $includeModule = true, $blank = false) {
+        $this->load->model('m_notif', 'm_notif');
+        $this->data['notif']= $this->m_notif->count_each();
         foreach ($this->session->userdata('module') as $k => $m) {
             if ($m['name'] == $this->module) {
                 $this->activeModule = $m;
@@ -43,8 +45,6 @@ class MY_Controller extends CI_Controller {
                 break;
         }
         empty($this->access) ? $this->access = $view : null;
-        $this->load->model('M_notif', 'm_notif');
-        $this->data['notif']= $this->m_notif->count_each();
         if (empty($this->activeModule['acc_' . $this->access])) {
             $this->data['view'] = 'template/no_access';
             $this->load->view('template/container', $this->data);

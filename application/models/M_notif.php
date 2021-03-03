@@ -11,9 +11,9 @@ class M_notif extends CI_Model {
         $this->db->group_by('d.id');
         if ($count) {
             $this->db->where('ds.notif', 'UNREAD');
-            return $this->db->count_all_results('document d');
+            $this->db->from('document d');
+            return $this->db->count_all_results();
         } else {
-//            $this->db->order_by('d.judul', 'DESC');
             $this->db->order_by('ds.notif', 'DESC');
             return $this->db->get('document d')->result_array();
         }
