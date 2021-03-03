@@ -113,6 +113,24 @@ if ($this->input->get('standard')) {
                         <div class="header-btn-lg pr-0">
                             <div class="widget-content p-0">
                                 <div class="widget-content-wrapper">
+                                    <div>
+                                        <a class="nav-link fa fa-bell btn btn-outline-primary" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <?php if (!empty($notif['all'])) { ?>
+                                                <span class="text-danger"><?= $notif['all'] ?></span>
+                                            <?php } ?>
+                                        </a>
+                                        <div class="dropdown-menu">
+                                            <!--<div class="dropdown-divider"></div>-->
+                                            <a class="dropdown-item" href="<?= site_url('notif')?>">Distribusi
+                                            <?php if (!empty($notif['all'])) { ?>
+                                                <span class="badge badge-primary"><?= $notif['distribution'] ?></span>
+                                            <?php } ?>
+                                            </a>
+                                            <a class="dropdown-item" href="#">Tugas</a>
+                                            <a class="dropdown-item" href="#">Jadwal</a>
+                                            <a class="dropdown-item" href="#">Deadline</a>
+                                        </div>
+                                    </div>
                                     <div class="widget-content-left">
                                         <div class="btn-group">                                 
                                             <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="p-0 btn">
@@ -240,9 +258,9 @@ if ($this->input->get('standard')) {
                                                     </ul>
                                                 </div>
                                             <?php } ?>
-                                                <span id="company-title">
-                                                    <?= $this->session->activeCompany['name'] ?>
-                                                </span>
+                                            <span id="company-title">
+                                                <?= $this->session->activeCompany['name'] ?>
+                                            </span>
                                         <?php } else { ?>
                                             <?= empty($activeModule['title']) ? ucfirst($module) : $activeModule['title']; ?>
                                             <div class="page-title-subheading">

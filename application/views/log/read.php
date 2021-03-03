@@ -7,15 +7,17 @@
             <thead>
                 <tr>
                     <th>Nama</th>
-                    <th>User</th>
+                    <th>Role</th>
+                    <th>Aktifitas</th>
                     <th>Waktu</th>
                 </tr>
             </thead>
             <tbody>
                 <?php foreach ($log as $k => $v) { ?>
                     <tr>
+                        <td><?= $v['fullname'] ?></td>
+                        <td><?= $v['title'] ?></td>
                         <td><?= $v['desc'] ?></td>
-                        <td><?= $v['fullname'] ?> [<?= $v['title'] ?>]</td>
                         <td><?= $v['waktu'] ?></td>
                     </tr>
                 <?php } ?>

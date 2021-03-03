@@ -43,6 +43,8 @@ class MY_Controller extends CI_Controller {
                 break;
         }
         empty($this->access) ? $this->access = $view : null;
+        $this->load->model('M_notif', 'm_notif');
+        $this->data['notif']= $this->m_notif->count_each();
         if (empty($this->activeModule['acc_' . $this->access])) {
             $this->data['view'] = 'template/no_access';
             $this->load->view('template/container', $this->data);
