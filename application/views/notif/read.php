@@ -12,19 +12,25 @@
                 <div class="text-right"><small><?= $t['created_at'] ?></small></div>
             </div>
         <?php } ?>
+        <?php foreach ($jadwal as $k => $j) { ?>
+            <div class="alert alert-primary" role="alert">
+                Anda memiliki jadwal tugas baru "<?= $j['tugas'] ?>"
+                <div class="text-right"><small><?= $j['tanggal'] ?></small></div>
+            </div>
+        <?php } ?>
         <?php foreach ($deadline as $k => $d) { ?>
             <div class="alert alert-primary" role="alert">
                 Anda memiliki jadwal untuk besok pada tugas "<?= $d['tugas'] ?>"
                 <div class="text-right"><small><?= $d['tanggal'] ?></small></div>
             </div>
         <?php } ?>
-<!--        <ul class="nav nav-tabs">
-            <li class="nav-item"><a data-toggle="tab" href="#tabDistribusi" class="nav-link active">Distribusi</a></li>
-            <li class="nav-item"><a data-toggle="tab" href="#tabDistribusi" class="nav-link">Distribusi</a></li>
-            <li class="nav-item"><a data-toggle="tab" href="#tabTugas" class="nav-link">Tugas</a></li>
-            <li class="nav-item"><a data-toggle="tab" href="#tab-dokumen" class="nav-link">Jadwal</a></li>
-            <li class="nav-item"><a data-toggle="tab" href="#tab-dokumen" class="nav-link">Deadline</a></li>
-        </ul>-->
+        <!--        <ul class="nav nav-tabs">
+                    <li class="nav-item"><a data-toggle="tab" href="#tabDistribusi" class="nav-link active">Distribusi</a></li>
+                    <li class="nav-item"><a data-toggle="tab" href="#tabDistribusi" class="nav-link">Distribusi</a></li>
+                    <li class="nav-item"><a data-toggle="tab" href="#tabTugas" class="nav-link">Tugas</a></li>
+                    <li class="nav-item"><a data-toggle="tab" href="#tab-dokumen" class="nav-link">Jadwal</a></li>
+                    <li class="nav-item"><a data-toggle="tab" href="#tab-dokumen" class="nav-link">Deadline</a></li>
+                </ul>-->
         <div class="tab-content">
             <div class="tab-pane" id="tabDistribusi">
 
