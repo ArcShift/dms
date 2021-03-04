@@ -125,7 +125,7 @@ if ($this->input->get('standard')) {
                                                     <a href="<?= site_url('notif') ?>">
                                                         <div class="alert alert-primary" role="alert" style="margin-bottom: 3px ">
                                                             Anda ditambahkan pada sebagai daftar distribusi pada dokumen "<?= $d['judul'] ?>"
-                                                            <div class="text-right"><small><?= time $d['created_at'] ?></small></div>
+                                                            <div class="text-right"><small><?= $d['created_at'] ?></small></div>
                                                         </div>
                                                     </a>
                                                 <?php } ?>
