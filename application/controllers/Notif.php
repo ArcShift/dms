@@ -15,6 +15,8 @@ class Notif extends MY_Controller {
             $this->db->update('distribution');
         }
         $this->data['distribution']= $this->model->distribution();
+        $this->data['tugas']= $this->model->tugas();
+        $this->data['deadline']= $this->model->deadline();
         $this->render('read');
     }
 

@@ -114,22 +114,21 @@ if ($this->input->get('standard')) {
                             <div class="widget-content p-0">
                                 <div class="widget-content-wrapper">
                                     <div>
-                                        <a class="nav-link fa fa-bell btn btn-outline-primary" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            <?php if (!empty($notif['all'])) { ?>
-                                                <span class="text-danger"><?= $notif['all'] ?></span>
+                                        <a class="nav-link fa fa-bell btn btn-sm btn-outline-primary" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <?php if (!empty($distribution)) { ?>
+                                                <span class="text-danger"><?= count($distribution) ?></span>
                                             <?php } ?>
                                         </a>
-                                        <div class="dropdown-menu">
-                                            <!--<div class="dropdown-divider"></div>-->
-                                            <a class="dropdown-item" href="<?= site_url('notif')?>">Distribusi
-                                            <?php if (!empty($notif['all'])) { ?>
-                                                <span class="badge badge-primary"><?= $notif['distribution'] ?></span>
-                                            <?php } ?>
-                                            </a>
-                                            <a class="dropdown-item" href="#">Tugas</a>
-                                            <a class="dropdown-item" href="#">Jadwal</a>
-                                            <a class="dropdown-item" href="#">Deadline</a>
-                                        </div>
+                                        <?php if (!empty($distribution)) { ?>
+                                            <div class="dropdown-menu">
+                                                <?php foreach ($distribution as $k => $d) { ?>
+                                                    <div class="alert alert-primary" role="alert">
+                                                        Anda ditambahkan pada sebagai daftar distribusi pada dokumen "<?= $d['judul'] ?>"
+                                                        <div class="text-right"><small><?= $d['created_at'] ?></small></div>
+                                                    </div>
+                                                <?php } ?>
+                                            </div>
+                                        <?php } ?>
                                     </div>
                                     <div class="widget-content-left">
                                         <div class="btn-group">                                 

@@ -21,7 +21,7 @@ class MY_Controller extends CI_Controller {
 
     protected function render($view, $includeModule = true, $blank = false) {
         $this->load->model('m_notif', 'm_notif');
-        $this->data['notif']= $this->m_notif->count_each();
+        $this->data['notif']= $this->m_notif->distribution();
         foreach ($this->session->userdata('module') as $k => $m) {
             if ($m['name'] == $this->module) {
                 $this->activeModule = $m;

@@ -239,6 +239,10 @@ class M_treeview_detail extends CI_Model {
                 $this->db->set('id_document', $in['dokumen']);
                 $this->db->set('id_position_personil', $p);
                 if (!$this->db->insert('distribution')) {
+//                    $this->db->join
+//                            $this->db->get_where('users',[])
+//                    $penerima= 
+//                    $this->notif($penerima, $pesan, $type, $target)
                     return false;
                 }
             }
@@ -538,9 +542,9 @@ class M_treeview_detail extends CI_Model {
         $this->db->update('jadwal');
         $this->db->join('jadwal j', 'j.id_tugas = t.id');
         $this->db->where('j.id', $j['id']);
-        $t =$this->db->get('tugas t')->row_array();
-        $this->setLog('Upload Implementasi: '. $t['nama'] .' ['.$j['tanggal'].']');
-        return true; 
+        $t = $this->db->get('tugas t')->row_array();
+        $this->setLog('Upload Implementasi: ' . $t['nama'] . ' [' . $j['tanggal'] . ']');
+        return true;
     }
 
     private $pasal = [];
@@ -620,6 +624,14 @@ class M_treeview_detail extends CI_Model {
 //        $this->db->set('target', $target);
         $this->db->set('desc', $desc);
         $this->db->insert('log');
+    }
+
+    private function notif($penerima, $pesan, $type, $target) {
+        $this->db->set('penerima', $penerima);
+        $this->db->set('pesan', $pesan);
+        $this->db->set('type', $type);
+        $this->db->set('target', $target);
+        $this->db->insert('notif');
     }
 
 }
