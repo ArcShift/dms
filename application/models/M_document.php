@@ -63,9 +63,10 @@ class M_document extends CI_Model {
     }
 
     function get($id) {//detail dokumen
-        $this->db->select('d.*, u.username AS pembuat, d2.judul AS dokumen_terkait');
+        $this->db->select('d.*, p.fullname AS pembuat, d2.judul AS dokumen_terkait');
         $this->db->where('d.id', $id);
-        $this->db->join('users u', 'u.id = d.creator', 'LEFT');
+        $this->db->join('position_personil pp', 'pp.id = d.pembuat', 'LEFT');
+        $this->db->join('personil p', 'p.id = pp.id_personil', 'LEFT');
         $this->db->join($this->table . ' d2', 'd.contoh = d2.id', 'LEFT');
         return $this->db->get($this->table . ' d')->row_array();
     }

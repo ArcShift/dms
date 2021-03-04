@@ -122,10 +122,12 @@ if ($this->input->get('standard')) {
                                         <?php if (!empty($notif)) { ?>
                                             <div class="dropdown-menu">
                                                 <?php foreach ($notif as $k => $d) { ?>
-                                                    <div class="alert alert-primary" role="alert">
-                                                        Anda ditambahkan pada sebagai daftar distribusi pada dokumen "<?= $d['judul'] ?>"
-                                                        <div class="text-right"><small><?= $d['created_at'] ?></small></div>
-                                                    </div>
+                                                    <a href="<?= site_url('notif') ?>">
+                                                        <div class="alert alert-primary" role="alert" style="margin-bottom: 3px ">
+                                                            Anda ditambahkan pada sebagai daftar distribusi pada dokumen "<?= $d['judul'] ?>"
+                                                            <div class="text-right"><small><?= time $d['created_at'] ?></small></div>
+                                                        </div>
+                                                    </a>
                                                 <?php } ?>
                                             </div>
                                         <?php } ?>
