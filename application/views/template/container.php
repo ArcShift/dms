@@ -115,13 +115,13 @@ if ($this->input->get('standard')) {
                                 <div class="widget-content-wrapper">
                                     <div>
                                         <a class="nav-link fa fa-bell btn btn-sm btn-outline-primary" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            <?php if (!empty($distribution)) { ?>
-                                                <span class="text-danger"><?= count($distribution) ?></span>
+                                            <?php if (!empty($notif)) { ?>
+                                                <span class="text-danger"><?= count($notif) ?></span>
                                             <?php } ?>
                                         </a>
-                                        <?php if (!empty($distribution)) { ?>
+                                        <?php if (!empty($notif)) { ?>
                                             <div class="dropdown-menu">
-                                                <?php foreach ($distribution as $k => $d) { ?>
+                                                <?php foreach ($notif as $k => $d) { ?>
                                                     <div class="alert alert-primary" role="alert">
                                                         Anda ditambahkan pada sebagai daftar distribusi pada dokumen "<?= $d['judul'] ?>"
                                                         <div class="text-right"><small><?= $d['created_at'] ?></small></div>
