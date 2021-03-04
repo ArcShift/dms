@@ -74,8 +74,9 @@ class Dashboard extends MY_Controller {
 
     function switch_standard() {
         if ($this->input->get('standard')) {
-            $this->db->where('id', $this->input->get('standard'));
-            $activeStandard = $this->db->get('standard')->row_array();
+            $this->db->join('company_standard cs', 'cs.id_standard = s.id');
+            $this->db->where('cs.id', $this->input->get('standard'));
+            $activeStandard = $this->db->get('standard s')->row_array();
             $this->session->set_userdata('activeStandard', $activeStandard);
             echo 'success';
         }
