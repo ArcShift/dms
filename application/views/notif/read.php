@@ -2,26 +2,25 @@
     <div class="card-body">
         <?php foreach ($distribution as $k => $d) { ?>
             <div class="alert alert-primary" role="alert">
-                Anda ditambahkan pada sebagai daftar distribusi pada dokumen "<?= $d['judul'] ?>"
+                Anda telah terdaftar sebagai penerima dokumen untuk dokumen dengan judul <b><?= $d['judul'] ?></b> di standar <b><?= $d['standard'] ?></b>
                 <div class="text-right"><small><?= $d['created_at'] ?></small></div>
             </div>
         <?php } ?>
         <?php foreach ($tugas as $k => $t) { ?>
             <div class="alert alert-primary" role="alert">
-                Anda ditambahkan pada sebagai penerima tugas pada tugas "<?= $t['nama'] ?>"
+                Anda telah terdaftar sebagai pelaksana tugas untuk tugas dengan judul <b><?= $t['nama'] ?></b> di Standar <b><?= $t['standard'] ?></b>
                 <div class="text-right"><small><?= $t['created_at'] ?></small></div>
             </div>
         <?php } ?>
         <?php foreach ($jadwal as $k => $j) { ?>
             <div class="alert alert-primary" role="alert">
-                Anda memiliki jadwal tugas baru "<?= $j['tugas'] ?>"
-                <div class="text-right"><small><?= $j['tanggal'] ?></small></div>
+                Jadwal pelaksanaan tugas <b><?= $j['tugas'] ?></b> untuk standar <b><?= $j['standard'] ?></b> telah ditetapkan pada tanggal <b><?= $j['tanggal'] ?></b>
+                <div class="text-right"><small><?= $j['created_at'] ?></small></div>
             </div>
         <?php } ?>
         <?php foreach ($deadline as $k => $d) { ?>
             <div class="alert alert-primary" role="alert">
-                Anda memiliki jadwal untuk besok pada tugas "<?= $d['tugas'] ?>"
-                <div class="text-right"><small><?= $d['tanggal'] ?></small></div>
+                Besok adalah hari terakhir untuk upload bukti implementasi untuk tugas <b><?= $d['tugas'] ?></b> di standar <b><?= $d['standard'] ?></b>, pastikan untuk upload tepat waktu.
             </div>
         <?php } ?>
         <!--        <ul class="nav nav-tabs">

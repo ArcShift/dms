@@ -124,7 +124,7 @@ if ($this->input->get('standard')) {
                                                 <?php foreach ($notif as $k => $d) { ?>
                                                     <a href="<?= site_url('notif') ?>">
                                                         <div class="alert alert-primary" role="alert" style="margin-bottom: 3px ">
-                                                            Anda ditambahkan pada sebagai daftar distribusi pada dokumen "<?= $d['judul'] ?>"
+                                                            Anda telah terdaftar sebagai penerima dokumen untuk dokumen dengan judul <b><?= $d['judul'] ?></b> di standar <b><?= $d['standard'] ?></b>
                                                             <div class="text-right"><small><?= $d['created_at'] ?></small></div>
                                                         </div>
                                                     </a>
