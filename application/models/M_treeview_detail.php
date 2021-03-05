@@ -74,7 +74,7 @@ class M_treeview_detail extends CI_Model {
         if ($this->input->post('id')) {
             $this->db->where('id', $this->input->post('id'));
             if ($this->db->update('document')) {
-                $this->setLog('Mengubah dokumen ' . $this->input->post('judul'));
+                $this->setLog('U_DOC', $this->input->post('id'));
                 if ($this->editDokumenPasal()) {
                     return $this->editDocumentTerkait();
                 } else {
@@ -88,13 +88,13 @@ class M_treeview_detail extends CI_Model {
                 $id_document = $this->db->insert_id();
                 if (!empty($this->input->post('pasals'))) {
                     foreach ($this->input->post('pasals') as $k => $p) {
-                        $this->setLog('Membuat dokumen ' . $this->input->post('judul'));
                         $this->db->set('id_document', $id_document);
                         $this->db->set('id_pasal', $p);
                         if (!$this->db->insert('document_pasal')) {
                             return false;
                         }
                     }
+                    $this->setLog('C_DOC', $id_document);
                 }
             } else {
                 return false;
@@ -220,8 +220,9 @@ class M_treeview_detail extends CI_Model {
             $doc = $this->db->get_where('document', ['id' => $id])->row_array();
             $this->db->where('id', $id);
             if ($this->db->delete('document')) {
-                $this->setLog('Menghapus dokumen ' . $doc['judul']);
                 unlink(FCPATH . 'upload\\dokumen\\' . $result['file']);
+                $message = '<b>' . $this->session->user['fullname'] . '</b> telah menghapus dokumen <b>' . $doc['judul'] . '</b> di standard <b>' . $this->session->activeStandard['name'] . '</b>';
+                $this->setLog('D_DOC', null, $message);
                 return true;
             }
         }
@@ -360,8 +361,6 @@ class M_treeview_detail extends CI_Model {
             } else {
                 $result[$k]['deadline'] = false;
             }
-//            $this->db->select('SUM(CASE WHEN s.date < CURDATE() AND s.file IS NULL THEN 1 ELSE 0 END) AS terlambat'); //UNFIX
-//            $this->db->select('SUM(CASE WHEN s.file IS NOT NULL AND s.date < s.upload_date THEN 1 ELSE 0 END) AS terlambat2'); //UNFIX
             if (!empty($r['file']) & !empty($r['date']) & $r['date'] >= $r['upload_date']) {
                 $result[$k]['status'] = 'selesai';
             } else if (empty($r['upload_date']) & $r['date'] >= date('Y-m-d')) {
@@ -543,7 +542,7 @@ class M_treeview_detail extends CI_Model {
         $this->db->join('jadwal j', 'j.id_tugas = t.id');
         $this->db->where('j.id', $j['id']);
         $t = $this->db->get('tugas t')->row_array();
-        $this->setLog('Upload Implementasi: ' . $t['nama'] . ' [' . $j['tanggal'] . ']');
+        $this->setLog('U_IMP', $j['id']);
         return true;
     }
 
@@ -617,12 +616,36 @@ class M_treeview_detail extends CI_Model {
         $this->pasal[$index]['impStatus'] = $impStatus;
     }
 
-    private function setLog($desc) {
-//        $type = $this->db->get_where('log_type',['code'=>$code])->row_array();
-//        $this->db->set('id_log_type', $type['id']);
-        $this->db->set('id_user', $this->session->user['id']);
-//        $this->db->set('target', $target);
+    private function setLog($type, $target, $message = null) {
+        $desc = $message;
+        if ($type == 'C_DOC' | $type == 'U_DOC') {
+            $this->db->select('p.name, d.judul');
+            $this->db->join('document_pasal dp', 'dp.id_document = d.id');
+            $this->db->join('pasal p', 'p.id = dp.id_pasal');
+            $this->db->where('d.id', $target);
+            $result = $this->db->get('document d')->row_array();
+            if ($type == 'C_DOC') {
+                $text = 'menambahkan';
+            } else {
+                $text = 'mengubah';
+            }
+            $desc = '<b>' . $this->session->user['fullname'] . '</b> telah ' . $text . ' dokumen <b>'
+                    . $result['judul'] . '</b> pada Pasal <b>'
+                    . $result['name'] . '</b> di Standar <b>'
+                    . $this->session->activeStandard['name'] . '</b>';
+        } elseif ($type == 'U_IMP') {
+            $this->db->select('t.nama AS tugas');
+            $this->db->join('tugas t', 't.id = j.id_tugas');
+            $this->db->where('j.id', $target);
+            $result = $this->db->get('jadwal j')->row_array();
+            $desc = '<b>' . $this->session->user['fullname'] . '</b> telah menambahkan bukti implementasi pada tugas <b>'
+                    . $result['tugas'] . '</b> di Standar <b>'
+                    . $this->session->activeStandard['name'] . '</b>';
+        }
         $this->db->set('desc', $desc);
+        $this->db->set('type', $type);
+        $this->db->set('target', $target);
+        $this->db->set('id_user', $this->session->user['id']);
         $this->db->insert('log');
     }
 

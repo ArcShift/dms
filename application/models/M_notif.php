@@ -74,7 +74,6 @@ class M_notif extends CI_Model {
     }
 
     function notif2($limit) {
-
         return $this->db->query($sql)->result_array();
     }
 

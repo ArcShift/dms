@@ -18,7 +18,7 @@
                         <td><?= $v['fullname'] ?></td>
                         <td><?= $v['title'] ?></td>
                         <td><?= $v['desc'] ?></td>
-                        <td><?= $v['waktu'] ?></td>
+                        <td><?= $v['created_at'] ?></td>
                     </tr>
                 <?php } ?>
             </tbody>
