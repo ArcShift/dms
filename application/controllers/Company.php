@@ -56,6 +56,8 @@ class Company extends MY_Controller {
             $this->form_validation->set_rules('nama', 'Nama', 'required');
             if ($this->form_validation->run()) {
                 if ($this->model->update()) {
+                    $this->load->model('m_log');
+                    $this->m_log->update_company();
                     $this->session->set_flashdata('msgSuccess', 'Data berhasil diedit');
                     redirect($this->module);
                 } else {

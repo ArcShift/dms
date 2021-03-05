@@ -23,7 +23,9 @@ class Unit_kerja extends MY_Controller {
             if ($this->model->create()) {
                 $id = $this->db->insert_id();
                 $this->session->set_userdata('idData', $id);
-                redirect($this->module.'/edit');
+                $this->load->model('m_log');
+                $this->m_log->create_unit_kerja($id);
+                redirect($this->module . '/edit');
             } else {
                 //SHOW ERROR
             }

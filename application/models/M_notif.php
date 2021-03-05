@@ -81,10 +81,8 @@ class M_notif extends CI_Model {
         $now = new DateTime;
         $ago = new DateTime($datetime);
         $diff = $now->diff($ago);
-
         $diff->w = floor($diff->d / 7);
         $diff->d -= $diff->w * 7;
-
         $string = array(
             'y' => 'year',
             'm' => 'month',
@@ -101,7 +99,6 @@ class M_notif extends CI_Model {
                 unset($string[$k]);
             }
         }
-
         if (!$full)
             $string = array_slice($string, 0, 1);
         return $string ? implode(', ', $string) . ' ago' : 'just now';

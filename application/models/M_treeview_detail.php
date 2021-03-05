@@ -630,7 +630,7 @@ class M_treeview_detail extends CI_Model {
                 $text = 'mengubah';
             }
             $desc = '<b>' . $this->session->user['fullname'] . '</b> telah ' . $text . ' dokumen <b>'
-                    . $result['judul'] . '</b> pada Pasal <b>'
+                    . $result['judul'] . '</b> pada <b>'
                     . $result['name'] . '</b> di Standar <b>'
                     . $this->session->activeStandard['name'] . '</b>';
         } elseif ($type == 'U_IMP') {
