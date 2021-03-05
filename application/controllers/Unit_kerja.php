@@ -7,6 +7,7 @@ class Unit_kerja extends MY_Controller {
     function __construct() {
         parent::__construct();
         $this->load->model('m_unit_kerja', 'model');
+        $this->load->model('m_log');
         $this->data['company'] = $this->model->company();
         $this->load->library('form_validation');
     }
@@ -23,7 +24,6 @@ class Unit_kerja extends MY_Controller {
             if ($this->model->create()) {
                 $id = $this->db->insert_id();
                 $this->session->set_userdata('idData', $id);
-                $this->load->model('m_log');
                 $this->m_log->create_unit_kerja($id);
                 redirect($this->module . '/edit');
             } else {
@@ -43,6 +43,7 @@ class Unit_kerja extends MY_Controller {
             if ($this->form_validation->run()) {
                 if ($this->model->update()) {
                     $this->session->set_flashdata('msgSuccess', 'Data berhasil diedit');
+                    $this->m_log->update_unit_kerja($this->input->post('id'));
                     redirect($this->module);
                 } else {
                     $this->session->set_flashdata('msgError', $this->db->error()['message']);

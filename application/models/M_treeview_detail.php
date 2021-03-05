@@ -226,7 +226,6 @@ class M_treeview_detail extends CI_Model {
                 return true;
             }
         }
-//        }
         return false;
     }
 
