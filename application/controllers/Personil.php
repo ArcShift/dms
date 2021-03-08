@@ -7,6 +7,7 @@ class Personil extends MY_Controller {
     function __construct() {
         parent::__construct();
         $this->load->model('m_personil', 'model');
+        $this->load->model('m_log');
         $this->data['company'] = $this->model->company();
         $this->load->library('form_validation');
     }
@@ -21,7 +22,10 @@ class Personil extends MY_Controller {
         $this->subTitle = 'Create';
         if ($this->input->post('buat')) {
             if ($this->model->create()) {
-                redirect($this->module);
+                $id = $this->db->insert_id();
+                $this->m_log->create_personil($id);
+                $this->session->set_userdata('idData', $id);
+                redirect($this->module . '/edit');
             } else {
                 //SHOW ERROR
             }
@@ -39,6 +43,7 @@ class Personil extends MY_Controller {
             $this->form_validation->set_rules('fullname', 'Nama Lengkap', 'required');
             if ($this->form_validation->run()) {
                 if ($this->model->updateData()) {
+                    $this->m_log->update_personil($result['id']);
                     $this->session->set_flashdata('msgSuccess', 'Data berhasil diedit');
                     redirect($this->module);
                 } else {
@@ -62,7 +67,7 @@ class Personil extends MY_Controller {
             $this->session->set_userdata('delete', $this->input->post('initHapus'));
         } else if ($this->input->post('hapus')) {
             $data = $this->model->detail($this->session->delete);
-            foreach ($data['unit_kerja'] as $uk){
+            foreach ($data['unit_kerja'] as $uk) {
                 $this->db->set('pembuat', 'NULL', false);
                 $this->db->where('pembuat', $uk['id_position_personil']);
                 $this->db->update('document');
@@ -75,15 +80,17 @@ class Personil extends MY_Controller {
             $this->db->delete('position_personil');
             $this->db->where('id_personil', $this->input->post('id'));
             $this->db->delete('users');
+            $result = $this->db->get_where('personil', ['id' => $this->input->post('id')])->row_array();
+            $message = '<b>' . $this->session->user['fullname'] . '</b> menghapus data personil <b>' . $result['fullname'] . '</b> pada perusahaan <b>' . $this->session->activeCompany['name'] . '</b>';
             $this->db->where('id', $this->input->post('id'));
             if ($this->db->delete('personil')) {
+                $this->m_log->delete_personil($message);
                 $this->session->set_flashdata('msgSuccess', 'Data berhasil dihapus');
                 redirect($this->module);
             }
         }
         $id = $this->session->delete;
         $this->data['data'] = $this->model->detail($id);
-
         $this->render('delete');
     }
 

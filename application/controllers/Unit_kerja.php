@@ -72,8 +72,25 @@ class Unit_kerja extends MY_Controller {
     }
 
     function delete() {
-        $config['table'] = 'unit_kerja';
-        parent::hapus($config);
+        if ($this->input->post('initHapus')) {
+            $this->session->set_userdata('delete', $this->input->post('initHapus'));
+        }
+        if (isset($this->session->delete)) {
+            $data = $this->db->get_where('unit_kerja', ['id' => $this->session->delete])->row_array();
+            $this->data['data']= $data;
+            if ($this->input->post('id')) {
+                $this->db->where('id', $this->input->post('id'));
+                if ($this->db->delete('unit_kerja')) {
+                    $message = '<b>'. $this->session->user['fullname'] . '</b> menghapus data unit kerja <b>' . $data['name'] . '</b> pada perusahaan <b>' . $this->session->activeCompany['name'].'</b>';
+                    $this->m_log->delete_unit_kerja($message);
+                    $this->session->set_flashdata('msgSuccess', 'Data berhasil dihapus');
+                    redirect($this->module);
+                }
+            }
+            $this->render('delete');
+        } else {
+            redirect($this->module);
+        }
     }
 
 }

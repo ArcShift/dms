@@ -37,4 +37,35 @@ class M_log extends CI_Model {
         $this->db->insert('log');
     }
 
+    function delete_unit_kerja($message) {
+        $this->db->set('desc', $message);
+        $this->db->set('type', 'D_UK');
+        $this->db->set('id_user', $this->session->user['id']);
+        $this->db->insert('log');
+    }
+
+    function create_personil($id) {
+        $result = $this->db->get_where('personil', ['id' => $id])->row_array();
+        $this->db->set('desc', '<b>' . $this->session->user['fullname'] . '</b> menambahkan data personil <b>' . $result['fullname'] . '</b> pada perusahaan <b>' . $this->session->activeCompany['name'] . '</b>');
+        $this->db->set('type', 'C_PRS');
+        $this->db->set('target', $id);
+        $this->db->set('id_user', $this->session->user['id']);
+        $this->db->insert('log');
+    }
+
+    function update_personil($id) {
+        $result = $this->db->get_where('personil', ['id' => $id])->row_array();
+        $this->db->set('desc', '<b>' . $this->session->user['fullname'] . '</b> mengubah data personil <b>' . $result['fullname'] . '</b> pada perusahaan <b>' . $this->session->activeCompany['name'] . '</b>');
+        $this->db->set('type', 'U_PRS');
+        $this->db->set('target', $id);
+        $this->db->set('id_user', $this->session->user['id']);
+        $this->db->insert('log');
+    }
+    function delete_personil($message) {
+        $this->db->set('desc', $message);
+        $this->db->set('type', 'D_UK');
+        $this->db->set('id_user', $this->session->user['id']);
+        $this->db->insert('log');
+    }
+
 }
