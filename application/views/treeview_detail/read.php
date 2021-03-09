@@ -954,7 +954,7 @@ if ($role == 'anggota') {
     });
     function afterReady() {
         perusahaan = <?= $this->session->activeCompany['id'] ?>;
-        standar = <?= $this->session->activeStandard['id'] ?>;
+        standar = <?= $this->session->activeStandard['id_standard'] ?>;
         $.post('<?php echo site_url($module); ?>/unit_kerja', {'perusahaan': perusahaan}, function (data) {
             unitKerja = JSON.parse(data);
             $('.select-unit-kerja').empty();
