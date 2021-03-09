@@ -9,6 +9,7 @@ class Notif extends MY_Controller {
     }
     
     function index() {
+        $this->data['notif2']= $this->model->notif2(10); 
         if($this->input->post('read_dist')){
             $this->db->set('notif', 'READ');
             $this->db->where('id', $this->input->post('read_dist'));

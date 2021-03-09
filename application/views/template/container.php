@@ -107,54 +107,45 @@ if ($this->input->get('standard')) {
                                     <?php echo $this->config->item('app_name') ?>
                                 </a>
                             </li>
-                        </ul>        
+                        </ul>    
                     </div>
                     <div class="app-header-right">
                         <div class="header-btn-lg pr-0">
                             <div class="widget-content p-0">
                                 <div class="widget-content-wrapper">
+                                    <a href="<?php echo site_url('account') ?>" class="nav-link font-weight-normal text-dark">
+                                        <img width="42" class="rounded-circle" style="" src="<?php echo empty($this->session->userdata('user')['photo']) ? base_url('assets/images/default_user.jpg') : base_url('upload/profile_photo/' . $this->session->userdata('user')['photo']) ?>" alt="">
+                                        <div>
+                                            <?= $this->session->userdata('user')['fullname'] . ' - ' . $this->session->userdata('user')['title'] ?>
+                                        </div>
+                                    </a>
+                                    &nbsp;&nbsp;&nbsp;
                                     <div>
-                                        <a class="nav-link fa fa-bell btn btn-sm btn-outline-primary" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <a class="nav-link fa fa-bell text-dark" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            Notifikasi
                                             <?php if (!empty($notif)) { ?>
-                                                <span class="text-danger"><?= count($notif) ?></span>
+                                                <span class="text-danger"><?= count($notif) == 10 ? '+9' : count($notif) ?></span>
                                             <?php } ?>
                                         </a>
                                         <?php if (!empty($notif)) { ?>
                                             <div class="dropdown-menu">
-                                                <?php foreach ($notif as $k => $d) { ?>
-                                                    <a href="<?= site_url('notif') ?>">
-                                                        <div class="alert alert-primary" role="alert" style="margin-bottom: 3px ">
-                                                            Anda telah terdaftar sebagai penerima dokumen untuk dokumen dengan judul <b><?= $d['judul'] ?></b> di standar <b><?= $d['standard'] ?></b>
-                                                            <div class="text-right"><small><?= $d['created_at'] ?></small></div>
+                                                <?php foreach ($notif as $k => $n) { ?>
+                                                    <?php if ($k < 3) { ?>
+                                                        <div class="alert alert-primary" role="alert" style="margin-bottom: 3px; width: 350px">
+                                                            <?= $n['message'] ?>
+                                                            <div class="text-right"><small><?= $n['ago'] ?></small></div>
                                                         </div>
-                                                    </a>
+                                                    <?php } ?>
                                                 <?php } ?>
+                                                <a class="btn btn-sm btn-outline-primary form-control" href="<?= site_url('notif') ?>">Tampilkan lebih banyak</a>
                                             </div>
                                         <?php } ?>
                                     </div>
-                                    <div class="widget-content-left">
-                                        <div class="btn-group">                                 
-                                            <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="p-0 btn">
-                                                <img width="42" class="rounded-circle" src="<?php echo empty($this->session->userdata('user')['photo']) ? base_url('assets/images/default_user.jpg') : base_url('upload/profile_photo/' . $this->session->userdata('user')['photo']) ?>" alt="">
-                                                <i class="fa fa-angle-down ml-2 opacity-8"></i>
-                                            </a>
-                                            <div tabindex="-1" role="menu" aria-hidden="false" class="dropdown-menu dropdown-menu-right">
-                                                <a href="<?php echo site_url('account') ?>" class="dropdown-item">Akun</a>
-                                                <!--<button type="button" tabindex="0" class="dropdown-item">Settings</button>-->
-                                                <!--<h6 tabindex="-1" class="dropdown-header">Header</h6>-->
-                                                <!--<button type="button" tabindex="0" class="dropdown-item">Actions</button>-->
-                                                <div class="dropdown-divider"></div>
-                                                <a href="<?php echo site_url('account/logout') ?>" class="dropdown-item">Logout</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="widget-content-left  ml-3 header-user-info">
-                                        <div class="widget-heading">
-                                            <?php echo $this->session->userdata('user')['username'] ?>
-                                        </div>
-                                        <div class="widget-subheading">
-                                            <?php echo $this->session->userdata('user')['title'] ?>                                            
-                                        </div>
+                                    &nbsp;&nbsp;&nbsp;
+                                    <div >
+                                        <a href="<?php echo site_url('account/logout') ?>" class="nav-link fa fa-sign-out-alt text-dark">
+                                            Logout
+                                        </a>
                                     </div>
                                 </div>
                             </div>
@@ -194,7 +185,7 @@ if ($this->input->get('standard')) {
                             </button>
                         </span>
                     </div>
-                    <div class="scrollbar-sidebar">
+                    <div class="scrollbar-sidebar overflow-auto">
                         <div class="app-sidebar__inner">
                             <ul class="vertical-nav-menu">
                                 <li class="app-sidebar__heading">DASHBOARDS</li>
