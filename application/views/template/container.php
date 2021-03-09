@@ -115,13 +115,14 @@ if ($this->input->get('standard')) {
                                 <div class="widget-content-wrapper">
                                     <a href="<?php echo site_url('account') ?>" class="nav-link font-weight-normal text-dark">
                                         <img width="42" class="rounded-circle" style="" src="<?php echo empty($this->session->userdata('user')['photo']) ? base_url('assets/images/default_user.jpg') : base_url('upload/profile_photo/' . $this->session->userdata('user')['photo']) ?>" alt="">
+                                        &nbsp;
                                         <div>
                                             <?= $this->session->userdata('user')['fullname'] . ' - ' . $this->session->userdata('user')['title'] ?>
                                         </div>
                                     </a>
                                     &nbsp;&nbsp;&nbsp;
-                                    <div>
                                         <a class="nav-link fa fa-bell text-dark" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            &nbsp;
                                             Notifikasi
                                             <?php if (!empty($notif)) { ?>
                                                 <span class="text-danger"><?= count($notif) == 10 ? '+9' : count($notif) ?></span>
@@ -140,16 +141,18 @@ if ($this->input->get('standard')) {
                                                 <a class="btn btn-sm btn-outline-primary form-control" href="<?= site_url('notif') ?>">Tampilkan lebih banyak</a>
                                             </div>
                                         <?php } ?>
-                                    </div>
                                     &nbsp;&nbsp;&nbsp;
                                     <div >
                                         <a href="<?php echo site_url('account/logout') ?>" class="nav-link fa fa-sign-out-alt text-dark">
+                                            &nbsp;
+                                            <span>
                                             Logout
+                                            </span>
                                         </a>
                                     </div>
                                 </div>
                             </div>
-                        </div> 
+                        </div>
                     </div>
                 </div>
             </div>
