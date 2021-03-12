@@ -19,7 +19,11 @@ class M_unit_kerja extends CI_Model {
             $this->db->where('c.id', $this->session->userdata['user']['id_company']);
         }
         $this->db->group_by('u.id');
-        return $this->db->get($this->table . ' u')->result_array();
+        $result = $this->db->get($this->table . ' u')->result_array();
+        foreach ($result as $k => $v) {
+            $result[$k]['jobdesk']= $this->db->get_where('jobdesk',['id_unit_kerja'=>$v['id']])->result_array();
+        }
+        return $result;
     }
 
     function create() {
@@ -32,11 +36,13 @@ class M_unit_kerja extends CI_Model {
         $this->db->where('id', $id);
         return $this->db->get($this->table)->row_array();
     }
+
     function update() {
         $this->db->set('name', $this->input->post('nama'));
         $this->db->where('id', $this->input->post('id'));
         return $this->db->update('unit_kerja');
     }
+
     function jobdesk($id) {
         $this->db->where('id_unit_kerja', $id);
         return $this->db->get('jobdesk')->result_array();

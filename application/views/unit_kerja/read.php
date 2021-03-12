@@ -11,7 +11,7 @@
                     <tr>
                         <th>No</th>
                         <th>Unit Kerja</th>
-                        <th>Perusahaan</th>
+                        <th>Tugas</th>
                         <th class="text-center">Jumlah Personil</th>
                         <th>Aksi</th>
                     </tr>
@@ -21,7 +21,12 @@
                         <tr>
                             <td><?php echo $k + 1 ?></td>
                             <td><?php echo $d['name'] ?></td>
-                            <td><?php echo $d['company'] ?></td>
+                            <td>
+                                <?php foreach ($d['jobdesk'] as $jd) { ?>
+                                    <div><?= $jd['name'] ?></div>
+                                <?php } ?>
+                                <?php // echo $d['company'] ?>
+                            </td>
                             <td class="text-center"><span class="badge badge-<?= $d['personil'] == 0 ? 'danger' : 'info' ?>"><?php echo $d['personil'] ?></span></td>
                             <td>
                                 <?php if ($activeModule['acc_update']) { ?>
