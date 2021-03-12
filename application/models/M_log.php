@@ -8,6 +8,11 @@ class M_log extends CI_Model {
         $this->db->join('role r', 'r.id = u.id_role');
         $this->db->join('personil p', 'p.id = u.id_personil', 'LEFT');
         $this->db->order_by('l.created_at', 'DESC');
+        if($this->session->user['role']=='anggota'){
+            $this->db->where('u.id', $this->session->user['id']);
+        }else if($this->session->user['role']=='pic'){
+            $this->db->where('p.id_company', $this->session->activeCompany['id']);
+        }
         return $this->db->get('log l')->result_array();
     }
 

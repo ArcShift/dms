@@ -26,5 +26,7 @@
     </div>
 </div>
 <script>
-    $('.table').DataTable();
+    $('.table').DataTable({
+        "order": [[ 3, "desc" ]];
+    });
 </script>

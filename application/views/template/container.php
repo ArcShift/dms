@@ -122,32 +122,32 @@ if ($this->input->get('standard')) {
                                         </div>
                                     </a>
                                     &nbsp;&nbsp;&nbsp;
-                                        <a class="nav-link fa fa-bell text-dark" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            &nbsp;
-                                            Notifikasi
-                                            <?php if (!empty($notif)) { ?>
-                                                <span class="text-danger"><?= count($notif) == 10 ? '+9' : count($notif) ?></span>
-                                            <?php } ?>
-                                        </a>
+                                    <a class="nav-link fa fa-bell text-dark" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        &nbsp;
+                                        Notifikasi
                                         <?php if (!empty($notif)) { ?>
-                                            <div class="dropdown-menu">
-                                                <?php foreach ($notif as $k => $n) { ?>
-                                                    <?php if ($k < 3) { ?>
-                                                        <div class="alert alert-primary" role="alert" style="margin-bottom: 3px; width: 350px">
-                                                            <?= $n['message'] ?>
-                                                            <div class="text-right"><small><?= $n['ago'] ?></small></div>
-                                                        </div>
-                                                    <?php } ?>
-                                                <?php } ?>
-                                                <a class="btn btn-sm btn-outline-primary form-control" href="<?= site_url('notif') ?>">Tampilkan lebih banyak</a>
-                                            </div>
+                                            <span class="text-danger"><?= count($notif) == 10 ? '+9' : count($notif) ?></span>
                                         <?php } ?>
+                                    </a>
+                                    <?php if (!empty($notif)) { ?>
+                                        <div class="dropdown-menu">
+                                            <?php foreach ($notif as $k => $n) { ?>
+                                                <?php if ($k < 3) { ?>
+                                                    <div class="alert alert-primary" role="alert" style="margin-bottom: 3px; width: 350px">
+                                                        <?= $n['message'] ?>
+                                                        <div class="text-right"><small><?= $n['ago'] ?></small></div>
+                                                    </div>
+                                                <?php } ?>
+                                            <?php } ?>
+                                            <a class="btn btn-sm btn-outline-primary form-control" href="<?= site_url('notif') ?>">Tampilkan lebih banyak</a>
+                                        </div>
+                                    <?php } ?>
                                     &nbsp;&nbsp;&nbsp;
                                     <div >
                                         <a href="<?php echo site_url('account/logout') ?>" class="nav-link fa fa-sign-out-alt text-dark">
                                             &nbsp;
                                             <span>
-                                            Logout
+                                                Logout
                                             </span>
                                         </a>
                                     </div>
@@ -199,8 +199,6 @@ if ($this->input->get('standard')) {
                                 <li id="menu-unit_kerja">-</li>
                                 <li id="menu-personil">-</li>
                                 <li id="menu-user">-</li>
-                                <li class="app-sidebar__heading">RIWAYAT</li>
-                                <li id="menu-log">-</li>
                                 <li class="app-sidebar__heading">STANDAR</li>
                                 <li id="menu-standard">-</li>
                                 <li id="menu-company_standard">-</li>
@@ -208,6 +206,8 @@ if ($this->input->get('standard')) {
                                 <li id="menu-management_hope">-</li>
                                 <li id="menu-treeview_detail">-</li>
                                 <li id="menu-document_search">-</li>
+                                <li class="app-sidebar__heading">RIWAYAT</li>
+                                <li id="menu-log">-</li>
                                 <?php foreach ($this->session->userdata('module') as $key => $m) { ?>
                                     <?php if ($m['on_menu'] == 'YES' & $m['acc_read']) { ?>
                                         <li id="module-<?php echo $m['name'] ?>" class="menu-item">
