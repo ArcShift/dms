@@ -18,7 +18,7 @@ class M_log extends CI_Model {
             foreach ($result as $k => $v) {
                 $pos = strpos($v['desc'], ' pada perusahaan');
                 if($pos !== false){
-//                    $result[$k]['desc'] = substr($v['desc'],0, $pos);
+                    $result[$k]['desc'] = substr($v['desc'],0, $pos);
                 }
             }
         }
