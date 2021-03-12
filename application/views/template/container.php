@@ -1,4 +1,5 @@
 <?php
+//echo $x
 $this->db->get('users');
 $activeCompany = $this->session->activeCompany;
 $this->db->join('company_standard cs', 'cs.id_standard = s.id AND cs.id_company = ' . $activeCompany['id']);
