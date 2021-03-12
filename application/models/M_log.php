@@ -13,7 +13,16 @@ class M_log extends CI_Model {
         }else if($this->session->user['role']=='pic'){
             $this->db->where('p.id_company', $this->session->activeCompany['id']);
         }
-        return $this->db->get('log l')->result_array();
+        $result = $this->db->get('log l')->result_array();
+        if($this->session->user['role']!='admin'){
+            foreach ($result as $k => $v) {
+                $pos = strpos($v['desc'], ' pada perusahaan');
+                if($pos !== false){
+//                    $result[$k]['desc'] = substr($v['desc'],0, $pos);
+                }
+            }
+        }
+        return $result;
     }
 
     function update_company() {
