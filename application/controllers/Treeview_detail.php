@@ -18,7 +18,7 @@ class Treeview_detail extends MY_Controller {
     function index() {
         $this->load->model('m_company');
         $this->data['company'] = $this->m_company->get();
-        $this->data['menuStandard']= 'standard';
+        $this->data['menuStandard'] = 'standard';
         $this->render('read');
     }
 
@@ -132,6 +132,26 @@ class Treeview_detail extends MY_Controller {
         echo json_encode($result);
     }
 
+    function tugas2() {
+        if ($this->input->post('delete-id')) {//hapus tugas
+            if ($this->model->tugas_delete($this->input->post('delete-id'))) {
+                $result['status'] = 'success';
+                $result['message'] = 'Berhasil menghapus data';
+            } else {
+                $result['status'] = 'error';
+                $result['message'] = $this->db->error()['message'];
+            }
+        } else {
+            if ($this->model->tugas()) {
+                $result['status'] = 'success';                
+            } else {
+                $result['status'] = 'error';
+                $result['message'] = $this->db->error()['message'];
+            }
+        }
+        echo json_encode($result);
+    }
+
     function get_jadwal() {
         $this->ajax_request();
         echo json_encode($this->model->getJadwal());
@@ -210,30 +230,32 @@ class Treeview_detail extends MY_Controller {
         }
         echo json_encode($status);
     }
+
     function get_pemenuhan() {
-        echo json_encode($this->model->getPemenuhan($this->input->get('company'),$this->input->get('standard')));
+        echo json_encode($this->model->getPemenuhan($this->input->get('company'), $this->input->get('standard')));
     }
+
     function get_pemenuhan_test() {
         $result = $this->model->getPemenuhan($this->input->get('company'), $this->input->get('standard'));
         echo '<table border="1"><thead><tr>'
-            . '<td>Index</td>'
-            . '<td>sortIndex</td>'
-            . '<td>Pasal</td>'
-            . '<td>child</td>'
-            . '<td>indexParent</td>'
-            . '<td>indexChild</td>'
-            . '<td>Doc</td>'
-            . '<td>pemenuhan Doc</td>'
-            . '<td>listDoc</td>'
-            . '<td>tugas</td>'
-            . '<td>Jadwal</td>'
-            . '<td>Jadwals</td>'
-            . '<td>Jadwal OK</td>'
+        . '<td>Index</td>'
+        . '<td>sortIndex</td>'
+        . '<td>Pasal</td>'
+        . '<td>child</td>'
+        . '<td>indexParent</td>'
+        . '<td>indexChild</td>'
+        . '<td>Doc</td>'
+        . '<td>pemenuhan Doc</td>'
+        . '<td>listDoc</td>'
+        . '<td>tugas</td>'
+        . '<td>Jadwal</td>'
+        . '<td>Jadwals</td>'
+        . '<td>Jadwal OK</td>'
         . '</tr></thead><tbody>';
         foreach ($result as $k => $r) {
             echo '<tr>'
-            . '<td>' .$k. '</td>'
-            . '<td>' .$r['sort_index']. '</td>'
+            . '<td>' . $k . '</td>'
+            . '<td>' . $r['sort_index'] . '</td>'
             . '<td>' . $r['name'] . '</td>'
             . '<td>' . $r['child'] . '</td>'
             . '<td>' . $r['indexParent'] . '</td>'

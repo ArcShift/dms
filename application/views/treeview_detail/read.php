@@ -1778,7 +1778,7 @@ if ($role == 'anggota') {
     }
     $('#formTugas').on("submit", function (e) {
         e.preventDefault();
-        post(this, 'tugas');
+        post(this, 'tugas2');
     });
     function detailTugas(index) {
         var t = sortTugas[index];
@@ -1855,7 +1855,11 @@ if ($role == 'anggota') {
                     data = JSON.parse(data);
                     if (data.status == 'success') {
                         getPasal();
-                        $('#modalNotif .modal-message').html('Data Berhasil Disimpan');
+                        if (data.message) {
+                            $('#modalNotif .modal-message').html(data.message);
+                        } else {
+                            $('#modalNotif .modal-message').html('Data Berhasil Disimpan');
+                        }
                         $('#modalNotif .modal-title').text('Success');
                     } else if (data.status === 'error') {
                         $('#modalNotif .modal-title').text('Error');

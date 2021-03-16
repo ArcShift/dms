@@ -285,20 +285,10 @@ class M_treeview_detail extends CI_Model {
         if ($this->input->post('form_terkait')) {
             $this->db->set('form_terkait', $this->input->post('form_terkait'));
         }
-        if ($this->input->post('delete-id')) {//DELETE
-            //DELETE pic PELAKSANA
-            $this->db->where('id_tugas', $this->input->post('delete-id'));
-            $this->db->delete('jadwal');
-            $this->db->where('id_tugas', $this->input->post('delete-id'));
-            if ($this->db->delete('personil_task')) {
-                $this->db->where('id', $this->input->post('delete-id'));
-                return $this->db->delete('tugas');
-            }
-            return false;
-        } else if ($this->input->post('id')) {//UPDATE
+        if ($this->input->post('id')) {//UPDATE
             $this->db->where('id', $this->input->post('id'));
             if ($this->db->update('tugas')) {
-                return $this->editPenerima();
+                return $this->editPenerima($this->input->post('id'));
             } else {
                 return false;
             }
@@ -306,23 +296,47 @@ class M_treeview_detail extends CI_Model {
             if ($this->db->insert('tugas')) {
                 $id_tugas = $this->db->insert_id();
                 if (!empty($this->input->post('penerima'))) {
-                    foreach ($this->input->post('penerima') as $p) {
-                        $this->db->set('id_tugas', $id_tugas);
-                        $this->db->set('id_position_personil', $p);
-                        if (!$this->db->insert('personil_task')) {
-                            return false;
-                        }
-                    }
+                    return $this->editPenerima($id_tugas);
+
+//                    foreach ($this->input->post('penerima') as $p) {
+//                        $this->db->set('id_tugas', $id_tugas);
+//                        $this->db->set('id_position_personil', $p);
+//                        if ($this->db->insert('personil_task')) {
+//                            $this->db->select('t.nama AS tugas, s.name AS standard');
+//                            $this->db->join('document d', 'd.id = t.id_document');
+//                            $this->db->join('document_pasal dp', 'dp.id_document = d.id');
+//                            $this->db->join('pasal p', 'p.id = dp.id_pasal');
+//                            $this->db->join('standard s', 's.id = p.id_standard');
+//                            $this->db->where('t.id', $id_tugas);
+//                            $r = $this->db->get('tugas t')->row_array();
+//                            $msg = "Anda telah terdaftar sebagai pelaksana tugas untuk tugas dengan judul <b>" . $r['tugas'] . "</b> di Standar <b>" . $r['standard'] . "</b>";
+//                            return parent::notif_mail($penerima, 'DMS', $msg);
+//                        } else {
+//                            return false;
+//                        }
+//                    }
+                }else{
+                    return false;
                 }
-                return true;
             } else {
                 return false;
             }
         }
     }
 
-    private function editPenerima() {
-        $id_tugas = $this->input->post('id');
+    function tugas_delete($id) {
+        //DELETE pelaksana & jadwal
+        $this->db->where('id_tugas', $id);
+        $this->db->delete('jadwal');
+        $this->db->where('id_tugas', $id);
+        if ($this->db->delete('personil_task')) {
+            $this->db->where('id', $id);
+            return $this->db->delete('tugas');
+        }
+        return false;
+    }
+
+    private function editPenerima($id_tugas) {
         if (!empty($this->input->post('penerima'))) {
             $input = $this->input->post('penerima');
             $this->db->where('id_tugas', $id_tugas);

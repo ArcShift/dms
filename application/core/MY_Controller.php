@@ -16,12 +16,13 @@ class MY_Controller extends CI_Controller {
             redirect('login');
         }
         $this->load->model("base_model", "b_model");
+        $this->load->model("m_setting", "m_setting");
         $this->role = $this->session->userdata['user']['role'];
     }
 
     protected function render($view, $includeModule = true, $blank = false) {
         $this->load->model('m_notif', 'm_notif');
-        $this->data['notif']= $this->m_notif->notif2(10);
+        $this->data['notif'] = $this->m_notif->notif2(10);
         foreach ($this->session->userdata('module') as $k => $m) {
             if ($m['name'] == $this->module) {
                 $this->activeModule = $m;
@@ -33,7 +34,7 @@ class MY_Controller extends CI_Controller {
         $this->data['role'] = $this->role;
         if (isset($this->data['menuStandard'])) {
             if (empty($this->session->user['id_company'])) {
-                $this->data['companies']= $this->db->get('company')->result_array();
+                $this->data['companies'] = $this->db->get('company')->result_array();
             }
         }
         switch ($view) {
@@ -61,6 +62,7 @@ class MY_Controller extends CI_Controller {
             }
         }
     }
+
     function hapus($config) {
         if ($this->input->post('initHapus')) {
             $config['id'] = $this->input->post('initHapus');
@@ -84,6 +86,33 @@ class MY_Controller extends CI_Controller {
         $this->access = 'delete';
         $this->render('template/delete', FALSE);
     }
-    
+
+    function notif_mail($penerima, $judul, $message) {
+        // load from setting
+        $config['protocol'] = 'smtp';
+        $config['smtp_host'] = 'ssl://smtp.gmail.com';
+        $config['smtp_port'] = '465';
+        $config['smtp_timeout'] = '7';
+        $config['smtp_user'] = 'knightarcher1@gmail.com';
+        $config['smtp_pass'] = '3ep5c98Hyys3NmF';
+        $config['charset'] = 'utf-8';
+        $config['newline'] = "\r\n";
+        $config['mailtype'] = 'text'; // or html
+        $config['validation'] = TRUE; // bool whether to validate email or not 
+        $this->load->library('email');
+        $this->email->initialize($config);
+        $this->email->from('darkwarrior0236@gmail.com', 'DMS Delta');
+//        $this->email->to($penerima);
+        $this->email->to('ma.kaafi@yahoo.co.id');
+        $this->email->subject($judul);
+        $this->email->message($message);
+        $this->email->send();
+        if (empty($this->email->print_debugger())) {
+            die('debug');
+            return true;
+        } else {
+            return $this->email->print_debugger();
+        }
+    }
 
 }
