@@ -13,12 +13,13 @@ class Account extends MY_Controller {
     function index() {
         $this->subTitle = 'Detail';
         if ($this->input->post('edit')) {
-            $result = $this->model->detail($this->input->post('edit'));
-            if ($this->input->post('nama') == $result['name']) {
-                $this->form_validation->set_rules('nama', 'Nama', 'required|is_unique[user.username]');
+            $result = $this->model->detail($this->session->user['id']);
+            if ($this->input->post('username') != $result['username']) {
+                $this->form_validation->set_rules('username', 'Username', 'required|is_unique[users.username]');
             }
-            $this->form_validation->set_rules('namaLengkap', 'Nama Lengkap', 'required');
-            if ($this->form_validation->run() == FALSE) {
+            $this->form_validation->set_rules('email', 'E-Mail', 'valid_email');
+//            $this->form_validation->set_rules('namaLengkap', 'Nama Lengkap', 'required');
+            if ($this->form_validation->run() != FALSE) {
                 if ($this->model->edit()) {
                     $this->data['msgSuccess'] = 'Data berhasil diubah';
                 } else {

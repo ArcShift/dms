@@ -230,6 +230,7 @@ class M_treeview_detail extends CI_Model {
     }
 
     function insert_distribusi() {
+        $this->load->library('dms');
         $in = $this->input->post();
         foreach ($in['dist'] as $p) {
             $this->db->where('id_document', $in['dokumen']);
@@ -239,11 +240,17 @@ class M_treeview_detail extends CI_Model {
                 $this->db->set('id_document', $in['dokumen']);
                 $this->db->set('id_position_personil', $p);
                 if (!$this->db->insert('distribution')) {
-//                    $this->db->join
-//                            $this->db->get_where('users',[])
-//                    $penerima= 
-//                    $this->notif($penerima, $pesan, $type, $target)
                     return false;
+                } else {
+                    $this->db->select('u.*');
+                    $this->db->join('personil p', 'p.id = u.id_personil');
+                    $this->db->join('position_personil pp', 'pp.id_personil = p.id');
+                    $this->db->where('pp.id', $p);
+                    $user = $this->db->get('users u');
+                    if (!empty($user['email'])) {
+                        $doc = $this->db->get_where('document', ['id' => $in['dokumen']]);
+                        $this->dms->notif_mail($user['email'], 'DMS', 'Anda ditambahkan ke daftar distribusi pada dokumen ' . $doc['judul']);
+                    }
                 }
             }
         }
