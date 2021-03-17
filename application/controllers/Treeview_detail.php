@@ -156,7 +156,7 @@ class Treeview_detail extends MY_Controller {
                     $r = $this->db->get('tugas t')->row_array();
                     $msg = "Anda telah terdaftar sebagai pelaksana tugas untuk tugas dengan judul <b>" . $r['tugas'] . "</b> di Standar <b>" . $r['standard'] . "</b>";
                     $statusEmail = parent::notif_mail($personil['email'], $personil['fullname'] . ' menerima tugas', $msg);
-                    if (!empty($statusEmail)) {
+                    if ($statusEmail!==true) {
                         $result['status'] = 'error';
                         $result['message'] = 'Gagal mengirim notifikasi email';
                         $result['message2'] = $statusEmail;

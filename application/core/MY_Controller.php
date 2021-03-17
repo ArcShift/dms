@@ -107,7 +107,7 @@ class MY_Controller extends CI_Controller {
         $this->email->subject($judul);
         $this->email->message($message);
         $this->email->send();
-        if (empty($this->email->print_debugger())) {
+        if (strlen($this->email->print_debugger()) < 20) {
             return true;
         } else {
             return $this->email->print_debugger();
