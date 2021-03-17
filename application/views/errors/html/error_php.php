@@ -2,7 +2,7 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-            <title>CodePen - 500 Error - Broken #CodePenChallenge</title>
+            <title>Monev - 500 Error</title>
             <meta name="viewport" content="width=device-width, initial-scale=1"/>
             <style>
                 @import url("https://fonts.googleapis.com/css?family=Nunito:400,700");
