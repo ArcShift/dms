@@ -74,7 +74,6 @@ class M_notif extends CI_Model {
     }
 
     function notif2($limit = null) {
-        return array();//TODO: FIX ERROR GROUP
         $id = $this->session->user['id'];
         $sql = "(SELECT d.id, d.judul AS `name`, `ds`.`created_at` AS time, `s`.`name` AS `standard`, 'DIS' AS type, NULL AS more FROM `document` `d` JOIN `pasal` `ps` ON `ps`.`id` = `d`.`id_pasal` JOIN `standard` `s` ON `s`.`id` = `ps`.`id_standard` JOIN `distribution` `ds` ON `ds`.`id_document` = `d`.`id` JOIN `position_personil` `pp` ON `pp`.`id` = `ds`.`id_position_personil` JOIN `personil` `p` ON `p`.`id` = `pp`.`id_personil` JOIN `users` `u` ON `u`.`id_personil` = `p`.`id` AND `u`.`id` = " . $id . " GROUP BY `d`.`id` ORDER BY `ds`.`notif` DESC)UNION";
         $sql .= "(SELECT t.id, `t`.`nama` AS name, `pt`.`created_at` AS time, `s`.`name` AS `standard`, 'TGS' AS type, NULL AS more FROM `tugas` `t` JOIN `document` `d` ON `d`.`id` = `t`.`id_document` JOIN `pasal` `ps` ON `ps`.`id` = `d`.`id_pasal` JOIN `standard` `s` ON `s`.`id` = `ps`.`id_standard` JOIN `personil_task` `pt` ON `pt`.`id_tugas` = `t`.`id` JOIN `position_personil` `pp` ON `pp`.`id` = `pt`.`id_position_personil` JOIN `personil` `p` ON `p`.`id` = `pp`.`id_personil` JOIN `users` `u` ON `u`.`id_personil` = `p`.`id` AND `u`.`id` = " . $id . ")UNION";
