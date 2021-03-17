@@ -108,7 +108,6 @@ class MY_Controller extends CI_Controller {
         $this->email->message($message);
         $this->email->send();
         if (empty($this->email->print_debugger())) {
-            die('debug');
             return true;
         } else {
             return $this->email->print_debugger();
