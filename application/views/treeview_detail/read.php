@@ -1840,7 +1840,8 @@ if ($role == 'anggota') {
     }
     function post(form, url) {
         $('.modal').modal('hide');
-        $('#modalNotif .modal-title').text('Menyimpan data...');
+        $('#modalNotif .modal-title').text('Menyimpan data');
+        $('#modalNotif .modal-message').html('loading....');
         $('#modalNotif').modal('show');
         $.ajax({
             url: '<?php echo site_url($module . '/') ?>' + url,

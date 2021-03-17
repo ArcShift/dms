@@ -133,21 +133,31 @@ class Treeview_detail extends MY_Controller {
     }
 
     function tugas2() {
+        $result['status'] = 'success';
         if ($this->input->post('delete-id')) {//hapus tugas
             if ($this->model->tugas_delete($this->input->post('delete-id'))) {
-                $result['status'] = 'success';
                 $result['message'] = 'Berhasil menghapus data';
-            } else {
-                $result['status'] = 'error';
-                $result['message'] = $this->db->error()['message'];
             }
         } else {
-            if ($this->model->tugas()) {
-                $result['status'] = 'success';                
-            } else {
-                $result['status'] = 'error';
-                $result['message'] = $this->db->error()['message'];
+            $id_tugas = $this->model->tugas();
+            $penerima = $this->model->editPenerima($id_tugas);
+            foreach ($penerima as $p) {
+                $this->db->join('position_personil pp', 'pp.id_personil = p.id AND pp.id = ' . $p);
+                $this->db->join('users u', 'u.id_personil = p.id AND pp.id = ' . $p, 'LEFT');
+                $personil = $this->db->get('personil p')->row_array();
+                if (!empty($personil['email'])) {//cek apakah user memiliki email
+                    $this->db->select('t.nama AS tugas, s.name AS standard');
+                            $this->db->join('document d', 'd.id = t.id_document');
+                            $this->db->join('document_pasal dp', 'dp.id_document = d.id');
+                            $this->db->join('pasal p', 'p.id = dp.id_pasal');
+                            $this->db->join('standard s', 's.id = p.id_standard');
+                            $this->db->where('t.id', $id_tugas);
+                            $r = $this->db->get('tugas t')->row_array();
+                            $msg = "Anda telah terdaftar sebagai pelaksana tugas untuk tugas dengan judul <b>" . $r['tugas'] . "</b> di Standar <b>" . $r['standard'] . "</b>";                            
+                    parent::notif_mail($personil['email'], $personil['fullname'] . ' menerima tugas', $msg);
+                }
             }
+            $result['message'] = 'berhasil';
         }
         echo json_encode($result);
     }

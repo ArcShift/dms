@@ -97,13 +97,13 @@ class MY_Controller extends CI_Controller {
         $config['smtp_pass'] = '3ep5c98Hyys3NmF';
         $config['charset'] = 'utf-8';
         $config['newline'] = "\r\n";
-        $config['mailtype'] = 'text'; // or html
+        $config['mailtype'] = 'html'; //text or html
         $config['validation'] = TRUE; // bool whether to validate email or not 
         $this->load->library('email');
         $this->email->initialize($config);
         $this->email->from('darkwarrior0236@gmail.com', 'DMS Delta');
 //        $this->email->to($penerima);
-        $this->email->to('ma.kaafi@yahoo.co.id');
+        $this->email->to($penerima);
         $this->email->subject($judul);
         $this->email->message($message);
         $this->email->send();
