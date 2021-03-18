@@ -16,7 +16,7 @@ class MY_Controller extends CI_Controller {
             redirect('login');
         }
         $this->load->model("base_model", "b_model");
-        $this->load->model("m_setting", "m_setting");
+        $this->load->model("m_setting");
         $this->role = $this->session->userdata['user']['role'];
     }
 
@@ -90,18 +90,19 @@ class MY_Controller extends CI_Controller {
     function notif_mail($penerima, $judul, $message) {
         // load from setting
         $config['protocol'] = 'smtp';
-        $config['smtp_host'] = 'ssl://smtp.gmail.com';
+        $config['smtp_host'] = $this->m_setting->get('smtp_host');
         $config['smtp_port'] = '465';
         $config['smtp_timeout'] = '7';
-        $config['smtp_user'] = 'knightarcher1@gmail.com';
-        $config['smtp_pass'] = '3ep5c98Hyys3NmF';
+        $config['smtp_user'] = $this->m_setting->get('smtp_user');
+        $config['smtp_pass'] = $this->m_setting->get('smtp_pass');
         $config['charset'] = 'utf-8';
         $config['newline'] = "\r\n";
         $config['mailtype'] = 'html'; //text or html
         $config['validation'] = TRUE; // bool whether to validate email or not 
         $this->load->library('email');
         $this->email->initialize($config);
-        $this->email->from('darkwarrior0236@gmail.com', 'DMS Delta');
+//        $this->email->from('darkwarrior0236@gmail.com', 'DMS Delta');
+        $this->email->from($this->m_setting->get('smtp_user'), 'DMS Delta');
 //        $this->email->to($penerima);
         $this->email->to($penerima);
         $this->email->subject($judul);
