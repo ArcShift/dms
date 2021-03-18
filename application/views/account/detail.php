@@ -1,12 +1,40 @@
 <?= validation_errors(); ?>
-<div class="row"> 
-    <div class="col-sm-6">
-        <div class="card">
-            <form method="post">
-                <div class="card-header">
-                    <h6>Ubah Data</h6>
+<div class="card">
+    <form method="post">
+        <div class="card-header">
+            <h6>Ubah Data</h6>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label>Role</label>
+                        <br>
+                        <span class="badge badge-secondary"><?= $data['role'] ?></span>
+                    </div>
+                    <?php if ($this->session->user['role'] != 'admin') { ?>
+                        <div class="form-group">
+                            <label>Unit Kerja</label>
+                            <br>
+                            <?php foreach ($data['unit_kerja'] as $uk) { ?>
+                                <span class="badge badge-secondary"><?= $uk['name'] ?></span>
+                            <?php } ?>
+                        </div>
+                        <div class="form-group">
+                            <label>Tugas Unit</label>
+                            <br>
+                            <?php foreach ($data['jobdesk'] as $j) { ?>
+                                <span class="badge badge-secondary"><?= $j['name'] ?></span>
+                            <?php } ?>
+                        </div>
+                        <div class="form-group">
+                            <label>Perusahaan</label>
+                            <br>
+                            <label><b><?= $data['perusahaan'] ?></b></label>
+                        </div>
+                    <?php } ?>
                 </div>
-                <div class="card-body">
+                <div class="col-sm-6">
                     <div class="form-group">
                         <label>Username</label>
                         <input class="form-control <?= form_error('username') != "" ? "is-invalid" : "" ?>" name="username" placeholder="Username" required="" value="<?= $data['username'] ?>">
@@ -14,12 +42,7 @@
                             <?= form_error('username'); ?>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label>Role</label>
-                        <br>
-                        <span class="badge badge-secondary"><?= $data['role'] ?></span>
-                    </div>
-                    <?php if ($data['id_role'] == 2 | $data['id_role'] == 4) { ?>
+                    <?php if ($this->session->user['role'] != 'admin') { ?>
                         <div class="form-group">
                             <label>Email</label>
                             <input class="form-control <?= form_error('email') != "" ? "is-invalid" : "" ?>" name="email" placeholder="user@site.com" value="<?= $data['email'] ?>">
@@ -31,52 +54,18 @@
                             <label>Personil</label>
                             <input class="form-control" value="<?php echo $data['fullname'] ?>" disabled="">
                         </div>
-                        <div class="form-group">
-                            <label>Unit Kerja</label>
-                            <br>
-                            <?php foreach ($data['unit_kerja'] as $uk) { ?>
-                                <span class="badge badge-secondary"><?= $uk['name'] ?></span>
-                            <?php } ?>
-                        </div>
-                        <div class="form-group">
-                            <label>Perusahaan</label>
-                            <input class="form-control" value="<?php echo $data['perusahaan'] ?>" disabled="">
-                        </div>
                     <?php } ?>
                 </div>
-                <div class="d-block card-footer text-right">
-                    <button class="btn btn-primary" name="edit" value="ok">Simpan</button>
-                </div>
-            </form>
+            </div>
         </div>
-        <div class="card d-none">
-            <form method="post">
-                <div class="card-body">
-                    <div class="form-group">
-                        <label>Username</label>
-                        <input class="form-control <?php echo form_error('name') != "" ? "is-invalid" : "" ?>" name="name" placeholder="Username" required="" value="<?php echo $data['username'] ?>">
-                        <div class="error invalid-feedback">
-                            <?php echo form_error('name'); ?>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label>Nama Lengkap</label> 
-                        <input class="form-control <?php echo form_error('namaLengkap') != "" ? "is-invalid" : "" ?>" name="namaLengkap" placeholder="Nama lengkap" required="" value="<?php echo $data['fullname'] ?>">
-                        <div class="error invalid-feedback">
-                            <?php echo form_error('name'); ?>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label>Role</label>
-                        <input class="form-control"  disabled="" value="<?php echo $data['role'] ?>">
-                    </div>
-                </div>
-                <div class="d-block card-footer text-right">
-                    <button class="btn btn-primary" name="edit" value="ok">Simpan</button>
-                </div>
-            </form>
+        <div class="d-block card-footer text-right">
+            <button class="btn btn-primary" name="edit" value="ok">Simpan</button>
         </div>
-        <br/>
+    </form>
+</div>
+<br/>
+<div class="row"> 
+    <div class="col-sm-6">
         <div class="card">
             <form method="post" enctype="multipart/form-data">
                 <div class="card-header">

@@ -14,6 +14,10 @@ class M_account extends CI_Model {
         if (!empty($data['id_personil'])) {
             $this->db->join('position_personil pp', 'pp.id_unit_kerja = uk.id AND pp.id_personil = ' . $data['id_personil']);
             $data['unit_kerja'] = $this->db->get('unit_kerja uk')->result_array();
+            $this->db->select('j.*');
+            $this->db->join('unit_kerja uk', 'uk.id = j.id_unit_kerja');
+            $this->db->join('position_personil pp', 'pp.id_unit_kerja = uk.id AND pp.id_personil = ' . $data['id_personil']);
+            $data['jobdesk'] = $this->db->get('jobdesk j')->result_array();
         }
         return $data;
     }
