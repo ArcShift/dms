@@ -107,7 +107,7 @@ class Treeview_detail extends MY_Controller {
         $result['message'] = 'Berhasil';
         foreach ($penerima as $p) {
             $this->db->join('position_personil pp', 'pp.id_personil = p.id AND pp.id = ' . $p);
-            $this->db->join('users u', 'u.id_personil = p.id AND pp.id = ' . $p, 'LEFT');
+            $this->db->join('users u', 'u.id_personil = p.id', 'LEFT');
             $personil = $this->db->get('personil p')->row_array();
             if (!empty($personil['email'])) {//cek apakah user memiliki email
                 $this->db->select('d.judul AS document, s.name AS standard');
@@ -163,7 +163,7 @@ class Treeview_detail extends MY_Controller {
             $result['message'] = 'Berhasil';
             foreach ($penerima as $p) {
                 $this->db->join('position_personil pp', 'pp.id_personil = p.id AND pp.id = ' . $p);
-                $this->db->join('users u', 'u.id_personil = p.id AND pp.id = ' . $p, 'LEFT');
+                $this->db->join('users u', 'u.id_personil = p.id', 'LEFT');
                 $personil = $this->db->get('personil p')->row_array();
                 if (!empty($personil['email'])) {//cek apakah user memiliki email
                     $this->db->select('t.nama AS tugas, s.name AS standard');
@@ -198,10 +198,33 @@ class Treeview_detail extends MY_Controller {
 
     function set_jadwal() {
         $this->ajax_request();
-        if ($this->model->insertSchedule()) {
-            $result['status'] = 'success';
-        } else {
-            $result['status'] = 'error';
+        $this->model->insertSchedule();
+        $result['status'] = 'success';
+        $id_tugas = $this->input->post('id-tugas');
+        $this->db->select('p.fullname, u.email');
+        $this->db->join('position_personil pp', 'pp.id_personil = p.id');
+        $this->db->join('personil_task pt', 'pt.id_position_personil = pp.id');
+        $this->db->join('tugas t', 't.id = pt.id_tugas');
+        $this->db->join('users u', 'u.id_personil = p.id');
+        $this->db->where('t.id', $id_tugas);
+        $personil = $this->db->get('personil p')->result_array();
+        $this->db->select('t.nama AS tugas, s.name AS standard');
+        $this->db->join('document d', 'd.id = t.id_document');
+        $this->db->join('document_pasal dp', 'dp.id_document = d.id');
+        $this->db->join('pasal p', 'p.id = dp.id_pasal');
+        $this->db->join('standard s', 's.id = p.id_standard');
+        $t = $this->db->get('tugas t')->row_array();
+        foreach ($personil as $p) {
+            if (!empty($p['email'])) {//cek apakah user memiliki email
+                $msg = "Jadwal pelaksanaan tugas " . $t['tugas'] . " untuk standar " . $t['standard'] . " telah ditetapkan pada tanggal ".$this->input->post('tanggal')[0];
+                $statusEmail = parent::notif_mail($p['email'], $p['fullname'] . ' menerima tugas', $msg);
+                if ($statusEmail !== true) {
+                    $result['status'] = 'error';
+                    $result['message'] = 'Gagal mengirim notifikasi email';
+                    $result['message2'] = $statusEmail;
+                    break;
+                }
+            }
         }
         echo json_encode($result);
     }
