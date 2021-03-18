@@ -1750,10 +1750,11 @@ if ($role == 'anggota') {
     });
     $('#formDistribusi').submit(function (e) {
         e.preventDefault();
-        $.post('<?php echo site_url($module); ?>/set_distribusi', $(this).serialize(), function (data) {
-            $('#modalDistribusi').modal('hide');
-            getPasal();
-        });
+        post(this, 'set_distribusi');
+//        $.post('<?php // echo site_url($module); ?>/set_distribusi', $(this).serialize(), function (data) {
+//            $('#modalDistribusi').modal('hide');
+//            getPasal();
+//        });
     });
     function deleteUserDistribusi(id) {
         //TODO: check child: upload_bukti

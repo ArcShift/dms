@@ -102,11 +102,30 @@ class Treeview_detail extends MY_Controller {
 
     function set_distribusi() {
         $this->ajax_request();
-        if ($this->model->insert_distribusi()) {
-            echo 'success';
-        } else {
-            echo 'error';
+        $penerima = $this->model->EditDistribusi();
+        $result['status'] = 'success';
+        $result['message'] = 'Berhasil';
+        foreach ($penerima as $p) {
+            $this->db->join('position_personil pp', 'pp.id_personil = p.id AND pp.id = ' . $p);
+            $this->db->join('users u', 'u.id_personil = p.id AND pp.id = ' . $p, 'LEFT');
+            $personil = $this->db->get('personil p')->row_array();
+            if (!empty($personil['email'])) {//cek apakah user memiliki email
+                $this->db->select('d.judul AS document, s.name AS standard');
+                $this->db->join('document_pasal dp', 'dp.id_document = d.id');
+                $this->db->join('pasal p', 'p.id = dp.id_pasal');
+                $this->db->join('standard s', 's.id = p.id_standard');
+                $this->db->where('d.id', $this->input->post('dokumen'));
+                $r = $this->db->get('document d')->row_array();
+                $msg = "Anda telah terdaftar sebagai penerima dokumen untuk dokumen dengan judul " . $r['document'] . " di standar " . $r['standard'];
+                $statusEmail = parent::notif_mail($personil['email'], 'Distribusi Dokumen', $msg);
+                if ($statusEmail !== true) {
+                    $result['status'] = 'error';
+                    $result['message'] = 'Gagal mengirim notifikasi email';
+                    $result['message2'] = $statusEmail;
+                }
+            }
         }
+        echo json_encode($result);
     }
 
     function delete_distribusi() {
@@ -156,7 +175,7 @@ class Treeview_detail extends MY_Controller {
                     $r = $this->db->get('tugas t')->row_array();
                     $msg = "Anda telah terdaftar sebagai pelaksana tugas untuk tugas dengan judul <b>" . $r['tugas'] . "</b> di Standar <b>" . $r['standard'] . "</b>";
                     $statusEmail = parent::notif_mail($personil['email'], $personil['fullname'] . ' menerima tugas', $msg);
-                    if ($statusEmail!==true) {
+                    if ($statusEmail !== true) {
                         $result['status'] = 'error';
                         $result['message'] = 'Gagal mengirim notifikasi email';
                         $result['message2'] = $statusEmail;
