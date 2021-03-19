@@ -1,11 +1,10 @@
-<?php// echo "Server Time: " . date("Y-m-d h:i:sa"); ?>
 <div class="card">
     <div class="card-body">
-            <?php foreach ($notif2 as $k => $n) { ?>
+        <?php foreach ($notif2 as $k => $n) { ?>
             <div class="alert alert-primary" role="alert">
-    <?= $n['message'] ?>
+                <?= $n['message'] ?>
                 <div class="text-right"><small><?= $n['ago'] ?></small></div>
             </div>
-<?php } ?>
+        <?php } ?>
     </div>
 </div>
