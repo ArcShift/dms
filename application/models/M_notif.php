@@ -109,6 +109,7 @@ class M_notif extends CI_Model {
 
     private function time_elapsed_string($datetime, $full = false) {
         $now = new DateTime;
+        $now->add(new DateInterval('PT6H'));//todo fix timezone
         $ago = new DateTime($datetime);
         $diff = $now->diff($ago);
         $diff->w = floor($diff->d / 7);
