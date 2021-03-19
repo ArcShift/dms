@@ -38,6 +38,11 @@ class M_document extends CI_Model {
                     $this->db->where('pds.id', $cr[1]);
                 }
             }
+            if($this->session->user['role']=='anggota'){
+                $this->db->join('position_personil ppds', 'ppds.id = ds.id_position_personil');
+                $this->db->join('personil pds', 'pds.id = ppds.id_personil');
+                $this->db->join('users uds', 'uds.id_personil = pds.id AND uds.id = '.$this->session->user['id']);
+            }
         }
         if ($this->input->get('standar')) {
             $this->db->where('s.id', $this->input->get('standar'));
@@ -72,10 +77,13 @@ class M_document extends CI_Model {
     }
 
     function standar() {
-        $this->db->select('s.id, s.name');
-        $this->db->join('pasal p', 's.id = p.id_standard');
-        $this->db->join($this->table . ' d', 'd.id_pasal = p.id');
-        $this->db->group_by('s.id');
+//        $this->db->select('s.id, s.name');
+//        $this->db->join('pasal p', 's.id = p.id_standard');
+//        $this->db->join($this->table . ' d', 'd.id_pasal = p.id');
+//        $this->db->group_by('s.id');
+        if($this->session->user['id_company']){
+            $this->db->join('company_standard cs', 'cs.id_standard = s.id AND cs.id_company=' . $this->session->user['id_company']);
+        }
         return $this->db->get('standard s')->result_array();
     }
 
