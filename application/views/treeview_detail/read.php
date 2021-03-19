@@ -1270,6 +1270,7 @@ if ($role == 'anggota') {
                                 var btnDetail = '<span class="text-primary fa fa-info-circle" title="Detail" onclick="detailTugas(' + sortTugas.length + ')"></span>&nbsp';
                                 var btnEdit = '<span class="text-primary fa fa-edit" title="Edit" onclick="initEditTugas(' + sortTugas.length + ')"></span>&nbsp';
                                 var btnHapus = '<span class="text-danger fa fa-trash" title="Hapus" onclick="initDeleteTugas(' + sortTugas.length + ')"></span>';
+                                if (t.show) {
                                 if (nTgs == 3) {
                                     tbTugas.row.add([
                                         '',
@@ -1280,7 +1281,6 @@ if ($role == 'anggota') {
                                         '',
                                     ]);
                                 }
-                                if (t.show) {
                                     var tr = tbTugas.row.add([
                                         '',
                                         t.nama,
