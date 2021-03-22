@@ -21,11 +21,10 @@ class Personil extends MY_Controller {
     function create() {
         $this->subTitle = 'Create';
         if ($this->input->post('buat')) {
-            if ($this->model->create()) {
-                $id = $this->db->insert_id();
+            if ($id = $this->model->create()) {
                 $this->m_log->create_personil($id);
                 $this->session->set_userdata('idData', $id);
-                redirect($this->module . '/edit');
+                redirect($this->module);
             } else {
                 //SHOW ERROR
             }

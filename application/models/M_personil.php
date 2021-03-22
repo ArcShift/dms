@@ -36,7 +36,14 @@ class M_personil extends CI_Model {
     function create() {
         $this->db->set('fullname', $this->input->post('nama'));
         $this->db->set('id_company', $this->input->post('perusahaan'));
-        return $this->db->insert($this->table);
+        $this->db->insert($this->table);
+        $id = $this->db->insert_id();
+        foreach ($this->input->post('unit_kerja') as $v) {
+            $this->db->set('id_unit_kerja', $v);
+            $this->db->set('id_personil', $id);
+            $this->db->insert('position_personil');
+        }
+        return $id;
     }
 
     function updateData() {
