@@ -50,12 +50,12 @@
     function afterReady() {
         $('.data-table').DataTable({
             destroy: true,
-            "columnDefs": [
-                {
-                    "targets": [2],
-                    "visible": false
-                }
-            ],
+//            "columnDefs": [
+//                {
+//                    "targets": [2],
+//                    "visible": false
+//                }
+//            ],
             initComplete: function () {
                 console.log(this.api().columns());
                 this.api().columns().every(function () {
