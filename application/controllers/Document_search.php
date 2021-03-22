@@ -24,9 +24,11 @@ class Document_search extends MY_Controller {
         $this->access = 'read';
         $this->render('detail');
     }
+
     function personil() {
         $this->db->personil();
     }
+
     function company() {//AJAX
 //        $data = $this->model->creator($this->input->get('id'));
         $data = $this->model->personil($this->input->get('id'));

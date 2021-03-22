@@ -56,24 +56,26 @@
                     "visible": false
                 }
             ],
-            initComplete: function () {
-                console.log(this.api().columns());
-                this.api().columns().every(function () {
-                    var column = this;
-                    if (column[0][0] == 2) {
-                        console.log();
-                        var select = $('<select style="width:50%; margin-left:10px" class="form-control form-control-sm pull-right"><option value="">-- Perusahaan --</option></select>')
-                                .prependTo($('.dataTables_filter'))
-                                .on('change', function () {
-                                    var val = $.fn.dataTable.util.escapeRegex($(this).val());
-                                    column.search(val ? '^' + val + '$' : '', true, false).draw();
-                                });
-                        column.data().unique().sort().each(function (d, j) {
-                            select.append('<option value="' + d + '">' + d + '</option>');
-                        });
-                    }
-                });
-            }
+<?php if (empty($this->session->user['id_company'])) { ?>
+                initComplete: function () {
+                    console.log(this.api().columns());
+                    this.api().columns().every(function () {
+                        var column = this;
+                        if (column[0][0] == 2) {
+                            console.log();
+                            var select = $('<select id="pilihPerusahaan" style="width:50%; margin-left:10px" class="form-control form-control-sm pull-right"><option value="">-- Perusahaan --</option></select>')
+                                    .prependTo($('.dataTables_filter'))
+                                    .on('change', function () {
+                                        var val = $.fn.dataTable.util.escapeRegex($(this).val());
+                                        column.search(val ? '^' + val + '$' : '', true, false).draw();
+                                    });
+                            column.data().unique().sort().each(function (d, j) {
+                                select.append('<option value="' + d + '">' + d + '</option>');
+                            });
+                        }
+                    });
+                }
+<?php } ?>
         });
     }
 </script>
