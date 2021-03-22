@@ -208,6 +208,8 @@ if ($this->input->get('standard')) {
                                 <li id="menu-document_search">-</li>
                                 <li class="app-sidebar__heading">RIWAYAT</li>
                                 <li id="menu-log">-</li>
+                                <li class="app-sidebar__heading">PENGATURAN</li>
+                                <li id="menu-pengaturan">-</li>
                                 <?php foreach ($this->session->userdata('module') as $key => $m) { ?>
                                     <?php if ($m['on_menu'] == 'YES' & $m['acc_read']) { ?>
                                         <li id="module-<?php echo $m['name'] ?>" class="menu-item">

@@ -1,3 +1,7 @@
+<div style="display: none">
+    <?= date('Y m d h:i:s a', time()) . '<br>' ?>
+</div>
+<?php // echo gmdate("Y m d h:i:s a", time()); ?>
 <div class="card">
     <div class="card-body">
         <?php foreach ($notif2 as $k => $n) { ?>

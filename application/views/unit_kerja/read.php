@@ -11,6 +11,7 @@
                     <tr>
                         <th>No</th>
                         <th>Unit Kerja</th>
+                        <th>Perusahaan</th>
                         <th>Tugas</th>
                         <th class="text-center">Jumlah Personil</th>
                         <th>Aksi</th>
@@ -21,11 +22,11 @@
                         <tr>
                             <td><?php echo $k + 1 ?></td>
                             <td><?php echo $d['name'] ?></td>
+                            <td><?= $d['company'] ?></td>
                             <td>
                                 <?php foreach ($d['jobdesk'] as $jd) { ?>
                                     <div><?= $jd['name'] ?></div>
                                 <?php } ?>
-                                <?php // echo $d['company'] ?>
                             </td>
                             <td class="text-center"><span class="badge badge-<?= $d['personil'] == 0 ? 'danger' : 'info' ?>"><?php echo $d['personil'] ?></span></td>
                             <td>
@@ -49,6 +50,12 @@
     function afterReady() {
         $('.data-table').DataTable({
             destroy: true,
+            "columnDefs": [
+                {
+                    "targets": [2],
+                    "visible": false
+                }
+            ],
             initComplete: function () {
                 console.log(this.api().columns());
                 this.api().columns().every(function () {

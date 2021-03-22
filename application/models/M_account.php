@@ -5,7 +5,7 @@ class M_account extends CI_Model {
     private $table = 'users';
 
     function get() {
-        $this->db->select('u.username, u.email, p.fullname, u.photo, r.title AS role, u.id_role, c.name AS perusahaan, u.id_personil');
+        $this->db->select('u.username, u.email, u.notif_email, p.fullname, u.photo, r.title AS role, u.id_role, c.name AS perusahaan, u.id_personil');
         $this->db->where('u.id', $this->session->userdata('user')['id']);
         $this->db->join('role r', 'r.id=u.id_role');
         $this->db->join('personil p', 'p.id=u.id_personil', 'LEFT');
@@ -25,6 +25,7 @@ class M_account extends CI_Model {
     function edit() {
         $this->db->set('username', $this->input->post('username'));
         $this->db->set('email', $this->input->post('email'));
+        $this->db->set('notif_email', $this->input->post('notif_email'));
 //        $this->db->set('fullname', $this->input->post('namaLengkap'));
         $this->db->where('id', $this->session->user['id']);
         return $this->db->update($this->table);

@@ -18,6 +18,7 @@ class MY_Controller extends CI_Controller {
         $this->load->model("base_model", "b_model");
         $this->load->model("m_setting");
         $this->role = $this->session->userdata['user']['role'];
+        date_default_timezone_set('Asia/Jakarta');
     }
 
     protected function render($view, $includeModule = true, $blank = false) {
