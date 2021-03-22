@@ -26,7 +26,14 @@
     </div>
 </div>
 <script>
-    $('.table').DataTable({
-        "order": [[ 3, "desc" ]];
+//    $(document).ready(function () {
+//        $('.table').DataTable({
+//            order: [[4, "desc"]] //error
+//        });
+//    });
+    $(document).ready(function () {
+        $('.table').DataTable({
+            "order": [[3, "desc"]]
+        });
     });
 </script>

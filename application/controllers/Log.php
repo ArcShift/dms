@@ -21,7 +21,6 @@ class Log extends MY_Controller {
     }
 
     function index() {
-        $this->data['menuStandard'] = true;
         $this->data['log'] = $this->model->get();
         $this->render('read');
     }
