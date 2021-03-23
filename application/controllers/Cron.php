@@ -4,7 +4,7 @@ class Cron extends CI_Controller {
 
     function index() {
         //query
-        $this->db->select('t.nama AS tugas, s.name AS standard, u.email');
+        $this->db->select('u.id, t.nama AS tugas, s.name AS standard, u.email, j.id AS id_jadwal, u.notif_email');
         $this->db->join('tugas t', 't.id = j.id_tugas');
         $this->db->join('document d', 'd.id = t.id_document');
         $this->db->join('pasal ps', 'ps.id = d.id_pasal');
@@ -17,6 +17,7 @@ class Cron extends CI_Controller {
         $data = $this->db->get('jadwal j')->result_array();
         //config mail
         $this->load->model('m_setting');
+        $this->load->model('m_notif');
         $judul = 'Cron';
         $message = 'Test Cron Job';
         $config['protocol'] = 'smtp';
@@ -32,15 +33,17 @@ class Cron extends CI_Controller {
         $this->load->library('email');
         $this->email->initialize($config);
         foreach ($data as $k => $v) {
-            if (!empty($v['email'])) {
-                $msg = "Besok adalah hari terakhir untuk upload bukti implementasi untuk tugas <b>".$v['tugas']."</b> di standar ".$v['standard'].", pastikan untuk upload tepat waktu";
+                $msg = "Besok adalah hari terakhir untuk upload bukti implementasi untuk tugas <b>" . $v['tugas'] . "</b> di standar <b>" . $v['standard'] . "</b>, pastikan untuk upload tepat waktu";
+            if (!empty($v['email']) & $v['notif_email'] === 'ENABLE') {
                 $this->email->from($this->m_setting->get('smtp_user'), 'DMS Delta');
                 $this->email->to($v['email']);
                 $this->email->subject('Deadline');
                 $this->email->message($msg);
                 $this->email->send();
             }
+            $this->m_notif->set($v['id'], 'DEADLINE', $v['id_jadwal'], $msg);
         }
         echo 'success';
     }
+
 }

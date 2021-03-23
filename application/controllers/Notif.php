@@ -9,16 +9,10 @@ class Notif extends MY_Controller {
     }
     
     function index() {
-        $this->data['notif2']= $this->model->notif2(10); 
-        if($this->input->post('read_dist')){
-            $this->db->set('notif', 'READ');
-            $this->db->where('id', $this->input->post('read_dist'));
-            $this->db->update('distribution');
+        if($this->input->post('read_all')){
+            $this->model->read_all();
         }
-        $this->data['distribution']= $this->model->distribution();
-        $this->data['tugas']= $this->model->tugas();
-        $this->data['jadwal']= $this->model->jadwal();
-        $this->data['deadline']= $this->model->deadline();
+        $this->data['notif3'] = $this->model->get(30);
         $this->render('read');
     }
 

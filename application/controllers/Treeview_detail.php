@@ -7,6 +7,7 @@ class Treeview_detail extends MY_Controller {
     function __construct() {
         parent::__construct();
         $this->load->model('m_treeview_detail', 'model');
+        $this->load->model('m_notif');
     }
 
     private function ajax_request() {
@@ -105,24 +106,28 @@ class Treeview_detail extends MY_Controller {
         $penerima = $this->model->EditDistribusi();
         $result['status'] = 'success';
         $result['message'] = 'Berhasil';
+        $this->db->select('d.judul AS document, s.name AS standard');
+        $this->db->join('document_pasal dp', 'dp.id_document = d.id');
+        $this->db->join('pasal p', 'p.id = dp.id_pasal');
+        $this->db->join('standard s', 's.id = p.id_standard');
+        $this->db->where('d.id', $this->input->post('dokumen'));
+        $r = $this->db->get('document d')->row_array();
+        $msg = "Anda telah terdaftar sebagai penerima dokumen untuk dokumen dengan judul <b>" . $r['document'] . "</b> di standar <b>" . $r['standard'] . '</b>';
         foreach ($penerima as $p) {
+            $this->db->select('u.*');
             $this->db->join('position_personil pp', 'pp.id_personil = p.id AND pp.id = ' . $p);
-            $this->db->join('users u', 'u.id_personil = p.id', 'LEFT');
-            $personil = $this->db->get('personil p')->row_array();
-            if (!empty($personil['email'])) {//cek apakah user memiliki email
-                $this->db->select('d.judul AS document, s.name AS standard');
-                $this->db->join('document_pasal dp', 'dp.id_document = d.id');
-                $this->db->join('pasal p', 'p.id = dp.id_pasal');
-                $this->db->join('standard s', 's.id = p.id_standard');
-                $this->db->where('d.id', $this->input->post('dokumen'));
-                $r = $this->db->get('document d')->row_array();
-                $msg = "Anda telah terdaftar sebagai penerima dokumen untuk dokumen dengan judul " . $r['document'] . " di standar " . $r['standard'];
-                $statusEmail = parent::notif_mail($personil['email'], 'Distribusi Dokumen', $msg);
-                if ($statusEmail !== true) {
-                    $result['status'] = 'error';
-                    $result['message'] = 'Gagal mengirim notifikasi email';
-                    $result['message2'] = $statusEmail;
+            $this->db->join('users u', 'u.id_personil = p.id');
+            $user = $this->db->get('personil p')->row_array();
+            if (!empty($user)) {
+                if (!empty($user['email']) & $user['notif_email'] == 'ENABLE') {//cek apakah user memiliki email
+                    $statusEmail = parent::notif_mail($user['email'], 'Distribusi Dokumen', $msg);
+                    if ($statusEmail !== true) {
+                        $result['status'] = 'error';
+                        $result['message'] = 'Gagal mengirim notifikasi email';
+                        $result['message2'] = $statusEmail;
+                    }
                 }
+                $this->m_notif->set($user['id'], 'DIST', $this->input->post('dokumen'), $msg);
             }
         }
         echo json_encode($result);
@@ -141,15 +146,15 @@ class Treeview_detail extends MY_Controller {
         echo json_encode($this->model->readsTugas());
     }
 
-    function tugas() {
-        if ($this->model->tugas()) {
-            $result['status'] = 'success';
-        } else {
-            $result['status'] = 'error';
-            $result['message'] = $this->db->error()['message'];
-        }
-        echo json_encode($result);
-    }
+//    function tugas() {
+//        if ($this->model->tugas()) {
+//            $result['status'] = 'success';
+//        } else {
+//            $result['status'] = 'error';
+//            $result['message'] = $this->db->error()['message'];
+//        }
+//        echo json_encode($result);
+//    }
 
     function tugas2() {
         $result['status'] = 'success';
@@ -162,10 +167,11 @@ class Treeview_detail extends MY_Controller {
             $penerima = $this->model->editPenerima($id_tugas);
             $result['message'] = 'Berhasil';
             foreach ($penerima as $p) {
+                $this->db->select('u.*');
                 $this->db->join('position_personil pp', 'pp.id_personil = p.id AND pp.id = ' . $p);
-                $this->db->join('users u', 'u.id_personil = p.id', 'LEFT');
-                $personil = $this->db->get('personil p')->row_array();
-                if (!empty($personil['email'])) {//cek apakah user memiliki email
+                $this->db->join('users u', 'u.id_personil = p.id');
+                $user = $this->db->get('personil p')->row_array();
+                if (!empty($user)) {
                     $this->db->select('t.nama AS tugas, s.name AS standard');
                     $this->db->join('document d', 'd.id = t.id_document');
                     $this->db->join('document_pasal dp', 'dp.id_document = d.id');
@@ -174,12 +180,15 @@ class Treeview_detail extends MY_Controller {
                     $this->db->where('t.id', $id_tugas);
                     $r = $this->db->get('tugas t')->row_array();
                     $msg = "Anda telah terdaftar sebagai pelaksana tugas untuk tugas dengan judul <b>" . $r['tugas'] . "</b> di Standar <b>" . $r['standard'] . "</b>";
-                    $statusEmail = parent::notif_mail($personil['email'], $personil['fullname'] . ' menerima tugas', $msg);
-                    if ($statusEmail !== true) {
-                        $result['status'] = 'error';
-                        $result['message'] = 'Gagal mengirim notifikasi email';
-                        $result['message2'] = $statusEmail;
+                    if (!empty($user['email']) & $user['notif_email'] == 'ENABLE') {//cek apakah user memiliki email
+                        $statusEmail = parent::notif_mail($personil['email'], $personil['fullname'] . ' menerima tugas', $msg);
+                        if ($statusEmail !== true) {
+                            $result['status'] = 'error';
+                            $result['message'] = 'Gagal mengirim notifikasi email';
+                            $result['message2'] = $statusEmail;
+                        }
                     }
+                    $this->m_notif->set($user['id'], 'TASK', $id_tugas, $msg);
                 }
             }
         }
@@ -201,30 +210,30 @@ class Treeview_detail extends MY_Controller {
         $this->model->insertSchedule();
         $result['status'] = 'success';
         $id_tugas = $this->input->post('id-tugas');
-        $this->db->select('p.fullname, u.email');
+        $this->db->select('p.fullname, u.*');
         $this->db->join('position_personil pp', 'pp.id_personil = p.id');
         $this->db->join('personil_task pt', 'pt.id_position_personil = pp.id');
         $this->db->join('tugas t', 't.id = pt.id_tugas');
         $this->db->join('users u', 'u.id_personil = p.id');
         $this->db->where('t.id', $id_tugas);
-        $personil = $this->db->get('personil p')->result_array();
-        $this->db->select('t.nama AS tugas, s.name AS standard');
+        $user = $this->db->get('personil p')->result_array();
+        $this->db->select('t.id, t.nama AS tugas, s.name AS standard');
         $this->db->join('document d', 'd.id = t.id_document');
         $this->db->join('document_pasal dp', 'dp.id_document = d.id');
         $this->db->join('pasal p', 'p.id = dp.id_pasal');
         $this->db->join('standard s', 's.id = p.id_standard');
         $t = $this->db->get('tugas t')->row_array();
-        foreach ($personil as $p) {
-            if (!empty($p['email'])) {//cek apakah user memiliki email
-                $msg = "Jadwal pelaksanaan tugas " . $t['tugas'] . " untuk standar " . $t['standard'] . " telah ditetapkan pada tanggal ".$this->input->post('tanggal')[0];
-                $statusEmail = parent::notif_mail($p['email'], $p['fullname'] . ' menerima tugas', $msg);
+        $msg = "Jadwal pelaksanaan tugas <b>" . $t['tugas'] . "</b> untuk standar <b>" . $t['standard'] . "</b> telah ditetapkan pada tanggal <b>" . $this->input->post('tanggal')[0].'</b>';
+        foreach ($user as $u) {
+            if (!empty($u['email']) & $u['notif_email'] == 'ENABLE') {//cek apakah user memiliki email
+                $statusEmail = parent::notif_mail($u['email'], $u['fullname'] . ' menerima tugas', $msg);
                 if ($statusEmail !== true) {
                     $result['status'] = 'error';
                     $result['message'] = 'Gagal mengirim notifikasi email';
                     $result['message2'] = $statusEmail;
-                    break;
                 }
             }
+            $this->m_notif->set($u['id'], 'SCHEDULE', $t['id'], $msg);
         }
         echo json_encode($result);
     }

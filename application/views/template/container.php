@@ -133,8 +133,8 @@ if ($this->input->get('standard')) {
                                         <div class="dropdown-menu">
                                             <?php foreach ($notif as $k => $n) { ?>
                                                 <?php if ($k < 3) { ?>
-                                                    <div class="alert alert-primary" role="alert" style="margin-bottom: 3px; width: 350px">
-                                                        <?= $n['message'] ?>
+                                                    <div class="alert alert-info" role="alert" style="margin-bottom: 3px; width: 350px">
+                                                        <?= $n['pesan'] ?>
                                                         <div class="text-right"><small><?= $n['ago'] ?></small></div>
                                                     </div>
                                                 <?php } ?>
