@@ -115,6 +115,9 @@
     </div>
 </div>
 <script>
+<?php if (isset($this->session->user['id_company'])) { ?>
+    pilihPerusahaan(<?= $this->session->user['id_company'] ?>);
+<?php } ?>
     function afterReady() {
         $('.dataTables_filter').addClass('d-none');
         $('#selectPerusahaan').change();
@@ -140,6 +143,22 @@
             $('select[name=penerima]').val('<?= $this->input->get('penerima') ?>');
         });
     });
+
+    function pilihPerusahaan(id) {
+        $.getJSON('<?php echo site_url($module); ?>/company', {'id': id}, function (data) {
+            $('.select-ukp').empty();
+            $('.select-ukp').append('<option value="">-- -- --</option>');
+            for (var d of data) {
+                if (d.type == 'uk') {
+                    $('.select-ukp').append('<option class="select-parent"  value="' + d.type + '_' + d.id + '"><b>' + d.name.toUpperCase() + '</b></option>');
+                } else {
+                    $('.select-ukp').append('<option value="' + d.type + '_' + d.id + '">' + d.name + '</option>');
+                }
+            }
+            $('select[name=creator]').val('<?= $this->input->get('creator') ?>');
+            $('select[name=penerima]').val('<?= $this->input->get('penerima') ?>');
+        });
+    }
     $('#selectStandar').change(function () {
         $.getJSON('<?php echo site_url($module); ?>/get_pasal', {'id': $(this).val()}, function (data) {
             $('#list-pasal').empty();
