@@ -72,40 +72,39 @@ class M_notif extends CI_Model {
 //        $data['all'] = $data['distribution'];
 //        return $data;
 //    }
-
-    function notif2($limit = null) {
-        $id = $this->session->user['id'];
-        $sql = "(SELECT d.id, d.judul AS `name`, `ds`.`created_at` AS time, `s`.`name` AS `standard`, 'DIS' AS type, NULL AS more FROM `document` `d` JOIN `pasal` `ps` ON `ps`.`id` = `d`.`id_pasal` JOIN `standard` `s` ON `s`.`id` = `ps`.`id_standard` JOIN `distribution` `ds` ON `ds`.`id_document` = `d`.`id` JOIN `position_personil` `pp` ON `pp`.`id` = `ds`.`id_position_personil` JOIN `personil` `p` ON `p`.`id` = `pp`.`id_personil` JOIN `users` `u` ON `u`.`id_personil` = `p`.`id` AND `u`.`id` = " . $id . " GROUP BY `d`.`id` ORDER BY `ds`.`notif` DESC)UNION";
-        $sql .= "(SELECT t.id, `t`.`nama` AS name, `pt`.`created_at` AS time, `s`.`name` AS `standard`, 'TGS' AS type, NULL AS more FROM `tugas` `t` JOIN `document` `d` ON `d`.`id` = `t`.`id_document` JOIN `pasal` `ps` ON `ps`.`id` = `d`.`id_pasal` JOIN `standard` `s` ON `s`.`id` = `ps`.`id_standard` JOIN `personil_task` `pt` ON `pt`.`id_tugas` = `t`.`id` JOIN `position_personil` `pp` ON `pp`.`id` = `pt`.`id_position_personil` JOIN `personil` `p` ON `p`.`id` = `pp`.`id_personil` JOIN `users` `u` ON `u`.`id_personil` = `p`.`id` AND `u`.`id` = " . $id . ")UNION";
-        $sql .= "(SELECT t.id, `t`.`nama` AS `name`, `j`.`created_at` AS time, `s`.`name` AS `standard`,'JDW' AS type, `j`.`tanggal` AS more FROM `jadwal` `j` JOIN `tugas` `t` ON `t`.`id` = `j`.`id_tugas` JOIN `document` `d` ON `d`.`id` = `t`.`id_document` JOIN `pasal` `ps` ON `ps`.`id` = `d`.`id_pasal` JOIN `standard` `s` ON `s`.`id` = `ps`.`id_standard` JOIN `personil_task` `pt` ON `pt`.`id_tugas` = `t`.`id` JOIN `position_personil` `pp` ON `pp`.`id` = `pt`.`id_position_personil` JOIN `personil` `p` ON `p`.`id` = `pp`.`id_personil` JOIN `users` `u` ON `u`.`id_personil` = `p`.`id` AND `u`.`id` =" . $id . ")UNION";
-        $sql .= "(SELECT t.id, `t`.`nama` AS name, NOW() AS time, `s`.`name` AS `standard`, 'DED' AS type, `j`.`tanggal` AS more FROM `jadwal` `j` JOIN `tugas` `t` ON `t`.`id` = `j`.`id_tugas` JOIN `document` `d` ON `d`.`id` = `t`.`id_document` JOIN `pasal` `ps` ON `ps`.`id` = `d`.`id_pasal` JOIN `standard` `s` ON `s`.`id` = `ps`.`id_standard` JOIN `personil_task` `pt` ON `pt`.`id_tugas` = `t`.`id` JOIN `position_personil` `pp` ON `pp`.`id` = `pt`.`id_position_personil` JOIN `personil` `p` ON `p`.`id` = `pp`.`id_personil` JOIN `users` `u` ON `u`.`id_personil` = `p`.`id` AND `u`.`id` =" . $id . " WHERE DATEDIFF(j.tanggal, CURDATE()) = 1)";
-        $sql .= "ORDER BY time DESC ";
-        if (!empty($limit)) {
-            $sql .= "LIMIT " . $limit;
-        }
-        $result = $this->db->query($sql)->result_array();
-        foreach ($result as $k => $r) {
-            switch ($r['type']) {
-                case 'DIS':
-                    $msg = "Anda telah terdaftar sebagai penerima dokumen untuk dokumen dengan judul <b>" . $r['name'] . "</b> di standar <b>" . $r['standard'] . "</b>";
-                    break;
-                case 'TGS':
-                    $msg = "Anda telah terdaftar sebagai pelaksana tugas untuk tugas dengan judul <b>" . $r['name'] . "</b> di Standar <b>" . $r['standard'] . "</b>";
-                    break;
-                case 'JDW':
-                    $msg = "Jadwal pelaksanaan tugas <b>" . $r['name'] . "</b> untuk standar <b>" . $r['standard'] . "</b> telah ditetapkan pada tanggal <b>" . $r['more'] . "</b>";
-                    break;
-                case 'DED':
-                    $msg = "Besok adalah hari terakhir untuk upload bukti implementasi untuk tugas <b>" . $r['name'] . "</b> di standar <b>" . $r['standard'] . "</b>, pastikan untuk upload tepat waktu";
-                    break;
-                default: $msg = '--';
-                    break;
-            }
-            $result[$k]['message'] = $msg;
-            $result[$k]['ago'] = $this->time_elapsed_string($r['time']);
-        }
-        return $result;
-    }
+//    function notif2($limit = null) {
+//        $id = $this->session->user['id'];
+//        $sql = "(SELECT d.id, d.judul AS `name`, `ds`.`created_at` AS time, `s`.`name` AS `standard`, 'DIS' AS type, NULL AS more FROM `document` `d` JOIN `pasal` `ps` ON `ps`.`id` = `d`.`id_pasal` JOIN `standard` `s` ON `s`.`id` = `ps`.`id_standard` JOIN `distribution` `ds` ON `ds`.`id_document` = `d`.`id` JOIN `position_personil` `pp` ON `pp`.`id` = `ds`.`id_position_personil` JOIN `personil` `p` ON `p`.`id` = `pp`.`id_personil` JOIN `users` `u` ON `u`.`id_personil` = `p`.`id` AND `u`.`id` = " . $id . " GROUP BY `d`.`id` ORDER BY `ds`.`notif` DESC)UNION";
+//        $sql .= "(SELECT t.id, `t`.`nama` AS name, `pt`.`created_at` AS time, `s`.`name` AS `standard`, 'TGS' AS type, NULL AS more FROM `tugas` `t` JOIN `document` `d` ON `d`.`id` = `t`.`id_document` JOIN `pasal` `ps` ON `ps`.`id` = `d`.`id_pasal` JOIN `standard` `s` ON `s`.`id` = `ps`.`id_standard` JOIN `personil_task` `pt` ON `pt`.`id_tugas` = `t`.`id` JOIN `position_personil` `pp` ON `pp`.`id` = `pt`.`id_position_personil` JOIN `personil` `p` ON `p`.`id` = `pp`.`id_personil` JOIN `users` `u` ON `u`.`id_personil` = `p`.`id` AND `u`.`id` = " . $id . ")UNION";
+//        $sql .= "(SELECT t.id, `t`.`nama` AS `name`, `j`.`created_at` AS time, `s`.`name` AS `standard`,'JDW' AS type, `j`.`tanggal` AS more FROM `jadwal` `j` JOIN `tugas` `t` ON `t`.`id` = `j`.`id_tugas` JOIN `document` `d` ON `d`.`id` = `t`.`id_document` JOIN `pasal` `ps` ON `ps`.`id` = `d`.`id_pasal` JOIN `standard` `s` ON `s`.`id` = `ps`.`id_standard` JOIN `personil_task` `pt` ON `pt`.`id_tugas` = `t`.`id` JOIN `position_personil` `pp` ON `pp`.`id` = `pt`.`id_position_personil` JOIN `personil` `p` ON `p`.`id` = `pp`.`id_personil` JOIN `users` `u` ON `u`.`id_personil` = `p`.`id` AND `u`.`id` =" . $id . ")UNION";
+//        $sql .= "(SELECT t.id, `t`.`nama` AS name, NOW() AS time, `s`.`name` AS `standard`, 'DED' AS type, `j`.`tanggal` AS more FROM `jadwal` `j` JOIN `tugas` `t` ON `t`.`id` = `j`.`id_tugas` JOIN `document` `d` ON `d`.`id` = `t`.`id_document` JOIN `pasal` `ps` ON `ps`.`id` = `d`.`id_pasal` JOIN `standard` `s` ON `s`.`id` = `ps`.`id_standard` JOIN `personil_task` `pt` ON `pt`.`id_tugas` = `t`.`id` JOIN `position_personil` `pp` ON `pp`.`id` = `pt`.`id_position_personil` JOIN `personil` `p` ON `p`.`id` = `pp`.`id_personil` JOIN `users` `u` ON `u`.`id_personil` = `p`.`id` AND `u`.`id` =" . $id . " WHERE DATEDIFF(j.tanggal, CURDATE()) = 1)";
+//        $sql .= "ORDER BY time DESC ";
+//        if (!empty($limit)) {
+//            $sql .= "LIMIT " . $limit;
+//        }
+//        $result = $this->db->query($sql)->result_array();
+//        foreach ($result as $k => $r) {
+//            switch ($r['type']) {
+//                case 'DIS':
+//                    $msg = "Anda telah terdaftar sebagai penerima dokumen untuk dokumen dengan judul <b>" . $r['name'] . "</b> di standar <b>" . $r['standard'] . "</b>";
+//                    break;
+//                case 'TGS':
+//                    $msg = "Anda telah terdaftar sebagai pelaksana tugas untuk tugas dengan judul <b>" . $r['name'] . "</b> di Standar <b>" . $r['standard'] . "</b>";
+//                    break;
+//                case 'JDW':
+//                    $msg = "Jadwal pelaksanaan tugas <b>" . $r['name'] . "</b> untuk standar <b>" . $r['standard'] . "</b> telah ditetapkan pada tanggal <b>" . $r['more'] . "</b>";
+//                    break;
+//                case 'DED':
+//                    $msg = "Besok adalah hari terakhir untuk upload bukti implementasi untuk tugas <b>" . $r['name'] . "</b> di standar <b>" . $r['standard'] . "</b>, pastikan untuk upload tepat waktu";
+//                    break;
+//                default: $msg = '--';
+//                    break;
+//            }
+//            $result[$k]['message'] = $msg;
+//            $result[$k]['ago'] = $this->time_elapsed_string($r['time']);
+//        }
+//        return $result;
+//    }
 
     private function time_elapsed_string($datetime, $full = false) {
         $now = new DateTime;
@@ -146,7 +145,7 @@ class M_notif extends CI_Model {
     function get($limit, $status = null) {
         $this->db->order_by('id', 'DESC');
         $this->db->limit($limit);
-        if(!empty($status)){
+        if (!empty($status)) {
             $this->db->where('status', $status);
         }
         $result = $this->db->get_where('notification', ['penerima' => $this->session->user['id']])->result_array();
@@ -159,6 +158,14 @@ class M_notif extends CI_Model {
     function read_all() {
         $this->db->set('status', 'READ');
         $this->db->where('penerima', $this->session->user['id']);
+        $this->db->update('notification');
+    }
+
+    function switch($id) {
+        $data = $this->db->get_where('notification', ['id' => $id])->row_array();
+        $sw = $data['status'] == 'READ' ? 'UNREAD' : 'READ';
+        $this->db->where('id', $id);
+        $this->db->set('status', $sw);
         $this->db->update('notification');
     }
 
