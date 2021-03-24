@@ -125,15 +125,14 @@ if ($this->input->get('standard')) {
                                     <a class="nav-link fa fa-bell text-dark" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         &nbsp;
                                         Notifikasi
-                                        <?php if (!empty($notif)) { ?>
-                                            <span class="text-danger"><?= count($notif) == 10 ? '+9' : count($notif) ?></span>
+                                        <?php if (!empty($count_unread)) { ?>
+                                            <span class="text-danger"><?= $count_unread == 10 ? '+9' : $count_unread ?></span>
                                         <?php } ?>
                                     </a>
-                                    <?php if (!empty($notif)) { ?>
                                         <div class="dropdown-menu">
                                             <?php foreach ($notif as $k => $n) { ?>
-                                                <?php if ($k < 3) { ?>
-                                                    <div class="alert alert-info" role="alert" style="margin-bottom: 3px; width: 350px">
+                                                <?php if ($k < 4) { ?>
+                                                    <div class="alert alert-<?= $n['status']=='READ'?'secondary':'info' ?>" role="alert" style="margin-bottom: 3px; width: 350px">
                                                         <?= $n['pesan'] ?>
                                                         <div class="text-right"><small><?= $n['ago'] ?></small></div>
                                                     </div>
@@ -141,7 +140,6 @@ if ($this->input->get('standard')) {
                                             <?php } ?>
                                             <a class="btn btn-sm btn-outline-primary form-control" href="<?= site_url('notif') ?>">Tampilkan lebih banyak</a>
                                         </div>
-                                    <?php } ?>
                                     &nbsp;&nbsp;&nbsp;
                                     <div >
                                         <a href="<?php echo site_url('account/logout') ?>" class="nav-link fa fa-sign-out-alt text-dark">
@@ -210,6 +208,7 @@ if ($this->input->get('standard')) {
                                 <li id="menu-log">-</li>
                                 <li class="app-sidebar__heading">PENGATURAN</li>
                                 <li id="menu-pengaturan">-</li>
+                                <li id="menu-account">-</li>
                                 <?php foreach ($this->session->userdata('module') as $key => $m) { ?>
                                     <?php if ($m['on_menu'] == 'YES' & $m['acc_read']) { ?>
                                         <li id="module-<?php echo $m['name'] ?>" class="menu-item">

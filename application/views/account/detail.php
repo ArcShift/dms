@@ -51,13 +51,6 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label>Notifikasi Email</label>
-                            <select class="form-control" name="notif_email" id="notifEmail">
-                                <option value="ENABLE">Enable</option>
-                                <option value="DISABLE">Disable</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
                             <label>Personil</label>
                             <input class="form-control" value="<?php echo $data['fullname'] ?>" disabled="">
                         </div>

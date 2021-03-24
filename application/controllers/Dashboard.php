@@ -29,9 +29,6 @@ class Dashboard extends MY_Controller {
         $periode_tugas = isset($this->session->periode_tugas) ? $this->session->periode_tugas : 'hari';
         $company = $this->session->activeCompany;
         $standard = $this->session->activeStandard;
-        if ($this->input->get('periode_tugas')) {
-            
-        }
         $this->data['periode_tugas'] = $periode_tugas;
         if (!empty($company)) {
             $this->data['companies'] = $this->db->get('company')->result_array();
