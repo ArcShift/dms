@@ -4,7 +4,7 @@
             <thead>
                 <tr>
                     <th>Pasal</th>
-                    <th>Keterangan</th>
+                    <th>Alasan</th>
                     <th class="text-center">Status</th>
                 </tr>
             </thead>
@@ -40,12 +40,12 @@
                     <div class="form-group">
                         <label>Status</label>
                         <select class="form-control select-status" name="status">
-                            <option value="ENABLE">Enable</option>
-                            <option value="DISABLE">Disable</option>
+                            <option value="ENABLE">Berlaku</option>
+                            <option value="DISABLE">Tidak Berlaku</option>
                         </select>
                     </div>
                     <div class="form-group">
-                        <label>Keterangan</label>
+                        <label>Alasan</label>
                         <textarea class="form-control" name="desc"></textarea>
                     </div>
                 </div>
