@@ -1271,16 +1271,16 @@ if ($role == 'anggota') {
                                 var btnEdit = '<span class="text-primary fa fa-edit" title="Edit" onclick="initEditTugas(' + sortTugas.length + ')"></span>&nbsp';
                                 var btnHapus = '<span class="text-danger fa fa-trash" title="Hapus" onclick="initDeleteTugas(' + sortTugas.length + ')"></span>';
                                 if (t.show) {
-                                if (nTgs == 3) {
-                                    tbTugas.row.add([
-                                        '',
-                                        '',
-                                        '',
-                                        '<a class="text-primary tgs-btn-more' + i + '" onclick="showMoreTugas(' + i + ')">lihat lainnya</a>',
-                                        '',
-                                        '',
-                                    ]);
-                                }
+                                    if (nTgs == 3) {
+                                        tbTugas.row.add([
+                                            '',
+                                            '',
+                                            '',
+                                            '<a class="text-primary tgs-btn-more' + i + '" onclick="showMoreTugas(' + i + ')">lihat lainnya</a>',
+                                            '',
+                                            '',
+                                        ]);
+                                    }
                                     var tr = tbTugas.row.add([
                                         '',
                                         t.nama,
@@ -1751,7 +1751,7 @@ if ($role == 'anggota') {
     $('#formDistribusi').submit(function (e) {
         e.preventDefault();
         post(this, 'set_distribusi');
-//        $.post('<?php // echo site_url($module);  ?>/set_distribusi', $(this).serialize(), function (data) {
+//        $.post('<?php // echo site_url($module);   ?>/set_distribusi', $(this).serialize(), function (data) {
 //            $('#modalDistribusi').modal('hide');
 //            getPasal();
 //        });
@@ -2060,7 +2060,6 @@ if ($role == 'anggota') {
                 fp.append('<option value="' + p.fullname + '">' + p.fullname + '</option>');
             }
         }
-
     }
     function filterPersonil(elem, table, index) {
         table.columns(index).search(elem.value).draw();
@@ -2112,24 +2111,12 @@ if ($role == 'anggota') {
     }
 
     $(document).ready(function () {
-        //konfigurasi DataTable pada tabel dengan id example dan menambahkan  div class dateseacrhbox dengan dom untuk meletakkan inputan daterangepicker
-//        var $dTable = $('#example').DataTable({
-//            "dom": "<'row'<'col-sm-4'l><'col-sm-5' <'datesearchbox'>><'col-sm-3'f>>" +
-//                    "<'row'<'col-sm-12'tr>>" +
-//                    "<'row'<'col-sm-5'i><'col-sm-7'p>>"
-//        });
-
-        //menambahkan daterangepicker di dalam datatables
-//        $("div.datesearchbox").html('<div class="input-group"> <div class="input-group-addon"> <i class="glyphicon glyphicon-calendar"></i> </div><input type="text" class="form-control form-control-sm pull-right datesearch" id="datesearch" placeholder="Search by date range.."> </div>');
-
-//        document.getElementsByClassName("datesearchbox")[0].style.textAlign = "right";
-
-        //konfigurasi daterangepicker pada input dengan id datesearch
+        if (role == 'anggota') {
+            $('.filter-unit-kerja, .filter-personil').remove();
+        }
         $('.datesearch').daterangepicker({
             autoUpdateInput: false
         });
-
-        //menangani proses saat apply date range
         $('#datesearchJd').on('apply.daterangepicker', function (ev, picker) {
             $(this).val(picker.startDate.format('DD/MM/YYYY') + ' - ' + picker.endDate.format('DD/MM/YYYY'));
             start_date = picker.startDate.format('DD/MM/YYYY');
