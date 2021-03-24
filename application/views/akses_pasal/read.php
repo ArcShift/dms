@@ -4,6 +4,7 @@
             <thead>
                 <tr>
                     <th>Pasal</th>
+                    <th>Keterangan</th>
                     <th class="text-center">Status</th>
                 </tr>
             </thead>
@@ -11,6 +12,7 @@
                 <?php foreach ($data as $k => $d) { ?>
                     <tr>
                         <td><?= $d['name'] ?></td>
+                        <td><?php echo $d['desc'] ?></td>
                         <td class="text-center"><i class="btn btn-outline-<?= $d['status'] == 'DISABLE' ? 'danger' : 'success' ?> fa fa-check-square" onclick="edit(<?= $k ?>)")></i></td>
                     </tr>
                 <?php } ?>
@@ -37,7 +39,14 @@
                     </div>
                     <div class="form-group">
                         <label>Status</label>
-                        <input class="form-control input-status" name="status" readonly="">
+                        <select class="form-control select-status" name="status">
+                            <option value="ENABLE">Enable</option>
+                            <option value="DISABLE">Disable</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Keterangan</label>
+                        <textarea class="form-control" name="desc"></textarea>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -57,7 +66,7 @@
         m.modal('show');
         m.find('.input-id-pasal').val(pasal[index].id);
         m.find('.input-pasal').val(pasal[index].name);
-        m.find('.input-status').val(pasal[index].status == 'DISABLE' ? 'ENABLE' : 'DISABLE');
+        m.find('.select-status').val(pasal[index].status == 'DISABLE' ? 'DISABLE' : 'ENABLE');
         m.find('.input-persentase').val(pasal[index].persentase == null ? 0 : pasal[index].persentase);
     }
 </script>

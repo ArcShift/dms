@@ -15,6 +15,7 @@ class Akses_pasal extends MY_Controller {
             $this->db->where('id_company', $this->session->activeCompany['id']);
             $acc = $this->db->get('pasal_access')->row_array();
             $this->db->set('status', $this->input->post('status'));
+            $this->db->set('desc', $this->input->post('desc'));
             if (empty($acc)) {
                 $this->db->set('id_pasal', $this->input->post('pasal'));
                 $this->db->set('id_company', $this->session->activeCompany['id']);
@@ -25,7 +26,7 @@ class Akses_pasal extends MY_Controller {
                 $this->db->update('pasal_access');
             }
         }
-        $this->db->select('p.*, pa.status');
+        $this->db->select('p.*, pa.status, pa.desc');
         $this->db->join('pasal_access pa', 'pa.id_pasal = p.id AND pa.id_company = ' . $this->session->activeCompany['id'], 'LEFT');
         $this->db->where('p.parent', null);
         $this->db->where('p.id_standard', $this->session->activeStandard['id']);
