@@ -77,10 +77,7 @@ class M_document extends CI_Model {
     }
 
     function standar() {
-//        $this->db->select('s.id, s.name');
-//        $this->db->join('pasal p', 's.id = p.id_standard');
-//        $this->db->join($this->table . ' d', 'd.id_pasal = p.id');
-//        $this->db->group_by('s.id');
+        $this->db->select('s.id, s.name');
         if($this->session->user['id_company']){
             $this->db->join('company_standard cs', 'cs.id_standard = s.id AND cs.id_company=' . $this->session->user['id_company']);
         }
