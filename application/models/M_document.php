@@ -47,6 +47,7 @@ class M_document extends CI_Model {
         if ($this->input->get('standar')) {
             $this->db->where('s.id', $this->input->get('standar'));
             if ($this->input->get('pasal')) {
+                $this->db->join('document_pasal dp', 'dp.id_document = d.id AND dp.id_pasal = ' . $this->input->get('pasal'));
                 $this->db->where('d.id_pasal', $this->input->get('pasal'));
             }
         }
