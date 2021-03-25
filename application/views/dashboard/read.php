@@ -483,7 +483,7 @@ if (empty($this->session->activeCompany)) {
                 label.push(p.name);
                 doc.push(p.pemenuhanDoc);
                 imp.push(p.pemenuhanImp);
-                hope.push(70);
+                hope.push((p.hope==null?70:p.hope));
             }
             $('#averageDoc').text(average(doc));
             $('#averageImp').text(average(imp));
