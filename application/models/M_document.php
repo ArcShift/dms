@@ -44,12 +44,10 @@ class M_document extends CI_Model {
                 $this->db->join('users uds', 'uds.id_personil = pds.id AND uds.id = ' . $this->session->user['id']);
             }
         }
-        if ($this->input->get('standar')) {
+        if ($this->input->get('pasal')) {
+            $this->db->join('document_pasal dp', 'dp.id_document = d.id  AND dp.id_pasal = ' . $this->input->get('pasal'));
+        } elseif ($this->input->get('standar')) {
             $this->db->where('s.id', $this->input->get('standar'));
-            if ($this->input->get('pasal')) {
-                $this->db->join('document_pasal dp', 'dp.id_document = d.id AND dp.id_pasal = ' . $this->input->get('pasal'));
-                $this->db->where('d.id_pasal', $this->input->get('pasal'));
-            }
         }
 
         if ($this->input->get('judul')) {
