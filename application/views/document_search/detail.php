@@ -34,18 +34,8 @@
                     <span class="form-control">LEVEL <?= $data['jenis'] ?></span>
                 </div>
                 <div class="form-group">
-                    <label>File / url</label>
-                    <span class="form-control overflow-hidden disabled">
-                        <?php if (!empty($data['file'])) { ?>
-                            <a class="btn btn-primary fa fa-download" target="_blank" href="<?= base_url('upload/dokumen/' . $data['file']) ?>"></a>
-                            <?= $data['file'] ?>
-                        <?php } elseif (!empty($data['url'])) { ?>
-                            <a class="btn btn-primary fa fa-search" target="_blank" href="<?= $data['url'] ?>"></a>
-                            <?= $data['url'] ?>
-                        <?php } else { ?>
-                            Tidak Ada file
-                        <?php } ?>
-                    </span>
+                    <label>Letak Pasal pada Dokumen</label>
+                    <textarea class="form-control" readonly=""><?= $data['deskripsi'] ?></textarea>
                 </div>
             </div>
             <div class="col-sm-6">
@@ -69,6 +59,20 @@
                             <?= $data['dokumen_terkait'] ?> 
                         <?php } else { ?>
                             Tidak Ada
+                        <?php } ?>
+                    </span>
+                </div>
+                <div class="form-group">
+                    <label>File / url</label>
+                    <span class="form-control overflow-hidden disabled">
+                        <?php if (!empty($data['file'])) { ?>
+                            <a class="btn btn-primary fa fa-download" target="_blank" href="<?= base_url('upload/dokumen/' . $data['file']) ?>"></a>
+                            <?= $data['file'] ?>
+                        <?php } elseif (!empty($data['url'])) { ?>
+                            <a class="btn btn-primary fa fa-search" target="_blank" href="<?= $data['url'] ?>"></a>
+                            <?= $data['url'] ?>
+                        <?php } else { ?>
+                            Tidak Ada file
                         <?php } ?>
                     </span>
                 </div>
