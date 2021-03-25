@@ -38,10 +38,10 @@ class M_document extends CI_Model {
                     $this->db->where('pds.id', $cr[1]);
                 }
             }
-            if($this->session->user['role']=='anggota'){
+            if ($this->session->user['role'] == 'anggota') {
                 $this->db->join('position_personil ppds', 'ppds.id = ds.id_position_personil');
                 $this->db->join('personil pds', 'pds.id = ppds.id_personil');
-                $this->db->join('users uds', 'uds.id_personil = pds.id AND uds.id = '.$this->session->user['id']);
+                $this->db->join('users uds', 'uds.id_personil = pds.id AND uds.id = ' . $this->session->user['id']);
             }
         }
         if ($this->input->get('standar')) {
@@ -68,17 +68,37 @@ class M_document extends CI_Model {
     }
 
     function get($id) {//detail dokumen
-        $this->db->select('d.*, p.fullname AS pembuat, d2.judul AS dokumen_terkait');
+        $this->db->select('d.*, p.fullname AS pembuat, d2.judul AS dokumen_terkait, 1 AS pasal');
         $this->db->where('d.id', $id);
         $this->db->join('position_personil pp', 'pp.id = d.pembuat', 'LEFT');
         $this->db->join('personil p', 'p.id = pp.id_personil', 'LEFT');
         $this->db->join($this->table . ' d2', 'd.contoh = d2.id', 'LEFT');
-        return $this->db->get($this->table . ' d')->row_array();
+        $result = $this->db->get($this->table . ' d')->row_array();
+        $this->db->select('p.*');
+        $this->db->join('document_pasal dp', 'dp.id_pasal = p.id');
+        $this->db->join('document d', 'd.id = dp.id_document');
+        $this->db->where('d.id', $id);
+        $pasal = $this->db->get('pasal p')->result_array();
+        foreach ($pasal as $k => $v) {
+            $pasal[$k]['fullname'] = $this->getPasalName($v['id']);
+        }
+        $result['pasal'] = $pasal;
+        return $result;
+    }
+
+    function getPasalName($id) {
+        $pasal = $this->db->get_where('pasal', ['id' => $id])->row_array();
+        $name = '';
+        if (!empty($pasal['parent'])) {
+            $name = $this->getPasalName($pasal['parent']) . ' - ';
+        }
+        $name .= $pasal['name'];
+        return $name;
     }
 
     function standar() {
         $this->db->select('s.id, s.name');
-        if($this->session->user['id_company']){
+        if ($this->session->user['id_company']) {
             $this->db->join('company_standard cs', 'cs.id_standard = s.id AND cs.id_company=' . $this->session->user['id_company']);
         }
         return $this->db->get('standard s')->result_array();

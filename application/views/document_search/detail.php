@@ -1,4 +1,7 @@
-<?php ?>
+<?php
+//print_r($data['pasal']);
+?>
+
 <div class="main-card card">
     <div class="card-header">
         <?= $data['judul'] ?>
@@ -6,6 +9,13 @@
     <div class="card-body">
         <div class="row">
             <div class="col-sm-6">
+                <div class="form-group">
+                    <label>Pasal</label>
+                    <br>
+                    <?php foreach ($data['pasal'] as $v) { ?>
+                        <span class="badge badge-secondary"><?= $v['fullname'] ?></span>
+                    <?php } ?>
+                </div>
                 <div class="form-group">
                     <label>Nomor</label>
                     <span class="form-control"><?= $data['nomor'] ?></span>
@@ -15,12 +25,8 @@
                     <span class="form-control">LEVEL <?= $data['jenis'] ?></span>
                 </div>
                 <div class="form-group">
-                    <label>Letak Pasal pada Dokumen</label>
-                    <textarea class="form-control"><?= $data['deskripsi'] ?></textarea>
-                </div>
-                <div class="form-group">
                     <label>File / url</label>
-                    <span class="form-control">
+                    <span class="form-control overflow-hidden disabled">
                         <?php if (!empty($data['file'])) { ?>
                             <a class="btn btn-primary fa fa-download" target="_blank" href="<?= base_url('upload/dokumen/' . $data['file']) ?>"></a>
                             <?= $data['file'] ?>
@@ -61,6 +67,6 @@
         </div>
     </div>
     <div class="card-footer text-right">
-        <a class="btn btn-primary mr-3 pull-right" href="<?= site_url($module)?>">Kembali</a>
+        <a class="btn btn-primary mr-3 pull-right" href="<?= site_url($module) ?>">Kembali</a>
     </div>
 </div>
