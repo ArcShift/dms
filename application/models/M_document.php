@@ -82,6 +82,12 @@ class M_document extends CI_Model {
             $pasal[$k]['fullname'] = $this->getPasalName($v['id']);
         }
         $result['pasal'] = $pasal;
+        $this->db->select('p.fullname AS personil, uk.name AS unit_kerja');
+        $this->db->join('position_personil pp', 'pp.id = ds.id_position_personil');
+        $this->db->join('personil p', 'p.id = pp.id_personil');
+        $this->db->join('unit_kerja uk', 'uk.id = pp.id_unit_kerja');
+        $this->db->where('ds.id_document', $id);
+        $result['dist'] = $this->db->get('distribution ds')->result_array();
         return $result;
     }
 

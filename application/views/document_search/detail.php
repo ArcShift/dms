@@ -12,8 +12,17 @@
                 <div class="form-group">
                     <label>Pasal</label>
                     <br>
+                    <?= empty($data['pasal'])?'-':'' ?>
                     <?php foreach ($data['pasal'] as $v) { ?>
                         <span class="badge badge-secondary"><?= $v['fullname'] ?></span>
+                    <?php } ?>
+                </div>
+                <div class="form-group">
+                    <label>Distribusi</label>
+                    <br>
+                    <?= empty($data['dist'])?'-':'' ?>
+                    <?php foreach ($data['dist'] as $v) { ?>
+                        <span class="badge badge-secondary"><?= $v['personil'].' - '.$v['unit_kerja'] ?></span>
                     <?php } ?>
                 </div>
                 <div class="form-group">
