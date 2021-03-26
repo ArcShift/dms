@@ -115,4 +115,60 @@ class M_pasal extends CI_Model {
         }
     }
 
+    function get() {
+        $this->db->where('id_standard', $this->session->activeStandard['id']);
+        $this->db->where('parent IS NULL');
+        $result = $this->db->get_where('pasal p')->result_array();
+        $sort = [];
+        foreach ($result as $k => $v) {
+            array_push($sort, $v);
+            $child = $this->getChild($v['id']);
+            foreach ($child as $v2) {
+                $v2['name'] = $v['name'] . ' - ' . $v2['name'];
+                array_push($sort, $v2);
+            }
+        }
+        return $sort;
+    }
+
+    private function getChild($id) {
+        $result = $this->db->get_where('pasal', ['parent' => $id])->result_array();
+        $sort = [];
+        foreach ($result as $k => $v) {
+            array_push($sort, $v);
+            $child = $this->getChild($v['id']);
+            foreach ($child as $k2 => $v2) {
+                $v2['name'] = $v['name'] . ' - ' . $v2['name'];
+                array_push($sort, $v2);
+            }
+        }
+        return $sort;
+    }
+
+    function getDocument($id) {
+        $this->db->join('document_pasal dp', 'dp.id_document = d.id');
+        $this->db->where('dp.id_pasal', $id);
+        $this->db->where('d.id_company', $this->session->activeCompany['id']);
+        return $this->db->get('document d')->result_array();
+    }
+
+    function detail($id) {
+        $result = $this->db->get_where('pasal', ['id' => $id])->row_array();
+        $result['fullname'] = $this->getFullname($id);
+        if (!empty($result['parent'])) {
+            $result['parent_fullname'] = $this->getFullname($result['parent']);
+        }
+        return $result;
+    }
+
+    private function getFullname($id) {
+        $pasal = $this->db->get_where('pasal', ['id' => $id])->row_array();
+        $name = '';
+        if (!empty($pasal['parent'])) {
+            $name = $this->getFullname($pasal['parent']) . ' - ';
+        }
+        $name .= $pasal['name'];
+        return $name;
+    }
+
 }

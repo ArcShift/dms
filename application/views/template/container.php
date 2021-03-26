@@ -129,17 +129,17 @@ if ($this->input->get('standard')) {
                                             <span class="text-danger"><?= $count_unread == 10 ? '+9' : $count_unread ?></span>
                                         <?php } ?>
                                     </a>
-                                        <div class="dropdown-menu">
-                                            <?php foreach ($notif as $k => $n) { ?>
-                                                <?php if ($k < 4) { ?>
-                                                    <div class="alert alert-<?= $n['status']=='READ'?'secondary':'info' ?>" role="alert" style="margin-bottom: 3px; width: 350px">
-                                                        <?= $n['pesan'] ?>
-                                                        <div class="text-right"><small><?= $n['ago'] ?></small></div>
-                                                    </div>
-                                                <?php } ?>
+                                    <div class="dropdown-menu">
+                                        <?php foreach ($notif as $k => $n) { ?>
+                                            <?php if ($k < 4) { ?>
+                                                <div class="alert alert-<?= $n['status'] == 'READ' ? 'secondary' : 'info' ?>" role="alert" style="margin-bottom: 3px; width: 350px">
+                                                    <?= $n['pesan'] ?>
+                                                    <div class="text-right"><small><?= $n['ago'] ?></small></div>
+                                                </div>
                                             <?php } ?>
-                                            <a class="btn btn-sm btn-outline-primary form-control" href="<?= site_url('notif') ?>">Tampilkan lebih banyak</a>
-                                        </div>
+                                        <?php } ?>
+                                        <a class="btn btn-sm btn-outline-primary form-control" href="<?= site_url('notif') ?>">Tampilkan lebih banyak</a>
+                                    </div>
                                     &nbsp;&nbsp;&nbsp;
                                     <div >
                                         <a href="<?php echo site_url('account/logout') ?>" class="nav-link fa fa-sign-out-alt text-dark">
@@ -197,11 +197,16 @@ if ($this->input->get('standard')) {
                                 <li id="menu-unit_kerja">-</li>
                                 <li id="menu-personil">-</li>
                                 <li id="menu-user">-</li>
-                                <li class="app-sidebar__heading">STANDAR</li>
+                                <li class="app-sidebar__heading">PASAL STANDAR</li>
                                 <li id="menu-standard">-</li>
                                 <li id="menu-company_standard">-</li>
+                                <li id="menu-deskripsi_pasal">-</li>
+                                <li id="menu-pemahaman_pasal">-</li>
+                                <li id="menu-bukti_pasal">-</li>
+                                <li class="app-sidebar__heading">PENGATURAN PASAL</li>
                                 <li id="menu-akses_pasal">-</li>
                                 <li id="menu-management_hope">-</li>
+                                <li class="app-sidebar__heading">DOKUMEN & IMPLEMENTASI</li>
                                 <li id="menu-treeview_detail">-</li>
                                 <li id="menu-document_search">-</li>
                                 <li class="app-sidebar__heading">RIWAYAT</li>

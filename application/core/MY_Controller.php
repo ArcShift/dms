@@ -3,6 +3,7 @@
 class MY_Controller extends CI_Controller {
 
     protected $module = null;
+    protected $subModule = null;
     protected $title = null;
     protected $subTitle = null;
     protected $data = array();
@@ -30,6 +31,9 @@ class MY_Controller extends CI_Controller {
                 $this->activeModule = $m;
             }
         }
+        if(empty($this->subModule)){
+            $this->subModule = $view;
+        }
         $this->data['module'] = $this->module;
         $this->data['activeModule'] = $this->activeModule;
         $this->data['subTitle'] = $this->subTitle;
@@ -39,7 +43,7 @@ class MY_Controller extends CI_Controller {
                 $this->data['companies'] = $this->db->get('company')->result_array();
             }
         }
-        switch ($view) {
+        switch ($this->subModule) {
             case 'edit':$this->access = 'update';
                 break;
             case 'detail':$this->access = 'read';
@@ -47,7 +51,7 @@ class MY_Controller extends CI_Controller {
             default:
                 break;
         }
-        empty($this->access) ? $this->access = $view : null;
+        empty($this->access) ? $this->access = $this->subModule : null;
         if (empty($this->activeModule['acc_' . $this->access])) {
             $this->data['view'] = 'template/no_access';
             $this->load->view('template/container', $this->data);
