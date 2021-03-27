@@ -8,7 +8,9 @@
                         <th>Judul</th>
                         <th>Deskripsi</th>
                         <th>Penjelasan</th>
-                        <th style="width:100px">Aksi</th>
+                        <?php if ($this->session->user['role'] == 'admin') { ?>
+                            <th style="width:100px">Aksi</th>
+                        <?php } ?>
                     </tr>
                 </thead>
                 <tbody>
@@ -18,9 +20,11 @@
                             <td><?= $v['sort_desc'] ?></td>
                             <td style="white-space: pre-wrap"><?= $v['long_desc'] ?></td>
                             <td style="white-space: pre-wrap"><?= $v['penjelasan'] ?></td>
-                            <td>
-                                <button class="btn btn-sm btn-outline-primary fa fa-edit" title="Edit" name="edit" value="<?= $v['id'] ?>"></button>
-                            </td>
+                            <?php if ($this->session->user['role'] == 'admin') { ?>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-primary fa fa-edit" title="Edit" name="edit" value="<?= $v['id'] ?>"></button>
+                                </td>
+                            <?php } ?>
                         </tr>
                     <?php } ?>
                 </tbody>
