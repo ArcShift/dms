@@ -41,7 +41,7 @@ class Pemahaman_pasal extends MY_Controller {
             $this->session->set_flashdata('msgSuccess', 'Data berhasil diubah');
             redirect($this->module);
         }
-    }    
+    }
     $this->subTitle= 'Edit';
     $this->data['pasal']= $this->model->detail($this->session->idData);
     $this->render('edit');
