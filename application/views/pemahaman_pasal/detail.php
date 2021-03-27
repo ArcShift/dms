@@ -16,7 +16,7 @@
                     <b><?= $pasal['sort_desc'] ?></b>
                 </div>
             </div>
-            <div class="col-sm-6">
+                <div class="col-sm-6">
                 <div class="form-group">
                     <label>Pasal induk</label>
                     <br>
@@ -32,11 +32,15 @@
         </div>
         <div class="form-group">
             <label>Deskripsi</label>
-            <textarea class="form-control" rows="4" readonly=""><?= $pasal['long_desc'] ?></textarea>
+            <textarea class="form-control" rows="3" readonly=""><?= $pasal['long_desc'] ?></textarea>
         </div>
         <div class="form-group">
             <label>Penjelasan</label>
-            <textarea class="form-control" rows="4" readonly="">-</textarea>
+            <textarea class="form-control" rows="3" readonly=""><?= $pasal['penjelasan'] ?></textarea>
+        </div>
+        <div class="form-group">
+            <label>Bukti Pasal</label>
+            <textarea class="form-control" rows="3" readonly=""><?= $pasal['bukti'] ?></textarea>
         </div>
     </div>
 </div>

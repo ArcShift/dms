@@ -171,4 +171,12 @@ class M_pasal extends CI_Model {
         return $name;
     }
 
+    function update2() {
+        $this->db->set('long_desc', $this->input->post('desc'));
+        $this->db->set('penjelasan', $this->input->post('penjelasan'));
+        $this->db->set('bukti', $this->input->post('bukti'));
+        $this->db->where('id', $this->session->idData);
+        return $this->db->update($this->table);
+    }
+
 }
