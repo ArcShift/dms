@@ -38,8 +38,8 @@ class Pemahaman_pasal extends MY_Controller {
     function edit() {
     if($this->input->post('edit')){
         if($this->model->update2()){
-//            $this->session->set_flashdata('msgSuccess', 'Data berhasil diubah');
-//            redirect($this->module);
+            $this->session->set_flashdata('msgSuccess', 'Data berhasil diubah');
+            redirect($this->module);
         }
     }    
     $this->subTitle= 'Edit';
