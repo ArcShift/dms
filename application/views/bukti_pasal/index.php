@@ -7,7 +7,7 @@
                         <th>Pasal</th>
                         <th>Judul</th>
                         <th>Bukti Pasal</th>
-                        <!--<th style="width:100px">Aksi</th>-->
+                        <th style="width:100px">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -16,10 +16,9 @@
                             <td><?= $v['name'] ?></td>
                             <td><?= $v['sort_desc'] ?></td>
                             <td style="white-space: pre-wrap"><?= $v['bukti'] ?></td>
-                            <!--<td>-->
-                                <!--<button class="btn btn-sm btn-outline-primary fa fa-search" title="Detail" name="detail" value="<?= $v['id'] ?>"></button>-->
-                                <!--<button class="btn btn-sm btn-outline-primary fa fa-edit" title="Edit" name="edit" value="<?= $v['id'] ?>"></button>-->
-                            <!--</td>-->
+                            <td>
+                                <button class="btn btn-sm btn-outline-primary fa fa-edit" title="Edit" name="edit" value="<?= $v['id'] ?>"></button>
+                            </td>
                         </tr>
                     <?php } ?>
                 </tbody>

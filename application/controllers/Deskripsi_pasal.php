@@ -9,6 +9,10 @@ class Deskripsi_pasal extends MY_Controller{
     }
 
     function index() {
+        if ($this->input->get('edit')) {
+            $this->session->set_userdata('idData', $this->input->get('edit'));
+            redirect('pemahaman_pasal/edit');
+        }
         $this->data['menuStandard'] = 'standard';
         $this->subModule = 'read';
         $this->data['pasal'] = $this->model->get();

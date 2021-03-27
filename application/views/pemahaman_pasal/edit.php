@@ -26,7 +26,7 @@
             </div>
         </div>
         <div class="d-block card-footer text-right">
-            <a class="btn btn-outline-secondary" href="<?= site_url($module) ?>">Batal</a>  
+            <button class="btn btn-outline-secondary" onclick="history.back()">Kembali</button>  
             <button class="btn btn-outline-primary" name="edit" value="ok">Simpan</button>
         </div>
     </form>
