@@ -26,7 +26,7 @@
             </div>
         </div>
         <div class="d-block card-footer text-right">
-            <button class="btn btn-outline-secondary" onclick="history.back()">Kembali</button>  
+            <a class="btn btn-outline-secondary" onclick="history.back()" href="<?= site_url($this->session->redirect) ?>">Kembali</a>
             <button class="btn btn-outline-primary" name="edit" value="ok">Simpan</button>
         </div>
     </form>
