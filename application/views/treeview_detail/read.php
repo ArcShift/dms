@@ -1451,12 +1451,13 @@ if ($role == 'anggota') {
             //update table pasal
             tbPasal.rows().every(function (rowIdx, tableLoop, rowLoop) {
                 var row = this.data();
-                txtDoc = '';
+                txtDoc = '<ul>';
                 var docs = sortPasal[rowIdx].index_child_documents;
                 for (var i = 0; i < docs.length; i++) {
                     var doc = sortDokumen[docs[i]];
-                    txtDoc += '<div class="">'+doc.judul+'</div>';
+                    txtDoc += '<li>'+doc.judul+'</li>';
                 }
+                txtDoc += '</ul>';
                 row[3] = txtDoc;
                 this.invalidate();
             });
