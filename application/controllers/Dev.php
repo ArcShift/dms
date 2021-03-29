@@ -128,4 +128,16 @@ class Dev extends CI_Controller {
             $this->db->insert('personil_task');
         }
     }
+    function document_set_standard() {
+        $this->db->where('id_standard IS NULL');
+        $this->db->where('id_pasal IS NOT NULL');
+        $document = $this->db->get('document')->result_array();
+        foreach ($document as $k => $v) {
+            $this->db->where('id', $v['id_pasal']);
+            $pasal = $this->db->get('pasal')->row_array();
+            $this->db->set('id_standard', $pasal['id_standard']);
+            $this->db->where('id', $v['id']);
+            $this->db->update('document');
+        }
+    }
 }

@@ -203,6 +203,8 @@ if ($this->input->get('standard')) {
                                 <li id="menu-deskripsi_pasal">-</li>
                                 <li id="menu-pemahaman_pasal">-</li>
                                 <li id="menu-bukti_pasal">-</li>
+                                <li id="menu-dokumen">-</li>
+                                <li id="menu-implementasi">-</li>
                                 <li class="app-sidebar__heading">PENGATURAN PASAL</li>
                                 <li id="menu-akses_pasal">-</li>
                                 <li id="menu-management_hope">-</li>

@@ -47,9 +47,8 @@ class M_treeview_detail extends CI_Model {
         $this->db->set('id_pasal', $this->input->post('pasal'));
         $this->db->set('nomor', $this->input->post('nomor'));
         $this->db->set('judul', $this->input->post('judul'));
-        if ($this->input->post('company')) {
-            $this->db->set('id_company', $this->input->post('company'));
-        }
+        $this->db->set('id_company', $this->session->activeCompany['id']);
+        $this->db->set('id_standard', $this->session->activeStandard['id']);
         if ($this->input->post('creator')) {
             $this->db->set('pembuat', $this->input->post('creator'));
         } else {
@@ -332,7 +331,7 @@ class M_treeview_detail extends CI_Model {
             }
         } else {//remove all data
             $this->db->where('id_tugas', $id_tugas);
-            $this->db->delete('personil_task'); 
+            $this->db->delete('personil_task');
         }
         return $add;
     }
@@ -567,8 +566,8 @@ class M_treeview_detail extends CI_Model {
                     array_push($pasal[$k]['indexChild'], $k2);
                 }
             }
-            if(empty($pasal[$k]['hope'])){
-                $pasal[$k]['hope']==70;
+            if (empty($pasal[$k]['hope'])) {
+                $pasal[$k]['hope'] == 70;
             }
         }
         $this->pasal = $pasal;

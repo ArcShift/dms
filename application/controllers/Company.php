@@ -76,7 +76,9 @@ class Company extends MY_Controller {
     }
 
     function detail() {
-        
+        $this->subModule = 'read';
+        $this->subTitle = 'Detail';
+        $this->render('detail');
     }
 
 }
