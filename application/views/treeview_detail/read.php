@@ -88,7 +88,7 @@ if ($role == 'anggota') {
                                     <th>Pasal</th>
                                     <th>Judul</th>
                                     <th>Deskripsi</th>
-                                    <!--<th>Dok</th>-->
+                                    <th>Dokumen</th>
                                     <th style="min-width: 0px">Aksi</th>
                                 </tr>
                             </thead>
@@ -1042,7 +1042,7 @@ if ($role == 'anggota') {
                     d.fullname,
                     (d.sort_desc == null ? '-' : d.sort_desc),
                     '<p style="white-space: pre-wrap">' + (d.long_desc == null ? '-' : d.long_desc) + '</p>',
-//                    '',
+                    '',
                     '<span class="fa fa-info-circle text-primary" onclick="detailPasal(' + i + ')" title="Detail"></span>&nbsp'
                             + (d.child == '0' ? '<span class="fa fa-upload text-primary" onclick="initAddDocument(' + i + ')" title="Upload"></span>&nbsp' : '')
                 ]).node();
@@ -1199,7 +1199,6 @@ if ($role == 'anggota') {
                             (role == 'anggota' ? d.txtDistribusi : d.txtDistribusi),
                             (role == 'anggota' ? btnDetail : btnDetail + btnEdit),
                         ]);
-
                     }
                 }
                 n++;
@@ -1449,6 +1448,19 @@ if ($role == 'anggota') {
                 }
             }
             tbPemenuhan.draw();
+            //update table pasal
+            tbPasal.rows().every(function (rowIdx, tableLoop, rowLoop) {
+                var row = this.data();
+                txtDoc = '';
+                var docs = sortPasal[rowIdx].index_child_documents;
+                for (var i = 0; i < docs.length; i++) {
+                    var doc = sortDokumen[docs[i]];
+                    txtDoc += '<div class="">'+doc.judul+'</div>';
+                }
+                row[3] = txtDoc;
+                this.invalidate();
+            });
+            tbPasal.draw();
 //            tbJadwal.columns(6).visible(false);
         });
     }
@@ -1749,7 +1761,7 @@ if ($role == 'anggota') {
     $('#formDistribusi').submit(function (e) {
         e.preventDefault();
         post(this, 'set_distribusi');
-//        $.post('<?php // echo site_url($module);   ?>/set_distribusi', $(this).serialize(), function (data) {
+//        $.post('<?php // echo site_url($module);       ?>/set_distribusi', $(this).serialize(), function (data) {
 //            $('#modalDistribusi').modal('hide');
 //            getPasal();
 //        });

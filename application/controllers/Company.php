@@ -75,4 +75,8 @@ class Company extends MY_Controller {
         $this->render('edit');
     }
 
+    function detail() {
+        
+    }
+
 }
