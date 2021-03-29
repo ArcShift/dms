@@ -87,7 +87,6 @@ if ($role == 'anggota') {
                                 <tr>
                                     <th>Pasal</th>
                                     <th>Judul</th>
-                                    <th>Sub Judul</th>
                                     <th>Deskripsi</th>
                                     <!--<th>Dok</th>-->
                                     <th style="min-width: 0px">Aksi</th>
@@ -1042,7 +1041,6 @@ if ($role == 'anggota') {
                 var tr = tbPasal.row.add([
                     d.fullname,
                     (d.sort_desc == null ? '-' : d.sort_desc),
-                    (d.subtitle == null ? '-' : d.subtitle),
                     '<p style="white-space: pre-wrap">' + (d.long_desc == null ? '-' : d.long_desc) + '</p>',
 //                    '',
                     '<span class="fa fa-info-circle text-primary" onclick="detailPasal(' + i + ')" title="Detail"></span>&nbsp'

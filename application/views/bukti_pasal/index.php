@@ -6,6 +6,7 @@
                     <tr>
                         <th>Pasal</th>
                         <th>Judul</th>
+                        <th>Deskripsi</th>
                         <th>Bukti Pasal</th>
                         <?php if ($this->session->user['role'] == 'admin') { ?>
                             <th style="width:100px">Aksi</th>
@@ -17,6 +18,7 @@
                         <tr <?= empty($v['parent']) ? 'class="table-success"' : '' ?>>
                             <td><?= $v['name'] ?></td>
                             <td><?= $v['sort_desc'] ?></td>
+                            <td><?= $v['long_desc'] ?></td>
                             <td style="white-space: pre-wrap"><?= $v['bukti'] ?></td>
                             <?php if ($this->session->user['role'] == 'admin') { ?>
                                 <td>
