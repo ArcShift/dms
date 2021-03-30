@@ -145,6 +145,17 @@ class M_pasal extends CI_Model {
         return $sort;
     }
 
+    function getByDocument($id_document) {
+        $this->db->select('p.*');
+        $this->db->join('document_pasal dp', 'dp.id_pasal = p.id AND dp.id_document = ' . $id_document);
+        $pasal = $this->db->get('pasal p')->result_array();
+        foreach ($pasal as $k => $v) {
+            $pasal[$k]['fullname']= $this->getFullname($v['id']);
+        }
+        return $pasal;
+    }
+
+
     function getDocument($id) {
         $this->db->join('document_pasal dp', 'dp.id_document = d.id');
         $this->db->where('dp.id_pasal', $id);

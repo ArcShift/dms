@@ -1,28 +1,25 @@
 <?php
 
-class Dokumen extends MY_Controller {
+class Implementasi extends MY_Controller {
 
-    protected $module = "dokumen";
+    protected $module = "implementasi";
 
     function __construct() {
         parent::__construct();
-        $this->load->model("m_treeview_detail", "model");
+        $this->load->model('m_treeview_detail', 'model');
         $this->load->model('m_notif');
     }
-
     private function ajax_request() {
         if (!$this->input->is_ajax_request()) {
             redirect('404');
         }
     }
-
     function index() {
         $this->subTitle = 'List';
         $this->subModule = 'read';
         $this->data['menuStandard'] = 'standard';
         $this->render('index');
     }
-
     function standard() {
         $this->ajax_request();
         echo json_encode($this->model->standard());
@@ -223,7 +220,7 @@ class Dokumen extends MY_Controller {
         $this->db->join('pasal p', 'p.id = dp.id_pasal');
         $this->db->join('standard s', 's.id = p.id_standard');
         $t = $this->db->get('tugas t')->row_array();
-        $msg = "Jadwal pelaksanaan tugas <b>" . $t['tugas'] . "</b> untuk standar <b>" . $t['standard'] . "</b> telah ditetapkan pada tanggal <b>" . $this->input->post('tanggal')[0] . '</b>';
+        $msg = "Jadwal pelaksanaan tugas <b>" . $t['tugas'] . "</b> untuk standar <b>" . $t['standard'] . "</b> telah ditetapkan pada tanggal <b>" . $this->input->post('tanggal')[0].'</b>';
         foreach ($user as $u) {
             if (!empty($u['email']) & $u['notif_email'] == 'ENABLE') {//cek apakah user memiliki email
                 $statusEmail = parent::notif_mail($u['email'], $u['fullname'] . ' menerima tugas', $msg);
@@ -299,5 +296,43 @@ class Dokumen extends MY_Controller {
 
     function get_pemenuhan() {
         echo json_encode($this->model->getPemenuhan($this->input->get('company'), $this->input->get('standard')));
+    }
+
+    function get_pemenuhan_test() {
+        $result = $this->model->getPemenuhan($this->input->get('company'), $this->input->get('standard'));
+        echo '<table border="1"><thead><tr>'
+        . '<td>Index</td>'
+        . '<td>sortIndex</td>'
+        . '<td>Pasal</td>'
+        . '<td>child</td>'
+        . '<td>indexParent</td>'
+        . '<td>indexChild</td>'
+        . '<td>Doc</td>'
+        . '<td>pemenuhan Doc</td>'
+        . '<td>listDoc</td>'
+        . '<td>tugas</td>'
+        . '<td>Jadwal</td>'
+        . '<td>Jadwals</td>'
+        . '<td>Jadwal OK</td>'
+        . '</tr></thead><tbody>';
+        foreach ($result as $k => $r) {
+            echo '<tr>'
+            . '<td>' . $k . '</td>'
+            . '<td>' . $r['sort_index'] . '</td>'
+            . '<td>' . $r['name'] . '</td>'
+            . '<td>' . $r['child'] . '</td>'
+            . '<td>' . $r['indexParent'] . '</td>'
+            . '<td>' . implode(',', $r['indexChild']) . '</td>'
+            . '<td>' . $r['doc'] . '</td>'
+            . '<td>' . $r['pemenuhanDoc'] . '%</td>'
+            . '<td>' . $r['docs'] . '</td>'
+            . '<td>' . $r['tugas'] . '</td>'
+            . '<td>' . $r['jadwal'] . '</td>'
+            . '<td>' . $r['jadwals'] . '</td>'
+            . '<td>' . $r['jadwal_ok'] . '</td>'
+            . '<td>' . $r['pemenuhanImp'] . '%</td>'
+            . '</tr>';
+        }
+        echo '</tbody></table>';
     }
 }

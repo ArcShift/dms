@@ -139,9 +139,11 @@ class M_document extends CI_Model {
         $this->db->where('p.id_company', $company);
         return $this->db->get('position_personil pp')->result_array();
     }
+
     function get_by_standard($company, $standard) {
         $this->db->where('id_company', $company);
         $this->db->where('id_standard', $standard);
         return $this->db->get('document')->result_array();
     }
+
 }

@@ -41,11 +41,11 @@ if ($role == 'anggota') {
                 <!--TAB-->
                 <ul class="nav nav-tabs">
                     <li class="nav-item"><a data-toggle="tab" href="#tab-pasal" class="nav-link">Pasal</a></li>
-                    <li class="nav-item"><a data-toggle="tab" href="#tab-dokumen" class="nav-link">Dokumen</a></li>
-                    <li class="nav-item"><a data-toggle="tab" href="#tab-distribusi" class="nav-link">Distribusi</a></li>
+                    <li class="nav-item"><a data-toggle="tab" href="#tab-tugas" class="nav-link">Tugas</a></li>
+                    <li class="nav-item"><a data-toggle="tab" href="#tab-jadwal" class="nav-link">Jadwal</a></li>
+                    <li class="nav-item"><a data-toggle="tab" href="#tab-implementasi" class="nav-link">Implementasi</a></li>
                 </ul>
                 <div class="tab-content">
-                    <div class="tab-pane" id="tab-test" role="tabpanel"></div>
                     <!--PASAL-->
                     <div class="tab-pane" id="tab-pasal" role="tabpanel">
                         <div class="row div-filter">
@@ -58,9 +58,9 @@ if ($role == 'anggota') {
                             <thead>
                                 <tr>
                                     <th>Pasal</th>
+                                    <th>Judul Dokumen</th>
                                     <th>Judul</th>
                                     <th>Deskripsi</th>
-                                    <th>Dokumen</th>
                                     <th style="min-width: 0px">Aksi</th>
                                 </tr>
                             </thead>
@@ -90,27 +90,87 @@ if ($role == 'anggota') {
                             <tbody></tbody>
                         </table>
                     </div>
-                    <!--DISTRIBUSI-->
-                    <div class="tab-pane" id="tab-distribusi" role="tabpanel">
+                    
+                    <!--TUGAS-->
+                    <div class="tab-pane" id="tab-tugas" role="tabpanel">
                         <div class="row div-filter">
                             <div class="col-sm-3"></div>
                             <div class="col-sm-3"></div>
                             <div class="col-sm-3">
-                                <select class="form-control form-control-sm filter-unit-kerja" onchange="filterUnitKerja(this, tbDistribusi, 4)"></select>
+                                <select class="form-control form-control-sm filter-unit-kerja" onchange="filterUnitKerja(this, tbTugas, 4)"></select>
                             </div>
                             <div class="col-sm-3">
-                                <select class="form-control form-control-sm filter-personil" onchange="filterPersonil(this, tbDistribusi, 4)"></select>
+                                <select class="form-control form-control-sm filter-personil" onchange="filterPersonil(this, tbTugas, 4)"></select>
                             </div>
                         </div>
-                        <table class="table table-striped" id="table-distribusi">
+                        <div class="table-responsive">
+                            <table class="table table-striped" id="table-tugas">
+                                <thead>
+                                    <tr>
+                                        <th>Judul Dokumen</th>
+                                        <th>Tugas</th>
+                                        <th>Form Terkait</th>
+                                        <th>Sifat</th>
+                                        <th>PIC Pelakasana</th>
+                                        <th class="col-aksi" style="min-width: 70px">Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <!--JADWAL-->
+                    <div class="tab-pane" id="tab-jadwal" role="tabpanel">
+                        <div class="row div-filter">
+                            <div class="col-sm-3"></div>
+                            <div class="col-sm-3">
+                                <input class="form-control form-control-sm pull-right datesearch" id="datesearchJd" placeholder="Search by date range..">
+                            </div>
+                            <div class="col-sm-3">
+                                <select class="form-control form-control-sm filter-unit-kerja" onchange="filterUnitKerja(this, tbJadwal, 5)"></select>
+                            </div>
+                            <div class="col-sm-3">
+                                <select class="form-control form-control-sm filter-personil" onchange="filterPersonil(this, tbJadwal, 5)"></select>
+                            </div>
+                        </div>
+                        <table class="table table-striped" id="table-jadwal">
                             <thead>
                                 <tr>
-                                    <th>Nomor Dokumen</th>
-                                    <th>Judul Dokumen</th>
-                                    <th>Level Dokumen</th>
-                                    <th>Pembuat Dokumen</th>
-                                    <th>Penerima</th>
+                                    <th>Dokumen</th>
+                                    <th>Tugas</th>
+                                    <th>Form</th>
+                                    <th>Periode</th>
+                                    <th class="col-tgl">Jadwal</th>
+                                    <th>PIC Pelaksana</th>
                                     <th class="col-aksi" style="min-width: 70px">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                    <!--IMPLEMENTASI-->
+                    <div class="tab-pane" id="tab-implementasi" role="tabpanel">
+                        <div class="row div-filter">
+                            <div class="col-sm-3"></div>
+                            <div class="col-sm-3">
+                                <input class="form-control form-control-sm pull-right datesearch" id="datesearchImp" placeholder="Search by date range..">
+                            </div>
+                            <div class="col-sm-3">
+                                <select class="form-control form-control-sm filter-unit-kerja" onchange="filterUnitKerja(this, tbImplementasi, 1)"></select>
+                            </div>
+                            <div class="col-sm-3">
+                                <select class="form-control form-control-sm filter-personil" onchange="filterPersonil(this, tbImplementasi, 1)"></select>
+                            </div>
+                        </div>
+                        <table class="table" id="table-implementasi">
+                            <thead>
+                                <tr>
+                                    <th>Tugas</th>
+                                    <th>PIC Pelaksana Tugas</th>
+                                    <th class="col-tgl">Jadwal</th>
+                                    <th class="text-center">Status</th>
+                                    <th class="text-center">Keterlambatan</th>
+                                    <th class="text-center">Bukti</th>
                                 </tr>
                             </thead>
                             <tbody></tbody>
@@ -927,9 +987,9 @@ if ($role == 'anggota') {
                 var d = sortPasal[i];
                 var tr = tbPasal.row.add([
                     d.fullname,
+                    '',
                     (d.sort_desc == null ? '-' : d.sort_desc),
                     '<p style="white-space: pre-wrap">' + (d.long_desc == null ? '-' : d.long_desc) + '</p>',
-                    '',
                     '<span class="fa fa-info-circle text-primary" onclick="detailPasal(' + i + ')" title="Detail"></span>&nbsp'
                             + (d.child == '0' ? '<span class="fa fa-upload text-primary" onclick="initAddDocument(' + i + ')" title="Upload"></span>&nbsp' : '')
                 ]).node();
@@ -1342,7 +1402,7 @@ if ($role == 'anggota') {
                 var docs = sortPasal[rowIdx].index_child_documents;
                 for (var i = 0; i < docs.length; i++) {
                     var doc = sortDokumen[docs[i]];
-                    txtDoc += '<li>' + doc.judul + '</li>';
+                    txtDoc += '<li>'+doc.judul+'</li>';
                 }
                 txtDoc += '</ul>';
                 row[3] = txtDoc;
@@ -1649,7 +1709,7 @@ if ($role == 'anggota') {
     $('#formDistribusi').submit(function (e) {
         e.preventDefault();
         post(this, 'set_distribusi');
-//        $.post('<?php // echo site_url($module);        ?>/set_distribusi', $(this).serialize(), function (data) {
+//        $.post('<?php // echo site_url($module);       ?>/set_distribusi', $(this).serialize(), function (data) {
 //            $('#modalDistribusi').modal('hide');
 //            getPasal();
 //        });
@@ -2012,5 +2072,36 @@ if ($role == 'anggota') {
         if (role == 'anggota') {
             $('.filter-unit-kerja, .filter-personil').remove();
         }
+        $('.datesearch').daterangepicker({
+            autoUpdateInput: false
+        });
+        $('#datesearchJd').on('apply.daterangepicker', function (ev, picker) {
+            $(this).val(picker.startDate.format('DD/MM/YYYY') + ' - ' + picker.endDate.format('DD/MM/YYYY'));
+            start_date = picker.startDate.format('DD/MM/YYYY');
+            end_date = picker.endDate.format('DD/MM/YYYY');
+            $.fn.dataTableExt.afnFiltering.push(DateFilterFunction);
+            tbJadwal.draw();
+        });
+        $('#datesearchJd').on('cancel.daterangepicker', function (ev, picker) {
+            $(this).val('');
+            start_date = '';
+            end_date = '';
+            $.fn.dataTable.ext.search.splice($.fn.dataTable.ext.search.indexOf(DateFilterFunction, 1));
+            tbJadwal.draw();
+        });
+        $('#datesearchImp').on('apply.daterangepicker', function (ev, picker) {
+            $(this).val(picker.startDate.format('DD/MM/YYYY') + ' - ' + picker.endDate.format('DD/MM/YYYY'));
+            start_date = picker.startDate.format('DD/MM/YYYY');
+            end_date = picker.endDate.format('DD/MM/YYYY');
+            $.fn.dataTableExt.afnFiltering.push(DateFilterFunction2);
+            tbImplementasi.draw();
+        });
+        $('#datesearchImp').on('cancel.daterangepicker', function (ev, picker) {
+            $(this).val('');
+            start_date = '';
+            end_date = '';
+            $.fn.dataTable.ext.search.splice($.fn.dataTable.ext.search.indexOf(DateFilterFunction2, 1));
+            tbImplementasi.draw();
+        });
     });
 </script>
