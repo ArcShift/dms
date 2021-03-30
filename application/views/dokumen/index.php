@@ -740,7 +740,6 @@ if ($role == 'anggota') {
     </div>
 </div>
 <script>
-//    $('.app-page-title').first().hide();
     $(document).ready(function () {
         if (role != 'admin') {
             $('.group-select-perusahaan').hide();

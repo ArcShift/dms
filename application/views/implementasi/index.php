@@ -59,8 +59,8 @@ if ($role == 'anggota') {
                                 <tr>
                                     <th>Pasal</th>
                                     <th>Judul Dokumen</th>
-                                    <th>Judul</th>
-                                    <th>Deskripsi</th>
+                                    <th>Penerima Dokumen (pelaksana pasal)</th>
+                                    <th>Tugas</th>
                                     <th style="min-width: 0px">Aksi</th>
                                 </tr>
                             </thead>
@@ -90,7 +90,7 @@ if ($role == 'anggota') {
                             <tbody></tbody>
                         </table>
                     </div>
-                    
+
                     <!--TUGAS-->
                     <div class="tab-pane" id="tab-tugas" role="tabpanel">
                         <div class="row div-filter">
@@ -969,6 +969,8 @@ if ($role == 'anggota') {
                 var s = sortPasal[i];
                 s.index_childs = [];
                 s.index_documents = [];
+                s.txtTugas = '';
+                s.txtPenerimaDokumen = '';
                 if (s.parent === null) {
                     s.parentIndex = null;
                     s.fullname = s.name;
@@ -1023,7 +1025,6 @@ if ($role == 'anggota') {
             $('.select-dokumen').append('<option value="">-- -- --</option>');
             sortDokumen = [];
             var n = 0;
-            var nDoc = 0;
             var descLimit = 160;
             for (var i = 0; i < data.length; i++) {
                 var d = data[i];
@@ -1137,7 +1138,6 @@ if ($role == 'anggota') {
                     var btnDetail = '<span class="text-primary fa fa-info-circle" title="Detail" onclick="detailDistribusi(' + n + ')"></span>&nbsp';
                     var btnEdit = '<span class="text-primary fa fa-edit" title="Edit" onclick="editDistribusi(' + n + ')"></span>';
                     if (d.jenis < 4 & d.jenis >= 1) {
-                        nDoc++;
                         tbDistribusi.row.add([
                             d.nomor,
                             d.judul,
@@ -1163,11 +1163,10 @@ if ($role == 'anggota') {
             tbTugas.clear();
             $('.input-form-terkait').empty();
             $('.input-form-terkait').append('<option value="">-- form terkait --</option>');
-            var nDoc = 0;
             for (var i = 0; i < sortDokumen.length; i++) {
                 var d = sortDokumen[i];
                 if (d.jenis < 4 & d.jenis >= 1) {
-                    nDoc++;
+                    var listTugas = '';
                     if (d.show) {
                         tbTugas.row.add([
                             d.judul,
@@ -1225,6 +1224,7 @@ if ($role == 'anggota') {
                                             '',
                                         ]);
                                     }
+                                    listTugas += '<li>' + t.nama + '</li>';
                                     var tr = tbTugas.row.add([
                                         '',
                                         t.nama,
@@ -1253,6 +1253,10 @@ if ($role == 'anggota') {
                                 '',
                             ]);
                         }
+                    }
+                    for (var j = 0; j < d.index_dokumen_pasal.length; j++) {
+                        var idxPasal = d.index_dokumen_pasal[j];
+                        sortPasal[idxPasal].txtTugas+=listTugas;
                     }
                 } else if (d.jenis == 4) {
                     $('.input-form-terkait').append('<option value="' + d.id + '">' + d.judul + '</option>');
@@ -1367,6 +1371,24 @@ if ($role == 'anggota') {
             tbImplementasi.draw();
             $('.jd-more').hide();
         });
+        //update table pasal - finishing
+            tbPasal.rows().every(function (rowIdx, tableLoop, rowLoop) {
+                var row = this.data();
+                txtDoc = '<ul>';
+                var p= sortPasal[rowIdx];
+                var docs = p.index_child_documents;
+                for (var i = 0; i < docs.length; i++) {
+                    var doc = sortDokumen[docs[i]];
+                    txtDoc += '<li>' + doc.judul + '</li>';
+                }
+                txtDoc += '</ul>';
+                row[1] = txtDoc;
+                console.log(p.txtTugas);
+                row[2] = '-';
+                row[3] = p.txtTugas;
+                this.invalidate();
+            }); 
+            tbPasal.draw();
     }
     function getPemenuhan() {
         $.getJSON('<?= site_url($module); ?>/get_pemenuhan', {'company': perusahaan, 'standard': standar}, function (data) {
@@ -1395,20 +1417,6 @@ if ($role == 'anggota') {
                 }
             }
             tbPemenuhan.draw();
-            //update table pasal
-            tbPasal.rows().every(function (rowIdx, tableLoop, rowLoop) {
-                var row = this.data();
-                txtDoc = '<ul>';
-                var docs = sortPasal[rowIdx].index_child_documents;
-                for (var i = 0; i < docs.length; i++) {
-                    var doc = sortDokumen[docs[i]];
-                    txtDoc += '<li>'+doc.judul+'</li>';
-                }
-                txtDoc += '</ul>';
-                row[3] = txtDoc;
-                this.invalidate();
-            });
-            tbPasal.draw();
 //            tbJadwal.columns(6).visible(false);
         });
     }
@@ -1709,7 +1717,7 @@ if ($role == 'anggota') {
     $('#formDistribusi').submit(function (e) {
         e.preventDefault();
         post(this, 'set_distribusi');
-//        $.post('<?php // echo site_url($module);       ?>/set_distribusi', $(this).serialize(), function (data) {
+//        $.post('<?php // echo site_url($module);         ?>/set_distribusi', $(this).serialize(), function (data) {
 //            $('#modalDistribusi').modal('hide');
 //            getPasal();
 //        });
@@ -1758,7 +1766,7 @@ if ($role == 'anggota') {
                 m.find('.input-group-append').append('<a class="btn btn-outline-primary btn-sm pull-right fa fa-download" href="<?= base_url('upload/dokumen') ?>/' + dt.file + '"></a>');
             } else if (dt.type_doc == 'URL') {
                 m.find('.input-group-append').append('<a class="btn btn-outline-primary btn-sm pull-right fa fa-search" href="' + dt.url + '"></a>');
-
+                
             }
         } else {
             m.find('.group-form-terkait').hide();
@@ -1887,7 +1895,7 @@ if ($role == 'anggota') {
             $('#tglMulaiJadwal').text('Tanggal');
         }
     });
-
+    
     function detailJadwal(index) {
         var m = $('#modalDetail');
         var j = sortJadwal[index];
@@ -2060,14 +2068,14 @@ if ($role == 'anggota') {
         }
         return false;
     });
-
+    
     // fungsi untuk converting format tanggal dd/mm/yyyy menjadi format tanggal javascript menggunakan zona aktubrowser
     function parseDateValue(rawDate) {
         var dateArray = rawDate.split("/");
         var parsedDate = new Date(dateArray[2], parseInt(dateArray[1]) - 1, dateArray[0]);  // -1 because months are from 0 to 11   
         return parsedDate;
     }
-
+    
     $(document).ready(function () {
         if (role == 'anggota') {
             $('.filter-unit-kerja, .filter-personil').remove();
