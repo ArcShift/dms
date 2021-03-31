@@ -59,7 +59,7 @@ if ($role == 'anggota') {
                                 <tr>
                                     <th>Pasal</th>
                                     <th>Judul Dokumen</th>
-                                    <th>Penerima Dokumen (pelaksana pasal)</th>
+                                    <th>Penerima Dokumen (Pelaksana Pasal)</th>
                                     <th>Tugas</th>
                                     <th style="min-width: 0px">Aksi</th>
                                 </tr>
