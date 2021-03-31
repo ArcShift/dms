@@ -18,7 +18,7 @@
                         <tr <?= empty($v['parent']) ? 'class="table-success"' : '' ?>>
                             <td><?= $v['name'] ?></td>
                             <td><?= $v['sort_desc'] ?></td>
-                            <td><?= $v['long_desc'] ?></td>
+                            <td style="white-space: pre-wrap"><?= $v['long_desc'] ?></td>
                             <td style="white-space: pre-wrap"><?= $v['bukti'] ?></td>
                             <?php if ($this->session->user['role'] == 'admin') { ?>
                                 <td>
