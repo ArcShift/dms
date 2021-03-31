@@ -19,7 +19,7 @@ class M_treeview_detail extends CI_Model {
     }
 
     function personil() {
-        $this->db->select('pp.id,  pp.id_personil, pp.id_unit_kerja, CONCAT(p.fullname, " - ", uk.name) AS fullname');
+        $this->db->select('pp.id,  pp.id_personil, uk.name AS unit_kerja, pp.id_unit_kerja, CONCAT(p.fullname, " - ", uk.name) AS fullname');
         $this->db->join('personil p', 'p.id=pp.id_personil');
         $this->db->join('unit_kerja uk', 'uk.id=pp.id_unit_kerja');
         $this->db->where('p.id_company', $this->input->post('perusahaan'));

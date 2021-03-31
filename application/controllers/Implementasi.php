@@ -9,17 +9,20 @@ class Implementasi extends MY_Controller {
         $this->load->model('m_treeview_detail', 'model');
         $this->load->model('m_notif');
     }
+
     private function ajax_request() {
         if (!$this->input->is_ajax_request()) {
             redirect('404');
         }
     }
+
     function index() {
         $this->subTitle = 'List';
         $this->subModule = 'read';
         $this->data['menuStandard'] = 'standard';
         $this->render('index');
     }
+
     function standard() {
         $this->ajax_request();
         echo json_encode($this->model->standard());
@@ -220,7 +223,7 @@ class Implementasi extends MY_Controller {
         $this->db->join('pasal p', 'p.id = dp.id_pasal');
         $this->db->join('standard s', 's.id = p.id_standard');
         $t = $this->db->get('tugas t')->row_array();
-        $msg = "Jadwal pelaksanaan tugas <b>" . $t['tugas'] . "</b> untuk standar <b>" . $t['standard'] . "</b> telah ditetapkan pada tanggal <b>" . $this->input->post('tanggal')[0].'</b>';
+        $msg = "Jadwal pelaksanaan tugas <b>" . $t['tugas'] . "</b> untuk standar <b>" . $t['standard'] . "</b> telah ditetapkan pada tanggal <b>" . $this->input->post('tanggal')[0] . '</b>';
         foreach ($user as $u) {
             if (!empty($u['email']) & $u['notif_email'] == 'ENABLE') {//cek apakah user memiliki email
                 $statusEmail = parent::notif_mail($u['email'], $u['fullname'] . ' menerima tugas', $msg);
@@ -335,4 +338,5 @@ class Implementasi extends MY_Controller {
         }
         echo '</tbody></table>';
     }
+
 }

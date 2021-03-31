@@ -40,7 +40,7 @@ if ($role == 'anggota') {
             <div id="container" class="card-body">
                 <!--TAB-->
                 <ul class="nav nav-tabs">
-                    <li class="nav-item"><a data-toggle="tab" href="#tab-pasal" class="nav-link">Pasal</a></li>
+                    <li class="nav-item"><a data-toggle="tab" href="#tab-pasal" class="nav-link active">Pasal</a></li>
                     <li class="nav-item"><a data-toggle="tab" href="#tab-tugas" class="nav-link">Tugas</a></li>
                     <li class="nav-item"><a data-toggle="tab" href="#tab-jadwal" class="nav-link">Jadwal</a></li>
                     <li class="nav-item"><a data-toggle="tab" href="#tab-implementasi" class="nav-link">Implementasi</a></li>
@@ -67,46 +67,23 @@ if ($role == 'anggota') {
                             <tbody></tbody>
                         </table>
                     </div>
-                    <!--DOKUMEN-->
-                    <div class="tab-pane" id="tab-dokumen" role="tabpanel">
-                        <div class="row div-filter">
-                            <div class="col-sm-3"></div>
-                            <div class="col-sm-3"></div>
-                            <div class="col-sm-3"></div>
-                            <div class="col-sm-3"></div>
-                        </div>
-                        <table class="table table-striped" id="table-document">
-                            <thead>
-                                <tr>
-                                    <th>No</th>
-                                    <th>Judul</th>
-                                    <th>Pasal</th>
-                                    <th>Revisi</th>
-                                    <th>Level</th>
-                                    <th>Klasifikasi</th>
-                                    <th class="col-aksi" style="min-width: 70px">Aksi</th>
-                                </tr>
-                            </thead>
-                            <tbody></tbody>
-                        </table>
-                    </div>
-
                     <!--TUGAS-->
                     <div class="tab-pane" id="tab-tugas" role="tabpanel">
                         <div class="row div-filter">
                             <div class="col-sm-3"></div>
                             <div class="col-sm-3"></div>
                             <div class="col-sm-3">
-                                <select class="form-control form-control-sm filter-unit-kerja" onchange="filterUnitKerja(this, tbTugas, 4)"></select>
+                                <select class="form-control form-control-sm filter-unit-kerja" onchange="filterUnitKerja(this, tbTugas, 0)"></select>
                             </div>
                             <div class="col-sm-3">
-                                <select class="form-control form-control-sm filter-personil" onchange="filterPersonil(this, tbTugas, 4)"></select>
+                                <select class="form-control form-control-sm filter-personil" onchange="filterPersonil(this, tbTugas, 5)"></select>
                             </div>
                         </div>
                         <div class="table-responsive">
-                            <table class="table table-striped" id="table-tugas">
+                            <table class="table table-striped" id="table-tugas" style="min-width: 100%">
                                 <thead>
                                     <tr>
+                                        <th>Unit Kerja</th>
                                         <th>Judul Dokumen</th>
                                         <th>Tugas</th>
                                         <th>Form Terkait</th>
@@ -127,15 +104,16 @@ if ($role == 'anggota') {
                                 <input class="form-control form-control-sm pull-right datesearch" id="datesearchJd" placeholder="Search by date range..">
                             </div>
                             <div class="col-sm-3">
-                                <select class="form-control form-control-sm filter-unit-kerja" onchange="filterUnitKerja(this, tbJadwal, 5)"></select>
+                                <select class="form-control form-control-sm filter-unit-kerja" onchange="filterUnitKerja(this, tbJadwal, 0)"></select>
                             </div>
                             <div class="col-sm-3">
-                                <select class="form-control form-control-sm filter-personil" onchange="filterPersonil(this, tbJadwal, 5)"></select>
+                                <select class="form-control form-control-sm filter-personil" onchange="filterPersonil(this, tbJadwal, 6)"></select>
                             </div>
                         </div>
-                        <table class="table table-striped" id="table-jadwal">
+                        <table class="table table-striped" id="table-jadwal" style="min-width: 100%">
                             <thead>
                                 <tr>
+                                    <th>Unit Kerja</th>
                                     <th>Dokumen</th>
                                     <th>Tugas</th>
                                     <th>Form</th>
@@ -156,13 +134,13 @@ if ($role == 'anggota') {
                                 <input class="form-control form-control-sm pull-right datesearch" id="datesearchImp" placeholder="Search by date range..">
                             </div>
                             <div class="col-sm-3">
-                                <select class="form-control form-control-sm filter-unit-kerja" onchange="filterUnitKerja(this, tbImplementasi, 1)"></select>
+                                <select class="form-control form-control-sm filter-unit-kerja" onchange="filterUnitKerja(this, tbImplementasi, 0)"></select>
                             </div>
                             <div class="col-sm-3">
-                                <select class="form-control form-control-sm filter-personil" onchange="filterPersonil(this, tbImplementasi, 1)"></select>
+                                <select class="form-control form-control-sm filter-personil" onchange="filterPersonil(this, tbImplementasi, 2)"></select>
                             </div>
                         </div>
-                        <table class="table" id="table-implementasi">
+                        <table class="table" id="table-implementasi" style="min-width: 100%">
                             <thead>
                                 <tr>
                                     <th>Tugas</th>
@@ -862,6 +840,12 @@ if ($role == 'anggota') {
             "language": {
                 "emptyTable": "Belum ada jadwal implementasi yang dibuat."
             },
+            "columnDefs": [
+                {
+                    "targets": [0],
+                    "visible": false,
+                }
+            ]
         });
         dataTableConfig['ordering'] = false;
         tbPemenuhan = $('#table-pemenuhan').DataTable(dataTableConfig);
@@ -878,6 +862,12 @@ if ($role == 'anggota') {
             "language": {
                 "emptyTable": "Untuk membuat jadwal, buat dahulu detail tugas yang perlu dikerjakan pada Tab Tugas."
             },
+            "columnDefs": [
+                {
+                    "targets": [0],
+                    "visible": false,
+                }
+            ]
         });
         tbTugas = $('#table-tugas').DataTable({
             "order": [],
@@ -891,6 +881,12 @@ if ($role == 'anggota') {
             "language": {
                 "emptyTable": "Untuk membuat tugas, pertama ubah dahulu data Jenis Dokumen pada Tab Dokumen, menjadi Level 1 / Level 2 / Level 3 / Level 4"
             },
+            "columnDefs": [
+                {
+                    "targets": [0],
+                    "visible": false,
+                }
+            ]
         });
         $('.dataTables_filter').hide();
         $('.dataTables_filter .form-control').attr('placeholder', 'Search');
@@ -1178,6 +1174,7 @@ if ($role == 'anggota') {
                     var listPersonil2 = [];
                     if (d.show) {
                         tbTugas.row.add([
+                            '',
                             d.judul,
                             '',
                             '',
@@ -1193,6 +1190,7 @@ if ($role == 'anggota') {
                                 sortDokumen[i].index_tugas.push(sortTugas.length);
                                 t.indexPelaksana = [];
                                 t.txt_personil = '';
+                                t.txtUnitKerja = '';
                                 if (role == 'anggota') {
                                     t.show = false
                                 } else {
@@ -1202,6 +1200,7 @@ if ($role == 'anggota') {
                                     for (var l = 0; l < personil.length; l++) {
                                         if (t.personil[k] == personil[l].id) {
                                             t.indexPelaksana.push(l);
+                                            t.txtUnitKerja += '<div>' + personil[l].unit_kerja + '</div>';
                                             t.txt_personil += '<div>' + personil[l].fullname + '</div>';
                                             listPersonil += '<li>' + personil[l].fullname + '</li>';
                                             listPersonil2.push(l);
@@ -1233,10 +1232,12 @@ if ($role == 'anggota') {
                                             '<a class="text-primary tgs-btn-more' + i + '" onclick="showMoreTugas(' + i + ')">lihat lainnya</a>',
                                             '',
                                             '',
+                                            '',
                                         ]);
                                     }
                                     listTugas += '<li>' + t.nama + '</li>';
                                     var tr = tbTugas.row.add([
+                                        t.txtUnitKerja,
                                         '',
                                         t.nama,
                                         (t.index_form_terkait == null ? '-' : sortDokumen[t.index_form_terkait].judul),
@@ -1260,6 +1261,7 @@ if ($role == 'anggota') {
                                 '',
                                 '',
                                 '<a class="text-primary tgs-more tgs-more' + i + '" onclick="hideMoreTugas(' + i + ')">sembunyikan</a>',
+                                '',
                                 '',
                                 '',
                             ]);
@@ -1292,6 +1294,7 @@ if ($role == 'anggota') {
                 var t = sortTugas[i];
                 if (t.show) {
                     tbJadwal.row.add([
+                        '---',
                         sortDokumen[t.index_document].judul,
                         t.nama,
                         (t.index_form_terkait == null ? '-' : sortDokumen[t.index_form_terkait].judul),
@@ -1330,9 +1333,11 @@ if ($role == 'anggota') {
                                     '',
                                     '',
                                     '',
+                                    '',
                                 ]);
                             }
                             var tr = tbJadwal.row.add([
+                                t.txtUnitKerja,
                                 '---',
                                 '---',
                                 '---',
@@ -1353,6 +1358,7 @@ if ($role == 'anggota') {
                             }
                             jd.keterlambatan = diffDate > 0 ? diffDate + ' Hari' : '-';
                             tbImplementasi.row.add([
+                                t.txtUnitKerja,
                                 t.nama,
                                 t.txt_personil,
                                 jd.tgl,
@@ -1378,6 +1384,7 @@ if ($role == 'anggota') {
                             '',
                             '',
                             '',
+                            '',
                         ]);
                     }
                 }
@@ -1399,10 +1406,10 @@ if ($role == 'anggota') {
             txtDoc += '</ul>';
             var txtPersonil = '';
             p.listPersonil = Array.from(new Set(p.listPersonil));
-                for (var i = 0; i < p.listPersonil.length; i++) {
-                    var idx = p.listPersonil[i];
-                    txtPersonil += '<li>' + personil[idx].fullname + '</li>';
-                }
+            for (var i = 0; i < p.listPersonil.length; i++) {
+                var idx = p.listPersonil[i];
+                txtPersonil += '<li>' + personil[idx].fullname + '</li>';
+            }
             row[1] = txtDoc;
             row[2] = txtPersonil;
             row[3] = p.txtTugas;
@@ -1434,7 +1441,6 @@ if ($role == 'anggota') {
                 }
             }
             tbPemenuhan.draw();
-//            tbJadwal.columns(6).visible(false);
         });
     }
     function percentColor(num) {
@@ -1734,7 +1740,7 @@ if ($role == 'anggota') {
     $('#formDistribusi').submit(function (e) {
         e.preventDefault();
         post(this, 'set_distribusi');
-//        $.post('<?php // echo site_url($module);              ?>/set_distribusi', $(this).serialize(), function (data) {
+//        $.post('<?php // echo site_url($module);                 ?>/set_distribusi', $(this).serialize(), function (data) {
 //            $('#modalDistribusi').modal('hide');
 //            getPasal();
 //        });
@@ -2058,7 +2064,7 @@ if ($role == 'anggota') {
         //nama depan = 0
         //nama belakang = 1
         //tanggal terdaftar =2
-        var evalDate = parseDateValue(aData[4]);
+        var evalDate = parseDateValue(aData[5]);
         if ((isNaN(dateStart) && isNaN(dateEnd)) ||
                 (isNaN(dateStart) && evalDate <= dateEnd) ||
                 (dateStart <= evalDate && isNaN(dateEnd)) ||
@@ -2075,7 +2081,7 @@ if ($role == 'anggota') {
         //nama depan = 0
         //nama belakang = 1
         //tanggal terdaftar =2
-        var evalDate = parseDateValue(aData[2]);
+        var evalDate = parseDateValue(aData[3]);
         if ((isNaN(dateStart) && isNaN(dateEnd)) ||
                 (isNaN(dateStart) && evalDate <= dateEnd) ||
                 (dateStart <= evalDate && isNaN(dateEnd)) ||
