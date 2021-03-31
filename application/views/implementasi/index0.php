@@ -58,9 +58,9 @@ if ($role == 'anggota') {
                             <thead>
                                 <tr>
                                     <th>Pasal</th>
-                                    <th>Judul Dokumen</th>
-                                    <th>Penerima Dokumen (pelaksana pasal)</th>
-                                    <th>Tugas</th>
+                                    <th>Judul</th>
+                                    <th>Deskripsi</th>
+                                    <th>Dokumen</th>
                                     <th style="min-width: 0px">Aksi</th>
                                 </tr>
                             </thead>
@@ -989,9 +989,9 @@ if ($role == 'anggota') {
                 var d = sortPasal[i];
                 var tr = tbPasal.row.add([
                     d.fullname,
-                    '',
                     (d.sort_desc == null ? '-' : d.sort_desc),
                     '<p style="white-space: pre-wrap">' + (d.long_desc == null ? '-' : d.long_desc) + '</p>',
+                    '',
                     '<span class="fa fa-info-circle text-primary" onclick="detailPasal(' + i + ')" title="Detail"></span>&nbsp'
                             + (d.child == '0' ? '<span class="fa fa-upload text-primary" onclick="initAddDocument(' + i + ')" title="Upload"></span>&nbsp' : '')
                 ]).node();
@@ -1375,17 +1375,13 @@ if ($role == 'anggota') {
             tbPasal.rows().every(function (rowIdx, tableLoop, rowLoop) {
                 var row = this.data();
                 txtDoc = '<ul>';
-                var p= sortPasal[rowIdx];
-                var docs = p.index_child_documents;
+                var docs = sortPasal[rowIdx].index_child_documents;
                 for (var i = 0; i < docs.length; i++) {
                     var doc = sortDokumen[docs[i]];
                     txtDoc += '<li>' + doc.judul + '</li>';
                 }
                 txtDoc += '</ul>';
-                row[1] = txtDoc;
-                console.log(txtDoc);
-                row[2] = '-';
-                row[3] = p.txtTugas;
+                row[3] = txtDoc;
                 this.invalidate();
             });
             tbPasal.draw();

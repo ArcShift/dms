@@ -58,9 +58,9 @@ if ($role == 'anggota') {
                             <thead>
                                 <tr>
                                     <th>Pasal</th>
-                                    <th>Judul</th>
-                                    <th>Deskripsi</th>
-                                    <th>Dokumen</th>
+                                    <th>Judul Dokumen</th>
+                                    <th>Penerima Dokumen (pelaksana pasal)</th>
+                                    <th>Tugas</th>
                                     <th style="min-width: 0px">Aksi</th>
                                 </tr>
                             </thead>
@@ -970,6 +970,7 @@ if ($role == 'anggota') {
                 s.index_childs = [];
                 s.index_documents = [];
                 s.txtTugas = '';
+                s.txtPersonil = '';
                 s.txtPenerimaDokumen = '';
                 if (s.parent === null) {
                     s.parentIndex = null;
@@ -989,9 +990,9 @@ if ($role == 'anggota') {
                 var d = sortPasal[i];
                 var tr = tbPasal.row.add([
                     d.fullname,
+                    '',
                     (d.sort_desc == null ? '-' : d.sort_desc),
                     '<p style="white-space: pre-wrap">' + (d.long_desc == null ? '-' : d.long_desc) + '</p>',
-                    '',
                     '<span class="fa fa-info-circle text-primary" onclick="detailPasal(' + i + ')" title="Detail"></span>&nbsp'
                             + (d.child == '0' ? '<span class="fa fa-upload text-primary" onclick="initAddDocument(' + i + ')" title="Upload"></span>&nbsp' : '')
                 ]).node();
@@ -1152,6 +1153,11 @@ if ($role == 'anggota') {
                 d.index_tugas = [];
                 sortDokumen.push(d);
             }
+            for (var i = 0; i < sortPasal.length; i++) {
+                if (sortPasal[i].parent == null) {//data detail dokumen
+                    listPasalDocuments(i);
+                }
+            }
             tbDocument.draw();
             tbDistribusi.draw();
             getTugas();
@@ -1167,6 +1173,7 @@ if ($role == 'anggota') {
                 var d = sortDokumen[i];
                 if (d.jenis < 4 & d.jenis >= 1) {
                     var listTugas = '';
+                    var listPersonil = '';
                     if (d.show) {
                         tbTugas.row.add([
                             d.judul,
@@ -1194,6 +1201,7 @@ if ($role == 'anggota') {
                                         if (t.personil[k] == personil[l].id) {
                                             t.indexPelaksana.push(l);
                                             t.txt_personil += '<div>' + personil[l].fullname + '</div>';
+                                            listPersonil += '<li>' + personil[l].fullname + '</li>';
                                             if (role == 'anggota') {
                                                 if (personil[l].id_personil == idPersonil) {
                                                     t.show = true;
@@ -1256,7 +1264,8 @@ if ($role == 'anggota') {
                     }
                     for (var j = 0; j < d.index_dokumen_pasal.length; j++) {
                         var idxPasal = d.index_dokumen_pasal[j];
-                        sortPasal[idxPasal].txtTugas+=listTugas;
+                        sortPasal[idxPasal].txtTugas += listTugas;
+                        sortPasal[idxPasal].txtPersonil += listPersonil;
                     }
                 } else if (d.jenis == 4) {
                     $('.input-form-terkait').append('<option value="' + d.id + '">' + d.judul + '</option>');
@@ -1372,19 +1381,22 @@ if ($role == 'anggota') {
             $('.jd-more').hide();
         });
         //update table pasal - finishing
-            tbPasal.rows().every(function (rowIdx, tableLoop, rowLoop) {
-                var row = this.data();
-                txtDoc = '<ul>';
-                var docs = sortPasal[rowIdx].index_child_documents;
-                for (var i = 0; i < docs.length; i++) {
-                    var doc = sortDokumen[docs[i]];
-                    txtDoc += '<li>' + doc.judul + '</li>';
-                }
-                txtDoc += '</ul>';
-                row[3] = txtDoc;
-                this.invalidate();
-            });
-            tbPasal.draw();
+        tbPasal.rows().every(function (rowIdx, tableLoop, rowLoop) {
+            var row = this.data();
+            txtDoc = '<ul>';
+            var p = sortPasal[rowIdx];
+            var docs = p.index_child_documents;
+            for (var i = 0; i < docs.length; i++) {
+                var doc = sortDokumen[docs[i]];
+                txtDoc += '<li>' + doc.judul + '</li>';
+            }
+            txtDoc += '</ul>';
+            row[1] = txtDoc;
+            row[2] = p.txtPersonil;
+            row[3] = p.txtTugas;
+            this.invalidate();
+        });
+        tbPasal.draw();
     }
     function getPemenuhan() {
         $.getJSON('<?= site_url($module); ?>/get_pemenuhan', {'company': perusahaan, 'standard': standar}, function (data) {
@@ -1392,9 +1404,6 @@ if ($role == 'anggota') {
             for (var i = 0; i < sortPasal.length; i++) {
                 sortPasal[i].pemenuhanImplementasi = 0;
                 var ps = sortPasal[i];
-                if (ps.parent == null) {//data detail dokumen
-                    listPasalDocuments(i);
-                }
                 for (var j = 0; j < data.length; j++) {
                     var d = data[j];
                     if (d.id == ps.id) {
@@ -1713,7 +1722,7 @@ if ($role == 'anggota') {
     $('#formDistribusi').submit(function (e) {
         e.preventDefault();
         post(this, 'set_distribusi');
-//        $.post('<?php // echo site_url($module);         ?>/set_distribusi', $(this).serialize(), function (data) {
+//        $.post('<?php // echo site_url($module);           ?>/set_distribusi', $(this).serialize(), function (data) {
 //            $('#modalDistribusi').modal('hide');
 //            getPasal();
 //        });
@@ -1762,7 +1771,7 @@ if ($role == 'anggota') {
                 m.find('.input-group-append').append('<a class="btn btn-outline-primary btn-sm pull-right fa fa-download" href="<?= base_url('upload/dokumen') ?>/' + dt.file + '"></a>');
             } else if (dt.type_doc == 'URL') {
                 m.find('.input-group-append').append('<a class="btn btn-outline-primary btn-sm pull-right fa fa-search" href="' + dt.url + '"></a>');
-                
+
             }
         } else {
             m.find('.group-form-terkait').hide();
@@ -1891,7 +1900,7 @@ if ($role == 'anggota') {
             $('#tglMulaiJadwal').text('Tanggal');
         }
     });
-    
+
     function detailJadwal(index) {
         var m = $('#modalDetail');
         var j = sortJadwal[index];
@@ -2064,14 +2073,14 @@ if ($role == 'anggota') {
         }
         return false;
     });
-    
+
     // fungsi untuk converting format tanggal dd/mm/yyyy menjadi format tanggal javascript menggunakan zona aktubrowser
     function parseDateValue(rawDate) {
         var dateArray = rawDate.split("/");
         var parsedDate = new Date(dateArray[2], parseInt(dateArray[1]) - 1, dateArray[0]);  // -1 because months are from 0 to 11   
         return parsedDate;
     }
-    
+
     $(document).ready(function () {
         if (role == 'anggota') {
             $('.filter-unit-kerja, .filter-personil').remove();
