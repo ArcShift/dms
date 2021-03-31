@@ -971,6 +971,7 @@ if ($role == 'anggota') {
                 s.index_documents = [];
                 s.txtTugas = '';
                 s.txtPersonil = '';
+                s.listPersonil = [];
                 s.txtPenerimaDokumen = '';
                 if (s.parent === null) {
                     s.parentIndex = null;
@@ -1174,6 +1175,7 @@ if ($role == 'anggota') {
                 if (d.jenis < 4 & d.jenis >= 1) {
                     var listTugas = '';
                     var listPersonil = '';
+                    var listPersonil2 = [];
                     if (d.show) {
                         tbTugas.row.add([
                             d.judul,
@@ -1202,6 +1204,7 @@ if ($role == 'anggota') {
                                             t.indexPelaksana.push(l);
                                             t.txt_personil += '<div>' + personil[l].fullname + '</div>';
                                             listPersonil += '<li>' + personil[l].fullname + '</li>';
+                                            listPersonil2.push(l);
                                             if (role == 'anggota') {
                                                 if (personil[l].id_personil == idPersonil) {
                                                     t.show = true;
@@ -1266,6 +1269,9 @@ if ($role == 'anggota') {
                         var idxPasal = d.index_dokumen_pasal[j];
                         sortPasal[idxPasal].txtTugas += listTugas;
                         sortPasal[idxPasal].txtPersonil += listPersonil;
+                        sortPasal[idxPasal].listPersonil = sortPasal[idxPasal].listPersonil.concat(listPersonil2);
+//                        console.log(sortPasal[idxPasal].txtPersonil);
+//                        console.log(sortPasal[idxPasal].listPersonil);
                     }
                 } else if (d.jenis == 4) {
                     $('.input-form-terkait').append('<option value="' + d.id + '">' + d.judul + '</option>');
@@ -1391,8 +1397,14 @@ if ($role == 'anggota') {
                 txtDoc += '<li>' + doc.judul + '</li>';
             }
             txtDoc += '</ul>';
+            var txtPersonil = '';
+            p.listPersonil = Array.from(new Set(p.listPersonil));
+                for (var i = 0; i < p.listPersonil.length; i++) {
+                    var idx = p.listPersonil[i];
+                    txtPersonil += '<li>' + personil[idx].fullname + '</li>';
+                }
             row[1] = txtDoc;
-            row[2] = p.txtPersonil;
+            row[2] = txtPersonil;
             row[3] = p.txtTugas;
             this.invalidate();
         });
@@ -1722,7 +1734,7 @@ if ($role == 'anggota') {
     $('#formDistribusi').submit(function (e) {
         e.preventDefault();
         post(this, 'set_distribusi');
-//        $.post('<?php // echo site_url($module);           ?>/set_distribusi', $(this).serialize(), function (data) {
+//        $.post('<?php // echo site_url($module);              ?>/set_distribusi', $(this).serialize(), function (data) {
 //            $('#modalDistribusi').modal('hide');
 //            getPasal();
 //        });
