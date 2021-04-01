@@ -76,6 +76,10 @@ class Company extends MY_Controller {
     }
 
     function detail() {
+        if ($this->input->post('initDetail')) {
+            $this->session->set_userdata('idData', $this->input->post('initDetail'));
+        }
+        $this->data['data'] = $this->model->detail($this->session->idData);
         $this->subModule = 'read';
         $this->subTitle = 'Detail';
         $this->render('detail');

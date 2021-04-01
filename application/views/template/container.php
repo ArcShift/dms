@@ -213,6 +213,8 @@ if ($this->input->get('standard')) {
                                 <li id="menu-document_search">-</li>
                                 <li class="app-sidebar__heading">MONITORING & EVALUASI</li>
                                 <li id="menu-pemenuhan">-</li>
+                                <li class="app-sidebar__heading">GAP ANALISA</li>
+                                <li id="menu-gap_analisa">-</li>
                                 <li class="app-sidebar__heading">RIWAYAT</li>
                                 <li id="menu-log">-</li>
                                 <li class="app-sidebar__heading">PENGATURAN</li>

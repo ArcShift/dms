@@ -7,7 +7,8 @@
         <!--===============================================================================================-->	
         <link rel="icon" type="image/png" href="images/icons/favicon.ico"/>
         <!--===============================================================================================-->
-        <link rel="stylesheet" type="text/css" href="https://colorlib.com/etc/lf/Login_v18/vendor/bootstrap/css/bootstrap.min.css">
+        <!--<link rel="stylesheet" type="text/css" href="https://colorlib.com/etc/lf/Login_v18/vendor/bootstrap/css/bootstrap.min.css">-->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
         <!--===============================================================================================-->
         <link rel="stylesheet" type="text/css" href="https://colorlib.com/etc/lf/Login_v18/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
         <!--===============================================================================================-->
@@ -32,7 +33,8 @@
         <script src="https://colorlib.com/etc/lf/Login_v18/vendor/animsition/js/animsition.min.js"></script>
         <!--===============================================================================================-->
         <script src="https://colorlib.com/etc/lf/Login_v18/vendor/bootstrap/js/popper.js"></script>
-        <script src="https://colorlib.com/etc/lf/Login_v18/vendor/bootstrap/js/bootstrap.min.js"></script>
+        <!--<script src="https://colorlib.com/etc/lf/Login_v18/vendor/bootstrap/js/bootstrap.min.js"></script>-->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
         <!--===============================================================================================-->
         <script src="https://colorlib.com/etc/lf/Login_v18/vendor/select2/select2.min.js"></script>
         <!--===============================================================================================-->
@@ -62,23 +64,25 @@
                                 Username/ password salah
                             </div>
                         <?php } ?>
-                        <div class="wrap-input100 validate-input">
-                            <input id="inputUser" class="input100 has-val" type="text" name="user" value="<?php echo $this->input->post('user') ?>">
-                            <span class="focus-input100"></span>
-                            <span class="label-input100">Username</span>
+                        <label>Username</label>
+                        <div class="input-group">
+                            <input class="form-control" name="user" value="<?php echo $this->input->post('user') ?>" required="">
                         </div>
-                        <div class="wrap-input100 validate-input" data-validate="Password is required">
-                            <input class="input100 has-val" id="input-pass" type="password" name="pass">
-                            <span class="focus-input100"></span>
-                            <span class="label-input100">Password</span>
+                        <br>
+                        <label>Password</label>
+                        <div class="input-group">
+                            <input class="form-control" type="password" id="input-pass" name="pass" required="">
+                            <div class="input-group-append">
+                                <button class="btn btn-outline-success fa fa-eye" onclick="myFunction()" type="button"></button>
+                            </div>
                         </div>
-                        <input type="checkbox" onclick="myFunction()" style="margin: 5px 10px 20px">Show Password 
+                        <br>
+                        <br>
                         <div class="container-login100-form-btn">
                             <button class="login100-form-btn" name="login" value="l">
                                 Login
                             </button>
                         </div>
-
                     </form>
                     <div class="login100-more" style="background-image: url('https://colorlib.com/etc/lf/Login_v18/images/bg-01.jpg');">
                     </div>
@@ -87,7 +91,6 @@
         </div>
     </body>
     <script>
-        $('#inputUser').click();
         function myFunction() {
             var x = document.getElementById("input-pass");
             if (x.type === "password") {

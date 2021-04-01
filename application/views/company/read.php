@@ -23,9 +23,10 @@
                             <td><?php echo $k + 1 ?></td>
                             <td><?php echo $r['name'] ?></td>
                             <td><?php echo $r['city'] ?></td>
-                            <td class="text-center"><span class="badge badge-<?= $r['count']==0?'danger':'info'?>"><?php echo $r['count'] ?></span></td>
-                            <td class="text-center"><span class="badge badge-<?= $r['standard']==0?'danger':'info'?>"><?php echo $r['standard'] ?></span></td>
+                            <td class="text-center"><span class="badge badge-<?= $r['count'] == 0 ? 'danger' : 'info' ?>"><?php echo $r['count'] ?></span></td>
+                            <td class="text-center"><span class="badge badge-<?= $r['standard'] == 0 ? 'danger' : 'info' ?>"><?php echo $r['standard'] ?></span></td>
                             <td>
+                                <button class="btn btn-outline-primary btn-sm fa fa-search" title="Detail" name="initDetail" value="<?php echo $r['id'] ?>" formaction="<?php echo site_url($module . '/detail') ?>"></button>
                                 <?php if ($activeModule['acc_update']) { ?>
                                     <button class="btn btn-outline-primary btn-sm fa fa-edit" title="Edit" name="initEdit" value="<?php echo $r['id'] ?>" formaction="<?php echo site_url($module . '/edit') ?>"></button>
                                 <?php } ?>
