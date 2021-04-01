@@ -41,6 +41,7 @@
         <!--===============================================================================================-->
         <script src="https://colorlib.com/etc/lf/Login_v18/vendor/countdowntime/countdowntime.js"></script>
         <!--===============================================================================================-->
+        <script src="https://colorlib.com/etc/lf/Login_v18/js/main.js"></script>
     </head>
     <body style="background-color: #666666;">	
         <div class="limiter">
@@ -48,7 +49,7 @@
                 <div class="wrap-login100">
                     <form class="login100-form validate-form" method="post" style="padding-top: 0px">
                         <?php if ($this->config->item('loginLogo')) { ?>
-                            <img src="<?= base_url('assets/images/'.$this->config->item('loginLogo')) ?>" style="width: 100%">
+                            <img src="<?= base_url('assets/images/' . $this->config->item('loginLogo')) ?>" style="width: 100%">
                         <?php } else { ?>
                             <span class="login100-form-title p-b-43" style="padding-top: 200px">
                                 <?php echo $this->config->item('app_name') ?>
@@ -67,25 +68,33 @@
                             <span class="label-input100">Username</span>
                         </div>
                         <div class="wrap-input100 validate-input" data-validate="Password is required">
-                            <input class="input100 has-val" type="password" name="pass">
+                            <input class="input100 has-val" id="input-pass" type="password" name="pass">
                             <span class="focus-input100"></span>
                             <span class="label-input100">Password</span>
                         </div>
+                        <input type="checkbox" onclick="myFunction()" style="margin: 5px 10px 20px">Show Password 
                         <div class="container-login100-form-btn">
                             <button class="login100-form-btn" name="login" value="l">
                                 Login
                             </button>
                         </div>
+
                     </form>
                     <div class="login100-more" style="background-image: url('https://colorlib.com/etc/lf/Login_v18/images/bg-01.jpg');">
                     </div>
                 </div>
             </div>
         </div>
-        <!--===============================================================================================-->
-        <script src="https://colorlib.com/etc/lf/Login_v18/js/main.js"></script>
-        <script>
-            $('#inputUser').click();
-        </script>
     </body>
+    <script>
+        $('#inputUser').click();
+        function myFunction() {
+            var x = document.getElementById("input-pass");
+            if (x.type === "password") {
+                x.type = "text";
+            } else {
+                x.type = "password";
+            }
+        }
+    </script>
 </html>
