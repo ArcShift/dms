@@ -149,6 +149,7 @@ if ($role == 'anggota') {
                                     <th class="text-center">Status</th>
                                     <th class="text-center">Keterlambatan</th>
                                     <th class="text-center">Bukti</th>
+                                    <th class="text-center">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody></tbody>
