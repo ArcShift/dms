@@ -84,7 +84,7 @@
                             </button>
                         </div>
                     </form>
-                    <div class="login100-more" style="background-image: url('https://colorlib.com/etc/lf/Login_v18/images/bg-01.jpg');">
+                    <div class="login100-more" style="background-image: url('<?= base_url('assets/images/login-ema.jpg') ?>');">
                     </div>
                 </div>
             </div>
