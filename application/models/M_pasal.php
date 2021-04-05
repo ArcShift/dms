@@ -115,20 +115,26 @@ class M_pasal extends CI_Model {
         }
     }
 
-    function get() {
-        $this->db->where('id_standard', $this->session->activeStandard['id']);
-        $this->db->where('parent IS NULL');
-        $result = $this->db->get_where('pasal p')->result_array();
-        $sort = [];
-        foreach ($result as $k => $v) {
-            array_push($sort, $v);
-            $child = $this->getChild($v['id']);
-            foreach ($child as $v2) {
-                $v2['name'] = $v['name'] . ' - ' . $v2['name'];
-                array_push($sort, $v2);
+    function get($id = null) {
+        if (empty($id)) {
+            $this->db->where('id_standard', $this->session->activeStandard['id']);
+            $this->db->where('parent IS NULL');
+            $result = $this->db->get_where('pasal p')->result_array();
+            $sort = [];
+            foreach ($result as $k => $v) {
+                array_push($sort, $v);
+                $child = $this->getChild($v['id']);
+                foreach ($child as $v2) {
+                    $v2['name'] = $v['name'] . ' - ' . $v2['name'];
+                    array_push($sort, $v2);
+                }
             }
+            return $sort;
+        } else {
+            $data = $this->db->get_where('pasal', ['id' => $id])->result_array();
+            $data['fullname'] = $this->getFullname($id);
+            return $data;
         }
-        return $sort;
     }
 
     private function getChild($id) {
@@ -150,11 +156,10 @@ class M_pasal extends CI_Model {
         $this->db->join('document_pasal dp', 'dp.id_pasal = p.id AND dp.id_document = ' . $id_document);
         $pasal = $this->db->get('pasal p')->result_array();
         foreach ($pasal as $k => $v) {
-            $pasal[$k]['fullname']= $this->getFullname($v['id']);
+            $pasal[$k]['fullname'] = $this->getFullname($v['id']);
         }
         return $pasal;
     }
-
 
     function getDocument($id) {
         $this->db->join('document_pasal dp', 'dp.id_document = d.id');

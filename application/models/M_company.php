@@ -31,9 +31,14 @@ class M_company extends CI_Model {
     }
 
     function detail($id) {
-        $this->db->select('c.*, r.name AS kota, p.id AS province');
+        $this->db->select('c.*, r.name AS kota, p.name AS province, COUNT(DISTINCT uk.id) AS unit_kerja, COUNT(DISTINCT prs.id) AS personil,  COUNT(DISTINCT cs.id) AS standard,  COUNT(DISTINCT d.id) AS document');
         $this->db->join('regency r', 'r.id = c.id_regency', 'LEFT');
         $this->db->join('province p', 'p.id = r.id_province', 'LEFT');
+        $this->db->join('unit_kerja uk', 'uk.id_company = c.id', 'LEFT');
+        $this->db->join('personil prs', 'prs.id_company = c.id', 'LEFT');
+        $this->db->join('company_standard cs', 'cs.id_company = c.id', 'LEFT');
+        $this->db->join('document d', 'd.id_company = c.id', 'LEFT');
+        $this->db->group_by('c.id');
         $this->db->where('c.id', $id);
         return $this->db->get($this->table. ' c')->row_array();
     }
