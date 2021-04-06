@@ -17,7 +17,11 @@ class Gap_analisa extends MY_Controller {
         $this->subTitle = 'List';
         $this->subModule = 'read';
         $this->data['menuStandard'] = 'standard';
-        $this->data['data'] = $this->m_pasal->get();
+        $pasal = $this->m_pasal->get();
+        foreach ($pasal as $k => $p) {
+            $pasal[$k]['pertanyaan'] = $this->db->get_where('kuesioner', ['id_pasal'=>$p['id']])->result_array();
+        }
+        $this->data['data'] = $pasal;
         $this->render('index');
     }
 
