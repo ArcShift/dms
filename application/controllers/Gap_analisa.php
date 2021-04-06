@@ -37,9 +37,9 @@ class Gap_analisa extends MY_Controller {
         }
         $this->data['data'] = $pasal;
         if ($this->role == 'admin') {
-            $this->render('index2');
-        } else {
             $this->render('index0');
+        } else {
+            $this->render('index');
         }
     }
 
