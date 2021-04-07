@@ -91,7 +91,15 @@ class Gap_analisa extends MY_Controller {
             $this->db->set('status', $this->input->post('status'));
             $this->db->set('id_unit_kerja', $this->input->post('unit_kerja'));
             $this->db->insert('kuesioner_status');
-        }
+        }elseif ($this->input->post('edit')) {
+            $this->db->set('status', $this->input->post('status'));
+            $this->db->set('id_unit_kerja', $this->input->post('unit_kerja'));
+            $this->db->where('id', $this->input->post('id'));
+            $this->db->update('kuesioner_status');
+        }elseif ($this->input->post('hapus')) {
+            $this->db->where('id', $this->input->post('id'));
+            $this->db->delete('kuesioner_status');
+        }  
         $this->subModule = 'edit';
         $this->data['pertanyaan'] = $this->db->get_where('kuesioner', ['id' => $this->session->idData])->row_array();
         $this->data['status'] = $this->model->getStatus($this->session->idData);

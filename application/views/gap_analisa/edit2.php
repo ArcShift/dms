@@ -26,20 +26,20 @@
         </table>
     </div>
 </div>
-<!--MODAL TAMBAH-->
-<div class="modal fade" id="modalAdd">
+<!--MODAL-->
+<div class="modal fade" id="modalStatus">
     <div class="modal-dialog">
         <form method="post">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Tambah Status</h5>
+                    <h5 class="modal-title"></h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
-                        <select class="form-control" name="unit_kerja" required="">
+                        <select class="form-control select-unit-kerja" name="unit_kerja" required="">
                             <option value="">~ Unit Kerja ~</option>
                             <?php foreach ($unit_kerja as $uk) { ?>
                                 <option value="<?= $uk['id'] ?>"><?= $uk['name'] ?></option>
@@ -47,82 +47,45 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <input type="number" max="100" min="0" class="form-control" name="status" required="">
+                        <input type="number" class="input-id" name="id" required="" hidden="">
+                        <input type="number" max="100" min="0" class="form-control input-status" name="status" required="">
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-primary" data-dismiss="modal">Tutup</button>
-                    <button class="btn btn-primary" name="tambah" value="ok">Simpan</button>
-                </div>
-            </div>
-        </form>
-    </div>
-</div>
-<div class="modal fade" id="modalEdit">
-    <div class="modal-dialog">
-        <form method="post">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Edit Pertanyaan</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="form-group">
-                        <input class="input-id" name="id" required="" hidden="">
-                        <textarea class="form-control input-pertanyaan" required="" name="pertanyaan"></textarea>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button class="btn btn-primary" data-dismiss="modal">Tutup</button>
-                    <button class="btn btn-primary" name="edit" value="ok">Simpan</button>
-                </div>
-            </div>
-        </form>
-    </div>
-</div>
-<div class="modal fade" id="modalHapus">
-    <div class="modal-dialog">
-        <form method="post">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Hapus Pertanyaan</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="form-group">
-                        <input class="input-id" name="id" required="" hidden="">
-                        <textarea class="form-control input-pertanyaan" required="" readonly=""></textarea>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button class="btn btn-outline-primary" data-dismiss="modal">Tutup</button>
-                    <button class="btn btn-outline-danger" name="hapus" value="ok">Hapus</button>
+                    <button class="btn btn-primary" id="btnSubmit" name="tambah" value="ok">Simpan</button>
                 </div>
             </div>
         </form>
     </div>
 </div>
 <script>
-    var pertanyaan = <?= json_encode($pertanyaan) ?>;
+    var stat = <?php echo json_encode($status) ?>;
     $('#btnAdd').click(function () {
-        $('#modalAdd').modal('show');
+        var m = $('#modalStatus');
+        m.modal('show');
+        m.find('#btnSubmit').attr('name', 'tambah');
+        m.find('#btnSubmit').html('Tambah');
+        m.find('.modal-title').html('Tambah Status');
     });
-    function hapus(idx) {
-        var m = $('#modalHapus');
-        m.modal('show');
-        m.find('.input-id').val(pertanyaan[idx].id);
-        m.find('.input-pertanyaan').val(pertanyaan[idx].kuesioner);
-    }
     function edit(idx) {
-        var m = $('#modalEdit');
+        var m = $('#modalStatus');
         m.modal('show');
-        m.find('.input-id').val(pertanyaan[idx].id);
-        m.find('.input-pertanyaan').val(pertanyaan[idx].kuesioner);
+        m.find('#btnSubmit').attr('name', 'edit');
+        m.find('#btnSubmit').html('Edit');
+        m.find('.modal-title').html('Edit Status');
+        m.find('.select-unit-kerja').val(stat[idx].id_unit_kerja);
+        m.find('.input-status').val(stat[idx].status);
+        m.find('.input-id').val(stat[idx].id);
+    }
+    function hapus(idx) {
+        var m = $('#modalStatus');
+        m.modal('show');
+        m.find('#btnSubmit').attr('name', 'hapus');
+        m.find('#btnSubmit').html('Hapus');
+        m.find('.modal-title').html('Hapus Status');
+        m.find('.select-unit-kerja').val(stat[idx].id_unit_kerja);
+        m.find('.input-status').val(stat[idx].status);
+        m.find('.input-id').val(stat[idx].id);
     }
 </script>
-<?php
-// print_r($pertanyaan) ?>
