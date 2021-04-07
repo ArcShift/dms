@@ -47,7 +47,7 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <input type="number" class="input-id" name="id" required="" hidden="">
+                        <input type="number" class="input-id" name="id" hidden="">
                         <input type="number" max="100" min="0" class="form-control input-status" name="status" required="">
                     </div>
                 </div>
