@@ -1,7 +1,6 @@
 <div class="card">   
     <div class="card-body">
         <form method="post">
-
             <table class="table">
                 <thead>
                     <tr>

@@ -13,8 +13,8 @@ class Company extends MY_Controller {
     }
 
     function index() {
-        if($this->session->user['role']!= 'admin'){
-            redirect($this->module.'/detail');
+        if ($this->session->user['role'] != 'admin') {
+            redirect($this->module . '/detail');
         }
         $this->subTitle = 'List';
         $this->data['data'] = $this->model->read();
@@ -73,11 +73,11 @@ class Company extends MY_Controller {
                 "name" => $this->input->post('nama'),
                 "id_role" => $this->input->post('role')
             );
-        }elseif($this->session->idData){
-            $this->data['data'] = $this->model->detail($this->session->idData);
         }
-        if(empty($this->data['data'])){
-            redirect($this->module);
+        if (isset($this->session->idData)) {
+            $this->data['data'] = $this->model->detail($this->session->idData);
+        } else {
+            $this->data['data'] = $this->model->detail($this->session->activeCompany['id']);
         }
         $this->render('edit');
     }
@@ -86,7 +86,20 @@ class Company extends MY_Controller {
         if ($this->input->post('initDetail')) {
             $this->session->set_userdata('idData', $this->input->post('initDetail'));
         }
-        $this->data['data'] = $this->model->detail($this->session->idData);
+        if ($this->role == 'admin') {
+            $company = $this->model->detail($this->session->idData);
+        } else {
+            $company = $this->model->detail($this->session->activeCompany['id']);
+        }
+        if (!empty($company)) {
+            $this->data['data'] = $company;
+            $this->data['unit_kerja'] = $this->db->get_where('unit_kerja', ['id_company'=> $company['id']])->result_array();
+            $this->data['personil'] = $this->db->get_where('personil', ['id_company'=> $company['id']])->result_array();
+            $this->db->join('company_standard cs', 'cs.id_standard = s.id');
+            $this->data['standard'] = $this->db->get_where('standard s', ['cs.id_company'=> $company['id']])->result_array();
+        }else{
+            echo 'NO DATA';
+        }
         $this->subModule = 'read';
         $this->subTitle = 'Detail';
         $this->render('detail');
