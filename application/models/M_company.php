@@ -31,7 +31,7 @@ class M_company extends CI_Model {
     }
 
     function detail($id) {
-        $this->db->select('c.*, r.name AS kota, p.name AS province, COUNT(DISTINCT uk.id) AS unit_kerja, COUNT(DISTINCT prs.id) AS personil,  COUNT(DISTINCT cs.id) AS standard,  COUNT(DISTINCT d.id) AS document');
+        $this->db->select('c.*, r.name AS kota, r.id_province, p.name AS province, COUNT(DISTINCT uk.id) AS unit_kerja, COUNT(DISTINCT prs.id) AS personil,  COUNT(DISTINCT cs.id) AS standard,  COUNT(DISTINCT d.id) AS document');
         $this->db->join('regency r', 'r.id = c.id_regency', 'LEFT');
         $this->db->join('province p', 'p.id = r.id_province', 'LEFT');
         $this->db->join('unit_kerja uk', 'uk.id_company = c.id', 'LEFT');
@@ -40,14 +40,15 @@ class M_company extends CI_Model {
         $this->db->join('document d', 'd.id_company = c.id', 'LEFT');
         $this->db->group_by('c.id');
         $this->db->where('c.id', $id);
-        return $this->db->get($this->table. ' c')->row_array();
+        return $this->db->get($this->table . ' c')->row_array();
     }
 
     function update() {
         $input = $this->input->post();
-        $this->db->where('id', $input['id']);
+        $this->db->where('id', $this->session->idData);
         $this->db->set('name', $input['nama']);
         $this->db->set('id_regency', $input['kota']);
+        $this->db->set('alamat', $input['alamat']);
         return $this->db->update($this->table);
     }
 

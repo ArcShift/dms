@@ -13,6 +13,9 @@ class Company extends MY_Controller {
     }
 
     function index() {
+        if($this->session->user['role']!= 'admin'){
+            redirect($this->module.'/detail');
+        }
         $this->subTitle = 'List';
         $this->data['data'] = $this->model->read();
         $this->render('read');
@@ -50,9 +53,10 @@ class Company extends MY_Controller {
     function edit() {
         $this->subTitle = 'Edit';
         if ($this->input->post('initEdit')) {
+            $this->session->set_userdata('idData', $this->input->post('initEdit'));
             $this->data['data'] = $this->model->detail($this->input->post('initEdit'));
         } elseif ($this->input->post('edit')) {
-            $result = $this->model->detail($this->input->post('edit'));
+//            $result = $this->model->detail($this->input->post('edit'));
             $this->form_validation->set_rules('nama', 'Nama', 'required');
             if ($this->form_validation->run()) {
                 if ($this->model->update()) {
@@ -69,7 +73,10 @@ class Company extends MY_Controller {
                 "name" => $this->input->post('nama'),
                 "id_role" => $this->input->post('role')
             );
-        } else {
+        }elseif($this->session->idData){
+            $this->data['data'] = $this->model->detail($this->session->idData);
+        }
+        if(empty($this->data['data'])){
             redirect($this->module);
         }
         $this->render('edit');
