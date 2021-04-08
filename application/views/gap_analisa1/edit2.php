@@ -1,40 +1,26 @@
-<?php $n = 0 ?>
 <div class="card">
     <div class="card-body">
-        <h4><?= $pasal['fullname'] ?></h4>
-        <div style="border: 0.5px solid gray; padding: 8px; border-radius: 10px; margin: 20px 0px 20px 0px">
-            <b>Bukti Pasal</b>
-            <p style=" white-space: pre-wrap"><?= $pasal['bukti'] ?></p>
-        </div>
+        <button class="btn btn-outline-primary pull-right m-1" id="btnAdd">Tambah</button>
+        <a class="btn btn-outline-primary pull-right m-1" href="<?= site_url($module) ?>">Kembali</a>
+        <h4><?= $pertanyaan['kuesioner'] ?></h4>
         <table class="table">
             <thead>
                 <tr>
-                    <th>Unit</th>
+                    <th>Unit Kerja</th>
                     <th>Status</th>
                     <th style="width: 100px">Aksi</th>
                 </tr>
             </thead>
             <tbody>
-                <?php foreach ($pertanyaan as $k => $v) { ?>
-                    <tr class="table-success">
-                        <td colspan="2"><b><?= $v['kuesioner'] ?></b></td>
+                <?php foreach ($status as $k => $v) { ?>
+                    <tr>
+                        <td><?= $v['unit_kerja'] ?></td>
+                        <td><?= $v['status'] ?></td>
                         <td>
-                            <button class="btn btn-sm btn-outline-primary fa fa-plus" onclick="tambah(<?= $v['id'] ?>)"></button>
+                            <button class="btn btn-sm btn-outline-primary fa fa-edit" onclick="edit(<?= $k ?>)"></button>
+                            <button class="btn btn-sm btn-outline-danger fa fa-trash" onclick="hapus(<?= $k ?>)"></button>
                         </td>
                     </tr>
-                    <?php foreach ($v['detail'] as $k2 => $v2) { ?>
-                        <tr>
-                            <td><?= $v2['unit_kerja'] ?></td>
-                            <td><?= $v2['status'] ?></td>
-                            <td>
-                                <button class="btn btn-sm btn-outline-primary fa fa-edit" onclick="edit(<?= $n ?>)"></button>
-                                <button class="btn btn-sm btn-outline-danger fa fa-trash" onclick="hapus(<?= $n ?>)"></button>
-                            </td>
-                        </tr>
-                        <?php
-                        $n++;
-                    }
-                    ?>
                 <?php } ?>
             </tbody>
         </table>
@@ -75,15 +61,13 @@
 </div>
 <script>
     var stat = <?php echo json_encode($status) ?>;
-    function tambah(idx) {
-        console.log(idx);
+    $('#btnAdd').click(function () {
         var m = $('#modalStatus');
         m.modal('show');
         m.find('#btnSubmit').attr('name', 'tambah');
         m.find('#btnSubmit').html('Tambah');
         m.find('.modal-title').html('Tambah Status');
-        m.find('.input-id').val(idx);
-    }
+    });
     function edit(idx) {
         var m = $('#modalStatus');
         m.modal('show');
@@ -105,5 +89,3 @@
         m.find('.input-id').val(stat[idx].id);
     }
 </script>
-<?php
-// print_r($pertanyaan) ?>

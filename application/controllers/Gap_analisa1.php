@@ -1,8 +1,8 @@
 <?php
 
-class Gap_analisa extends MY_Controller {
+class Gap_analisa1 extends MY_Controller {
 
-    protected $module = 'gap_analisa';
+    protected $module = 'gap_analisa1';
 
     function __construct() {
         parent::__construct();
@@ -10,7 +10,7 @@ class Gap_analisa extends MY_Controller {
         $this->load->model('m_kuesioner', 'model');
     }
 
-    function index1() {
+    function index() {
         if ($this->input->post('edit')) {
             $this->session->set_userdata('idData', $this->input->post('edit'));
             redirect($this->module . '/edit');
@@ -40,76 +40,30 @@ class Gap_analisa extends MY_Controller {
             $this->render('index0');
         } else {
             $this->render('index');
-            $pasal = $this->m_pasal->get();
         }
     }
 
-    function index() {
+    function index2() {
         if ($this->input->post('edit')) {
             $this->session->set_userdata('idData', $this->input->post('edit'));
             redirect($this->module . '/edit');
-        }else if ($this->input->post('detail')) {
-            $this->session->set_userdata('idData', $this->input->post('detail'));
-            redirect($this->module . '/detail');
         }
-        $pasal = $this->m_pasal->get();
+        $this->subTitle = 'List';
         $this->subModule = 'read';
-        if ($this->role == 'admin') {
-            foreach ($pasal as $k => $p) {//admin
-                $n = 1;
-                $pertanyaan = $this->db->get_where('kuesioner', ['id_pasal' => $p['id']])->result_array();
-                foreach ($pertanyaan as $k2 => $p2) {
-                    $status = $this->model->getStatus($p2['id']);
-                    $pertanyaan[$k2]['status'] = $status;
-                    $n2 = count($status) + 1;
-                    $pertanyaan[$k2]['row'] = $n2;
-                    $n += $n2;
-                }
-                $pasal[$k]['pertanyaan'] = $pertanyaan;
-                $pasal[$k]['row'] = $n;
+        $this->data['menuStandard'] = 'standard';
+        $pasal = $this->m_pasal->get();
+        foreach ($pasal as $k => $p) {
+            $n = 1;
+            $pertanyaan = $this->db->get_where('kuesioner', ['id_pasal' => $p['id']])->result_array();
+            foreach ($pertanyaan as $k2 => $p2) {
+                $pertanyaan[$k]['status'] = $this->model->getStatus($p2['id']);
+                $n++;
             }
-            $this->data['data'] = $pasal;
-            $this->render('index0');
-        } else {
-            foreach ($pasal as $k => $v) {//pic
-                $counts = $this->model->counts($v['id']);
-                $pasal[$k]['pertanyaan'] = $counts['pertanyaan'];
-                $pasal[$k]['unit'] = $counts['unit'];
-                $pasal[$k]['status'] = round($counts['status']);
-            }
-            $this->data['data'] = $pasal;
-            $this->render('index3');
+            $pasal[$k]['pertanyaan'] = $pertanyaan;
+            $pasal[$k]['row'] = $n;
         }
-//        $this->render('index3');
-    }
-
-    function detail() {
-        if ($this->input->post('tambah')) {
-            $this->db->set('id_unit_kerja', $this->input->post('unit_kerja'));
-            $this->db->set('id_kuesioner', $this->input->post('id'));
-            $this->db->set('status', $this->input->post('status'));
-            $this->db->insert('kuesioner_status');
-        } elseif ($this->input->post('edit')) {
-            $this->db->set('status', $this->input->post('status'));
-            $this->db->set('id_unit_kerja', $this->input->post('unit_kerja'));
-            $this->db->where('id', $this->input->post('id'));
-            $this->db->update('kuesioner_status');
-        } elseif ($this->input->post('hapus')) {
-            $this->db->where('id', $this->input->post('id'));
-            $this->db->delete('kuesioner_status');
-        }
-        $stats = [];
-        $this->data['pasal'] = $this->m_pasal->get($this->session->idData);
-        $que = $this->db->get_where('kuesioner', ['id_pasal' => $this->session->idData])->result_array();
-        foreach ($que as $k => $v) {
-            $stat = $this->model->getStatus($v['id']);
-            $que[$k]['detail'] = $stat;
-            $stats = array_merge($stats, $stat);
-        }
-        $this->data['pertanyaan'] = $que;
-        $this->data['status'] = $stats;
-        $this->data['unit_kerja'] = $this->db->get_where('unit_kerja', ['id_company' => $this->session->activeCompany['id']])->result_array();
-        $this->render('detail');
+        $this->data['data'] = $pasal;
+        $this->render('index0');
     }
 
     function edit() {
@@ -137,15 +91,15 @@ class Gap_analisa extends MY_Controller {
             $this->db->set('status', $this->input->post('status'));
             $this->db->set('id_unit_kerja', $this->input->post('unit_kerja'));
             $this->db->insert('kuesioner_status');
-        } elseif ($this->input->post('edit')) {
+        }elseif ($this->input->post('edit')) {
             $this->db->set('status', $this->input->post('status'));
             $this->db->set('id_unit_kerja', $this->input->post('unit_kerja'));
             $this->db->where('id', $this->input->post('id'));
             $this->db->update('kuesioner_status');
-        } elseif ($this->input->post('hapus')) {
+        }elseif ($this->input->post('hapus')) {
             $this->db->where('id', $this->input->post('id'));
             $this->db->delete('kuesioner_status');
-        }
+        }  
         $this->subModule = 'edit';
         $this->data['pertanyaan'] = $this->db->get_where('kuesioner', ['id' => $this->session->idData])->row_array();
         $this->data['status'] = $this->model->getStatus($this->session->idData);
