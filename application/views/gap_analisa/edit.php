@@ -114,4 +114,3 @@
         m.find('.input-pertanyaan').val(pertanyaan[idx].kuesioner);
     }
 </script>
-<?php print_r(json_encode($pertanyaan)) ?>

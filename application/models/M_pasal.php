@@ -131,7 +131,7 @@ class M_pasal extends CI_Model {
             }
             return $sort;
         } else {
-            $data = $this->db->get_where('pasal', ['id' => $id])->result_array();
+            $data = $this->db->get_where('pasal', ['id' => $id])->row_array();
             $data['fullname'] = $this->getFullname($id);
             return $data;
         }

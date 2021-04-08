@@ -20,23 +20,14 @@
         </div>
         <hr>
         <div class="row">
-            <div class="col-sm-4">
+            <div class="col-sm-6">
                 Unit Kerja
                 <ol>
                     <?php foreach ($unit_kerja as $k => $v) { ?>
                         <li><b><?= $v['name'] ?></b></li>
                     <?php } ?>
                 </ol>
-            </div>
-            <div class="col-sm-4">
-                Personil
-                <ol>
-                    <?php foreach ($personil as $k => $v) { ?>
-                        <li><b><?= $v['fullname'] ?></b></li>
-                    <?php } ?>
-                </ol>
-            </div>
-            <div class="col-sm-4">
+                <br>
                 Standard
                 <ol>
                     <?php foreach ($standard as $k => $v) { ?>
@@ -44,6 +35,15 @@
                     <?php } ?>
                 </ol>
             </div>
+            <div class="col-sm-6">
+                Personil
+                <ol>
+                    <?php foreach ($personil as $k => $v) { ?>
+                        <li><b><?= $v['fullname'] ?></b></li>
+                    <?php } ?>
+                </ol>
+            </div>
+            <div class="col-sm-6"></div>
         </div>
         <span class="badge badge-primary" data-toggle="tab" href="#tabUnitKerja">Unit Kerja: <?= $data['unit_kerja'] ?></span>
         <span class="badge badge-primary" data-toggle="tab" href="#tabPersonil">Personil: <?= $data['personil'] ?></span>

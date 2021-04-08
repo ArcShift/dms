@@ -1,4 +1,4 @@
-<div class="card">   
+<div class="card">
     <div class="card-body">
         <form method="post">
             <table class="table">
@@ -25,7 +25,7 @@
                                 <?php } ?>
                                 <?= $v['name'] ?>
                             </td>
-                            <td rowspan="<?= $v['row'] ?>"><?= $v['bukti'] ?></td>
+                            <td style="white-space: pre-wrap" rowspan="<?= $v['row'] ?>"><?= $v['bukti'] ?></td>
                         </tr>
                         <?php foreach ($v['pertanyaan'] as $k2 => $v2) { ?>
                             <tr>  
