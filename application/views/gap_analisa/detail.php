@@ -1,6 +1,7 @@
 <?php $n = 0 ?>
 <div class="card">
     <div class="card-body">
+        <a class="btn btn-outline-primary pull-right m-1" href="<?= site_url($module) ?>">Kembali</a>
         <h4><?= $pasal['fullname'] ?></h4>
         <div style="border: 0.5px solid gray; padding: 8px; border-radius: 10px; margin: 20px 0px 20px 0px">
             <b>Bukti Pasal</b>
