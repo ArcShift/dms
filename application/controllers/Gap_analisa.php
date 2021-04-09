@@ -10,40 +10,6 @@ class Gap_analisa extends MY_Controller {
         $this->load->model('m_kuesioner', 'model');
     }
 
-    function index1() {
-        if ($this->input->post('edit')) {
-            $this->session->set_userdata('idData', $this->input->post('edit'));
-            redirect($this->module . '/edit');
-        } else if ($this->input->post('edit_pertanyaan')) {
-            $this->session->set_userdata('idData', $this->input->post('edit_pertanyaan'));
-            redirect($this->module . '/edit2');
-        }
-        $this->subTitle = 'List';
-        $this->subModule = 'read';
-        $this->data['menuStandard'] = 'standard';
-        $pasal = $this->m_pasal->get();
-        foreach ($pasal as $k => $p) {
-            $n = 1;
-            $pertanyaan = $this->db->get_where('kuesioner', ['id_pasal' => $p['id']])->result_array();
-            foreach ($pertanyaan as $k2 => $p2) {
-                $status = $this->model->getStatus($p2['id']);
-                $pertanyaan[$k2]['status'] = $status;
-                $n2 = count($status) + 1;
-                $pertanyaan[$k2]['row'] = $n2;
-                $n += $n2;
-            }
-            $pasal[$k]['pertanyaan'] = $pertanyaan;
-            $pasal[$k]['row'] = $n;
-        }
-        $this->data['data'] = $pasal;
-        if ($this->role == 'admin') {
-            $this->render('index0');
-        } else {
-            $this->render('index');
-            $pasal = $this->m_pasal->get();
-        }
-    }
-
     function index() {
         if ($this->input->post('edit')) {
             $this->session->set_userdata('idData', $this->input->post('edit'));

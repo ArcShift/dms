@@ -12,10 +12,26 @@
                 </tr>
             </thead>
             <tbody>
-                <?php foreach ($status as $k => $v) { ?>
+                <?php
+                foreach ($status as $k => $v) {
+                    switch ($v['status']) {
+                        case 100: {
+                                $stt = 'OK';
+                                $color = 'success';
+                            } break;
+                        case 0: {
+                                $stt = 'NOK';
+                                $color = 'danger';
+                            } break;
+                        default: {
+                                $stt = $v['status'] . '%';
+                                $color = 'warning';
+                            } break;
+                    }
+                    ?>
                     <tr>
                         <td><?= $v['unit_kerja'] ?></td>
-                        <td><?= $v['status'] ?></td>
+                        <td><span class="badge badge-<?= $color ?>"><?= $stt ?></span></td>
                         <td>
                             <button class="btn btn-sm btn-outline-primary fa fa-edit" onclick="edit(<?= $k ?>)"></button>
                             <button class="btn btn-sm btn-outline-danger fa fa-trash" onclick="hapus(<?= $k ?>)"></button>
@@ -48,7 +64,14 @@
                     </div>
                     <div class="form-group">
                         <input type="number" class="input-id" name="id" hidden="">
-                        <input type="number" max="100" min="0" class="form-control input-status" name="status" required="">
+                        <select class="form-control input-status" name="status" required="">
+                            <option value="">~ status ~</option>
+                            <option value="100">OK</option>
+                            <option value="75">75%</option>
+                            <option value="50">50%</option>
+                            <option value="25">25%</option>
+                            <option value="0">NOK</option>
+                        </select>
                     </div>
                 </div>
                 <div class="modal-footer">

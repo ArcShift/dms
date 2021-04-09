@@ -37,10 +37,26 @@
                                 </td>
                             </tr>
                             <?php if ($role == 'pic') { ?>
-                                <?php foreach ($v2['status'] as $k3 => $v3) { ?>
+                                <?php
+                                foreach ($v2['status'] as $k3 => $v3) {
+                                    switch ($v3['status']) {
+                                        case 100: {
+                                                $stt = 'OK';
+                                                $color = 'success';
+                                            } break;
+                                        case 0: {
+                                                $stt = 'NOK';
+                                                $color = 'danger';
+                                            } break;
+                                        default: {
+                                                $stt = $v3['status'] . '%';
+                                                $color = 'warning';
+                                            } break;
+                                    }
+                                    ?>
                                     <tr>
                                         <td><?= $v3['unit_kerja'] ?></td>
-                                        <td><?= $v3['status'] ?></td>
+                                        <td><span class="badge badge-<?= $color ?>"><?= $stt ?></span></td>
                                     </tr>
                                 <?php } ?>
                             <?php } ?>
