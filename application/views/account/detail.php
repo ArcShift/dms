@@ -72,7 +72,7 @@
                     <h6>Upload Foto</h6>
                 </div>
                 <div class="card-body">
-                    <img class="rounded-circle text-right" src="<?php echo base_url('upload/profile_photo/' . $data['photo']) ?>" alt="" width="100">
+                    <img width="100" height="100" class="rounded-circle text-right" style="object-fit: cover" src="<?php echo base_url('upload/profile_photo/' . $data['photo']) ?>" alt="" width="100">
                     <div class="form-group">
                         <input class="form-control" name="foto" type="file" required="" accept=".gif,.jpg,.png">
                     </div>

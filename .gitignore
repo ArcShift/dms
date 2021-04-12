@@ -28,7 +28,8 @@ user_guide_src/cilexer/pycilexer.egg-info/*
 *.sublime-project
 /tests/tests/
 /tests/results/
-/application/config/
 /upload/
 !*.gitkeep
 /application/views/errors/
+/application/config/database.php
+/application/config/config.php

@@ -115,7 +115,7 @@ if ($this->input->get('standard')) {
                             <div class="widget-content p-0">
                                 <div class="widget-content-wrapper">
                                     <a href="<?php echo site_url('account') ?>" class="nav-link font-weight-normal text-dark">
-                                        <img width="42" class="rounded-circle" style="" src="<?php echo empty($this->session->userdata('user')['photo']) ? base_url('assets/images/default_user.jpg') : base_url('upload/profile_photo/' . $this->session->userdata('user')['photo']) ?>" alt="">
+                                        <img width="42" height="42" class="rounded-circle" style="object-fit: cover" src="<?php echo empty($this->session->userdata('user')['photo']) ? base_url('assets/images/default_user.jpg') : base_url('upload/profile_photo/' . $this->session->userdata('user')['photo']) ?>" alt="">
                                         &nbsp;
                                         <div>
                                             <?= $this->session->userdata('user')['fullname'] . ' - ' . $this->session->userdata('user')['title'] ?>
