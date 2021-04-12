@@ -63,7 +63,7 @@ class Company extends MY_Controller {
                     $this->load->model('m_log');
                     $this->m_log->update_company();
                     $this->session->set_flashdata('msgSuccess', 'Data berhasil diedit');
-                    redirect($this->module);
+//                    redirect($this->module);
                 } else {
                     $this->session->set_flashdata('msgError', $this->db->error()['message']);
                 }
@@ -74,7 +74,7 @@ class Company extends MY_Controller {
                 "id_role" => $this->input->post('role')
             );
         }
-        if (isset($this->session->idData)) {
+        if ($this->role == 'admin') {
             $this->data['data'] = $this->model->detail($this->session->idData);
         } else {
             $this->data['data'] = $this->model->detail($this->session->activeCompany['id']);

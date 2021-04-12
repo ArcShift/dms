@@ -45,7 +45,8 @@ class M_company extends CI_Model {
 
     function update() {
         $input = $this->input->post();
-        $this->db->where('id', $this->session->idData);
+        $id = $this->session->user['role']=='admin'?$this->session->idData: $this->session->activeCompany['id'];
+        $this->db->where('id', $id);
         $this->db->set('name', $input['nama']);
         $this->db->set('id_regency', $input['kota']);
         $this->db->set('alamat', $input['alamat']);

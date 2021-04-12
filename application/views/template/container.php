@@ -192,6 +192,7 @@ if ($this->input->get('standard')) {
                             <ul class="vertical-nav-menu">
                                 <li class="app-sidebar__heading">DASHBOARDS</li>
                                 <li id="menu-dashboard">-</li>
+                                <li id="menu-panduan">-</li>
                                 <li class="app-sidebar__heading">MANAJEMEN PENGGUNA</li>
                                 <li id="menu-company">-</li>
                                 <li id="menu-unit_kerja">-</li>

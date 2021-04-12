@@ -10,11 +10,20 @@ class M_kuesioner extends CI_Model {
     }
 
     function counts($id) {
-        $this->db->select('p.id, COUNT(DISTINCT k.id) AS pertanyaan, COUNT(DISTINCT ks.id) AS unit, , AVG(DISTINCT ks.status) AS status');
+        $this->db->select('p.id, COUNT(DISTINCT k.id) AS pertanyaan, COUNT(DISTINCT ks.id) AS unit, , AVG(ks.status) AS status');
         $this->db->join('kuesioner k', 'k.id_pasal = p.id', 'LEFT');
         $this->db->join('kuesioner_status ks', 'ks.id_kuesioner = k.id', 'LEFT');
         $this->db->where('p.id', $id);
         return $this->db->get('pasal p')->row_array();
+    }
+
+    function getAverage($id) {
+        $que = $this->getStatus($id);
+        $sum = 0;
+        foreach ($que as $v) {
+            $sum += $v['status'];
+        }
+        return round($sum / $this->counts($que));
     }
 
 }

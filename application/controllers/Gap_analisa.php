@@ -14,7 +14,7 @@ class Gap_analisa extends MY_Controller {
         if ($this->input->post('edit')) {
             $this->session->set_userdata('idData', $this->input->post('edit'));
             redirect($this->module . '/edit');
-        }else if ($this->input->post('detail')) {
+        } else if ($this->input->post('detail')) {
             $this->session->set_userdata('idData', $this->input->post('detail'));
             redirect($this->module . '/detail');
         }
@@ -67,11 +67,17 @@ class Gap_analisa extends MY_Controller {
         $stats = [];
         $this->data['pasal'] = $this->m_pasal->get($this->session->idData);
         $que = $this->db->get_where('kuesioner', ['id_pasal' => $this->session->idData])->result_array();
+        $sum = 0;
         foreach ($que as $k => $v) {
             $stat = $this->model->getStatus($v['id']);
             $que[$k]['detail'] = $stat;
+//            $que[$k]['average'] = $this->model->getAverage($v['id']);
             $stats = array_merge($stats, $stat);
+            foreach ($stat as $k2 => $v2) {
+                $sum+= $v2['status'];
+            }
         }
+        $this->data['average'] = $sum/ count($stats);
         $this->data['pertanyaan'] = $que;
         $this->data['status'] = $stats;
         $this->data['unit_kerja'] = $this->db->get_where('unit_kerja', ['id_company' => $this->session->activeCompany['id']])->result_array();

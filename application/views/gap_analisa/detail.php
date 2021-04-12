@@ -3,6 +3,9 @@
     <div class="card-body">
         <a class="btn btn-outline-primary pull-right m-1" href="<?= site_url($module) ?>">Kembali</a>
         <h4><?= $pasal['fullname'] ?></h4>
+        <span class="badge badge-secondary">Pertanyaan: <?= count($pertanyaan) ?></span>
+        <span class="badge badge-secondary">Status: <?= count($status) ?></span>
+        <span class="badge badge-secondary">Nilai rata-rata: <?= round($average) ?>%</span>
         <div style="border: 0.5px solid gray; padding: 8px; border-radius: 10px; margin: 20px 0px 20px 0px">
             <b>Bukti Pasal</b>
             <p style=" white-space: pre-wrap"><?= $pasal['bukti'] ?></p>
@@ -19,6 +22,7 @@
                 <?php foreach ($pertanyaan as $k => $v) { ?>
                     <tr class="table-success">
                         <td colspan="2"><b><?= $v['kuesioner'] ?></b></td>
+                       <!--<td><b><?= $v['average'] ?></b></td>-->
                         <td>
                             <button class="btn btn-sm btn-outline-primary fa fa-plus" onclick="tambah(<?= $v['id'] ?>)"></button>
                         </td>
@@ -35,7 +39,7 @@
                                     $color = 'danger';
                                 } break;
                             default: {
-                                    $stt = $v2['status'].'%';
+                                    $stt = $v2['status'] . '%';
                                     $color = 'warning';
                                 } break;
                         }

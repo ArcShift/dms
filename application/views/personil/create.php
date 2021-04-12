@@ -4,7 +4,7 @@
         </div>
         <div class="modal-body">
             <?php // if(!isset($this->session->user['id_company'])){ ?>
-            <div class="form-group">
+            <div class="form-group" <?= $role=='admin'?'':'hidden' ?>>
                 <label>Perusahaan</label>
                 <select class="form-control" name="perusahaan" id="perusahaan" required="">
                     <?php if ($this->session->userdata('user')['role'] == 'admin') { ?>

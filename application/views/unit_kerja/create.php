@@ -1,9 +1,8 @@
 <div class="main-card mb-3 card">
     <form method="post">
-        <div class="modal-header">
-        </div>
+        <div class="modal-header"></div>
         <div class="modal-body">
-            <div class="form-group">
+            <div class="form-group" <?= $role=='admin'?'':'hidden' ?>>
                 <label>Perusahaan</label>
                 <select class="form-control" name="perusahaan" required="">
                     <?php if ($this->session->userdata('user')['role'] == 'admin') { ?>
@@ -18,10 +17,6 @@
                 <label>Nama</label>
                 <input class="form-control" name="nama" required="" placeholder="Nama">
             </div>
-<!--            <div class="form-group">
-                <label class="">Tugas</label><br>
-                <select class="form-control" name="tugas[]" id="tugas" multiple="" style="width: 100%"></select>
-            </div>-->
         </div>
         <div class="modal-footer">
             <a class="btn btn-primary" href="<?php echo site_url($module) ?>">Batal</a>
