@@ -11,6 +11,7 @@ class Hasil_gap_analisa extends MY_Controller {
     }
 
     function index() {
+        $this->data['menuStandard'] = 'standard';
         $this->subModule = 'read';
         $pasal = $this->m_pasal->get();
         foreach ($pasal as $k => $p) {
