@@ -252,7 +252,7 @@ if ($this->input->get('standard')) {
                                         </i>
                                     </div>
                                     <div>
-                                        <?php if (isset($menuStandard)) { ?>
+                                        <?php if (isset($menuStandard) & $role=='admin') { ?>
                                             <?php if (empty($this->session->user['id_company'])) { ?>
                                                 <button type="button" title="Pilih Perusahaan" data-toggle="dropdown" class="btn-shadow mr-3 btn btn-dark">
                                                     <i class="fa fa-angle-double-down"></i>
@@ -285,7 +285,6 @@ if ($this->input->get('standard')) {
                                 </div>
                                 <!--=========================-->
                                 <?php if (isset($menuStandard)) { ?>
-
                                     <?php if ($menuStandard === 'standard') { ?>
                                         <div class="page-title-actions">
                                             <div class="d-inline-block dropdown">
