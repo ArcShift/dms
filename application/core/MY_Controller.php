@@ -31,7 +31,7 @@ class MY_Controller extends CI_Controller {
                 $this->activeModule = $m;
             }
         }
-        if(empty($this->subModule)){
+        if (empty($this->subModule)) {
             $this->subModule = $view;
         }
         $this->data['module'] = $this->module;
@@ -119,6 +119,20 @@ class MY_Controller extends CI_Controller {
         } else {
             return $this->email->print_debugger();
         }
+    }
+
+}
+
+class MY_Admin extends CI_Controller {
+    protected $data=[];
+            function __construct() {
+        parent::__construct();
+        // check if logged_in
+    }
+
+    function render($view) {
+        $this->data['view']=$view;
+        $this->load->view('template/admin', $this->data);
     }
 
 }

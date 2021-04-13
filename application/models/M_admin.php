@@ -7,7 +7,9 @@ class M_admin extends CI_Model {
     }
 
     function login($username, $pass) {
-        $admin = $this->db->get_where('admin',)->row_array();
+        $this->db->where('username',$username);
+        $this->db->where('pass',$pass);
+        return $this->db->get_where('admin',)->row_array();
     }
 
 }
