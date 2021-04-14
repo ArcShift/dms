@@ -45,7 +45,13 @@ $unit = [];
                             <tr>
                                 <td><?= $v3['unit_kerja'] ?></td>
                                 <td><?= $v3['saran_perbaikan'] ?></td>
-                                <td><?= $v3['path'] ?></td>
+                                <td>
+                                    <?php if ($v3['type'] == 'FILE') { ?>
+                                        <a class="btn btn-outline-primary fa fa-download" href="<?= base_url('upload/gap_analisa/' . $v3['path']) ?>"></a>
+                                    <?php } elseif ($v3['type'] == 'URL') { ?>
+                                        <a class="btn btn-outline-primary fa fa-eye" href="<?= $v3['path'] ?>"></a>
+                                    <?php } ?>
+                                </td>
                                 <td><span class="badge badge-<?= $color ?>"><?= $stt ?></span></td>
                                 <td>
                                     <button class="btn btn-sm btn-outline-primary fa fa-edit" onclick="edit(<?= count($unit) - 1 ?>)"></button>
@@ -109,7 +115,7 @@ $unit = [];
         var u = unit[idx];
         $('.radio-bukti').prop('checked', false);
         $('.input-file,.input-url').hide();
-        $('.input-file,.input-url').prop('required',false);
+        $('.input-file,.input-url').prop('required', false);
         m.modal('show');
         m.find('.input-unit').val(u.unit_kerja);
         m.find('.input-id').val(u.id);
@@ -121,14 +127,14 @@ $unit = [];
         var m = $('#modalEdit');
         if (type == 'file') {
             m.find('.input-file').show();
-            m.find('.input-file').prop('required',true);
+            m.find('.input-file').prop('required', true);
             m.find('.input-url').hide();
-            m.find('.input-url').prop('required',false);
+            m.find('.input-url').prop('required', false);
         } else if (type == 'url') {
             m.find('.input-file').hide();
-            m.find('.input-file').prop('required',false);
+            m.find('.input-file').prop('required', false);
             m.find('.input-url').show();
-            m.find('.input-url').prop('required',true);
+            m.find('.input-url').prop('required', true);
         }
         console.log($(this).val());
     });
