@@ -30,8 +30,8 @@ $unit = [];
                             ?>
                             <tr>
                                 <td><?= $v3['unit_kerja'] ?></td>
-                                <td><?= $v3['hasil'] ?></td>
-                                <td><?= $v3['saran_perbaikan'] ?></td>
+                                <td style="white-space: pre-wrap"><?= $v3['hasil'] ?></td>
+                                <td style="white-space: pre-wrap"><?= $v3['saran_perbaikan'] ?></td>
                                 <td><?= empty($v3['target'])?'':date('d M Y', strtotime($v3['target'])) ?></td>
                                 <td>
                                     <button class="btn btn-sm btn-outline-primary fa fa-edit" onclick="edit(<?= count($unit)-1 ?>)"></button>

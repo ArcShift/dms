@@ -44,7 +44,7 @@ $unit = [];
                             ?>
                             <tr>
                                 <td><?= $v3['unit_kerja'] ?></td>
-                                <td><?= $v3['saran_perbaikan'] ?></td>
+                                <td style="white-space: pre-wrap"><?= $v3['saran_perbaikan'] ?></td>
                                 <td>
                                     <?php if ($v3['type'] == 'FILE') { ?>
                                         <a class="btn btn-outline-primary fa fa-download" href="<?= base_url('upload/gap_analisa/' . $v3['path']) ?>"></a>
