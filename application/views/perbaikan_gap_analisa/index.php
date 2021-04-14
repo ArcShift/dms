@@ -46,10 +46,17 @@ $unit = [];
                                 <td><?= $v3['unit_kerja'] ?></td>
                                 <td style="white-space: pre-wrap"><?= $v3['saran_perbaikan'] ?></td>
                                 <td>
-                                    <?php if ($v3['type'] == 'FILE') { ?>
-                                        <a class="btn btn-outline-primary fa fa-download" href="<?= base_url('upload/gap_analisa/' . $v3['path']) ?>"></a>
-                                    <?php } elseif ($v3['type'] == 'URL') { ?>
-                                        <a class="btn btn-outline-primary fa fa-eye" href="<?= $v3['path'] ?>"></a>
+                                    <?php if (!empty($v3['type'])) { ?>
+                                        <div class="input-group">
+                                            <input value="<?= $v3['path'] ?>" class="form-control" readonly="">
+                                            <div class="input-group-append">
+                                                <?php if ($v3['type'] == 'FILE') { ?>
+                                                    <a target="_blank" class="btn btn-outline-primary fa fa-download" href="<?= base_url('upload/gap_analisa/' . $v3['path']) ?>"></a>
+                                                <?php } elseif ($v3['type'] == 'URL') { ?>
+                                                    <a target="_blank" class="btn btn-outline-primary fa fa-eye" href="<?= $v3['path'] ?>"></a>
+                                                <?php } ?>
+                                            </div>
+                                        </div>
                                     <?php } ?>
                                 </td>
                                 <td><span class="badge badge-<?= $color ?>"><?= $stt ?></span></td>
@@ -85,6 +92,14 @@ $unit = [];
                         <label>Saran Perbaikan</label>
                         <textarea class="form-control input-saran" disabled=""></textarea>
                     </div>
+                    <div class="form-group group-link">
+                        <div class="input-group">
+                            <input class="form-control input-path" readonly="">
+                            <div class="input-group-append">
+                                <a target="_blank" class="btn btn-outline-primary fa link-bukti"></a>
+                            </div>
+                        </div>
+                    </div>
                     <div class="form-group">
                         <div class="custom-control custom-radio custom-control-inline">
                             <input type="radio" id="customRadio1" name="type" value="file" class="custom-control-input radio-bukti">
@@ -102,7 +117,7 @@ $unit = [];
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-outline-primary" data-dismiss="modal">Tutup</button>
-                    <button class="btn btn-outline-primary" name="edit" value="ok">Simpan</button>
+                    <button class="btn btn-outline-primary btn-simpan" name="edit" value="ok">Simpan</button>
                 </div>
             </form>
         </div>
@@ -116,15 +131,30 @@ $unit = [];
         $('.radio-bukti').prop('checked', false);
         $('.input-file,.input-url').hide();
         $('.input-file,.input-url').prop('required', false);
+        $('.btn-simpan').hide();
         m.modal('show');
         m.find('.input-unit').val(u.unit_kerja);
         m.find('.input-id').val(u.id);
         m.find('.input-saran').val(u.saran_perbaikan);
+        m.find('.input-path').val(u.path);
+        if (u.type == null) {
+            m.find('.group-link').hide();
+        } else {
+            m.find('.group-link').show();
+            if (u.type == 'FILE') {
+                m.find('.link-bukti').addClass('fa-download');
+                m.find('.link-bukti').removeClass('fa-eye');
+            } else if (u.type == 'URL') {
+                m.find('.link-bukti').removeClass('fa-download');
+                m.find('.link-bukti').addClass('fa-eye');
+            }
+        }
         console.log(u);
     }
     $('.radio-bukti').change(function () {
         var type = $(this).val();
         var m = $('#modalEdit');
+        $('.btn-simpan').show();
         if (type == 'file') {
             m.find('.input-file').show();
             m.find('.input-file').prop('required', true);
