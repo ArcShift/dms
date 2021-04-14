@@ -16,5 +16,12 @@ class M_gap_analisa extends CI_Model {
         $this->db->where('id', $this->input->post('id'));
         $this->db->update('kuesioner_status');
     }
+    function update_perbaikan($path) {
+        $this->db->where('id', $this->input->post('id'));
+        $this->db->set('type', strtoupper($this->input->post('type')));
+        $this->db->set('path', $path);
+        $this->db->update('kuesioner_status');
+        
+    }
 
 }

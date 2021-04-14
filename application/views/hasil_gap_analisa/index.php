@@ -49,7 +49,6 @@ $unit = [];
     <div class="modal-dialog">
         <div class="modal-content">
             <form method="post">
-
                 <div class="modal-header">
                     <h5 class="modal-title">Edit Hasil Gap Analisa</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -92,7 +91,7 @@ $unit = [];
         m.find('.input-unit').val(u.unit_kerja);
         m.find('.input-id').val(u.id);
         m.find('.input-hasil').val(u.hasil);
-        m.find('.input-saran').val(u.saran);
+        m.find('.input-saran').val(u.saran_perbaikan);
         m.find('.input-target').val(u.target);
         console.log(u);
     }

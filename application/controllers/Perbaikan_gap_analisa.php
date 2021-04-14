@@ -1,6 +1,7 @@
 <?php
 
 class Perbaikan_gap_analisa extends MY_Controller {
+
     protected $module = 'perbaikan_gap_analisa';
 
     public function __construct() {
@@ -10,6 +11,21 @@ class Perbaikan_gap_analisa extends MY_Controller {
     }
 
     function index() {
+        if ($this->input->post('edit')) {
+            if ($this->input->post('type') == 'file') {
+                $config['upload_path'] = './upload/gap_analisa';
+                $config['allowed_types'] = '*';
+                $config['max_size'] = 100000;
+                $this->load->library('upload', $config);
+                if ($this->upload->do_upload('userfile')) {
+                    $this->model->update_perbaikan($this->upload->data()['file_name']);
+                } else {
+                    $this->data['msgError'] = $this->upload->display_errors();
+                }
+            } else {
+                $this->model->update_perbaikan($this->input->post('url'));
+            }
+        }
         $this->data['menuStandard'] = 'standard';
         $this->subModule = 'read';
         $pasal = $this->m_pasal->get();
@@ -29,4 +45,5 @@ class Perbaikan_gap_analisa extends MY_Controller {
         $this->data['data'] = $pasal;
         $this->render('index');
     }
+
 }
