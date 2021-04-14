@@ -11,6 +11,9 @@ class Hasil_gap_analisa extends MY_Controller {
     }
 
     function index() {
+        if($this->input->post('edit')){
+            $this->model->update_hasil();
+        }
         $this->data['menuStandard'] = 'standard';
         $this->subModule = 'read';
         $pasal = $this->m_pasal->get();
