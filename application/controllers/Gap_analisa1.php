@@ -23,17 +23,18 @@ class Gap_analisa1 extends MY_Controller {
         $this->data['menuStandard'] = 'standard';
         $pasal = $this->m_pasal->get();
         foreach ($pasal as $k => $p) {
-            $n = 1;
+            $n = 0;
             $pertanyaan = $this->db->get_where('kuesioner', ['id_pasal' => $p['id']])->result_array();
             foreach ($pertanyaan as $k2 => $p2) {
                 $status = $this->model->getStatus($p2['id']);
                 $pertanyaan[$k2]['status'] = $status;
-                $n2 = count($status) + 1;
-                $pertanyaan[$k2]['row'] = $n2;
+                $n2 = count($status);
+                $pertanyaan[$k2]['row'] = $n2==0?1:$n2;
                 $n += $n2;
+                if($n2==0)$n++;
             }
             $pasal[$k]['pertanyaan'] = $pertanyaan;
-            $pasal[$k]['row'] = $n;
+            $pasal[$k]['row'] = $n==0?1:$n;
         }
         $this->data['data'] = $pasal;
         if ($this->role == 'admin') {

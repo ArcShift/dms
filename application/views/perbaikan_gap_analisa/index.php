@@ -47,16 +47,16 @@ $unit = [];
                                 <td style="white-space: pre-wrap"><?= $v3['saran_perbaikan'] ?></td>
                                 <td>
                                     <?php if (!empty($v3['type'])) { ?>
-<!--                                        <div class="input-group">
-                                            <input value="<?= $v3['path'] ?>" class="form-control" readonly="">
-                                            <div class="input-group-append">-->
-                                                <?php if ($v3['type'] == 'FILE') { ?>
-<a target="_blank" href="<?= base_url('upload/gap_analisa/' . $v3['path']) ?>"><?= substr($v3['path'], 0, 40) ?></a>
-                                                <?php } elseif ($v3['type'] == 'URL') { ?>
-                                                    <a target="_blank" href="<?= $v3['path'] ?>"><?= substr($v3['path'], 0, 40) ?></a>
-                                                <?php } ?>
-<!--                                            </div>
-                                        </div>-->
+                                        <!--                                        <div class="input-group">
+                                                                                    <input value="<?= $v3['path'] ?>" class="form-control" readonly="">
+                                                                                    <div class="input-group-append">-->
+                                        <?php if ($v3['type'] == 'FILE') { ?>
+                                            <a target="_blank" href="<?= base_url('upload/gap_analisa/' . $v3['path']) ?>"><?= substr($v3['path'], 0, 40) ?></a>
+                                        <?php } elseif ($v3['type'] == 'URL') { ?>
+                                            <a target="_blank" href="<?= $v3['path'] ?>"><?= substr($v3['path'], 0, 40) ?></a>
+                                        <?php } ?>
+                                        <!--                                            </div>
+                                                                                </div>-->
                                     <?php } ?>
                                 </td>
                                 <td><span class="badge badge-<?= $color ?>"><?= $stt ?></span></td>

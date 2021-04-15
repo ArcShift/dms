@@ -26,41 +26,46 @@
                                 <?= $v['name'] ?>
                             </td>
                             <td style="white-space: pre-wrap" rowspan="<?= $v['row'] ?>"><?= $v['bukti'] ?></td>
-                        </tr>
-                        <?php foreach ($v['pertanyaan'] as $k2 => $v2) { ?>
-                            <tr>  
+                            <?php if(empty($v['pertanyaan'])){ ?>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <?php } ?>
+                            <?php foreach ($v['pertanyaan'] as $k2 => $v2) { ?>
+                                <?= $k2 == 0 ? '' : '<tr>' ?>
                                 <td rowspan="<?= $v2['row'] ?>">
                                     <?php if ($role == 'pic') { ?>
                                         <button class="btn btn-sm btn-outline-primary fa fa-edit" name="edit_pertanyaan" value="<?= $v2['id'] ?>"></button>
                                     <?php } ?>
                                     <?= $v2['kuesioner'] ?>
                                 </td>
-                            </tr>
-                            <?php if ($role == 'pic') { ?>
-                                <?php
-                                foreach ($v2['status'] as $k3 => $v3) {
-                                    switch ($v3['status']) {
-                                        case 100: {
-                                                $stt = 'OK';
-                                                $color = 'success';
-                                            } break;
-                                        case 0: {
-                                                $stt = 'NOK';
-                                                $color = 'danger';
-                                            } break;
-                                        default: {
-                                                $stt = $v3['status'] . '%';
-                                                $color = 'warning';
-                                            } break;
-                                    }
-                                    ?>
-                                    <tr>
+                                <?php if ($role == 'pic') { ?>
+                                    <?php
+                                    foreach ($v2['status'] as $k3 => $v3) {
+                                        switch ($v3['status']) {
+                                            case 100: {
+                                                    $stt = 'OK';
+                                                    $color = 'success';
+                                                } break;
+                                            case 0: {
+                                                    $stt = 'NOK';
+                                                    $color = 'danger';
+                                                } break;
+                                            default: {
+                                                    $stt = $v3['status'] . '%';
+                                                    $color = 'warning';
+                                                } break;
+                                        }
+                                        ?>
+                                        <?= $k3 == 0 ? '' : '<tr>' ?>
                                         <td><?= $v3['unit_kerja'] ?></td>
                                         <td><span class="badge badge-<?= $color ?>"><?= $stt ?></span></td>
-                                    </tr>
+                                            <?= $k3 == 0 ? '' : '</tr>' ?>
+                                        <?php } ?>
+                                    <?php } ?>
+                                <?= $k2 == 0 ? '' : '</tr>' ?>
                                 <?php } ?>
-                            <?php } ?>
-                        <?php } ?>
+                        </tr>
                     <?php } ?>
                 </tbody>
             </table>
