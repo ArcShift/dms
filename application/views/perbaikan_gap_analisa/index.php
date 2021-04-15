@@ -51,9 +51,9 @@ $unit = [];
                                             <input value="<?= $v3['path'] ?>" class="form-control" readonly="">
                                             <div class="input-group-append">-->
                                                 <?php if ($v3['type'] == 'FILE') { ?>
-                                                    <a target="_blank" href="<?= base_url('upload/gap_analisa/' . $v3['path']) ?>"><?= $v3['path'] ?></a>
+<a target="_blank" href="<?= base_url('upload/gap_analisa/' . $v3['path']) ?>"><?= substr($v3['path'], 0, 40) ?></a>
                                                 <?php } elseif ($v3['type'] == 'URL') { ?>
-                                                    <a target="_blank" href="<?= $v3['path'] ?>"><?= $v3['path'] ?></a>
+                                                    <a target="_blank" href="<?= $v3['path'] ?>"><?= substr($v3['path'], 0, 40) ?></a>
                                                 <?php } ?>
 <!--                                            </div>
                                         </div>-->
