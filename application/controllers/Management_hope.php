@@ -10,6 +10,7 @@ class Management_hope extends MY_Controller {
     }
 
     public function index() {
+        $this->data['menuStandard']= 'standard';
         $this->render('read');
     }
 
@@ -23,25 +24,25 @@ class Management_hope extends MY_Controller {
 
     function pasal() {
         $this->db->select('p.*, h.persentase');
-        $this->db->join('hope h', 'h.id_pasal = p.id AND h.id_company = ' . $this->input->get('company'), 'LEFT');
+        $this->db->join('hope h', 'h.id_pasal = p.id AND h.id_company = ' . $this->session->activeCompany['id'], 'LEFT');
         $this->db->where('p.parent', null);
-        $this->db->where('p.id_standard', $this->input->get('standard'));
+        $this->db->where('p.id_standard', $this->session->activeStandard['id']);
         $result = $this->db->get('pasal p')->result_array();
         echo json_encode($result);
     }
 
     function edit() {
         $post = $this->input->post();
-        $this->db->where('id_company', $post['id-company']);
+        $this->db->where('id_company', $this->session->activeCompany['id']);
         $this->db->where('id_pasal', $post['id-pasal']);
         $result = $this->db->get('hope')->result_array();
         $this->db->set('persentase', $post['persentase']);
         if (empty($result)) {//INSERT
-            $this->db->set('id_company', $post['id-company']);
+            $this->db->set('id_company', $this->session->activeCompany['id']);
             $this->db->set('id_pasal', $post['id-pasal']);
             $this->db->insert('hope');
         } else {//UPDATE
-            $this->db->where('id_company', $post['id-company']);
+            $this->db->where('id_company', $this->session->activeCompany['id']);
             $this->db->where('id_pasal', $post['id-pasal']);
             $this->db->update('hope');
         }

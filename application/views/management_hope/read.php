@@ -3,22 +3,6 @@ $company = $this->db->get('company')->result_array();
 ?>
 <div class="main-card mb-3 card">
     <div class="card-body">
-        <div class="row">
-            <div class="col-sm-6"></div>
-            <div class="col-sm-3">
-                <select class="form-control" id="selectCompany">
-                    <option>~ Pilih Perusahaan ~</option>
-                    <?php foreach ($company as $k => $c) { ?>
-                        <option value="<?= $c['id'] ?>"><?= $c['name'] ?></option>
-                    <?php } ?>
-                </select>
-            </div>
-            <div class="col-sm-3">
-                <select class="form-control" id="selectStandar">
-                    <option>~ Pilih Standar ~</option>
-                </select>
-            </div>
-        </div>
         <table class="table">
             <thead>
                 <tr>
@@ -70,36 +54,23 @@ $company = $this->db->get('company')->result_array();
     var pasal;
     var idPerusahaan;
     var perusahaan;
-    function afterReady() {}
-    $('#selectCompany').change(function () {
-        idPerusahaan = $(this).val();
-        perusahaan = $(this).find('option:selected').text();
-        $.getJSON('<?= site_url($module . '/standard') ?>', {company: $(this).val()}, function (data) {
-            $('#selectStandar').empty();
-            $('#selectStandar').append('<option>~ pilih standar ~</option>');
-            for (var i = 0; i < data.length; i++) {
-                $('#selectStandar').append('<option value="' + data[i].id + '">' + data[i].name + '</option>');
-            }
-            $('#selectStandar').change();
-        });
-    });
-    $('#selectStandar').change(function () {
+    function afterReady() {
+        getData();
+    }
+    function getData() {
         $('#table').empty();
-        $.getJSON('<?= site_url($module . '/pasal') ?>', {
-            company: $('#selectCompany').val(),
-            standard: $(this).val()
-        }, function (data) {
+        $.getJSON('<?= site_url($module . '/pasal') ?>', null, function (data) {
             pasal = data;
             for (var i = 0; i < data.length; i++) {
                 var d = data[i];
                 $('#table').append('<tr>'
                         + '<td>' + d.name + '</td>'
-                        + '<td class="text-center">' + (d.persentase==null?'70':d.persentase) + '</td>'
+                        + '<td class="text-center">' + (d.persentase == null ? '70' : d.persentase) + '</td>'
                         + '<td class="text-center"><i class="text-primary fa fa-edit" onclick="edit(' + i + ')")></i></td>'
                         + '</tr>');
             }
         });
-    });
+    }
     function edit(index) {
         var m = $('#modalEdit');
         m.modal('show');
@@ -113,12 +84,7 @@ $company = $this->db->get('company')->result_array();
         e.preventDefault();
         $('#modalEdit').modal('hide');
         $.post('<?= site_url($module . '/edit') ?>', $(this).serialize(), function (data) {
-            $('#selectStandar').change();
+            getData();
         });
     });
-    <?php if(isset($this->session->user['id_company'])){?>
-        $('#selectCompany').hide();
-        $('#selectCompany').val(<?= $this->session->user['id_company']?>);
-        $('#selectCompany').change();
-    <?php } ?>
 </script>
