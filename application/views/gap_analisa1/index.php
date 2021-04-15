@@ -26,10 +26,10 @@
                                 <?= $v['name'] ?>
                             </td>
                             <td style="white-space: pre-wrap" rowspan="<?= $v['row'] ?>"><?= $v['bukti'] ?></td>
-                            <?php if(empty($v['pertanyaan'])){ ?>
-                            <td>-</td>
-                            <td>-</td>
-                            <td>-</td>
+                            <?php if (empty($v['pertanyaan'])) { ?>
+                                <td>-</td>
+                                <td>-</td>
+                                <td>-</td>
                             <?php } ?>
                             <?php foreach ($v['pertanyaan'] as $k2 => $v2) { ?>
                                 <?= $k2 == 0 ? '' : '<tr>' ?>
@@ -63,7 +63,7 @@
                                             <?= $k3 == 0 ? '' : '</tr>' ?>
                                         <?php } ?>
                                     <?php } ?>
-                                <?= $k2 == 0 ? '' : '</tr>' ?>
+                                    <?= $k2 == 0 ? '' : '</tr>' ?>
                                 <?php } ?>
                         </tr>
                     <?php } ?>

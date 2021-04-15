@@ -3,7 +3,7 @@ $unit = [];
 ?>
 <div class="card">
     <div class="card-body">
-        <table class="table table-bordered">
+        <table class="table">
             <thead>
                 <tr>
                     <th>Pasal</th>
@@ -19,6 +19,14 @@ $unit = [];
                 <?php foreach ($data as $k => $v) { ?>
                     <tr>
                         <td rowspan="<?= $v['row'] ?>"><?= $v['name'] ?></td>
+                        <?php if (empty($v['pertanyaan'])) { ?>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>-</td>
+                        <?php } ?>
                     </tr>
                     <?php foreach ($v['pertanyaan'] as $k2 => $v2) { ?>
                         <tr>

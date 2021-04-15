@@ -3,7 +3,7 @@ $unit = [];
 ?>
 <div class="card">
     <div class="card-body">
-        <table class="table table-bordered">
+        <table class="table">
             <thead>
                 <tr>
                     <th>Pasal</th>
@@ -19,6 +19,14 @@ $unit = [];
                 <?php foreach ($data as $k => $v) { ?>
                     <tr>
                         <td rowspan="<?= $v['row'] ?>"><?= $v['name'] ?></td>
+                        <?php if (empty($v['pertanyaan'])) { ?>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>-</td>
+                        <?php } ?>
                     </tr>
                     <?php foreach ($v['pertanyaan'] as $k2 => $v2) { ?>
                         <tr>
@@ -32,9 +40,9 @@ $unit = [];
                                 <td><?= $v3['unit_kerja'] ?></td>
                                 <td style="white-space: pre-wrap"><?= $v3['hasil'] ?></td>
                                 <td style="white-space: pre-wrap"><?= $v3['saran_perbaikan'] ?></td>
-                                <td><?= empty($v3['target'])?'':date('d M Y', strtotime($v3['target'])) ?></td>
+                                <td><?= empty($v3['target']) ? '' : date('d M Y', strtotime($v3['target'])) ?></td>
                                 <td>
-                                    <button class="btn btn-sm btn-outline-primary fa fa-edit" onclick="edit(<?= count($unit)-1 ?>)"></button>
+                                    <button class="btn btn-sm btn-outline-primary fa fa-edit" onclick="edit(<?= count($unit) - 1 ?>)"></button>
                                 </td>
                             </tr>
                         <?php } ?>
