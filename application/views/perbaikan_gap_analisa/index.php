@@ -47,16 +47,16 @@ $unit = [];
                                 <td style="white-space: pre-wrap"><?= $v3['saran_perbaikan'] ?></td>
                                 <td>
                                     <?php if (!empty($v3['type'])) { ?>
-                                        <div class="input-group">
+<!--                                        <div class="input-group">
                                             <input value="<?= $v3['path'] ?>" class="form-control" readonly="">
-                                            <div class="input-group-append">
+                                            <div class="input-group-append">-->
                                                 <?php if ($v3['type'] == 'FILE') { ?>
                                                     <a target="_blank" class="btn btn-outline-primary fa fa-download" href="<?= base_url('upload/gap_analisa/' . $v3['path']) ?>"></a>
                                                 <?php } elseif ($v3['type'] == 'URL') { ?>
                                                     <a target="_blank" class="btn btn-outline-primary fa fa-eye" href="<?= $v3['path'] ?>"></a>
                                                 <?php } ?>
-                                            </div>
-                                        </div>
+<!--                                            </div>
+                                        </div>-->
                                     <?php } ?>
                                 </td>
                                 <td><span class="badge badge-<?= $color ?>"><?= $stt ?></span></td>
