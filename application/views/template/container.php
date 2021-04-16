@@ -214,6 +214,7 @@ if ($this->input->get('standard')) {
                                 <li class="app-sidebar__heading">MONITORING & EVALUASI</li>
                                 <li id="menu-pemenuhan">-</li>
                                 <li class="app-sidebar__heading">GAP ANALISA</li>
+                                <li id="menu-jadwal_gap_analisa">-</li>
                                 <li id="menu-gap_analisa1">-</li>
                                 <li id="menu-gap_analisa">-</li>
                                 <li id="menu-hasil_gap_analisa">-</li>
