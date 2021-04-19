@@ -63,33 +63,11 @@ class Gap_analisa1 extends MY_Controller {
         }
     }
 
-    function index2() {
-        if ($this->input->post('edit')) {
-            $this->session->set_userdata('idData', $this->input->post('edit'));
-            redirect($this->module . '/edit');
-        }
-        $this->subTitle = 'List';
-        $this->subModule = 'read';
-        $this->data['menuStandard'] = 'standard';
-        $pasal = $this->m_pasal->get();
-        foreach ($pasal as $k => $p) {
-            $n = 1;
-            $pertanyaan = $this->db->get_where('kuesioner', ['id_pasal' => $p['id']])->result_array();
-            foreach ($pertanyaan as $k2 => $p2) {
-                $pertanyaan[$k]['status'] = $this->m_kuesioner->getStatus($p2['id']);
-                $n++;
-            }
-            $pasal[$k]['pertanyaan'] = $pertanyaan;
-            $pasal[$k]['row'] = $n;
-        }
-        $this->data['data'] = $pasal;
-        $this->render('index0');
-    }
-
     function edit() {
         if ($this->input->post('save')) {
             $this->db->set('kuesioner', $this->input->post('pertanyaan'));
             $this->db->set('id_pasal', $this->session->idData);
+            $this->db->set('id_gap_analisa', $this->session->gapAnalisa['id']);
             $this->db->insert('kuesioner');
         } elseif ($this->input->post('edit')) {
             $this->db->set('kuesioner', $this->input->post('pertanyaan'));
@@ -100,7 +78,7 @@ class Gap_analisa1 extends MY_Controller {
             $this->db->delete('kuesioner');
         }
         $this->data['pasal'] = $this->m_pasal->get($this->session->idData);
-        $this->data['pertanyaan'] = $this->db->get_where('kuesioner', ['id_pasal' => $this->session->idData])->result_array();
+        $this->data['pertanyaan'] = $this->db->get_where('kuesioner', ['id_pasal' => $this->session->idData, 'id_gap_analisa'=>$this->session->gapAnalisa['id']])->result_array();
         $this->subTitle = 'Edit';
         $this->render('edit');
     }
