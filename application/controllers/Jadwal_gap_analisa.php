@@ -13,6 +13,7 @@ class Jadwal_gap_analisa extends MY_Controller {
     }
 
     function index() {
+        $this->data['menuStandard']= 'standard';
         if ($this->input->post('initEdit')) {
             $this->session->set_userdata('idData', $this->input->post('initEdit'));
             redirect($this->module . '/edit');

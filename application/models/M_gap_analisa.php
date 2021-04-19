@@ -13,7 +13,6 @@ class M_gap_analisa extends CI_Model {
     }
 
     function get($id = null) {
-//        die($id);
         if (empty($id)) {
             $this->db->where('id_company', $this->session->activeCompany['id']);
             $this->db->where('id_standard', $this->session->activeStandard['id']);
