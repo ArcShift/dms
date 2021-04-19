@@ -13,7 +13,7 @@ class M_gap_analisa extends CI_Model {
     }
 
     function get($id = null) {
-        $this->db->select('ga.*, COUNT(k.id) AS pertanyaan, COUNT(p.id) AS pelaksana');
+        $this->db->select('ga.*, COUNT(k.id) AS pertanyaan, COUNT(p.id) AS pl');
         $this->db->join('kuesioner k', 'k.id_gap_analisa = ga.id', 'LEFT');
         $this->db->join('pelaksana_gap_analisa p', 'p.id_gap_analisa = ga.id', 'LEFT');
         $this->db->group_by('ga.id');
