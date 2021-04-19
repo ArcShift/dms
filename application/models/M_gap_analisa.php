@@ -13,16 +13,20 @@ class M_gap_analisa extends CI_Model {
     }
 
     function get($id = null) {
+        $this->db->select('ga.*, COUNT(k.id) AS pertanyaan, COUNT(p.id) AS pelaksana');
+        $this->db->join('kuesioner k', 'k.id_gap_analisa = ga.id', 'LEFT');
+        $this->db->join('pelaksana_gap_analisa p', 'p.id_gap_analisa = ga.id', 'LEFT');
+        $this->db->group_by('ga.id');
         if (empty($id)) {
-            $this->db->where('id_company', $this->session->activeCompany['id']);
-            $this->db->where('id_standard', $this->session->activeStandard['id']);
-            $data = $this->db->get('gap_analisa')->result_array();
+            $this->db->where('ga.id_company', $this->session->activeCompany['id']);
+            $this->db->where('ga.id_standard', $this->session->activeStandard['id']);
+            $data = $this->db->get('gap_analisa ga')->result_array();
             foreach ($data as $k => $v) {
                 $data[$k]['tim_pelaksana'] = $this->getPelaksana($v['id']);
             }
         } else {
-            $this->db->where('id', $id);
-            $data = $this->db->get('gap_analisa')->row_array();
+            $this->db->where('ga.id', $id);
+            $data = $this->db->get('gap_analisa ga')->row_array();
             $data['tim_pelaksana'] = $this->getPelaksana($id);
         }
         return $data;

@@ -17,6 +17,9 @@ class Jadwal_gap_analisa extends MY_Controller {
         if ($this->input->post('initEdit')) {
             $this->session->set_userdata('idData', $this->input->post('initEdit'));
             redirect($this->module . '/edit');
+        }elseif($this->input->post('delete')){
+            $this->db->where('id', $this->input->post('delete'));
+            $this->db->delete('gap_analisa');
         }
         $this->subModule = 'read';
         $this->data['data'] = $this->model->get();

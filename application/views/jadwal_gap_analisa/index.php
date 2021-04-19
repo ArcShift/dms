@@ -23,12 +23,15 @@
                             <td><?= $v['pelaksana'] ?></td>
                             <td>
                                 <?php foreach ($v['tim_pelaksana'] as $k2 => $v2) { ?>
-                                <div>- <?= $v2['fullname'] ?></div>
+                                    <div>- <?= $v2['fullname'] ?></div>
                                 <?php } ?>
                             </td>
                             <td><?= $v['tanggal'] ?></td>
                             <td>
                                 <button class="btn btn-sm btn-outline-primary fa fa-edit" name="initEdit" value="<?= $v['id'] ?>"></button>
+                                <?php if (empty($v['pertanyaan'])& empty($v['pelaksana'])) { ?>
+                                    <button class="btn btn-sm btn-outline-danger fa fa-trash" name="delete" value="<?= $v['id'] ?>"></button>
+                                <?php } ?>
                             </td>
                         </tr>
                     <?php } ?>
