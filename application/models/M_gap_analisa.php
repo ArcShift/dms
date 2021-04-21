@@ -82,10 +82,9 @@ class M_gap_analisa extends CI_Model {
         return $this->db->get('kuesioner_status ks')->result_array();
     }
 
-    function update_hasil() {
-        $this->db->set('hasil', $this->input->post('hasil'));
-        $this->db->set('saran_perbaikan', $this->input->post('saran'));
-        $this->db->set('target', $this->input->post('target'));
+    function update_hasil($path) {
+        $this->db->set('imp_type', $this->input->post('type'));
+        $this->db->set('imp_path', $path);
         $this->db->where('id', $this->input->post('id'));
         $this->db->update('kuesioner_status');
     }

@@ -164,7 +164,8 @@ class M_dashboard extends CI_Model {
                 $this->db->where('YEAR(tanggal)', date('Y'));
                 break;
         }
-        $jadwal = $this->db->group_by('id_jadwal')->get('jadwal j')->result_array();
+        $this->db->group_by('j.id, p.fullname, u.photo, uk.name, t.nama, ps.name, j.tanggal, j.upload_date, d.judul, t.id, t.sifat, d.file, d.url');
+        $jadwal = $this->db->get('jadwal j')->result_array();
         foreach ($jadwal as $k => $j) {
             $this->db->select('p.fullname AS nama, uk.name AS unit_kerja');
             $this->db->join('position_personil pp','pp.id = pt.id_position_personil');

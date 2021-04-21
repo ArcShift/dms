@@ -20,29 +20,29 @@
         </ul>
     </div>
 </div>
-<!--CARD-->
-<div class="card">
-    <div class="card-body">
-        <form method="post">
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Pasal</th>
-                        <th>Bukti</th>
-                        <th>Pertanyaan</th>
-                        <?php if ($role != 'admin') { ?>
+<?php if ($this->session->has_userdata('gapAnalisa')) { ?>
+    <p class="text-center">Waktu Gap Analisa: <?= date('d M Y', strtotime($this->session->gapAnalisa['tanggal'])) ?></p>
+    <!--CARD-->
+    <div class="card">
+        <div class="card-body">
+            <form method="post">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Pasal</th>
+                            <th>Bukti</th>
+                            <th>Pertanyaan</th>
                             <th>Unit</th>
-                            <th>Status</th>
-                        <?php } ?>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php
-                    if ($this->session->has_userdata('gapAnalisa')) {
+                            <th>Bukti Implementasi</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
                         foreach ($data as $k => $v) {
                             $row = count($v['pertanyaan']) + 1;
                             ?>
-                            <tr>  
+                            <tr>
                                 <td rowspan="<?= $v['row'] ?>">
                                     <?php if ($role == 'admin') { ?>
                                         <button class="btn btn-sm btn-outline-primary fa fa-edit" name="edit" value="<?= $v['id'] ?>"></button>
@@ -64,37 +64,77 @@
                                         <?= $v2['kuesioner'] ?>
                                     </td>
                                     <?php if ($role == 'pic') { ?>
-                                        <?php
-                                        foreach ($v2['status'] as $k3 => $v3) {
-                                            switch ($v3['status']) {
-                                                case 100: {
-                                                        $stt = 'OK';
-                                                        $color = 'success';
-                                                    } break;
-                                                case 0: {
-                                                        $stt = 'NOK';
-                                                        $color = 'danger';
-                                                    } break;
-                                                default: {
-                                                        $stt = $v3['status'] . '%';
-                                                        $color = 'warning';
-                                                    } break;
-                                            }
-                                            ?>
+                                        <?php foreach ($v2['status'] as $k3 => $v3) { ?>
                                             <?= $k3 == 0 ? '' : '<tr>' ?>
                                             <td><?= $v3['unit_kerja'] ?></td>
-                                            <td><span class="badge badge-<?= $color ?>"><?= $stt ?></span></td>
-                                                <?= $k3 == 0 ? '' : '</tr>' ?>
-                                            <?php } ?>
+                                            <td>
+                                                <a target="_blank" href="<?= $v3['imp_type'] == 'URL' ? $v3['imp_path'] : base_url('upload/imp_gap_analisa/' . $v3['imp_path']) ?>"><?= substr($v3['imp_path'], 0, 30) ?></a>
+                                            </td>
+                                            <td>
+                                                <button type="button" class="btn btn-sm btn-outline-primary fa fa-edit" onclick="detail(<?= $v3['id'] ?>)"></button>
+                                            </td>
+                                            <?= $k3 == 0 ? '' : '</tr>' ?>
                                         <?php } ?>
-                                        <?= $k2 == 0 ? '' : '</tr>' ?>
                                     <?php } ?>
+                                    <?= $k2 == 0 ? '' : '</tr>' ?>
+                                <?php } ?>
                             </tr>
                         <?php } ?>
-                    <?php } ?>
-                </tbody>
-            </table>
-        </form>
+                    </tbody>
+                </table>
+            </form>
+        </div>
+    </div>
+<?php } ?>
+<!--MODAL DETAIL-->
+<div class="modal fade" id="modalDetail">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body"></div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" data-dismiss="modal">Tutup</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--MODAL EDIT-->
+<div class="modal fade" id="modalEdit">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form method="post" enctype="multipart/form-data">
+                <div class="modal-header">
+                    <h5 class="modal-title">Gap Analisa</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <input class="input-id" name="id" hidden="">
+                    <div class="form-group">
+                        <label><b>Hasil Gap Analisa</b></label>
+                        <textarea class="form-control input-hasil" name="hasil"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label><b>Status</b></label><br>
+                        <div class="badge badge-secondary badge-status"></div>
+                    </div>
+                    <div class="form-group">
+                        <label><b>Saran Perbaikan</b></label>
+                        <textarea class="form-control input-saran" name="saran"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-outline-primary" data-dismiss="modal">Tutup</button>
+                    <button class="btn btn-outline-primary btn-simpan" name="edit2" value="ok">Simpan</button>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 <script>
@@ -105,6 +145,16 @@
             if (data == 'success') {
                 location.reload();
             }
+        });
+    }
+    function detail(id) {
+        var m = $('#modalEdit');
+        m.modal('show');
+        $.getJSON('<?= site_url($module . '/detail_pertanyaan') ?>', {id: id}, function (d) {
+            m.find('.input-id').val(d.id);
+            m.find('.badge-status').html(d.status);
+            m.find('.input-hasil').val(d.hasil);
+            m.find('.input-saran').val(d.saran_perbaikan);
         });
     }
 </script>

@@ -2,6 +2,11 @@
 
 class M_kuesioner extends CI_Model {
 
+    function get() {
+        $this->db->where('id_gap_analisa', $this->session->gapAnalisa['id']);
+        return $this->db->get('kuesioner')->result_array();
+    }
+
     function getStatus($id) {
         $this->db->select('ks.*, uk.name AS unit_kerja');
         $this->db->join('unit_kerja uk', 'uk.id = ks.id_unit_kerja');
@@ -24,6 +29,13 @@ class M_kuesioner extends CI_Model {
             $sum += $v['status'];
         }
         return round($sum / $this->counts($que));
+    }
+
+    function implementasi($path) {
+        $this->db->set('hasil', $this->input->post('hasil'));
+        $this->db->set('saran_perbaikan', $this->input->post('saran'));
+        $this->db->where('id', $this->input->post('id'));
+        return $this->db->update('kuesioner_status');
     }
 
 }

@@ -8,11 +8,24 @@ class Hasil_gap_analisa extends MY_Controller {
         parent::__construct();
         $this->load->model('m_pasal');
         $this->load->model('m_gap_analisa', 'model');
+        $this->load->model('m_kuesioner', 'model2');
     }
 
     function index() {
         if ($this->input->post('edit')) {
-            $this->model->update_hasil();
+            if ($this->input->post('type') == 'file') {
+                $config['upload_path'] = './upload/imp_gap_analisa';
+                $config['allowed_types'] = '*';
+                $config['max_size'] = 50000;
+                $this->load->library('upload', $config);
+                if ($this->upload->do_upload('userfile')) {
+                    $this->model->update_hasil($this->upload->data()['file_name']);
+                } else {
+                    $this->data['msgError'] = $this->upload->display_errors();
+                }
+            } elseif ($this->input->post('type') == 'url') {
+                $this->model->update_hasil($this->input->post('url'));
+            }
         }
         $gap = $this->model->get();
         $this->data['gap_analisa'] = $gap;
@@ -31,22 +44,15 @@ class Hasil_gap_analisa extends MY_Controller {
         }
         $this->data['menuStandard'] = 'standard';
         $this->subModule = 'read';
-        $pasal = $this->m_pasal->get();
-        foreach ($pasal as $k => $p) {
-            $n = 1;
-            $pertanyaan = $this->db->get_where('kuesioner', ['id_pasal' => $p['id'], 'id_gap_analisa' => $this->session->gapAnalisa['id']])->result_array();
-            foreach ($pertanyaan as $k2 => $p2) {
-                $status = $this->model->getUnit($p2['id']);
-                $pertanyaan[$k2]['unit'] = $status;
-                $n2 = count($status) + 1;
-                $pertanyaan[$k2]['row'] = $n2;
-                $n += $n2;
-//                $n ++;
+        if ($this->session->has_userdata('gapAnalisa')) {
+            $data = $this->model2->get();
+            foreach ($data as $k => $d) {
+                $status = $this->model->getUnit($d['id']);
+                $data[$k]['status'] = $status;
+                $data[$k]['row'] = count($status) + 1;
             }
-            $pasal[$k]['pertanyaan'] = $pertanyaan;
-            $pasal[$k]['row'] = $n;
+            $this->data['data'] = $data;
         }
-        $this->data['data'] = $pasal;
         $this->render('index');
     }
 
@@ -54,6 +60,15 @@ class Hasil_gap_analisa extends MY_Controller {
         $gap = $this->model->get($this->input->get('id'));
         $this->session->set_userdata('gapAnalisa', $gap);
         echo 'success';
+    }
+
+    function detail() {
+        $this->db->select('ks.*, p.name AS pasal, p.bukti AS bukti_pasal');
+        $this->db->join('kuesioner k', 'k.id = ks.id_kuesioner');
+        $this->db->join('pasal p', 'p.id = k.id_pasal');
+        $this->db->where('ks.id',$this->input->get('id'));
+        $data =$this->db->get('kuesioner_status ks')->row_array();
+        echo json_encode($data);
     }
 
 }
