@@ -1,6 +1,3 @@
-<?php
-$unit = [];
-?>
 <div class="d-inline-block dropdown" id="menuGap">
     <button type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn-shadow dropdown-toggle btn btn-info">
         <span class="btn-icon-wrapper pr-2 opacity-7">
@@ -29,73 +26,60 @@ $unit = [];
         <table class="table">
             <thead>
                 <tr>
-                    <th>Pasal</th>
                     <th>Pertanyaan</th>
                     <th>Unit</th>
                     <th>Saran Perbaikan</th>
+                    <th>Target</th>
                     <th>Bukti Perbaikan</th>
                     <th>Status</th>
                     <th>Aksi</th>
                 </tr>
             </thead>
             <tbody>
-                <?php foreach ($data as $k => $v) { ?>
+                <?php foreach ($data as $k2 => $v2) { ?>
                     <tr>
-                        <td rowspan="<?= $v['row'] ?>"><?= $v['name'] ?></td>
-                        <?php if (empty($v['pertanyaan'])) { ?>
-                            <td>-</td>
-                            <td>-</td>
-                            <td>-</td>
-                            <td>-</td>
-                            <td>-</td>
-                            <td>-</td>
-                        <?php } ?>
+                        <td rowspan="<?= $v2['row'] ?>"><?= $v2['kuesioner'] ?></td>
                     </tr>
-                    <?php foreach ($v['pertanyaan'] as $k2 => $v2) { ?>
+                    <?php
+                    foreach ($v2['unit'] as $k3 => $v3) {
+                        switch ($v3['status']) {
+                            case 100: {
+                                    $stt = 'OK';
+                                    $color = 'success';
+                                } break;
+                            case 0: {
+                                    $stt = 'NOK';
+                                    $color = 'danger';
+                                } break;
+                            default: {
+                                    $stt = $v3['status'] . '%';
+                                    $color = 'warning';
+                                } break;
+                        }
+                        ?>
                         <tr>
-                            <td rowspan="<?= $v2['row'] ?>"><?= $v2['kuesioner'] ?></td>
-                        </tr>
-                        <?php
-                        foreach ($v2['unit'] as $k3 => $v3) {
-                            array_push($unit, $v3);
-                            switch ($v3['status']) {
-                                case 100: {
-                                        $stt = 'OK';
-                                        $color = 'success';
-                                    } break;
-                                case 0: {
-                                        $stt = 'NOK';
-                                        $color = 'danger';
-                                    } break;
-                                default: {
-                                        $stt = $v3['status'] . '%';
-                                        $color = 'warning';
-                                    } break;
-                            }
-                            ?>
-                            <tr>
-                                <td><?= $v3['unit_kerja'] ?></td>
-                                <td style="white-space: pre-wrap"><?= $v3['saran_perbaikan'] ?></td>
-                                <td>
-                                    <?php if (!empty($v3['type'])) { ?>
-                                        <!--                                        <div class="input-group">
-                                                                                    <input value="<?= $v3['path'] ?>" class="form-control" readonly="">
-                                                                                    <div class="input-group-append">-->
-                                        <?php if ($v3['type'] == 'FILE') { ?>
-                                            <a target="_blank" href="<?= base_url('upload/gap_analisa/' . $v3['path']) ?>"><?= substr($v3['path'], 0, 40) ?></a>
-                                        <?php } elseif ($v3['type'] == 'URL') { ?>
-                                            <a target="_blank" href="<?= $v3['path'] ?>"><?= substr($v3['path'], 0, 40) ?></a>
-                                        <?php } ?>
-                                        <!--                                            </div>
-                                                                                </div>-->
+                            <td><?= $v3['unit_kerja'] ?></td>
+                            <td style="white-space: pre-wrap"><?= $v3['saran_perbaikan'] ?></td>
+                            <td><?= $v3['target'] ?></td>
+                            <td>
+                                <?php if (!empty($v3['type'])) { ?>
+                                    <!--                                        <div class="input-group">
+                                                                                <input value="<?= $v3['path'] ?>" class="form-control" readonly="">
+                                                                                <div class="input-group-append">-->
+                                    <?php if ($v3['type'] == 'FILE') { ?>
+                                        <a target="_blank" href="<?= base_url('upload/gap_analisa/' . $v3['path']) ?>"><?= substr($v3['path'], 0, 40) ?></a>
+                                    <?php } elseif ($v3['type'] == 'URL') { ?>
+                                        <a target="_blank" href="<?= $v3['path'] ?>"><?= substr($v3['path'], 0, 40) ?></a>
                                     <?php } ?>
-                                </td>
-                                <td><span class="badge badge-<?= $color ?>"><?= $stt ?></span></td>
-                                <td>
-                                    <button class="btn btn-sm btn-outline-primary fa fa-edit" onclick="edit(<?= count($unit) - 1 ?>)"></button>
-                                </td>
-                            </tr>
-                        <?php } ?>
+                                    <!--                                            </div>
+                                                                            </div>-->
+                                <?php } ?>
+                            </td>
+                            <td><span class="badge badge-<?= $color ?>"><?= $stt ?></span></td>
+                            <td>
+                                <button class="btn btn-sm btn-outline-primary fa fa-edit" onclick="edit(<?= $v3['id'] ?>)"></button>
+                            </td>
+                        </tr>
                     <?php } ?>
                 <?php } ?>
             </tbody>
@@ -114,24 +98,25 @@ $unit = [];
                     </button>
                 </div>
                 <div class="modal-body">
+                    <input class="input-id" name="id" hidden="">
                     <div class="form-group">
-                        <label>Unit</label>
-                        <input class="input-id" name="id" hidden="">
-                        <input class="form-control input-unit" disabled="">
+                        <label><b>Pasal</b></label>
+                        <input class="form-control input-pasal" readonly="">
                     </div>
                     <div class="form-group">
-                        <label>Saran Perbaikan</label>
-                        <textarea class="form-control input-saran" disabled=""></textarea>
+                        <label><b>Bukti Pasal</b></label>
+                        <textarea class="form-control input-bukti" readonly=""></textarea>
                     </div>
+                    <label><b>Bukti Perbaikan</b></label>
                     <div class="form-group group-link">
                         <div class="input-group">
                             <input class="form-control input-path" readonly="">
                             <div class="input-group-append">
-                                <a target="_blank" class="btn btn-outline-primary fa link-bukti"></a>
+                                <button type="button" class="btn btn-outline-danger fa fa-trash link-bukti" onclick="initUpload()"></button>
                             </div>
                         </div>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group group-upload">
                         <div class="custom-control custom-radio custom-control-inline">
                             <input type="radio" id="customRadio1" name="type" value="file" class="custom-control-input radio-bukti">
                             <label class="custom-control-label" for="customRadio1">File</label>
@@ -141,7 +126,7 @@ $unit = [];
                             <label class="custom-control-label" for="customRadio2">Url</label>
                         </div>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group group-upload">
                         <input class="form-control input-file" type="file" name="userfile">
                         <input class="form-control input-url" type="url" name="url">
                     </div>
@@ -164,32 +149,29 @@ $unit = [];
             }
         });
     }
-    var unit = <?= json_encode($unit) ?>;
-    function edit(idx) {
-        var m = $('#modalEdit');
-        var u = unit[idx];
-        $('.radio-bukti').prop('checked', false);
-        $('.input-file,.input-url').hide();
-        $('.input-file,.input-url').prop('required', false);
-        $('.btn-simpan').hide();
-        m.modal('show');
-        m.find('.input-unit').val(u.unit_kerja);
-        m.find('.input-id').val(u.id);
-        m.find('.input-saran').val(u.saran_perbaikan);
-        m.find('.input-path').val(u.path);
-        if (u.type == null) {
-            m.find('.group-link').hide();
-        } else {
-            m.find('.group-link').show();
-            if (u.type == 'FILE') {
-                m.find('.link-bukti').addClass('fa-download');
-                m.find('.link-bukti').removeClass('fa-eye');
-            } else if (u.type == 'URL') {
-                m.find('.link-bukti').removeClass('fa-download');
-                m.find('.link-bukti').addClass('fa-eye');
+    function edit(id) {
+        $.getJSON('<?= site_url($module . '/detail') ?>', {id: id}, function (d) {
+            var m = $('#modalEdit');
+            m.modal('show');
+            m.find('.input-id').val(d.id);
+            m.find('.input-pasal').val(d.pasal);
+            m.find('.input-bukti').val(d.bukti_pasal);
+            if (d.path == null) {
+                initUpload();
+            } else {
+                $('.group-link').show();
+                $('.group-upload').hide();
+                m.find('.input-path').val(d.path);
             }
-        }
-        console.log(u);
+            $('.input-file,.input-url').hide();
+            $('.radio-bukti').prop('checked', false);
+            $('.input-file,.input-url').prop('required', false);
+            console.log(d);
+        });
+    }
+    function initUpload() {
+        $('.group-link').hide();
+        $('.group-upload').show();
     }
     $('.radio-bukti').change(function () {
         var type = $(this).val();

@@ -43,21 +43,14 @@ class Perbaikan_gap_analisa extends MY_Controller {
         }
         $this->data['menuStandard'] = 'standard';
         $this->subModule = 'read';
-        $pasal = $this->m_pasal->get();
-        foreach ($pasal as $k => $p) {
-            $n = 1;
-            $pertanyaan = $this->db->get_where('kuesioner', ['id_pasal' => $p['id'], 'id_gap_analisa' => $this->session->gapAnalisa['id']])->result_array();
-            foreach ($pertanyaan as $k2 => $p2) {
-                $status = $this->model->getUnit($p2['id']);
-                $pertanyaan[$k2]['unit'] = $status;
-                $n2 = count($status) + 1;
-                $pertanyaan[$k2]['row'] = $n2;
-                $n += $n2;
-            }
-            $pasal[$k]['pertanyaan'] = $pertanyaan;
-            $pasal[$k]['row'] = $n;
+        $pertanyaan = $this->db->get_where('kuesioner', ['id_gap_analisa' => $this->session->gapAnalisa['id']])->result_array();
+        foreach ($pertanyaan as $k2 => $p2) {
+            $status = $this->model->getUnit($p2['id']);
+            $pertanyaan[$k2]['unit'] = $status;
+            $n2 = count($status) + 1;
+            $pertanyaan[$k2]['row'] = $n2;
         }
-        $this->data['data'] = $pasal;
+        $this->data['data'] = $pertanyaan;
         $this->render('index');
     }
 
@@ -65,6 +58,15 @@ class Perbaikan_gap_analisa extends MY_Controller {
         $gap = $this->model->get($this->input->get('id'));
         $this->session->set_userdata('gapAnalisa', $gap);
         echo 'success';
+    }
+
+    function detail() {
+        $this->db->select('ks.*, p.name AS pasal, p.bukti AS bukti_pasal');
+        $this->db->join('kuesioner k', 'k.id = ks.id_kuesioner');
+        $this->db->join('pasal p', 'p.id = k.id_pasal');
+        $this->db->where('ks.id', $this->input->get('id'));
+        $data = $this->db->get('kuesioner_status ks')->row_array();
+        echo json_encode($data);
     }
 
 }
