@@ -26,62 +26,74 @@
     <div class="card">
         <div class="card-body">
             <form method="post">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>Pasal</th>
-                            <th>Bukti</th>
-                            <th>Pertanyaan</th>
-                            <th>Unit</th>
-                            <th>Bukti Implementasi</th>
-                            <th>Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php
-                        foreach ($data as $k => $v) {
-                            $row = count($v['pertanyaan']) + 1;
-                            ?>
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
                             <tr>
-                                <td rowspan="<?= $v['row'] ?>">
-                                    <?php if ($role == 'admin') { ?>
-                                        <button class="btn btn-sm btn-outline-primary fa fa-edit" name="edit" value="<?= $v['id'] ?>"></button>
-                                    <?php } ?>
-                                    <?= $v['name'] ?>
-                                </td>
-                                <td style="white-space: pre-wrap" rowspan="<?= $v['row'] ?>"><?= $v['bukti'] ?></td>
-                                <?php if (empty($v['pertanyaan'])) { ?>
-                                    <td>-</td>
-                                    <td>-</td>
-                                    <td>-</td>
-                                <?php } ?>
-                                <?php foreach ($v['pertanyaan'] as $k2 => $v2) { ?>
-                                    <?= $k2 == 0 ? '' : '<tr>' ?>
-                                    <td rowspan="<?= $v2['row'] ?>">
-                                        <?php if ($role == 'pic') { ?>
-                                            <button class="btn btn-sm btn-outline-primary fa fa-edit" name="edit_pertanyaan" value="<?= $v2['id'] ?>"></button>
-                                        <?php } ?>
-                                        <?= $v2['kuesioner'] ?>
-                                    </td>
-                                    <?php if ($role == 'pic') { ?>
-                                        <?php foreach ($v2['status'] as $k3 => $v3) { ?>
-                                            <?= $k3 == 0 ? '' : '<tr>' ?>
-                                            <td><?= $v3['unit_kerja'] ?></td>
-                                            <td>
-                                                <a target="_blank" href="<?= $v3['imp_type'] == 'URL' ? $v3['imp_path'] : base_url('upload/imp_gap_analisa/' . $v3['imp_path']) ?>"><?= substr($v3['imp_path'], 0, 30) ?></a>
-                                            </td>
-                                            <td>
-                                                <button type="button" class="btn btn-sm btn-outline-primary fa fa-edit" onclick="detail(<?= $v3['id'] ?>)"></button>
-                                            </td>
-                                            <?= $k3 == 0 ? '' : '</tr>' ?>
-                                        <?php } ?>
-                                    <?php } ?>
-                                    <?= $k2 == 0 ? '' : '</tr>' ?>
-                                <?php } ?>
+                                <th>Pasal</th>
+                                <th>Bukti</th>
+                                <th>Pertanyaan</th>
+                                <th>Unit</th>
+                                <th>Bukti Implementasi</th>
+                                <th>Status</th>
+                                <th style="min-width: 90px">Aksi</th>
                             </tr>
-                        <?php } ?>
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            <?php
+                            foreach ($data as $k => $v) {
+                                $row = count($v['pertanyaan']) + 1;
+                                ?>
+                                <tr>
+                                    <td rowspan="<?= $v['row'] ?>">
+                                        <?php if ($role == 'admin') { ?>
+                                            <button class="btn btn-sm btn-outline-primary fa fa-edit" name="edit" value="<?= $v['id'] ?>"></button>
+                                        <?php } ?>
+                                        <?= $v['name'] ?>
+                                    </td>
+                                    <td style="white-space: pre-wrap" rowspan="<?= $v['row'] ?>"><?= $v['bukti'] ?></td>
+                                    <?php if (empty($v['pertanyaan'])) { ?>
+                                        <td>-</td>
+                                        <td>-</td>
+                                        <td>-</td>
+                                        <td>-</td>
+                                    <?php } ?>
+                                    <?php foreach ($v['pertanyaan'] as $k2 => $v2) { ?>
+                                        <?= $k2 == 0 ? '' : '<tr>' ?>
+                                        <td rowspan="<?= $v2['row'] ?>">
+                                            <?= $v2['kuesioner'] ?>
+                                            <?php if ($role == 'pic') { ?>
+                                                <button class="btn p-0 btn-link" name="edit_pertanyaan" value="<?= $v2['id'] ?>">Kelola Unit</button>
+                                            <?php } ?>
+                                        </td>
+                                        <?php if ($role == 'pic') { ?>
+                                            <?php foreach ($v2['status'] as $k3 => $v3) { ?>
+                                                <?= $k3 == 0 ? '' : '<tr>' ?>
+                                                <td><?= $v3['unit_kerja'] ?></td>
+                                                <td>
+                                                    <ul>
+                                                    <?php foreach ($v3['implementasi'] as $k => $v4) { ?>
+                                                        <li>
+                                                            <a target="_blank" href="<?= $v4['type'] == 'URL' ? $v4['path'] : base_url('upload/imp_gap_analisa/' . $v4['path']) ?>"><?= substr($v4['path'], 0, 30) ?></a>
+                                                        </li>
+                                                    <?php } ?>
+                                                    </ul>
+                                                </td>
+                                                <td><?= $v3['status'] ?>%</td>
+                                                <td>
+                                                    <button class="btn btn-sm btn-outline-primary fa fa-upload" name="upload" value="<?= $v3['id'] ?>"></button>
+                                                    <button type="button" class="btn btn-sm btn-outline-primary fa fa-edit" onclick="detail(<?= $v3['id'] ?>)"></button>
+                                                </td>
+                                                <?= $k3 == 0 ? '' : '</tr>' ?>
+                                            <?php } ?>
+                                        <?php } ?>
+                                        <?= $k2 == 0 ? '' : '</tr>' ?>
+                                    <?php } ?>
+                                </tr>
+                            <?php } ?>
+                        </tbody>
+                    </table>
+                </div>
             </form>
         </div>
     </div>
@@ -146,6 +158,10 @@
                 location.reload();
             }
         });
+    }
+    function initUpload() {
+        var m = $('#modalUpload');
+        m.modal('show');
     }
     function detail(id) {
         var m = $('#modalEdit');

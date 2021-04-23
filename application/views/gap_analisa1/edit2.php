@@ -54,7 +54,9 @@
                     </button>
                 </div>
                 <div class="modal-body">
+                        <input type="number" class="input-id" name="id" hidden="">
                     <div class="form-group">
+                        <label><b>Unit Kerja</b></label>
                         <select class="form-control select-unit-kerja" name="unit_kerja" required="">
                             <option value="">~ Unit Kerja ~</option>
                             <?php foreach ($unit_kerja as $uk) { ?>
@@ -63,7 +65,7 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <input type="number" class="input-id" name="id" hidden="">
+                        <label><b>Status</b></label>
                         <select class="form-control input-status" name="status" required="">
                             <option value="">~ status ~</option>
                             <option value="100">OK</option>

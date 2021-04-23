@@ -188,6 +188,5 @@
             m.find('.input-url').show();
             m.find('.input-url').prop('required', true);
         }
-        console.log($(this).val());
     });
 </script>
