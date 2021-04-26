@@ -22,7 +22,7 @@ class Gap_analisa1 extends MY_Controller {
             $this->session->set_userdata('idData', $this->input->post('upload'));
             redirect($this->module . '/upload_bukti');
         } else if ($this->input->post('edit2')) {
-            $this->m_kuesioner->implementasi($this->input->post('url'));
+            $this->m_kuesioner->update();
         }
         $gap = $this->model->get();
         $this->data['gap_analisa'] = $gap;

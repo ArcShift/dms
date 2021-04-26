@@ -68,18 +68,34 @@
                                         </td>
                                         <?php if ($role == 'pic') { ?>
                                             <?php foreach ($v2['status'] as $k3 => $v3) { ?>
-                                                <?= $k3 == 0 ? '' : '<tr>' ?>
+                                                <?=
+                                                $k3 == 0 ? '' : '<tr>';
+                                                switch ($v3['status']) {
+                                                    case 100: {
+                                                            $stt = 'OK';
+                                                            $color = 'success';
+                                                        } break;
+                                                    case 0: {
+                                                            $stt = 'NOK';
+                                                            $color = 'danger';
+                                                        } break;
+                                                    default: {
+                                                            $stt = $v3['status'] . '%';
+                                                            $color = 'warning';
+                                                        } break;
+                                                }
+                                                ?>
                                                 <td><?= $v3['unit_kerja'] ?></td>
                                                 <td>
                                                     <ul>
-                                                    <?php foreach ($v3['implementasi'] as $k => $v4) { ?>
-                                                        <li>
-                                                            <a target="_blank" href="<?= $v4['type'] == 'URL' ? $v4['path'] : base_url('upload/imp_gap_analisa/' . $v4['path']) ?>"><?= substr($v4['path'], 0, 30) ?></a>
-                                                        </li>
-                                                    <?php } ?>
+                                                        <?php foreach ($v3['implementasi'] as $k => $v4) { ?>
+                                                            <li>
+                                                                <a target="_blank" href="<?= $v4['type'] == 'URL' ? $v4['path'] : base_url('upload/imp_gap_analisa/' . $v4['path']) ?>"><?= substr($v4['path'], 0, 30) ?></a>
+                                                            </li>
+                                                        <?php } ?>
                                                     </ul>
                                                 </td>
-                                                <td><?= $v3['status'] ?>%</td>
+                                                <td><span class="badge badge-<?= $color ?>"><?= $stt ?></span></td>
                                                 <td>
                                                     <button class="btn btn-sm btn-outline-primary fa fa-upload" name="upload" value="<?= $v3['id'] ?>"></button>
                                                     <button type="button" class="btn btn-sm btn-outline-primary fa fa-edit" onclick="detail(<?= $v3['id'] ?>)"></button>
@@ -133,8 +149,15 @@
                         <textarea class="form-control input-hasil" name="hasil"></textarea>
                     </div>
                     <div class="form-group">
-                        <label><b>Status</b></label><br>
-                        <div class="badge badge-secondary badge-status"></div>
+                        <label><b>Status</b></label>
+                        <select class="form-control input-status" name="status" required="">
+                            <option value="">~ status ~</option>
+                            <option value="100">OK</option>
+                            <option value="75">75%</option>
+                            <option value="50">50%</option>
+                            <option value="25">25%</option>
+                            <option value="0">NOK</option>
+                        </select>
                     </div>
                     <div class="form-group">
                         <label><b>Saran Perbaikan</b></label>
@@ -168,7 +191,7 @@
         m.modal('show');
         $.getJSON('<?= site_url($module . '/detail_pertanyaan') ?>', {id: id}, function (d) {
             m.find('.input-id').val(d.id);
-            m.find('.badge-status').html(d.status);
+            m.find('.input-status').val(d.status);
             m.find('.input-hasil').val(d.hasil);
             m.find('.input-saran').val(d.saran_perbaikan);
         });
