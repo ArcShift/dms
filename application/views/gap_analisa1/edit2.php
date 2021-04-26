@@ -42,7 +42,7 @@
         </table>
     </div>
 </div>
-<!--MODAL-->
+<!--MODAL STATUS-->
 <div class="modal fade" id="modalStatus">
     <div class="modal-dialog">
         <form method="post">
@@ -54,7 +54,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                        <input type="number" class="input-id" name="id" hidden="">
+                    <input type="number" class="input-id" name="id" hidden="">
                     <div class="form-group">
                         <label><b>Unit Kerja</b></label>
                         <select class="form-control select-unit-kerja" name="unit_kerja" required="">

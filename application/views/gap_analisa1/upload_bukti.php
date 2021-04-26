@@ -14,15 +14,15 @@
                 </tr>
             </thead>
             <tbody>
-                <?php foreach ($uploads as $u) { ?>
-                <tr>
-                    <td><?= $u['type'] ?></td>
-                    <td><?= $u['path'] ?></td>
-                    <td><?= $u['created_at'] ?></td>
-                    <td>
-                        <button class="btn btn-sm btn-outline-danger fa fa-trash"></button>
-                    </td>
-                </tr>
+                <?php foreach ($uploads as $k => $u) { ?>
+                    <tr>
+                        <td><?= $u['type'] ?></td>
+                        <td><?= $u['path'] ?></td>
+                        <td><?= $u['created_at'] ?></td>
+                        <td>
+                            <button class="btn btn-sm btn-outline-danger fa fa-trash" onclick="initHapus(<?= $k ?>)"></button>
+                        </td>
+                    </tr>
                 <?php } ?>
             </tbody>
         </table>
@@ -63,7 +63,35 @@
         </form>
     </div>
 </div>
+<!--MODAL HAPUS-->
+<div class="modal fade" id="modalHapus">
+    <div class="modal-dialog">
+        <form method="post" id="formHapus">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Hapus Bukti</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="modal-body">
+                        <input class="form-control input-id" name="id" hidden="" required="">
+                        <div class="form-group">
+                            <input class="form-control input-url" type="url" readonly="">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-outline-primary" data-dismiss="modal">Batal</button>
+                    <button class="btn btn-outline-danger" name="hapus" value="ok">Hapus</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
 <script>
+    var upl = <?php echo json_encode($uploads) ?>;
     $('#btnAdd').click(function () {
         var m = $('#modalUpload');
         m.modal('show');
@@ -74,15 +102,12 @@
         $('.radio-bukti').prop('checked', false);
         $('.input-file,.input-url').prop('required', false);
     });
-    function hapus(idx) {
-        var m = $('#modalStatus');
+    function initHapus(idx) {
+        var s = upl[idx];
+        var m = $('#modalHapus');
         m.modal('show');
-        m.find('#btnSubmit').attr('name', 'hapus');
-        m.find('#btnSubmit').html('Hapus');
-        m.find('.modal-title').html('Hapus Status');
-        m.find('.select-unit-kerja').val(stat[idx].id_unit_kerja);
-        m.find('.input-status').val(stat[idx].status);
-        m.find('.input-id').val(stat[idx].id);
+        m.find('.input-url').val(s.path);
+        m.find('.input-id').val(s.id);
     }
     $('.radio-bukti').change(function () {
         var type = $(this).val();
