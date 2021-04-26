@@ -31,7 +31,7 @@
                         <thead>
                             <tr>
                                 <th>Pasal</th>
-                                <th>Bukti</th>
+                                <th>Judul Pasal</th>
                                 <th>Pertanyaan</th>
                                 <th>Unit</th>
                                 <th>Bukti Implementasi</th>
@@ -51,7 +51,7 @@
                                         <?php } ?>
                                         <?= $v['name'] ?>
                                     </td>
-                                    <td style="white-space: pre-wrap" rowspan="<?= $v['row'] ?>"><?= $v['bukti'] ?></td>
+                                    <td style="white-space: pre-wrap" rowspan="<?= $v['row'] ?>"><?= $v['sort_desc'] ?></td>
                                     <?php if (empty($v['pertanyaan'])) { ?>
                                         <td>-</td>
                                         <td>-</td>
@@ -145,6 +145,14 @@
                 <div class="modal-body">
                     <input class="input-id" name="id" hidden="">
                     <div class="form-group">
+                        <label><b>Deskripsi Pasal</b></label>
+                        <textarea class="form-control input-deskripsi" readonly=""></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label><b>Bukti yang diinginkan</b></label>
+                        <textarea class="form-control input-bukti" readonly=""></textarea>
+                    </div>
+                    <div class="form-group">
                         <label><b>Hasil Gap Analisa</b></label>
                         <textarea class="form-control input-hasil" name="hasil"></textarea>
                     </div>
@@ -190,10 +198,13 @@
         var m = $('#modalEdit');
         m.modal('show');
         $.getJSON('<?= site_url($module . '/detail_pertanyaan') ?>', {id: id}, function (d) {
+            console.log(d);
             m.find('.input-id').val(d.id);
             m.find('.input-status').val(d.status);
             m.find('.input-hasil').val(d.hasil);
             m.find('.input-saran').val(d.saran_perbaikan);
+            m.find('.input-deskripsi').val(d.long_desc);
+            m.find('.input-bukti').val(d.bukti);
         });
     }
 </script>
