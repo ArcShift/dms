@@ -50,7 +50,9 @@ class Gap_analisa1 extends MY_Controller {
                 foreach ($pertanyaan as $k2 => $p2) {
                     $status = $this->m_kuesioner->getStatus($p2['id']);
                     foreach ($status as $k3 => $s) {
-                        $status[$k3]['implementasi'] = $this->db->get_where('bukti_gap_analisa', ['id_kuesioner_detail' => $s['id']])->result_array();
+                        $this->db->select('bga.*, d.judul, d.type_doc');
+                        $this->db->join('document d', 'd.id = bga.id_document', 'LEFT');
+                        $status[$k3]['implementasi'] = $this->db->get_where('bukti_gap_analisa bga', ['bga.id_kuesioner_detail' => $s['id']])->result_array();
                     }
                     $pertanyaan[$k2]['status'] = $status;
                     $n2 = count($status);

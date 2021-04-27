@@ -88,9 +88,25 @@
                                                 <td><?= $v3['unit_kerja'] ?></td>
                                                 <td>
                                                     <ul>
-                                                        <?php foreach ($v3['implementasi'] as $k => $v4) { ?>
+                                                        <?php
+                                                        foreach ($v3['implementasi'] as $k => $v4) {
+                                                            switch (strtolower($v4['type'])) {
+                                                                case 'file':
+                                                                    $href = base_url('gap_analisa/' . $v4['path']);
+                                                                    $txt = substr($v4['path'], 0, 30);
+                                                                    break;
+                                                                case 'url':
+                                                                    $href = $v4['path'];
+                                                                    $txt = substr($v4['path'], 0, 30);
+                                                                    break;
+                                                                case 'doc':
+                                                                    $href = site_url('document_search/detail/' . $v4['id_document']);
+                                                                    $txt = $v4['judul'];
+                                                                    break;
+                                                            }
+                                                            ?>
                                                             <li>
-                                                                <a target="_blank" href="<?= $v4['type'] == 'URL' ? $v4['path'] : base_url('upload/imp_gap_analisa/' . $v4['path']) ?>"><?= substr($v4['path'], 0, 30) ?></a>
+                                                                <a target="_blank" href="<?= $href ?>"><?= $txt ?></a>
                                                             </li>
                                                         <?php } ?>
                                                     </ul>
