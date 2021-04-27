@@ -145,19 +145,32 @@ class Gap_analisa1 extends MY_Controller {
                 }
             } elseif ($type == 'url') {
                 $path = $this->input->post('url');
+            } elseif ($type == 'doc') {
+                $this->db->set('id_document', $this->input->post('doc'));
             }
             if (isset($path)) {
                 $this->db->set('path', $path);
-                $this->db->insert('bukti_gap_analisa');
             }
+            $this->db->insert('bukti_gap_analisa');
         } elseif ($this->input->post('hapus')) {
             $this->db->where('id', $this->input->post('id'));
             $this->db->delete('bukti_gap_analisa');
         }
         $this->subTitle = 'Upload Bukti';
         $this->subModule = 'edit';
+        if ($this->role == 'anggota') {
+            $this->db->join('distribution ds', 'ds.id_document = d.id');
+            $this->db->join('position_personil pp', 'pp.id = ds.id_position_personil');
+            $this->db->join('personil p', 'p.id = pp.id_personil');
+            $this->db->join('users u', 'u.id_personil = p.id AND u.id = ' . $this->session->user['id']);
+        } else {
+            $this->db->where('d.id_company', $this->session->activeCompany['id']);
+        }
+        $this->data['document'] = $this->db->get('document d')->result_array();
         $this->data['unit'] = $this->db->get_where('kuesioner_status', ['id' => $this->session->idData])->result_array();
-        $this->data['uploads'] = $this->db->get_where('bukti_gap_analisa', ['id_kuesioner_detail' => $this->session->idData])->result_array();
+        $this->db->select('bga.*, d.judul, d.type_doc');
+        $this->db->join('document d', 'd.id = bga.id_document', 'LEFT');
+        $this->data['uploads'] = $this->db->get_where('bukti_gap_analisa bga', ['bga.id_kuesioner_detail' => $this->session->idData])->result_array();
         $this->render('upload_bukti');
     }
 
