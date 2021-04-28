@@ -21,69 +21,84 @@
     </div>
 </div>
 <!--CARD-->
+<p class="text-center">Waktu Gap Analisa: <?= date('d M Y', strtotime($this->session->gapAnalisa['tanggal'])) ?></p>
 <div class="card">
     <div class="card-body">
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Pertanyaan</th>
-                    <th>Unit</th>
-                    <th>Saran Perbaikan</th>
-                    <th>Target</th>
-                    <th>Bukti Perbaikan</th>
-                    <th>Status</th>
-                    <th>Aksi</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach ($data as $k2 => $v2) { ?>
+        <form method="post">
+            <table class="table">
+                <thead>
                     <tr>
-                        <td rowspan="<?= $v2['row'] ?>"><?= $v2['kuesioner'] ?></td>
+                        <th>Pertanyaan</th>
+                        <th>Unit</th>
+                        <th>Saran Perbaikan</th>
+                        <th>Target</th>
+                        <th>Bukti Perbaikan</th>
+                        <th>Status</th>
+                        <th>Aksi</th>
                     </tr>
-                    <?php
-                    foreach ($v2['unit'] as $k3 => $v3) {
-                        switch ($v3['status']) {
-                            case 100: {
-                                    $stt = 'OK';
-                                    $color = 'success';
-                                } break;
-                            case 0: {
-                                    $stt = 'NOK';
-                                    $color = 'danger';
-                                } break;
-                            default: {
-                                    $stt = $v3['status'] . '%';
-                                    $color = 'warning';
-                                } break;
-                        }
-                        ?>
+                </thead>
+                <tbody>
+                    <?php foreach ($data as $k2 => $v2) { ?>
                         <tr>
-                            <td><?= $v3['unit_kerja'] ?></td>
-                            <td style="white-space: pre-wrap"><?= $v3['saran_perbaikan'] ?></td>
-                            <td><?= $v3['target'] ?></td>
-                            <td>
-                                <?php if (!empty($v3['type'])) { ?>
-                                    <!--                                        <div class="input-group">
-                                                                                <input value="<?= $v3['path'] ?>" class="form-control" readonly="">
-                                                                                <div class="input-group-append">-->
-                                    <?php if ($v3['type'] == 'FILE') { ?>
-                                        <a target="_blank" href="<?= base_url('upload/gap_analisa/' . $v3['path']) ?>"><?= substr($v3['path'], 0, 40) ?></a>
-                                    <?php } elseif ($v3['type'] == 'URL') { ?>
-                                        <a target="_blank" href="<?= $v3['path'] ?>"><?= substr($v3['path'], 0, 40) ?></a>
-                                    <?php } ?>
-                                    <!--                                            </div>
-                                                                            </div>-->
-                                <?php } ?>
-                            </td>
-                            <td><span class="badge badge-<?= $color ?>"><?= $stt ?></span></td>
-                            <td>
-                                <button class="btn btn-sm btn-outline-primary fa fa-edit" onclick="edit(<?= $v3['id'] ?>)"></button>
-                            </td>
+                            <td rowspan="<?= $v2['row'] ?>"><?= $v2['kuesioner'] ?></td>
                         </tr>
+                        <?php
+                        foreach ($v2['unit'] as $k3 => $v3) {
+                            switch ($v3['status']) {
+                                case 100: {
+                                        $stt = 'OK';
+                                        $color = 'success';
+                                    } break;
+                                case 0: {
+                                        $stt = 'NOK';
+                                        $color = 'danger';
+                                    } break;
+                                default: {
+                                        $stt = $v3['status'] . '%';
+                                        $color = 'warning';
+                                    } break;
+                            }
+                            ?>
+                            <tr>
+                                <td><?= $v3['unit_kerja'] ?></td>
+                                <td style="white-space: pre-wrap"><?= $v3['saran_perbaikan'] ?></td>
+                                <td><?= $v3['target'] ?></td>
+                                <td>
+                                    <ul>
+                                                        <?php
+                                                        foreach ($v3['implementasi'] as $k => $v4) {
+                                                            switch (strtolower($v4['type'])) {
+                                                                case 'file':
+                                                                    $href = base_url('gap_analisa/' . $v4['path']);
+                                                                    $txt = substr($v4['path'], 0, 30);
+                                                                    break;
+                                                                case 'url':
+                                                                    $href = $v4['path'];
+                                                                    $txt = substr($v4['path'], 0, 30);
+                                                                    break;
+                                                                case 'doc':
+                                                                    $href = site_url('document_search/detail/' . $v4['id_document']);
+                                                                    $txt = $v4['judul'];
+                                                                    break;
+                                                            }
+                                                            ?>
+                                                            <li>
+                                                                <a target="_blank" href="<?= $href ?>"><?= $txt ?></a>
+                                                            </li>
+                                                        <?php } ?>
+                                                    </ul>
+                                </td>
+                                <td><span class="badge badge-<?= $color ?>"><?= $stt ?></span></td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-primary fa fa-upload" name="upload" value="<?= $v3['id'] ?>" title="Upload Bukti Perbaikan"></button>
+                                    <button type="button" class="btn btn-sm btn-outline-primary fa fa-edit" onclick="edit(<?= $v3['id'] ?>)"></button>
+                                </td>
+                            </tr>
+                        <?php } ?>
                     <?php } ?>
-                <?php } ?>
-            </tbody>
-        </table>
+                </tbody>
+            </table>
+        </form>
     </div>
 </div>
 <!--MODAL EDIT-->

@@ -95,5 +95,16 @@ class M_gap_analisa extends CI_Model {
         $this->db->set('path', $path);
         $this->db->update('kuesioner_status');
     }
-
+    function getDocument(){
+        if ($this->role == 'anggota') {
+            $this->db->join('distribution ds', 'ds.id_document = d.id');
+            $this->db->join('position_personil pp', 'pp.id = ds.id_position_personil');
+            $this->db->join('personil p', 'p.id = pp.id_personil');
+            $this->db->join('users u', 'u.id_personil = p.id AND u.id = ' . $this->session->user['id']);
+        } else {
+            $this->db->where('d.id_company', $this->session->activeCompany['id']);
+        }
+        $this->db->where('d.id_standard', $this->session->activeStandard['id']);
+        return $this->db->get('document d')->result_array();
+    }
 }

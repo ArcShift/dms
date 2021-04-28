@@ -168,6 +168,7 @@ class Gap_analisa1 extends MY_Controller {
         } else {
             $this->db->where('d.id_company', $this->session->activeCompany['id']);
         }
+        $this->db->where('d.id_standard', $this->session->activeStandard['id']);
         $this->data['document'] = $this->db->get('document d')->result_array();
         $this->data['unit'] = $this->db->get_where('kuesioner_status', ['id' => $this->session->idData])->result_array();
         $this->db->select('bga.*, d.judul, d.type_doc');

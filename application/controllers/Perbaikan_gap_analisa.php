@@ -25,6 +25,9 @@ class Perbaikan_gap_analisa extends MY_Controller {
             } else {
                 $this->model->update_perbaikan($this->input->post('url'));
             }
+        } elseif ($this->input->post('upload')) {
+            $this->session->set_userdata('idData', $this->input->post('upload'));
+            redirect($this->module . '/upload_bukti');
         }
         $gap = $this->model->get();
         $this->data['gap_analisa'] = $gap;
@@ -46,6 +49,11 @@ class Perbaikan_gap_analisa extends MY_Controller {
         $pertanyaan = $this->db->get_where('kuesioner', ['id_gap_analisa' => $this->session->gapAnalisa['id']])->result_array();
         foreach ($pertanyaan as $k2 => $p2) {
             $status = $this->model->getUnit($p2['id']);
+            foreach ($status as $k3 => $s) {
+                $this->db->select('bga.*, d.judul, d.type_doc');
+                $this->db->join('document d', 'd.id = bga.id_document', 'LEFT');
+                $status[$k3]['implementasi'] = $this->db->get_where('bukti_perbaikan_gap_analisa bga', ['bga.id_kuesioner_detail' => $s['id']])->result_array();
+            }
             $pertanyaan[$k2]['unit'] = $status;
             $n2 = count($status) + 1;
             $pertanyaan[$k2]['row'] = $n2;
@@ -67,6 +75,44 @@ class Perbaikan_gap_analisa extends MY_Controller {
         $this->db->where('ks.id', $this->input->get('id'));
         $data = $this->db->get('kuesioner_status ks')->row_array();
         echo json_encode($data);
+    }
+
+    function upload_bukti() {
+        if ($this->input->post('tambah')) {
+            $this->db->set('id_kuesioner_detail', $this->session->idData);
+            $type = $this->input->post('type');
+            $this->db->set('type', strtoupper($type));
+            if ($type == 'file') {
+                $config['upload_path'] = './upload/rev_gap_analisa';
+                $config['allowed_types'] = '*';
+                $config['max_size'] = 100000;
+                $this->load->library('upload', $config);
+                if ($this->upload->do_upload('userfile')) {
+                    $path = $this->upload->data()['file_name'];
+                } else {
+                    $this->data['status'] = 'error';
+                    $this->data['msgError'] = $this->upload->display_errors();
+                }
+            } elseif ($type == 'url') {
+                $path = $this->input->post('url');
+            } elseif ($type == 'doc') {
+                $this->db->set('id_document', $this->input->post('doc'));
+            }
+            if (isset($path)) {
+                $this->db->set('path', $path);
+            }
+            $this->db->insert('bukti_perbaikan_gap_analisa');
+        } elseif ($this->input->post('hapus')) {
+            $this->db->where('id', $this->input->post('id'));
+            $this->db->delete('bukti_perbaikan_gap_analisa');
+        }
+        $this->subModule = 'edit';
+        $this->subTitle = 'Upload Bukti';
+        $this->data['document'] = $this->model->getDocument();
+        $this->db->select('pga.*, d.judul, d.type_doc');
+        $this->db->join('document d', 'd.id = pga.id_document', 'LEFT');
+        $this->data['uploads'] = $this->db->get('bukti_perbaikan_gap_analisa pga')->result_array();
+        $this->render('upload_bukti');
     }
 
 }

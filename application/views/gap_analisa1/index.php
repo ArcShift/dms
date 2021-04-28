@@ -187,6 +187,10 @@
                         <label><b>Saran Perbaikan</b></label>
                         <textarea class="form-control input-saran" name="saran"></textarea>
                     </div>
+                    <div class="form-group">
+                        <label><b>Target</b></label>
+                        <input class="form-control input-target" name="target" type="date">
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-outline-primary" data-dismiss="modal">Tutup</button>
@@ -221,6 +225,7 @@
             m.find('.input-saran').val(d.saran_perbaikan);
             m.find('.input-deskripsi').val(d.long_desc);
             m.find('.input-bukti').val(d.bukti);
+            m.find('.input-target').val(d.target);
         });
     }
 </script>
