@@ -258,10 +258,10 @@ if ($this->input->get('standard')) {
                                                 <button type="button" title="Pilih Perusahaan" data-toggle="dropdown" class="btn-shadow mr-3 btn btn-dark">
                                                     <i class="fa fa-angle-double-down"></i>
                                                 </button>
-                                                <div id="company-dropdown" tabindex="-1" role="menu" aria-hidden="true" class="dropdown-menu">
+                                                <div id="company-dropdown" tabindex="-1" role="menu" aria-hidden="true" class="dropdown-menu" style="max-height: 300px; overflow-y: auto;">
                                                     <ul class="nav flex-column">
                                                         <?php foreach ($companies as $k => $c) { ?>
-                                                            <li class="nav-item">
+                                                            <li class="nav-item overflow-auto">
                                                                 <a class="nav-link" onclick="switchCompany(<?= $c['id'] ?>)">
                                                                     <i class="nav-link-icon lnr-inbox"></i>
                                                                     <span>
