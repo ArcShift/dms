@@ -1,4 +1,3 @@
-                                <?php echo $this->session->idData ?>
 <div class="card">
     <div class="card-body">
         <button class="btn btn-outline-primary pull-right m-1" id="btnAdd">Tambah</button>
