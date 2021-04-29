@@ -88,7 +88,7 @@
                                                         <?php } ?>
                                                     </ul>
                                 </td>
-                                <td><span class="badge badge-<?= $color ?>"><?= $stt ?></span></td>
+                                <td><span class="badge badge-<?= $v3['deadline'] ?>"><?= $stt ?></span></td>
                                 <td>
                                     <button class="btn btn-sm btn-outline-primary fa fa-upload" name="upload" value="<?= $v3['id'] ?>" title="Upload Bukti Perbaikan"></button>
                                     <button type="button" class="btn btn-sm btn-outline-primary fa fa-edit" onclick="edit(<?= $v3['id'] ?>)"></button>

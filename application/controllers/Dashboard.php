@@ -30,6 +30,7 @@ class Dashboard extends MY_Controller {
         $company = $this->session->activeCompany;
         $standard = $this->session->activeStandard;
         $this->data['periode_tugas'] = $periode_tugas;
+        $this->data['menuStandard'] = 'standard';
         if (!empty($company)) {
             $this->data['companies'] = $this->db->get('company')->result_array();
             $this->data['company_standard'] = $this->model->company_standard($company['id']);

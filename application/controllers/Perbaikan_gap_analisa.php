@@ -52,7 +52,21 @@ class Perbaikan_gap_analisa extends MY_Controller {
             foreach ($status as $k3 => $s) {
                 $this->db->select('bga.*, d.judul, d.type_doc');
                 $this->db->join('document d', 'd.id = bga.id_document', 'LEFT');
-                $status[$k3]['implementasi'] = $this->db->get_where('bukti_perbaikan_gap_analisa bga', ['bga.id_kuesioner_detail' => $s['id']])->result_array();
+                $imp = $this->db->get_where('bukti_perbaikan_gap_analisa bga', ['bga.id_kuesioner_detail' => $s['id']])->result_array();
+                $status[$k3]['implementasi'] = $imp;
+                $status[$k3]['dl'] = 0;
+                if (!empty($imp) & !empty($s['target'])) {
+                    $d1 = new DateTime(date('Y-m-d', strtotime($imp[0]['created_at'])));
+                    $d2 = new DateTime($s['target']);
+                    $status[$k3]['dl'] = $d1->diff($d2);
+                    if ($d1->diff($d2)->invert) {
+                        $status[$k3]['deadline'] = 'danger';
+                    } else {
+                        $status[$k3]['deadline'] = 'success';
+                    }
+                } else {
+                    $status[$k3]['deadline'] = 'secondary';
+                }
             }
             $pertanyaan[$k2]['unit'] = $status;
             $n2 = count($status) + 1;
@@ -111,6 +125,7 @@ class Perbaikan_gap_analisa extends MY_Controller {
         $this->data['document'] = $this->model->getDocument();
         $this->db->select('pga.*, d.judul, d.type_doc');
         $this->db->join('document d', 'd.id = pga.id_document', 'LEFT');
+        $this->db->where('pga.id_kuesioner_detail', $this->session->idData);
         $this->data['uploads'] = $this->db->get('bukti_perbaikan_gap_analisa pga')->result_array();
         $this->render('upload_bukti');
     }

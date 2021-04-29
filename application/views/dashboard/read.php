@@ -62,67 +62,6 @@ if (empty($this->session->activeCompany)) {
             </form>
         </div>
     </div>
-    <div class="app-page-title">
-        <div class="page-title-wrapper">
-            <div class="page-title-heading">
-                <div class="page-title-icon">
-                    <i class="pe-7s-home icon-gradient bg-mean-fruit">
-                    </i>
-                </div>
-                <?php if (empty($this->session->user['id_company'])) { ?>
-                    <button type="button" title="Pilih Perusahaan" data-toggle="dropdown" class="btn-shadow mr-3 btn btn-dark">
-                        <i class="fa fa-angle-double-down"></i>
-                    </button>
-                    <div id="company-dropdown" tabindex="-1" role="menu" aria-hidden="true" class="dropdown-menu">
-                        <ul class="nav flex-column">
-                            <?php foreach ($companies as $k => $c) { ?>
-                                <li class="nav-item">
-                                    <a href="<?= site_url($module . '?company=' . $c['id']); ?>" class="nav-link">
-                                        <i class="nav-link-icon lnr-inbox"></i>
-                                        <span>
-                                            <?= $c['name'] ?>
-                                        </span>
-                                    </a>
-                                </li>
-                            <?php } ?>
-                        </ul>
-                    </div>
-                <?php } ?>
-                <div>
-                    <span id="company-title">
-                        <?= $this->session->activeCompany['name'] ?>
-                    </span>
-                </div>
-            </div>
-            <div class="page-title-actions">
-                <button type="button" data-toggle="tooltip" title="Standar Aktif" data-placement="bottom" class="btn-shadow mr-3 btn btn-dark">
-                    <i class="fa fa-star"></i>
-                </button>
-                <div class="d-inline-block dropdown">
-                    <button type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn-shadow dropdown-toggle btn btn-info">
-                        <span class="btn-icon-wrapper pr-2 opacity-7">
-                            <i class="fa fa-file fa-w-20"></i>
-                        </span>
-                        <?= empty($activeStandard) ? '-' : $activeStandard['name'] ?>
-                    </button>
-                    <div tabindex="-1" role="menu" aria-hidden="true" class="dropdown-menu dropdown-menu-right">
-                        <ul class="nav flex-column">
-                            <?php foreach ($company_standard as $cs) { ?>
-                                <li class="nav-item">
-                                    <a href="<?= site_url($module . '?standard=' . $cs['id']); ?>" class="nav-link">
-                                        <i class="nav-link-icon lnr-inbox"></i>
-                                        <span>
-                                            <?= $cs['name'] ?>
-                                        </span>
-                                    </a>
-                                </li>
-                            <?php } ?>
-                        </ul>
-                    </div>
-                </div>
-            </div>   
-        </div>
-    </div>
     <?php
     if (empty($activeStandard)) {
         echo 'Perusahaan ini belum memiliki standar';
@@ -578,6 +517,5 @@ if (empty($this->session->activeCompany)) {
     <?php } ?>
     <script>
         function afterReady() {}
-        $('.app-page-title').first().hide();
     </script>
 <?php } ?>
