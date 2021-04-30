@@ -15,7 +15,7 @@
             <tbody>
                 <?php foreach ($uploads as $k => $u) { ?>
                     <tr>
-                        <td><?= $u['type']!='doc'?$u['type']:'Dokumen & Implementasi - Dokumen' ?></td>
+                        <td><?= $u['type']!='DOC'?$u['type']:'Dokumen & Implementasi - Dokumen' ?></td>
                         <td>
                             <?php
                             switch (strtolower($u['type'])) {
