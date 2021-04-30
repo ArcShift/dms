@@ -7,16 +7,16 @@
         <table class="table">
             <thead>
                 <tr>
-                    <th>Type</th>
-                    <th>Path</th>
-                    <th>Upload Date</th>
+                    <th>Tipe</th>
+                    <th>Bukti Implementasi</th>
+                    <th>Tanggal Upload</th>
                     <th style="width: 100px">Aksi</th>
                 </tr>
             </thead>
             <tbody>
                 <?php foreach ($uploads as $k => $u) { ?>
                     <tr>
-                        <td><?= $u['type'] ?></td>
+                        <td><?= $u['type']!='doc'?$u['type']:'Dokumen & Implementasi - Dokumen' ?></td>
                         <td>
                             <?php
                             switch (strtolower($u['type'])) {
@@ -69,7 +69,7 @@
                         </div>
                         <div class="custom-control custom-radio custom-control-inline">
                             <input type="radio" id="customRadio3" name="type" value="doc" class="custom-control-input radio-bukti">
-                            <label class="custom-control-label" for="customRadio3">Doc</label>
+                            <label class="custom-control-label" for="customRadio3">Pilih dari Menu Dokumen</label>
                         </div>
                     </div>
                     <div class="form-group group-upload">

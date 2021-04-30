@@ -6,16 +6,16 @@
         <table class="table">
             <thead>
                 <tr>
-                    <th>Type</th>
-                    <th>Path</th>
-                    <th>Upload Date</th>
+                    <th>Tipe</th>
+                    <th>Bukti Implementasi</th>
+                    <th>Tanggal Upload</th>
                     <th style="width: 100px">Aksi</th>
                 </tr>
             </thead>
             <tbody>
                 <?php foreach ($uploads as $k => $u) { ?>
                     <tr>
-                        <td><?= $u['type'] ?></td>
+                        <td><?= $u['type']!='doc'?$u['type']:'Dokumen & Implementasi - Dokumen' ?></td>
                         <td>
                             <?php
                             switch (strtolower($u['type'])) {

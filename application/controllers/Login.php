@@ -17,8 +17,14 @@ class Login extends CI_Controller {
                     $this->load->model('M_dashboard', 'm_dashboard');
                     $this->session->set_userdata('activeStandard', $this->m_dashboard->getDefaultStandard($this->session->activeCompany['id']));
                 }
-
-                redirect('dashboard');
+                switch ($this->session->user['role']) {
+                    case 'anggota':
+                        redirect('users');
+                        break;
+                    default:
+                        redirect('dashboard');
+                        break;
+                }
             }
         }
 //        $this->load->view('login/admin-lte');

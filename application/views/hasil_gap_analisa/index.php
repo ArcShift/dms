@@ -73,7 +73,7 @@
         <div class="modal-content">
             <form method="post" enctype="multipart/form-data">
                 <div class="modal-header">
-                    <h5 class="modal-title">Edit Hasil Gap Analisa</h5>
+                    <h5 class="modal-title">Hasil Gap Analisa</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -88,7 +88,7 @@
                         <label><b>Bukti (bukti pasal)</b></label>
                         <textarea class="form-control input-bukti" name="bukti_pasal" readonly=""></textarea>
                     </div>
-                    <div class="form-group">
+<!--                    <div class="form-group">
                         <label><b>Bukti Implementasi</b></label><br>
                         <label class="label-path"></label>
                         <br>
@@ -102,11 +102,11 @@
                         </div>
                         <input class="form-control input-file" type="file" name="userfile">
                         <input class="form-control input-url" type="url" name="url">
-                    </div>
+                    </div>-->
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-outline-primary" data-dismiss="modal">Tutup</button>
-                    <button class="btn btn-outline-primary" name="edit" value="ok">Simpan</button>
+                    <!--<button class="btn btn-outline-primary" name="edit" value="ok">Simpan</button>-->
                 </div>
             </form>
         </div>

@@ -107,7 +107,7 @@
         <div class="modal-content">
             <form method="post" enctype="multipart/form-data">
                 <div class="modal-header">
-                    <h5 class="modal-title">Edit Perbaikan Gap Analisa</h5>
+                    <h5 class="modal-title">Perbaikan Gap Analisa</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -122,7 +122,7 @@
                         <label><b>Bukti Pasal</b></label>
                         <textarea class="form-control input-bukti" readonly=""></textarea>
                     </div>
-                    <label><b>Bukti Perbaikan</b></label>
+<!--                    <label><b>Bukti Perbaikan</b></label>
                     <div class="form-group group-link">
                         <div class="input-group">
                             <input class="form-control input-path" readonly="">
@@ -144,11 +144,11 @@
                     <div class="form-group group-upload">
                         <input class="form-control input-file" type="file" name="userfile">
                         <input class="form-control input-url" type="url" name="url">
-                    </div>
+                    </div>-->
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-outline-primary" data-dismiss="modal">Tutup</button>
-                    <button class="btn btn-outline-primary btn-simpan" name="edit" value="ok">Simpan</button>
+                    <!--<button class="btn btn-outline-primary btn-simpan" name="edit" value="ok">Simpan</button>-->
                 </div>
             </form>
         </div>

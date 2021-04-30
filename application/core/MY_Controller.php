@@ -124,15 +124,38 @@ class MY_Controller extends CI_Controller {
 }
 
 class MY_Admin extends CI_Controller {
-    protected $data=[];
-            function __construct() {
+
+    protected $data = [];
+
+    function __construct() {
         parent::__construct();
         // check if logged_in
     }
 
     function render($view) {
-        $this->data['view']=$view;
+        $this->data['view'] = $view;
         $this->load->view('template/admin', $this->data);
+    }
+
+}
+
+class MY_User extends CI_Controller {
+
+    protected $data = [];
+    protected $role = null;
+     
+    function __construct() {
+        parent::__construct();
+        if (!$this->session->has_userdata('user')) {
+            redirect('login');
+            $this->role = $this->session->userdata['user']['role'];
+        }
+        // check if logged_in
+    }
+
+    function render($view) {
+        $this->data['view'] = $view;
+        $this->load->view('template/user', $this->data);
     }
 
 }
