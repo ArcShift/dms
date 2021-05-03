@@ -31,9 +31,12 @@ class M_kuesioner extends CI_Model {
         return round($sum / $this->counts($que));
     }
 
-    function implementasi($path) {
+    function update() {
         $this->db->set('hasil', $this->input->post('hasil'));
         $this->db->set('saran_perbaikan', $this->input->post('saran'));
+        $this->db->set('status', $this->input->post('status'));
+        $this->db->set('status_perbaikan', $this->input->post('status'));
+        $this->db->set('target', $this->input->post('target'));
         $this->db->where('id', $this->input->post('id'));
         return $this->db->update('kuesioner_status');
     }

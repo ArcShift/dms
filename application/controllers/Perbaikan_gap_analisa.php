@@ -12,19 +12,9 @@ class Perbaikan_gap_analisa extends MY_Controller {
 
     function index() {
         if ($this->input->post('edit')) {
-            if ($this->input->post('type') == 'file') {
-                $config['upload_path'] = './upload/gap_analisa';
-                $config['allowed_types'] = '*';
-                $config['max_size'] = 100000;
-                $this->load->library('upload', $config);
-                if ($this->upload->do_upload('userfile')) {
-                    $this->model->update_perbaikan($this->upload->data()['file_name']);
-                } else {
-                    $this->data['msgError'] = $this->upload->display_errors();
-                }
-            } else {
-                $this->model->update_perbaikan($this->input->post('url'));
-            }
+            $this->db->set('status_perbaikan', $this->input->post('status'));
+            $this->db->where('id', $this->input->post('id'));
+            $this->db->update('kuesioner_status');
         } elseif ($this->input->post('upload')) {
             $this->session->set_userdata('idData', $this->input->post('upload'));
             redirect($this->module . '/upload_bukti');

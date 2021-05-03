@@ -44,7 +44,7 @@
                         </tr>
                         <?php
                         foreach ($v2['unit'] as $k3 => $v3) {
-                            switch ($v3['status']) {
+                            switch ($v3['status_perbaikan']) {
                                 case 100: {
                                         $stt = 'OK';
                                         $color = 'success';
@@ -54,7 +54,7 @@
                                         $color = 'danger';
                                     } break;
                                 default: {
-                                        $stt = $v3['status'] . '%';
+                                        $stt = $v3['status_perbaikan'] . '%';
                                         $color = 'warning';
                                     } break;
                             }
@@ -91,6 +91,7 @@
                                 <td><span class="badge badge-<?= $v3['deadline'] ?>"><?= $stt ?></span></td>
                                 <td>
                                     <button class="btn btn-sm btn-outline-primary fa fa-upload" name="upload" value="<?= $v3['id'] ?>" title="Upload Bukti Perbaikan"></button>
+                                    <button type="button" class="btn btn-sm btn-outline-primary fa fa-search" onclick="detail(<?= $v3['id'] ?>)"></button>
                                     <button type="button" class="btn btn-sm btn-outline-primary fa fa-edit" onclick="edit(<?= $v3['id'] ?>)"></button>
                                 </td>
                             </tr>
@@ -101,13 +102,56 @@
         </form>
     </div>
 </div>
+<!--MODAL DETAIL-->
+<div class="modal fade" id="modalDetail">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Perbaikan Gap Analisa</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <input class="input-id" name="id" hidden="">
+                <div class="form-group">
+                    <label><b>Pasal</b></label>
+                    <input class="form-control input-pasal" readonly="">
+                </div>
+                <div class="form-group">
+                    <label><b>Judul Pasal</b></label>
+                    <input class="form-control input-judul" readonly="">
+                </div>
+                <div class="form-group">
+                    <label><b>Deskripsi Pasal</b></label>
+                    <textarea class="form-control input-deskripsi" readonly=""></textarea>
+                </div>
+                <div class="form-group">
+                    <label><b>Bukti yang diinginkan</b></label>   
+                    <textarea class="form-control input-bukti" readonly=""></textarea>
+                </div>
+                <div class="form-group">
+                    <label><b>Bukti Implementasi</b></label>
+                    <ul class="list-imp"></ul>
+                </div>
+                <div class="form-group">
+                    <label><b>Hasil Gap Analisa</b></label>   
+                    <textarea class="form-control input-hasil" readonly=""></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline-primary" data-dismiss="modal">Tutup</button>
+            </div>
+        </div>
+    </div>
+</div>
 <!--MODAL EDIT-->
 <div class="modal fade" id="modalEdit">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form method="post" enctype="multipart/form-data">
+            <form method="post">
                 <div class="modal-header">
-                    <h5 class="modal-title">Perbaikan Gap Analisa</h5>
+                    <h5 class="modal-title">Ubah Status</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -116,32 +160,19 @@
                     <input class="input-id" name="id" hidden="">
                     <div class="form-group">
                         <label><b>Pasal</b></label>
-                        <input class="form-control input-pasal" readonly="">
-                    </div>
-                    <div class="form-group">
-                        <label><b>Judul Pasal</b></label>
-                        <input class="form-control input-judul" readonly="">
-                    </div>
-                    <div class="form-group">
-                        <label><b>Deskripsi Pasal</b></label>
-                        <textarea class="form-control input-deskripsi" readonly=""></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label><b>Bukti yang diinginkan</b></label>   
-                        <textarea class="form-control input-bukti" readonly=""></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label><b>Bukti Implementasi</b></label>
-                        <ul class="list-imp"></ul>
-                    </div>
-                    <div class="form-group">
-                        <label><b>Hasil Gap Analisa</b></label>   
-                        <textarea class="form-control input-hasil" readonly=""></textarea>
+                        <select class="form-control input-status" name="status">
+                            <option value="">~ status ~</option>
+                            <option value="100">OK</option>
+                            <option value="75">75%</option>
+                            <option value="50">50%</option>
+                            <option value="25">25%</option>
+                            <option value="0">NOK</option>
+                        </select>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-outline-primary" data-dismiss="modal">Tutup</button>
-                    <!--<button class="btn btn-outline-primary btn-simpan" name="edit" value="ok">Simpan</button>-->
+                    <button class="btn btn-outline-primary btn-simpan" name="edit" value="ok">Simpan</button>
                 </div>
             </form>
         </div>
@@ -157,10 +188,9 @@
             }
         });
     }
-    function edit(id) {
+    function detail(id) {
         $.getJSON('<?= site_url($module . '/detail') ?>', {id: id}, function (d) {
-            console.log(d);
-            var m = $('#modalEdit');
+            var m = $('#modalDetail');
             m.modal('show');
             m.find('.input-id').val(d.id);
             m.find('.input-pasal').val(d.pasal);
@@ -169,6 +199,14 @@
             m.find('.input-bukti').val(d.bukti_pasal);
             m.find('.input-hasil').val(d.hasil);
             m.find('.list-imp').html(d.txt_imp);
+        });
+    }
+    function edit(id) {
+        $.getJSON('<?= site_url($module . '/detail') ?>', {id: id}, function (d) {
+        var m = $('#modalEdit');
+        m.modal('show');
+        m.find('.input-id').val(d.id);
+        m.find('.input-status').val(d.status_perbaikan);
         });
     }
 </script>
