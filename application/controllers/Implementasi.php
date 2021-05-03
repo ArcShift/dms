@@ -7,6 +7,7 @@ class Implementasi extends MY_Controller {
     function __construct() {
         parent::__construct();
         $this->load->model('m_treeview_detail', 'model');
+        $this->load->model('m_implementasi', 'model2');
         $this->load->model('m_notif');
     }
 
@@ -20,7 +21,16 @@ class Implementasi extends MY_Controller {
         $this->subTitle = 'List';
         $this->subModule = 'read';
         $this->data['menuStandard'] = 'standard';
-        $this->render('index');
+        if ($this->role == 'anggota') {
+            $this->render('indexAnggota');
+        } else {
+            $this->render('index');
+        }
+    }
+
+    function get_implementasi() {
+        $this->ajax_request();
+        echo json_encode($this->model2->get());
     }
 
     function standard() {
@@ -167,7 +177,7 @@ class Implementasi extends MY_Controller {
             $penerima = $this->model->editPenerima($id_tugas);
             $result['message'] = 'Berhasil';
             foreach ($penerima as $p) {
-                $this->db->select('u.*');
+                $this->db->select('u.*, p.fullname');
                 $this->db->join('position_personil pp', 'pp.id_personil = p.id AND pp.id = ' . $p);
                 $this->db->join('users u', 'u.id_personil = p.id');
                 $user = $this->db->get('personil p')->row_array();
@@ -181,7 +191,7 @@ class Implementasi extends MY_Controller {
                     $r = $this->db->get('tugas t')->row_array();
                     $msg = "Anda telah terdaftar sebagai pelaksana tugas untuk tugas dengan judul <b>" . $r['tugas'] . "</b> di Standar <b>" . $r['standard'] . "</b>";
                     if (!empty($user['email']) & $user['notif_email'] == 'ENABLE') {//cek apakah user memiliki email
-                        $statusEmail = parent::notif_mail($personil['email'], $personil['fullname'] . ' menerima tugas', $msg);
+                        $statusEmail = parent::notif_mail($user['email'], $user['fullname'] . ' menerima tugas', $msg);
                         if ($statusEmail !== true) {
                             $result['status'] = 'error';
                             $result['message'] = 'Gagal mengirim notifikasi email';
@@ -200,10 +210,10 @@ class Implementasi extends MY_Controller {
         echo json_encode($this->model->getJadwal());
     }
 
-    function get_implementasi() {
-        $this->ajax_request();
-        echo json_encode($this->model->getImplementasi());
-    }
+//    function get_implementasi() {
+//        $this->ajax_request();
+//        echo json_encode($this->model->getImplementasi());
+//    }
 
     function set_jadwal() {
         $this->ajax_request();
@@ -257,12 +267,16 @@ class Implementasi extends MY_Controller {
             $config['allowed_types'] = '*';
             $this->load->library('upload', $config);
             if (!$this->upload->do_upload('dokumen')) {
+                $result['status'] = 'error';
                 $result['message'] = $this->upload->display_errors();
                 $step = false;
             }
+            $path = $this->upload->data()['file_name'];
+        } else {
+            $path = $this->input->post('url');
         }
         if ($step) {
-            if ($this->model->upload_bukti()) {
+            if ($this->model2->upload($path)) {
                 $result['status'] = 'success';
             } else {
                 $result['message'] = $this->db->error()['message'];
@@ -271,72 +285,14 @@ class Implementasi extends MY_Controller {
         echo json_encode($result);
     }
 
-    function upload_bukti_penerapan() {
-        $config['upload_path'] = "./upload/penerapan";
-        $config['allowed_types'] = '*';
-        $this->load->library('upload', $config);
-        if ($this->upload->do_upload("doc")) {
-            if ($this->model->upload_bukti_penerapan()) {
-                $status['status'] = 'success';
-                $status['message'] = 'data berhasil diupload';
-            } else {
-                $status['status'] = 'error';
-                $status['message'] = $this->db->error()['message'];
-            }
-            $data = array('upload_data' => $this->upload->data());
-            $data1 = array(
-                'menu_id' => $this->input->post('selectmenuid'),
-                'submenu_id' => $this->input->post('selectsubmenu'),
-                'imagetitle' => $this->input->post('imagetitle'),
-                'imgpath' => $data['upload_data']['file_name']
-            );
-        } else {
-            $status['status'] = 'error';
-            $status['message'] = $this->upload->display_errors();
+//============================================================== v1.2
+    function get_implementasi_anggota() {
+        $data = $this->model2->get();
+        $this->load->model('m_document');
+        foreach ($data as $k => $d) {
+            $data[$k]['document'] = $this->m_document->get($d['id_document']);
         }
-        echo json_encode($status);
-    }
-
-    function get_pemenuhan() {
-        echo json_encode($this->model->getPemenuhan($this->input->get('company'), $this->input->get('standard')));
-    }
-
-    function get_pemenuhan_test() {
-        $result = $this->model->getPemenuhan($this->input->get('company'), $this->input->get('standard'));
-        echo '<table border="1"><thead><tr>'
-        . '<td>Index</td>'
-        . '<td>sortIndex</td>'
-        . '<td>Pasal</td>'
-        . '<td>child</td>'
-        . '<td>indexParent</td>'
-        . '<td>indexChild</td>'
-        . '<td>Doc</td>'
-        . '<td>pemenuhan Doc</td>'
-        . '<td>listDoc</td>'
-        . '<td>tugas</td>'
-        . '<td>Jadwal</td>'
-        . '<td>Jadwals</td>'
-        . '<td>Jadwal OK</td>'
-        . '</tr></thead><tbody>';
-        foreach ($result as $k => $r) {
-            echo '<tr>'
-            . '<td>' . $k . '</td>'
-            . '<td>' . $r['sort_index'] . '</td>'
-            . '<td>' . $r['name'] . '</td>'
-            . '<td>' . $r['child'] . '</td>'
-            . '<td>' . $r['indexParent'] . '</td>'
-            . '<td>' . implode(',', $r['indexChild']) . '</td>'
-            . '<td>' . $r['doc'] . '</td>'
-            . '<td>' . $r['pemenuhanDoc'] . '%</td>'
-            . '<td>' . $r['docs'] . '</td>'
-            . '<td>' . $r['tugas'] . '</td>'
-            . '<td>' . $r['jadwal'] . '</td>'
-            . '<td>' . $r['jadwals'] . '</td>'
-            . '<td>' . $r['jadwal_ok'] . '</td>'
-            . '<td>' . $r['pemenuhanImp'] . '%</td>'
-            . '</tr>';
-        }
-        echo '</tbody></table>';
+        echo json_encode($data);
     }
 
 }

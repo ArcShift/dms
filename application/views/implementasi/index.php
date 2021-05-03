@@ -40,10 +40,10 @@ if ($role == 'anggota') {
             <div id="container" class="card-body">
                 <!--TAB-->
                 <ul class="nav nav-tabs">
-                    <li class="nav-item"><a data-toggle="tab" href="#tab-pasal" class="nav-link active">Pasal</a></li>
-                    <li class="nav-item"><a data-toggle="tab" href="#tab-tugas" class="nav-link">Tugas</a></li>
+                    <!--<li class="nav-item"><a data-toggle="tab" href="#tab-pasal" class="nav-link active">Pasal</a></li>-->
+                    <li class="nav-item"><a data-toggle="tab" href="#tab-tugas" class="nav-link active">Tugas</a></li>
                     <li class="nav-item"><a data-toggle="tab" href="#tab-jadwal" class="nav-link">Jadwal</a></li>
-                    <li class="nav-item"><a data-toggle="tab" href="#tab-implementasi" class="nav-link">Implementasi</a></li>
+                    <li class="nav-item"><a data-toggle="tab" href="#tab-implementasi" class="nav-link">Pelaksana Tugas</a></li>
                 </ul>
                 <div class="tab-content">
                     <!--PASAL-->
@@ -76,7 +76,7 @@ if ($role == 'anggota') {
                                 <select class="form-control form-control-sm filter-unit-kerja" onchange="filterUnitKerja(this, tbTugas, 0)"></select>
                             </div>
                             <div class="col-sm-3">
-                                <select class="form-control form-control-sm filter-personil" onchange="filterPersonil(this, tbTugas, 5)"></select>
+                                <select class="form-control form-control-sm filter-personil" onchange="filterPersonil(this, tbTugas, 6)"></select>
                             </div>
                         </div>
                         <div class="table-responsive">
@@ -84,6 +84,7 @@ if ($role == 'anggota') {
                                 <thead>
                                     <tr>
                                         <th>Unit Kerja</th>
+                                        <th>Pasal</th>
                                         <th>Judul Dokumen</th>
                                         <th>Tugas</th>
                                         <th>Form Terkait</th>
@@ -114,9 +115,9 @@ if ($role == 'anggota') {
                             <thead>
                                 <tr>
                                     <th>Unit Kerja</th>
-                                    <th>Dokumen</th>
+                                    <th>Judul Dokumen</th>
                                     <th>Tugas</th>
-                                    <th>Form</th>
+                                    <th>Form Terkait</th>
                                     <th>Periode</th>
                                     <th class="col-tgl">Jadwal</th>
                                     <th>PIC Pelaksana</th>
@@ -143,12 +144,13 @@ if ($role == 'anggota') {
                         <table class="table" id="table-implementasi" style="min-width: 100%">
                             <thead>
                                 <tr>
+                                    <th>Judul Dokumen</th>
                                     <th>Tugas</th>
-                                    <th>PIC Pelaksana Tugas</th>
+                                    <th>PIC Pelaksana</th>
                                     <th class="col-tgl">Jadwal</th>
-                                    <th class="text-center">Status</th>
-                                    <th class="text-center">Keterlambatan</th>
                                     <th class="text-center">Bukti</th>
+                                    <th class="text-center">Status</th>
+                                    <!--<th class="text-center">Keterlambatan</th>-->
                                     <th class="text-center">Aksi</th>
                                 </tr>
                             </thead>
@@ -779,14 +781,13 @@ if ($role == 'anggota') {
     </div>
 </div>
 <script>
-//    $('.app-page-title').first().hide();
     $(document).ready(function () {
         if (role != 'admin') {
             $('.group-select-perusahaan').hide();
             idPersonil = <?= $personil ?>;
         }
         $('#perusahaan').change();
-        $('#tab-pasal').addClass('active');
+        $('#tab-tugas').addClass('active');
         $('.select-2').select2();
         $('.radio-ulangi-jadwal[value=TIDAK]').click();
         $('.input-path').hide();
@@ -1003,7 +1004,6 @@ if ($role == 'anggota') {
             }
             tbPasal.draw();
             getDokumen();
-            getPemenuhan();
         });
     }
     function loadPage(url, container) {
@@ -1176,6 +1176,7 @@ if ($role == 'anggota') {
                     if (d.show) {
                         tbTugas.row.add([
                             '',
+                            d.txt_pasals,
                             d.judul,
                             '',
                             '',
@@ -1230,6 +1231,7 @@ if ($role == 'anggota') {
                                             '',
                                             '',
                                             '',
+                                            '',
                                             '<a class="text-primary tgs-btn-more' + i + '" onclick="showMoreTugas(' + i + ')">lihat lainnya</a>',
                                             '',
                                             '',
@@ -1239,6 +1241,7 @@ if ($role == 'anggota') {
                                     listTugas += '<li>' + t.nama + '</li>';
                                     var tr = tbTugas.row.add([
                                         t.txtUnitKerja,
+                                        '',
                                         '',
                                         t.nama,
                                         (t.index_form_terkait == null ? '-' : sortDokumen[t.index_form_terkait].judul),
@@ -1261,6 +1264,7 @@ if ($role == 'anggota') {
                                 '',
                                 '',
                                 '',
+                                '',
                                 '<a class="text-primary tgs-more tgs-more' + i + '" onclick="hideMoreTugas(' + i + ')">sembunyikan</a>',
                                 '',
                                 '',
@@ -1273,8 +1277,6 @@ if ($role == 'anggota') {
                         sortPasal[idxPasal].txtTugas += listTugas;
                         sortPasal[idxPasal].txtPersonil += listPersonil;
                         sortPasal[idxPasal].listPersonil = sortPasal[idxPasal].listPersonil.concat(listPersonil2);
-//                        console.log(sortPasal[idxPasal].txtPersonil);
-//                        console.log(sortPasal[idxPasal].listPersonil);
                     }
                 } else if (d.jenis == 4) {
                     $('.input-form-terkait').append('<option value="' + d.id + '">' + d.judul + '</option>');
@@ -1352,9 +1354,12 @@ if ($role == 'anggota') {
                                 $(tr).addClass('jd-more');
                             }
                             var btnPreview = '';
+                            var link = '';
                             if (jd.doc_type == 'FILE') {
+                                link = '<a target="_blank" href="<?= base_url('upload/implementasi') ?>/' + jd.path + '">' + jd.path + '</a>';
                                 btnPreview = '<a class="text-primary fa fa-download" href="<?= base_url('upload/implementasi') ?>/' + jd.path + '"></a>';
                             } else if (jd.doc_type == 'URL') {
+                                link = '<a href="' + jd.path + '">' + jd.path + '</a>';
                                 btnPreview = '<a class="text-primary fa fa-search" target="_blank" href="' + jd.path + '"></a>';
                             }
                             jd.keterlambatan = diffDate > 0 ? diffDate + ' Hari' : '-';
@@ -1363,11 +1368,12 @@ if ($role == 'anggota') {
                                 t.nama,
                                 t.txt_personil,
                                 jd.tgl,
+                                link,
                                 '<div class="text-center">' + uploadStatus + '</div>',
-                                '<div class="text-center">' + jd.keterlambatan + '</div>',
+//                                '<div class="text-center">' + jd.keterlambatan + '</div>',
                                 '<span class="text-primary fa fa-info-circle" title="Detail" onclick="detailImplementasi(' + n + ')"></span> '
                                         + '<span class="text-primary fa fa-upload" title="Edit" onclick="initUploadImplementasi(' + n + ')"></span> '
-                                        + btnPreview
+//                                        + btnPreview
                             ]);
                             jd.indexTugas = i;
                             sortTugas[i].indexJadwal.push(n);
@@ -1741,7 +1747,7 @@ if ($role == 'anggota') {
     $('#formDistribusi').submit(function (e) {
         e.preventDefault();
         post(this, 'set_distribusi');
-//        $.post('<?php // echo site_url($module);                 ?>/set_distribusi', $(this).serialize(), function (data) {
+//        $.post('<?php // echo site_url($module);                    ?>/set_distribusi', $(this).serialize(), function (data) {
 //            $('#modalDistribusi').modal('hide');
 //            getPasal();
 //        });
@@ -1771,6 +1777,10 @@ if ($role == 'anggota') {
         e.preventDefault();
         post(this, 'tugas2');
     });
+    function detailTugas2() {
+        var m = $('#modalDetail');
+         m.modal('show');
+    }
     function detailTugas(index) {
         var t = sortTugas[index];
         var m = $('#modalTugas');
@@ -2136,4 +2146,10 @@ if ($role == 'anggota') {
             tbImplementasi.draw();
         });
     });
+    getImplementasi()
+    function getImplementasi() {
+        $.getJSON('<?= site_url($module . '/get_implementasi') ?>', null, function (data) {
+//            console.log(data);
+        });
+    }
 </script>
