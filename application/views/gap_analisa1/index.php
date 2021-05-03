@@ -114,7 +114,8 @@
                                                 <td><span class="badge badge-<?= $color ?>"><?= $stt ?></span></td>
                                                 <td>
                                                     <button class="btn btn-sm btn-outline-primary fa fa-upload" name="upload" value="<?= $v3['id'] ?>"></button>
-                                                    <button type="button" class="btn btn-sm btn-outline-primary fa fa-edit" onclick="detail(<?= $v3['id'] ?>)"></button>
+                                                    <button type="button" class="btn btn-sm btn-outline-primary fa fa-edit" onclick="edit(<?= $v3['id'] ?>)"></button>
+                                                    <button type="button" class="btn btn-sm btn-outline-primary fa fa-search" onclick="detail(<?= $v3['id'] ?>)"></button>
                                                 </td>
                                                 <?= $k3 == 0 ? '' : '</tr>' ?>
                                             <?php } ?>
@@ -170,11 +171,11 @@
                     </div>
                     <div class="form-group">
                         <label><b>Hasil Gap Analisa</b></label>
-                        <textarea class="form-control input-hasil" name="hasil"></textarea>
+                        <textarea class="form-control inp input-hasil" name="hasil"></textarea>
                     </div>
                     <div class="form-group">
                         <label><b>Status</b></label>
-                        <select class="form-control input-status" name="status" required="">
+                        <select class="form-control inp input-status" name="status" required="">
                             <option value="">~ status ~</option>
                             <option value="100">OK</option>
                             <option value="75">75%</option>
@@ -185,11 +186,11 @@
                     </div>
                     <div class="form-group">
                         <label><b>Saran Perbaikan</b></label>
-                        <textarea class="form-control input-saran" name="saran"></textarea>
+                        <textarea class="form-control inp input-saran" name="saran"></textarea>
                     </div>
                     <div class="form-group">
                         <label><b>Target</b></label>
-                        <input class="form-control input-target" name="target" type="date">
+                        <input class="form-control inp input-target" name="target" type="date">
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -214,9 +215,11 @@
         var m = $('#modalUpload');
         m.modal('show');
     }
-    function detail(id) {
+    function edit(id) {
         var m = $('#modalEdit');
         m.modal('show');
+        m.find('.inp').prop('disabled', false);
+        m.find('.btn-simpan').show();
         $.getJSON('<?= site_url($module . '/detail_pertanyaan') ?>', {id: id}, function (d) {
             console.log(d);
             m.find('.input-id').val(d.id);
@@ -227,5 +230,11 @@
             m.find('.input-bukti').val(d.bukti);
             m.find('.input-target').val(d.target);
         });
+    }
+    function detail(id) {
+        edit(id);
+        var m = $('#modalEdit');
+        m.find('.inp').prop('disabled', true);
+        m.find('.btn-simpan').hide();
     }
 </script>
