@@ -119,32 +119,25 @@
                         <input class="form-control input-pasal" readonly="">
                     </div>
                     <div class="form-group">
-                        <label><b>Bukti Pasal</b></label>
+                        <label><b>Judul Pasal</b></label>
+                        <input class="form-control input-judul" readonly="">
+                    </div>
+                    <div class="form-group">
+                        <label><b>Deskripsi Pasal</b></label>
+                        <textarea class="form-control input-deskripsi" readonly=""></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label><b>Bukti yang diinginkan</b></label>   
                         <textarea class="form-control input-bukti" readonly=""></textarea>
                     </div>
-<!--                    <label><b>Bukti Perbaikan</b></label>
-                    <div class="form-group group-link">
-                        <div class="input-group">
-                            <input class="form-control input-path" readonly="">
-                            <div class="input-group-append">
-                                <button type="button" class="btn btn-outline-danger fa fa-trash link-bukti" onclick="initUpload()"></button>
-                            </div>
-                        </div>
+                    <div class="form-group">
+                        <label><b>Bukti Implementasi</b></label>
+                        <ul class="list-imp"></ul>
                     </div>
-                    <div class="form-group group-upload">
-                        <div class="custom-control custom-radio custom-control-inline">
-                            <input type="radio" id="customRadio1" name="type" value="file" class="custom-control-input radio-bukti">
-                            <label class="custom-control-label" for="customRadio1">File</label>
-                        </div>
-                        <div class="custom-control custom-radio custom-control-inline">
-                            <input type="radio" id="customRadio2" name="type" value="url" class="custom-control-input radio-bukti">
-                            <label class="custom-control-label" for="customRadio2">Url</label>
-                        </div>
+                    <div class="form-group">
+                        <label><b>Hasil Gap Analisa</b></label>   
+                        <textarea class="form-control input-hasil" readonly=""></textarea>
                     </div>
-                    <div class="form-group group-upload">
-                        <input class="form-control input-file" type="file" name="userfile">
-                        <input class="form-control input-url" type="url" name="url">
-                    </div>-->
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-outline-primary" data-dismiss="modal">Tutup</button>
@@ -166,42 +159,16 @@
     }
     function edit(id) {
         $.getJSON('<?= site_url($module . '/detail') ?>', {id: id}, function (d) {
+            console.log(d);
             var m = $('#modalEdit');
             m.modal('show');
             m.find('.input-id').val(d.id);
             m.find('.input-pasal').val(d.pasal);
+            m.find('.input-judul').val(d.judul);
+            m.find('.input-deskripsi').val(d.deskripsi);
             m.find('.input-bukti').val(d.bukti_pasal);
-            if (d.path == null) {
-                initUpload();
-            } else {
-                $('.group-link').show();
-                $('.group-upload').hide();
-                m.find('.input-path').val(d.path);
-            }
-            $('.input-file,.input-url').hide();
-            $('.radio-bukti').prop('checked', false);
-            $('.input-file,.input-url').prop('required', false);
-            console.log(d);
+            m.find('.input-hasil').val(d.hasil);
+            m.find('.list-imp').html(d.txt_imp);
         });
     }
-    function initUpload() {
-        $('.group-link').hide();
-        $('.group-upload').show();
-    }
-    $('.radio-bukti').change(function () {
-        var type = $(this).val();
-        var m = $('#modalEdit');
-        $('.btn-simpan').show();
-        if (type == 'file') {
-            m.find('.input-file').show();
-            m.find('.input-file').prop('required', true);
-            m.find('.input-url').hide();
-            m.find('.input-url').prop('required', false);
-        } else if (type == 'url') {
-            m.find('.input-file').hide();
-            m.find('.input-file').prop('required', false);
-            m.find('.input-url').show();
-            m.find('.input-url').prop('required', true);
-        }
-    });
 </script>
