@@ -6,7 +6,7 @@
                 
             </div>
         </div>
-        <table class="table data-table">
+        <table class="table">
             <thead>
                 <tr>
                     <th>Pasal</th>

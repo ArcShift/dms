@@ -14,17 +14,17 @@
             </thead>
             <tbody>
                 <?php foreach ($data as $k => $d) { ?>
-                <tr>
-                    <td><?= $d->tanggal ?></td>
-                    <td><?= $d->tugas ?></td>
-                    <td><?= empty($d->form_terkait)?'-':$d->form_terkait->judul ?></td>
-                    <td><?= $d->path ?></td>
-                    <td><?= $d->deadline ?></td>
-                    <td>
-                        <button class="btn btn-sm btn-outline-primary fa fa-upload" onclick="initUpload(<?= $k ?>)"></button>
-                        <button class="btn btn-sm btn-outline-primary fa fa-search" onclick="detail(<?= $k ?>)"></button>
-                    </td>
-                </tr>
+                    <tr>
+                        <td><?= $d->tanggal ?></td>
+                        <td><?= $d->tugas ?></td>
+                        <td><?= empty($d->form_terkait) ? '-' : $d->form_terkait->judul ?></td>
+                        <td><?= $d->path ?></td>
+                        <td><?= $d->deadline ?></td>
+                        <td>
+                            <button class="btn btn-sm btn-outline-primary fa fa-upload" onclick="initUpload(<?= $k ?>)"></button>
+                            <button class="btn btn-sm btn-outline-primary fa fa-search" onclick="detail(<?= $k ?>)"></button>
+                        </td>
+                    </tr>
                 <?php } ?>
             </tbody>
         </table>
@@ -52,8 +52,10 @@
     function detail(idx) {
         var d = data[idx];
         console.log(d);
-        var txtPasal = '';
         var txtPelaksana = '';
+        for (var p of d.pelaksana) {
+            txtPelaksana += '<li>' + p.fullname + '</li>';
+        }
         var data2 = {
             Pasal: '-',
             'Judul Pasal': '-',
@@ -61,10 +63,10 @@
             'Judul Dokumen': '-',
             'Tugas': '-',
             'Form Terkait': '-',
-            Sifat: '-',
-            'PIC Pelaksana': '-',
-            Periode: '-',
-            Jadwal: '-',
+            Sifat: d.sifat,
+            'PIC Pelaksana': txtPelaksana,
+            Periode: (d.periode != null ? d.periode + 'AN' : '-'),
+            Jadwal: d.tanggal,
             Status: d.deadline,
 //            Pasal: txtPasal,
 //            'Judul Dokumen': d.document.judul,
