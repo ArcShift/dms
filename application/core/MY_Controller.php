@@ -155,6 +155,7 @@ class MY_User extends CI_Controller {
 
     function render($view) {
         $this->data['view'] = $view;
+        $this->data['notif'] = [];//TODO: fix later
         $this->load->view('template/user', $this->data);
     }
 
