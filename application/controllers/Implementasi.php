@@ -21,11 +21,7 @@ class Implementasi extends MY_Controller {
         $this->subTitle = 'List';
         $this->subModule = 'read';
         $this->data['menuStandard'] = 'standard';
-        if ($this->role == 'anggota') {
-            $this->render('indexAnggota');
-        } else {
-            $this->render('index');
-        }
+        $this->render('index');
     }
 
     function get_implementasi() {

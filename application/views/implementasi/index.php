@@ -527,6 +527,10 @@ if ($role == 'anggota') {
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
+                        <label>Pasal</label>
+                        <div class="input-pasal"></div>
+                    </div>
+                    <div class="form-group">
                         <label>Dokumen</label>
                         <input class="form-control input-document-judul" disabled="">
                     </div>
@@ -1787,6 +1791,7 @@ if ($role == 'anggota') {
         m.modal('show');
         m.find('form').trigger('reset');
         m.find('.modal-title').text('Detail Tugas');
+        m.find('.input-pasal').html(sortDokumen[t.index_document].txt_pasals);
         m.find('.input-document-judul').val(sortDokumen[t.index_document].judul);
         m.find('.input-tugas').val(t.nama);
         m.find('.input-sifat').val(t.sifat);
@@ -1950,6 +1955,7 @@ if ($role == 'anggota') {
             m.find('.group-form-terkait').hide();
         }
         var data = {
+            Pasal: sortDokumen[t.index_document].txt_pasals2,
             Dokumen: sortDokumen[t.index_document].judul,
             Tugas: t.nama,
             'Form Terkait': dt_txt,
@@ -1957,6 +1963,7 @@ if ($role == 'anggota') {
             Pelaksana: t.txt_personil,
             Jadwal: j.tanggal,
             Periode: (j.periode == null ? '-' : j.periode),
+            Status: j.status,
         };
         for (var key in data) {
             m.find('.modal-body').append('<div class="row"><div class="col-sm-4"><label>' + key + '</label></div><div class="col-sm-8">' + data[key] + '</div></div>');
