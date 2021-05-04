@@ -3,7 +3,7 @@
 class Tugas extends MY_User {
 
     function index() {
-        $this->db->select('j.*, t.nama AS tugas, t.form_terkait, t.sifat');
+        $this->db->select('j.*, t.nama AS tugas, t.form_terkait, t.sifat, t.id_document');
         $this->db->join('tugas t', 't.id = j.id_tugas');
         $this->db->join('personil_task pt', 'pt.id_tugas = t.id');
         $this->db->join('position_personil pp', 'pp.id = pt.id_position_personil');
@@ -26,9 +26,11 @@ class Tugas extends MY_User {
             $this->db->join('position_personil pp', 'pp.id_personil = p.id');
             $this->db->join('personil_task pt', 'pt.id_position_personil = pp.id AND pt.id_tugas =' . $d->id_tugas);
             $d->pelaksana = $this->db->get('personil p')->result();
-            $d->form_terkait = $this->db->get_where('document', ['id', $d->form_terkait])->row();
+            $d->form_terkait = $this->db->get_where('document', ['id' => $d->form_terkait])->row();
+            $d->dokumen = $this->db->get_where('document', ['id' => $d->id_document])->row();
             $data[$k] = $d;
         }
+        $this->data['data'] = $data;
         $this->data['data'] = $data;
         $this->render('tugas');
     }

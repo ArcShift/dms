@@ -47,6 +47,47 @@
         </div>
     </div>
 </div>
+<!--MODAL UPLOAD IMPLEMENTASI-->
+<div class="modal fade" id="modalUploadImplementasi">
+    <div class="modal-dialog" role="document">
+        <form id="formUploadImplementasi">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Upload Bukti</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <input class="input-id" name="id" hidden=""/>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Tugas</label>
+                        <input class="form-control input-tugas" disabled="">
+                    </div>
+                    <div class="form-group">
+                        <label>Tanggal</label>
+                        <input class="form-control input-field input-jadwal" name="tanggal" disabled="">
+                    </div>
+                    <div class="form-group">
+                        <label>Dokumen</label>
+                        <div id="tdUpload">
+                            <input class="radio-type-dokumen" type="radio" name="type_dokumen" value="FILE" required="">
+                            <label>File</label>
+                            <input class="radio-type-dokumen" type="radio" name="type_dokumen" value="URL">
+                            <label>Url</label>
+                            <input class="form-control input-path input-file" type="file" name="dokumen" required="">
+                            <input class="form-control input-path input-url" type="url" name="url" required="">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-primary">Simpan</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
 <script>
     var data = <?= json_encode($data) ?>;
     function detail(idx) {
@@ -60,23 +101,14 @@
             Pasal: '-',
             'Judul Pasal': '-',
             'Deskripsi Pasal': '-',
-            'Judul Dokumen': '-',
-            'Tugas': '-',
+            'Judul Dokumen': d.dokumen.judul,
+            'Tugas': d.tugas,
             'Form Terkait': '-',
             Sifat: d.sifat,
             'PIC Pelaksana': txtPelaksana,
             Periode: (d.periode != null ? d.periode + 'AN' : '-'),
             Jadwal: d.tanggal,
             Status: d.deadline,
-//            Pasal: txtPasal,
-//            'Judul Dokumen': d.document.judul,
-//            Tugas: d.tugas,
-//            'Form Terkait': d.form_terkait,
-//            Sifat: d.sifat,
-//            'PIC Pelaksana': txtPelaksana,
-//            Periode: (d.periode!=null?d.periode + 'AN':'-'),
-//            Jadwal: d.tanggal,
-//            Status: d.deadline.toUpperCase(),
         };
         showDetail('Detail Tugas', data2);
     }
@@ -89,6 +121,14 @@
             m.find('.modal-body').append('<div class="row"><div class="col-sm-4"><label>' + key + '</label></div><div class="col-sm-8">' + data[key] + '</div></div>');
         }
     }
+    function initUpload(idx) {
+        $('#formUploadImplementasi').trigger('reset');
+        var d = data[idx];
+        var m = $('#modalUploadImplementasi');
+        m.modal('show');
+        m.find('.input-id').val(d.id);
+        m.find('.input-tugas').val(d.tugas);
+        m.find('.input-jadwal').val(d.tanggal);
+        m.find('.input-url, .input-file').hide();
+    }
 </script>
-<?php
-//print_r($data);
