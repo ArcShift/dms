@@ -42,6 +42,7 @@ if ($role == 'anggota') {
                 <ul class="nav nav-tabs">
                     <!--<li class="nav-item"><a data-toggle="tab" href="#tab-pasal" class="nav-link active">Pasal</a></li>-->
                     <li class="nav-item"><a data-toggle="tab" href="#tab-tugas" class="nav-link active">Tugas</a></li>
+                    <!--<li class="nav-item"><a data-toggle="tab" href="#tab-tugas2" class="nav-link active">Tugas2</a></li>-->
                     <li class="nav-item"><a data-toggle="tab" href="#tab-jadwal" class="nav-link">Jadwal</a></li>
                     <li class="nav-item"><a data-toggle="tab" href="#tab-implementasi" class="nav-link">Pelaksana Tugas</a></li>
                 </ul>
@@ -94,6 +95,25 @@ if ($role == 'anggota') {
                                     </tr>
                                 </thead>
                                 <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <!--TUGAS 2-->
+                    <div class="tab-pane" id="tab-tugas2" role="tabpanel">
+                        <div class="table-responsive">
+                            <table class="table table-striped" id="table-tugas" style="min-width: 100%">
+                                <thead>
+                                    <tr>
+                                        <th>Pasal</th>
+                                        <th>Judul Dokumen</th>
+                                        <th>Tugas</th>
+                                        <th>Form Terkait</th>
+                                        <th>Sifat</th>
+                                        <th>PIC Pelakasana</th>
+                                        <th class="col-aksi" style="min-width: 70px">Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbTugas2"></tbody>
                             </table>
                         </div>
                     </div>
@@ -526,9 +546,11 @@ if ($role == 'anggota') {
                     <input class="form-control input-document-id" name="id-document" hidden="">
                 </div>
                 <div class="modal-body">
-                    <div class="form-group">
+                    <div class="group-detail">
+                        <div class="form-group">
                         <label>Pasal</label>
-                        <div class="input-pasal"></div>
+                        <div class="form-control input-pasal" style="height: 100px"></div>
+                    </div>
                     </div>
                     <div class="form-group">
                         <label>Dokumen</label>
@@ -1033,6 +1055,7 @@ if ($role == 'anggota') {
                 var d = data[i];
                 d.index_dokumen_pasal = [];
                 d.txt_pasals = '';
+                d.txt_pasals_span = '';
                 d.txt_pasals2 = '<div class="more-pasal-parent">';
                 var n2 = 0;
                 for (var j = 0; j < d.dokumen_pasal.length; j++) {
@@ -1054,6 +1077,7 @@ if ($role == 'anggota') {
                                 d.custom_deskripsi = '-';
                             }
                             d.txt_pasals += '<div><span class="badge badge-secondary">' + sortPasal[k].fullname + '</span></div>';
+                            d.txt_pasals_span += '<span class="badge badge-secondary ml-1">' + sortPasal[k].fullname + '</span>';
                             if (n2 == 10) {
                                 d.txt_pasals2 += '<div class="text-primary btn-show-more-pasal" style="cursor:pointer" onclick="showMorePasal(this)">lihat lebih lengkap</div>'
                                         + '<div class="more-pasal-child" style="display: none">'
@@ -1169,6 +1193,7 @@ if ($role == 'anggota') {
         $.getJSON('<?php echo site_url($module); ?>/get_tugas', {perusahaan: perusahaan, standar: standar}, function (data) {
             sortTugas = [];
             tbTugas.clear();
+            $('#tbTugas2').empty();
             $('.input-form-terkait').empty();
             $('.input-form-terkait').append('<option value="">-- form terkait --</option>');
             for (var i = 0; i < sortDokumen.length; i++) {
@@ -1188,6 +1213,11 @@ if ($role == 'anggota') {
                             '',
                             (role == 'anggota' ? '' : '<span class="text-primary fa fa-plus" title="Tambah" onclick="initCreateTugas(' + i + ')"></span>'),
                         ]);
+                        $('#tbTugas2').append('<tr>'
+                                + '<td col>' + d.txt_pasals + '</td>'
+                                + '<td>'+'<span class="text-primary fa fa-plus" title="Tambah" onclick="initCreateTugas(' + i + ')"></span>'+d.judul+'</td>'                               
+                                + '</tr>');
+
                         var nTgs = 0;
                         for (var j = 0; j < data.length; j++) {
                             var t = data[j];
@@ -1259,6 +1289,11 @@ if ($role == 'anggota') {
                                     }
                                     nTgs++;
                                 }
+                                
+                        $('#tbTugas2').append('<tr>'
+                                + '<td>' + t.nama + '</td>'                            
+                                + '<td>' + (t.index_form_terkait == null ? '-' : sortDokumen[t.index_form_terkait].judul) + '</td>'                            
+                                + '</tr>');
                                 t.indexJadwal = [];
                                 sortTugas.push(t);
                             }
@@ -1751,7 +1786,7 @@ if ($role == 'anggota') {
     $('#formDistribusi').submit(function (e) {
         e.preventDefault();
         post(this, 'set_distribusi');
-//        $.post('<?php // echo site_url($module);                    ?>/set_distribusi', $(this).serialize(), function (data) {
+//        $.post('<?php // echo site_url($module);                       ?>/set_distribusi', $(this).serialize(), function (data) {
 //            $('#modalDistribusi').modal('hide');
 //            getPasal();
 //        });
@@ -1783,7 +1818,7 @@ if ($role == 'anggota') {
     });
     function detailTugas2() {
         var m = $('#modalDetail');
-         m.modal('show');
+        m.modal('show');
     }
     function detailTugas(index) {
         var t = sortTugas[index];
@@ -1791,8 +1826,9 @@ if ($role == 'anggota') {
         m.modal('show');
         m.find('form').trigger('reset');
         m.find('.modal-title').text('Detail Tugas');
-        m.find('.input-pasal').html(sortDokumen[t.index_document].txt_pasals);
+        m.find('.group-detail').show();
         m.find('.input-document-judul').val(sortDokumen[t.index_document].judul);
+        m.find('.input-pasal').html(sortDokumen[t.index_document].txt_pasals_span);
         m.find('.input-tugas').val(t.nama);
         m.find('.input-sifat').val(t.sifat);
         m.find('.input-form-terkait').val(t.form_terkait);
@@ -1819,6 +1855,7 @@ if ($role == 'anggota') {
         detailTugas(index);
         var t = sortTugas[index];
         var m = $('#modalTugas');
+        m.find('.group-detail').hide();
         m.find('.modal-title').text('Edit Tugas');
         m.find('.input-id').val(t.id);
         m.find('.input-document-id').val(t.id_document);
@@ -1955,7 +1992,6 @@ if ($role == 'anggota') {
             m.find('.group-form-terkait').hide();
         }
         var data = {
-            Pasal: sortDokumen[t.index_document].txt_pasals2,
             Dokumen: sortDokumen[t.index_document].judul,
             Tugas: t.nama,
             'Form Terkait': dt_txt,
@@ -1963,7 +1999,6 @@ if ($role == 'anggota') {
             Pelaksana: t.txt_personil,
             Jadwal: j.tanggal,
             Periode: (j.periode == null ? '-' : j.periode),
-            Status: j.status,
         };
         for (var key in data) {
             m.find('.modal-body').append('<div class="row"><div class="col-sm-4"><label>' + key + '</label></div><div class="col-sm-8">' + data[key] + '</div></div>');
