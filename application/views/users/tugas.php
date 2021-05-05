@@ -187,7 +187,7 @@
         $('#modalNotif .modal-message').html('loading....');
         $('#modalNotif').modal('show');
         $.ajax({
-            url: '<?php echo site_url($module . '/') ?>' + url,
+            url: '<?= site_url('users/tugas/') ?>' + url,
             type: "post",
             data: new FormData(form),
             processData: false,

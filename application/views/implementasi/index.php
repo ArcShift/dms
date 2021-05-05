@@ -77,7 +77,7 @@ if ($role == 'anggota') {
                                 <select class="form-control form-control-sm filter-unit-kerja" onchange="filterUnitKerja(this, tbTugas, 0)"></select>
                             </div>
                             <div class="col-sm-3">
-                                <select class="form-control form-control-sm filter-personil" onchange="filterPersonil(this, tbTugas, 6)"></select>
+                                <select class="form-control form-control-sm filter-personil" onchange="filterPersonil(this, tbTugas, 5)"></select>
                             </div>
                         </div>
                         <div class="table-responsive">
@@ -85,7 +85,7 @@ if ($role == 'anggota') {
                                 <thead>
                                     <tr>
                                         <th>Unit Kerja</th>
-                                        <th>Pasal</th>
+                                        <!--<th>Pasal</th>-->
                                         <th>Judul Dokumen</th>
                                         <th>Tugas</th>
                                         <th>Form Terkait</th>
@@ -1205,7 +1205,7 @@ if ($role == 'anggota') {
                     if (d.show) {
                         tbTugas.row.add([
                             '',
-                            d.txt_pasals,
+//                            d.txt_pasals,
                             d.judul,
                             '',
                             '',
@@ -1265,7 +1265,6 @@ if ($role == 'anggota') {
                                             '',
                                             '',
                                             '',
-                                            '',
                                             '<a class="text-primary tgs-btn-more' + i + '" onclick="showMoreTugas(' + i + ')">lihat lainnya</a>',
                                             '',
                                             '',
@@ -1275,7 +1274,6 @@ if ($role == 'anggota') {
                                     listTugas += '<li>' + t.nama + '</li>';
                                     var tr = tbTugas.row.add([
                                         t.txtUnitKerja,
-                                        '',
                                         '',
                                         t.nama,
                                         (t.index_form_terkait == null ? '-' : sortDokumen[t.index_form_terkait].judul),
@@ -1300,7 +1298,6 @@ if ($role == 'anggota') {
                         }
                         if (nTgs >= 3) {
                             tbTugas.row.add([
-                                '',
                                 '',
                                 '',
                                 '',
