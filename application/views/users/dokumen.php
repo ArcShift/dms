@@ -14,16 +14,16 @@
             </thead>
             <tbody>
                 <?php foreach ($docs as $k => $d) { ?>
-                <tr>
-                    <td><?= $d->nomor ?></td>
-                    <td><a href="<?= $d->type_doc == 'FILE'?base_url('dokumen/'.$d->file):$d->url ?>" target="_blank"><?= $d->judul ?></a></td>
-                    <td><?= $d->versi ?></td>
-                    <td><?= $d->jenis ?></td>
-                    <td><?= $d->klasifikasi ?></td>
-                    <td>
-                        <button class="btn btn-sm btn-outline-primary fa fa-search" onclick="detail(<?= $k ?>)"></button>
-                    </td>
-                </tr>
+                    <tr>
+                        <td><?= $d['nomor'] ?></td>
+                        <td><a href="<?= $d['type_doc'] == 'FILE' ? base_url('upload/dokumen/' . $d['file']) : $d['url'] ?>" target="_blank"><?= $d['judul'] ?></a></td>
+                        <td><?= $d['versi'] ?></td>
+                        <td><?= $d['jenis'] ?></td>
+                        <td><?= $d['klasifikasi'] ?></td>
+                        <td>
+                            <button class="btn btn-sm btn-outline-primary fa fa-search" onclick="detail(<?= $k ?>)"></button>
+                        </td>
+                    </tr>
                 <?php } ?>
             </tbody>
         </table>
@@ -53,16 +53,21 @@
         console.log(d);
         var txtPasal = '';
         var txtPelaksana = '';
+        var path = d.type_doc == 'FILE' ? '<?= base_url('upload/dokumen/') ?>' + d.file : d.url;
+        var pasal = '';
+        for (var p of d.pasal) {
+            pasal += '<li>' + p.fullname + '</li>';
+        }
         var data = {
             'Nomor Dokumen': d.nomor,
             'Judul Dokumen': d.judul,
-            'Pasal Terkait': '-',
-            'Letak Pasal pada Dokumen': '-',
-            'Pembuat Dokumen': '-',
-            'Level Dokumen': '-',
-            'Klasifikasi Dokumen': '-',
-            'Dokumen Terkait': '-',
-            'File Dokumen': '-',
+            'Pasal Terkait': pasal,
+            'Letak Pasal pada Dokumen': d.deskripsi,
+            'Pembuat Dokumen': d.pembuat,
+            'Level Dokumen': d.jenis,
+            'Klasifikasi Dokumen': (d.klasifikasi != null ? d.klasifikasi : '-'),
+            'Dokumen Terkait': (d.dokumen_terkait!= null?d.dokumen_terkait.judul:'-'),
+            'File Dokumen': '<a href="' + path + '" target="_blank">' + path + '</a>',
         };
         showDetail('Detail Tugas', data);
     }
