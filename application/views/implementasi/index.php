@@ -549,7 +549,7 @@ if ($role == 'anggota') {
                     <div class="group-detail">
                         <div class="form-group">
                         <label>Pasal</label>
-                        <div class="form-control input-pasal" style="height: 100px"></div>
+                        <div class="form-control input-pasal overflow-auto" style="height: 100px"></div>
                     </div>
                     </div>
                     <div class="form-group">
