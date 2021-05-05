@@ -27,7 +27,8 @@ class Tugas extends MY_User {
             $this->db->join('personil_task pt', 'pt.id_position_personil = pp.id AND pt.id_tugas =' . $d->id_tugas);
             $d->pelaksana = $this->db->get('personil p')->result();
             $d->form_terkait = $this->db->get_where('document', ['id' => $d->form_terkait])->row();
-            $d->dokumen = $this->db->get_where('document', ['id' => $d->id_document])->row();
+            $this->load->model('m_document');
+            $d->dokumen = $this->m_document->get($d->id_document);
             $data[$k] = $d;
         }
         $this->data['data'] = $data;
