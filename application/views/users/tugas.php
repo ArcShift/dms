@@ -50,14 +50,14 @@
 <!--MODAL UPLOAD IMPLEMENTASI-->
 <div class="modal fade" id="modalUploadImplementasi">
     <div class="modal-dialog" role="document">
-        <form id="formUploadImplementasi">
+        <form id="formUploadImplementasi" method="post" enctype="multipart/form-data">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Upload Bukti</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
-                </div>
+                </div>s
                 <input class="input-id" name="id" hidden=""/>
                 <div class="modal-body">
                     <div class="form-group">
@@ -80,23 +80,23 @@
                     <div class="group-upload">
                         <div class="form-group">
                             <div class="custom-control custom-radio custom-control-inline">
-                                <input type="radio" id="customRadio1" name="type" value="file" class="custom-control-input radio-bukti">
+                                <input type="radio" id="customRadio1" name="type_dokumen" value="file" class="custom-control-input radio-bukti">
                                 <label class="custom-control-label" for="customRadio1">File</label>
                             </div>
                             <div class="custom-control custom-radio custom-control-inline">
-                                <input type="radio" id="customRadio2" name="type" value="url" class="custom-control-input radio-bukti">
+                                <input type="radio" id="customRadio2" name="type_dokumen" value="url" class="custom-control-input radio-bukti">
                                 <label class="custom-control-label" for="customRadio2">Url</label>
                             </div>
                         </div>
                         <div class="form-group">
-                            <input class="form-control input-file" type="file" name="userfile">
+                            <input class="form-control input-file" type="file" name="dokumen">
                             <input class="form-control input-url" type="url" name="url">
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-                    <button type="submit" class="btn btn-primary btn-simpan">Simpan</button>
+                    <button type="submit" class="btn btn-primary btn-simpan" name="upload" value="ok">Simpan</button>
                 </div>
             </div>
         </form>
@@ -177,10 +177,10 @@
             m.find('.input-url').prop('required', true);
         }
     });
-    $('#formUploadImplementasi').submit(function (e) {
-        e.preventDefault();
-        post(this, 'upload_bukti');
-    });
+//    $('#formUploadImplementasi').submit(function (e) {
+//        e.preventDefault();
+//        post(this, 'upload_bukti');
+//    });
     function post(form, url) {
         $('.modal').modal('hide');
         $('#modalNotif .modal-title').text('Menyimpan data');
@@ -198,7 +198,7 @@
                 try {
                     data = JSON.parse(data);
                     if (data.status == 'success') {
-                        getPasal();
+                        location.reload();
                         if (data.message) {
                             $('#modalNotif .modal-message').html(data.message);
                         } else {

@@ -2,7 +2,36 @@
 
 class Tugas extends MY_User {
 
+    private function ajax_request() {
+        if (!$this->input->is_ajax_request()) {
+            redirect('404');
+        }
+    }
+
     function index() {
+        if ($this->input->post('upload')) {
+            $step = true;
+            $this->load->model('m_implementasi', 'model');
+            if ($this->input->post('type_dokumen') == 'file') {
+                $config['upload_path'] = './upload/implementasi';
+                $config['allowed_types'] = '*';
+                $this->load->library('upload', $config);
+                if (!$this->upload->do_upload('dokumen')) {
+                    $this->data['msgError'] = $this->upload->display_errors();
+                    $step = false;
+                }
+                $path = $this->upload->data()['file_name'];
+            } else {
+                $path = $this->input->post('url');
+            }
+            if ($step) {
+                if ($this->model->upload($path)) {
+                    $this->data['msgSuccess'] = 'Data berhasil disimpan';
+                } else {
+                    $this->data['msgError'] = $this->db->error()['message'];
+                }
+            }
+        }
         $this->db->select('j.*, t.nama AS tugas, t.form_terkait, t.sifat, t.id_document');
         $this->db->join('tugas t', 't.id = j.id_tugas');
         $this->db->join('personil_task pt', 'pt.id_tugas = t.id');
@@ -34,6 +63,33 @@ class Tugas extends MY_User {
         $this->data['data'] = $data;
         $this->data['data'] = $data;
         $this->render('tugas');
+    }
+
+    function upload_bukti() {
+        $this->ajax_request();
+        $step = true;
+        $this->load->model('m_implementasi', 'model');
+        if ($this->input->post('type_dokumen') == 'FILE') {
+            $config['upload_path'] = './upload/implementasi';
+            $config['allowed_types'] = '*';
+            $this->load->library('upload', $config);
+            if (!$this->upload->do_upload('dokumen')) {
+                $result['status'] = 'error';
+                $result['message'] = $this->upload->display_errors();
+                $step = false;
+            }
+            $path = $this->upload->data()['file_name'];
+        } else {
+            $path = $this->input->post('url');
+        }
+        if ($step) {
+            if ($this->model->upload($path)) {
+                $result['status'] = 'success';
+            } else {
+                $result['message'] = $this->db->error()['message'];
+            }
+        }
+        echo json_encode($result);
     }
 
 }

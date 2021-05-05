@@ -124,11 +124,11 @@
                 </div>
                 <div class="form-group">
                     <label><b>Deskripsi Pasal</b></label>
-                    <textarea class="form-control input-deskripsi" readonly=""></textarea>
+                    <textarea class="form-control input-deskripsi" readonly="" rows="5"></textarea>
                 </div>
                 <div class="form-group">
                     <label><b>Bukti yang diinginkan</b></label>   
-                    <textarea class="form-control input-bukti" readonly=""></textarea>
+                    <textarea class="form-control input-bukti" readonly="" rows="5"></textarea>
                 </div>
                 <div class="form-group">
                     <label><b>Bukti Implementasi</b></label>
