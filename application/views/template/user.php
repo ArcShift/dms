@@ -20,7 +20,8 @@ $menus = [
     ['type' => 'parent', 'name' => 'riwayat'],
     ['type' => 'child', 'name' => 'aktifitas pengguna', 'href' => 'aktifitas', 'icon' => ''],
     ['type' => 'parent', 'name' => 'pengaturan'],
-    ['type' => 'child', 'name' => 'pengaturan', 'href' => 'pengaturan', 'icon' => ''],
+    ['type' => 'child', 'name' => 'akun', 'href' => 'akun', 'icon' => ''],
+    ['type' => 'child', 'name' => 'notifikasi email', 'href' => 'notif', 'icon' => ''],
 ];
 foreach ($menus as $k => $m) {
     if (isset($m['href'])) {

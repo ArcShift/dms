@@ -12,7 +12,6 @@
                     <th>Pasal</th>
                     <th>Judul Pasal</th>
                     <th>Deskripsi Pasal</th>
-                    <th>Dokumen Terkait</th>
                     <th>Aksi</th>
                 </tr>
             </thead>
@@ -22,13 +21,6 @@
                         <td><?= $p['name'] ?></td>
                         <td><?= $p['sort_desc'] ?></td>
                         <td style="white-space: pre-wrap"><?= $p['long_desc'] ?></td>
-                        <td>
-                            <ul>
-                                <?php foreach ($p['dokumen'] as $k2 => $d) { ?>
-                                    <li><?= $d['judul'] ?></li>
-                                <?php } ?>
-                            </ul>
-                        </td>
                         <td>
                             <button class="btn btn-sm btn-outline-primary fa fa-search" onclick="detail(<?= $k ?>)"></button>
                         </td>
@@ -66,9 +58,11 @@
         var txtPelaksana = '';
         var data = {
             Pasal: d.name,
-            'Judul Pasal': d.sort_desc==null?'-':d.sort_desc,
-            'Judul Dokumen': d.dokumen.length == 0 ? '-' : d.dokumen[0].judul,
-            'Letak Pasal pada Dokumen': d.dokumen.length == 0 ? '-' : d.dokumen[0].deskripsi,
+            'Penjelasan Pasal': (d.penjelasan!=null?d.penjelasan:'-'),
+            'Bukti Pasal': (d.bukti!=null?d.bukti:'-'),
+//            'Judul Pasal': d.sort_desc==null?'-':d.sort_desc,
+//            'Judul Dokumen': d.dokumen.length == 0 ? '-' : d.dokumen[0].judul,
+//            'Letak Pasal pada Dokumen': d.dokumen.length == 0 ? '-' : d.dokumen[0].deskripsi,
         };
         showDetail('Detail Tugas', data);
     }
