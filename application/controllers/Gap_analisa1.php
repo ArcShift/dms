@@ -122,7 +122,7 @@ class Gap_analisa1 extends MY_Controller {
     }
 
     function detail_pertanyaan() {
-        $this->db->select('ks.*, p.bukti, p.long_desc');
+        $this->db->select('ks.*, p.bukti, p.long_desc, ');
         $this->db->join('kuesioner k', 'k.id = ks.id_kuesioner');
         $this->db->join('pasal p', 'p.id = k.id_pasal');
         $data = $this->db->get_where('kuesioner_status ks', ['ks.id' => $this->input->get('id')])->row_array();

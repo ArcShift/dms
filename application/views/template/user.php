@@ -138,7 +138,7 @@ foreach ($menus as $k => $m) {
                         <div class="header-btn-lg pr-0">
                             <div class="widget-content p-0">
                                 <div class="widget-content-wrapper">
-                                    <a href="<?php echo site_url('account') ?>" class="nav-link font-weight-normal text-dark">
+                                    <a href="<?php echo site_url('users/akun') ?>" class="nav-link font-weight-normal text-dark">
                                         <img width="42" height="42" class="rounded-circle" style="object-fit: cover" src="<?php echo empty($this->session->userdata('user')['photo']) ? base_url('assets/images/default_user.jpg') : base_url('upload/profile_photo/' . $this->session->userdata('user')['photo']) ?>" alt="">
                                         &nbsp;
                                         <div>

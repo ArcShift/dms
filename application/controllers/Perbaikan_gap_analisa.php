@@ -73,9 +73,10 @@ class Perbaikan_gap_analisa extends MY_Controller {
     }
 
     function detail() {
-        $this->db->select('ks.*, p.name AS pasal, p.bukti AS bukti_pasal, p.sort_desc AS judul, p.long_desc AS deskripsi');
+        $this->db->select('ks.*, p.name AS pasal, p.bukti AS bukti_pasal, p.sort_desc AS judul, p.long_desc AS deskripsi, k.kuesioner AS pertanyaan, uk.name AS unit');
         $this->db->join('kuesioner k', 'k.id = ks.id_kuesioner');
         $this->db->join('pasal p', 'p.id = k.id_pasal');
+        $this->db->join('unit_kerja uk', 'uk.id = ks.id_unit_kerja');
         $this->db->where('ks.id', $this->input->get('id'));
         $data = $this->db->get('kuesioner_status ks')->row_array();
         $this->db->select('bga.*, d.judul');

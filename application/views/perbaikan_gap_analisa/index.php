@@ -104,7 +104,7 @@
 </div>
 <!--MODAL DETAIL-->
 <div class="modal fade" id="modalDetail">
-    <div class="modal-dialog">
+    <div class="modal-dialog  modal-xl">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Perbaikan Gap Analisa</h5>
@@ -112,31 +112,58 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body">
-                <input class="input-id" name="id" hidden="">
-                <div class="form-group">
-                    <label><b>Pasal</b></label>
-                    <input class="form-control input-pasal" readonly="">
+            <div class="modal-body row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label><b>Pasal</b></label>
+                        <div class="card-body bg-light input-pasal p-2" style="white-space: pre-wrap"></div>
+                    </div>
+                    <div class="form-group">
+                        <label><b>Judul Pasal</b></label>
+                        <div class="card-body bg-light input-judul p-2" style="white-space: pre-wrap"></div>
+                    </div>
+                    <div class="form-group">
+                        <label><b>Deskripsi Pasal</b></label>
+                        <div class="card">
+                            <div class="card-body bg-light input-deskripsi p-2" style="white-space: pre-wrap"></div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label><b>Bukti yang diinginkan</b></label>   
+                        <div class="card-body bg-light input-bukti p-2" style="white-space: pre-wrap"></div>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label><b>Judul Pasal</b></label>
-                    <input class="form-control input-judul" readonly="">
-                </div>
-                <div class="form-group">
-                    <label><b>Deskripsi Pasal</b></label>
-                    <textarea class="form-control input-deskripsi" readonly="" rows="5"></textarea>
-                </div>
-                <div class="form-group">
-                    <label><b>Bukti yang diinginkan</b></label>   
-                    <textarea class="form-control input-bukti" readonly="" rows="5"></textarea>
-                </div>
-                <div class="form-group">
-                    <label><b>Bukti Implementasi</b></label>
-                    <ul class="list-imp"></ul>
-                </div>
-                <div class="form-group">
-                    <label><b>Hasil Gap Analisa</b></label>   
-                    <textarea class="form-control input-hasil" readonly=""></textarea>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label><b>Pertanyaan</b></label>   
+                        <div class="card-body bg-light input-pertanyaan p-2" style="white-space: pre-wrap"></div>
+                    </div>
+                    <div class="form-group">
+                        <label><b>Unit</b></label>   
+                        <div class="card-body bg-light input-unit p-2" style="white-space: pre-wrap"></div>
+                    </div>
+                    <div class="form-group">
+                        <label><b>Saran Perbaikan</b></label>   
+                        <div class="card-body bg-light input-saran p-2" style="white-space: pre-wrap"></div>
+                    </div>
+                    <div class="form-group">
+                        <label><b>Bukti Implementasi</b></label>
+                        <div class="card-body bg-light p-2">
+                            <ul class="list-imp"></ul>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label><b>Hasil Gap Analisa</b></label>   
+                        <div class="card-body bg-light input-hasil p-2" style="white-space: pre-wrap"></div>
+                    </div>
+                    <div class="form-group">
+                        <label><b>Target</b></label>   
+                        <div class="card-body bg-light input-target p-2" style="white-space: pre-wrap"></div>
+                    </div>
+                    <div class="form-group">
+                        <label><b>Bukti Perbaikan</b></label>   
+                        <div class="card-body bg-light input-bukti-perbaikan p-2" style="white-space: pre-wrap"></div>
+                    </div>
                 </div>
             </div>
             <div class="modal-footer">
@@ -190,23 +217,28 @@
     }
     function detail(id) {
         $.getJSON('<?= site_url($module . '/detail') ?>', {id: id}, function (d) {
+            console.log(d);
             var m = $('#modalDetail');
             m.modal('show');
             m.find('.input-id').val(d.id);
-            m.find('.input-pasal').val(d.pasal);
-            m.find('.input-judul').val(d.judul);
-            m.find('.input-deskripsi').val(d.deskripsi);
-            m.find('.input-bukti').val(d.bukti_pasal);
-            m.find('.input-hasil').val(d.hasil);
+            m.find('.input-pasal').html(d.pasal);
+            m.find('.input-judul').html(d.judul);
+            m.find('.input-deskripsi').html(d.deskripsi);
+            m.find('.input-bukti').html(d.bukti_pasal);
+            m.find('.input-pertanyaan').html(d.pertanyaan);
+            m.find('.input-unit').html(d.unit);
+            m.find('.input-saran').html(d.saran_perbaikan);
+            m.find('.input-hasil').html(d.hasil);
             m.find('.list-imp').html(d.txt_imp);
+            m.find('.input-target').html(d.target);
         });
     }
     function edit(id) {
         $.getJSON('<?= site_url($module . '/detail') ?>', {id: id}, function (d) {
-        var m = $('#modalEdit');
-        m.modal('show');
-        m.find('.input-id').val(d.id);
-        m.find('.input-status').val(d.status_perbaikan);
+            var m = $('#modalEdit');
+            m.modal('show');
+            m.find('.input-id').val(d.id);
+            m.find('.input-status').val(d.status_perbaikan);
         });
     }
 </script>

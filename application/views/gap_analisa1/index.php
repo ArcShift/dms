@@ -162,6 +162,11 @@
                 <div class="modal-body">
                     <input class="input-id" name="id" hidden="">
                     <div class="form-group">
+                        <label><b>Pasal</b></label>
+                        <textarea class="form-control input-deskripsi" readonly=""></textarea>
+                    </div>
+
+                    <div class="form-group">
                         <label><b>Deskripsi Pasal</b></label>
                         <textarea class="form-control input-deskripsi" readonly=""></textarea>
                     </div>
