@@ -113,58 +113,8 @@
                 </button>
             </div>
             <div class="modal-body row">
-                <div class="col-sm-6">
-                    <div class="form-group">
-                        <label><b>Pasal</b></label>
-                        <div class="card-body bg-light input-pasal p-2" style="white-space: pre-wrap"></div>
-                    </div>
-                    <div class="form-group">
-                        <label><b>Judul Pasal</b></label>
-                        <div class="card-body bg-light input-judul p-2" style="white-space: pre-wrap"></div>
-                    </div>
-                    <div class="form-group">
-                        <label><b>Deskripsi Pasal</b></label>
-                        <div class="card">
-                            <div class="card-body bg-light input-deskripsi p-2" style="white-space: pre-wrap"></div>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label><b>Bukti yang diinginkan</b></label>   
-                        <div class="card-body bg-light input-bukti p-2" style="white-space: pre-wrap"></div>
-                    </div>
-                </div>
-                <div class="col-sm-6">
-                    <div class="form-group">
-                        <label><b>Pertanyaan</b></label>   
-                        <div class="card-body bg-light input-pertanyaan p-2" style="white-space: pre-wrap"></div>
-                    </div>
-                    <div class="form-group">
-                        <label><b>Unit</b></label>   
-                        <div class="card-body bg-light input-unit p-2" style="white-space: pre-wrap"></div>
-                    </div>
-                    <div class="form-group">
-                        <label><b>Saran Perbaikan</b></label>   
-                        <div class="card-body bg-light input-saran p-2" style="white-space: pre-wrap"></div>
-                    </div>
-                    <div class="form-group">
-                        <label><b>Bukti Implementasi</b></label>
-                        <div class="card-body bg-light p-2">
-                            <ul class="list-imp"></ul>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label><b>Hasil Gap Analisa</b></label>   
-                        <div class="card-body bg-light input-hasil p-2" style="white-space: pre-wrap"></div>
-                    </div>
-                    <div class="form-group">
-                        <label><b>Target</b></label>   
-                        <div class="card-body bg-light input-target p-2" style="white-space: pre-wrap"></div>
-                    </div>
-                    <div class="form-group">
-                        <label><b>Bukti Perbaikan</b></label>   
-                        <div class="card-body bg-light input-bukti-perbaikan p-2" style="white-space: pre-wrap"></div>
-                    </div>
-                </div>
+                <div class="col-sm-6" id="colLeft">sss</div>
+                <div class="col-sm-6" id="colRight"></div>
             </div>
             <div class="modal-footer">
                 <button class="btn btn-outline-primary" data-dismiss="modal">Tutup</button>
@@ -220,17 +170,39 @@
             console.log(d);
             var m = $('#modalDetail');
             m.modal('show');
-            m.find('.input-id').val(d.id);
-            m.find('.input-pasal').html(d.pasal);
-            m.find('.input-judul').html(d.judul);
-            m.find('.input-deskripsi').html(d.deskripsi);
-            m.find('.input-bukti').html(d.bukti_pasal);
-            m.find('.input-pertanyaan').html(d.pertanyaan);
-            m.find('.input-unit').html(d.unit);
-            m.find('.input-saran').html(d.saran_perbaikan);
-            m.find('.input-hasil').html(d.hasil);
-            m.find('.list-imp').html(d.txt_imp);
-            m.find('.input-target').html(d.target);
+            var dataLeft = {
+                Pasal: d.pasal,
+                'Judul Pasal': d.judul,
+                'Deskripsi Pasal': d.deskripsi,
+                'Bukti yang Diinginkan': d.bukti_pasal,
+            }
+            var dataRight = {
+                Pertanyaan: d.pertanyaan,
+                Unit: d.unit,
+                'Bukti Implementasi': d.txt_imp,
+                'Hasil Gap Analisa': d.hasil,
+                'Saran Perbaikan': d.saran_perbaikan,
+                'Target': d.target,
+                'Bukti Implementasi': d.txt_imp_rev,
+                'Status': d.status+'%',
+            }
+            $('#colLeft').empty();
+            $('#colRight').empty();
+            var i = 1;
+            for (var k in dataLeft) {
+                $('#colLeft').append('<div class="form-group">'
+                        + '<label><b>' + i + '. ' + k + '</b></label>'
+                        + '<div class="card-body bg-light p-2" style="white-space: pre-wrap">' + dataLeft[k] + '</div>'
+                        + '</div>');
+                i++;
+            }
+            for (var k in dataRight) {
+                $('#colRight').append('<div class="form-group">'
+                        + '<label><b>' + i + '. ' + k + '</b></label>'
+                        + '<div class="card-body bg-light p-2" style="white-space: pre-wrap">' + dataRight[k] + '</div>'
+                        + '</div>');
+                i++;
+            }
         });
     }
     function edit(id) {

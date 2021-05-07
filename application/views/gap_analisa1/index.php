@@ -131,23 +131,6 @@
         </div>
     </div>
 <?php } ?>
-<!--MODAL DETAIL-->
-<div class="modal fade" id="modalDetail">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title"></h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body"></div>
-            <div class="modal-footer">
-                <button class="btn btn-primary" data-dismiss="modal">Tutup</button>
-            </div>
-        </div>
-    </div>
-</div>
 <!--MODAL EDIT-->
 <div class="modal fade" id="modalEdit">
     <div class="modal-dialog">
@@ -206,6 +189,28 @@
         </div>
     </div>
 </div>
+<!--MODAL DETAIL-->
+<div class="modal fade" id="modalDetail">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Detail Gap Analisa</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body row">
+                <div class="modal-body row">
+                    <div class="col-sm-6" id="colLeft">sss</div>
+                    <div class="col-sm-6" id="colRight"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline-primary" data-dismiss="modal">Tutup</button>
+            </div>
+        </div>
+    </div>
+</div>
 <script>
     $('.page-title-actions').append($('#menuGap'));
     function switchGapAnalisa(id) {
@@ -237,9 +242,52 @@
         });
     }
     function detail(id) {
-        edit(id);
-        var m = $('#modalEdit');
-        m.find('.inp').prop('disabled', true);
-        m.find('.btn-simpan').hide();
+        var m = $('#modalDetail');
+        m.modal('show');
+        $.getJSON('<?= site_url($module . '/detail_pertanyaan') ?>', {id: id}, function (d) {
+            console.log(d);
+            m.find('.input-pasal').html(d.pasal.name);
+            m.find('.input-deskripsi').html(d.pasal.long_desc);
+            m.find('.input-judul').html(d.pasal.sort_desc);
+            m.find('.input-bukti').html(d.pasal.bukti);
+            m.find('.input-hasil').html(d.hasil);
+            m.find('.input-status').val(d.status);
+            m.find('.input-saran').html(d.saran_perbaikan);
+            m.find('.input-target').html(d.target);
+            var dataLeft = {
+                Pasal: d.pasal.name,
+                'Judul Pasal': d.pasal.sort_desc,
+                'Deskripsi Pasal': d.pasal.long_desc,
+                'Bukti yang Diinginkan': d.pasal.bukti,
+            }
+            var dataRight = {
+                'Hasil Gap Analisa': d.hasil,
+                'Saran Perbaikan': d.saran_perbaikan,
+                Status: d.status + '%',
+                Target: d.target,
+                Pertanyaan: d.kuesioner,
+//                Unit: d.unit,
+                
+//                'Bukti Implementasi': d.txt_imp,
+//                'Bukti Implementasi': d.txt_imp_rev,
+            }
+            $('#colLeft').empty();
+            $('#colRight').empty();
+            var i = 1;
+            for (var k in dataLeft) {
+                $('#colLeft').append('<div class="form-group">'
+                        + '<label><b>' + i + '. ' + k + '</b></label>'
+                        + '<div class="card-body bg-light p-2" style="white-space: pre-wrap">' + dataLeft[k] + '</div>'
+                        + '</div>');
+                i++;
+            }
+            for (var k in dataRight) {
+                $('#colRight').append('<div class="form-group">'
+                        + '<label><b>' + i + '. ' + k + '</b></label>'
+                        + '<div class="card-body bg-light p-2" style="white-space: pre-wrap">' + dataRight[k] + '</div>'
+                        + '</div>');
+                i++;
+            }
+        });
     }
 </script>

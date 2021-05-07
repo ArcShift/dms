@@ -82,7 +82,9 @@ class Perbaikan_gap_analisa extends MY_Controller {
         $this->db->select('bga.*, d.judul');
         $this->db->join('document d', 'd.id = bga.id_document', 'LEFT');
         $imp = $this->db->get_where('bukti_gap_analisa bga', ['bga.id_kuesioner_detail' => $data['id']])->result_array();
+        $imp_rev = $this->db->get_where('bukti_perbaikan_gap_analisa bga', ['bga.id_kuesioner_detail' => $data['id']])->result_array();
         $data['txt_imp'] = '';
+        $data['txt_imp_rev'] = '';
         foreach ($imp as $k => $u) {
             switch (strtolower($u['type'])) {
                 case 'file':
@@ -99,6 +101,23 @@ class Perbaikan_gap_analisa extends MY_Controller {
                     break;
             }
             $data['txt_imp'] .= '<li><a target="_blank" href="' . $href . '">' . $txt . '</a></li>';
+        }
+        foreach ($imp_rev as $k => $u) {
+            switch (strtolower($u['type'])) {
+                case 'file':
+                    $href = base_url('perbaikan_gap_analisa/' . $u['path']);
+                    $txt = substr($u['path'], 0, 50);
+                    break;
+                case 'url':
+                    $href = $u['path'];
+                    $txt = substr($u['path'], 0, 50);
+                    break;
+                case 'doc':
+                    $href = site_url('document_search/detail/' . $u['id_document']);
+                    $txt = $u['judul'];
+                    break;
+            }
+            $data['txt_imp_rev'] .= '<li><a target="_blank" href="' . $href . '">' . $txt . '</a></li>';
         }
         echo json_encode($data);
     }
