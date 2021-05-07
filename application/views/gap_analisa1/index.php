@@ -250,11 +250,11 @@
                 'Bukti yang Diinginkan': d.pasal.bukti,
             }
             var dataRight = {
+                Pertanyaan: d.kuesioner,
                 'Hasil Gap Analisa': d.hasil,
                 'Saran Perbaikan': d.saran_perbaikan,
                 Status: d.status + '%',
                 Target: d.target,
-                Pertanyaan: d.kuesioner,
 //                Unit: d.unit,
                 
 //                'Bukti Implementasi': d.txt_imp,
