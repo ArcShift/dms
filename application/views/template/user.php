@@ -11,17 +11,18 @@ $menus = [
     ['type' => 'parent', 'name' => 'dashboard'],
     ['type' => 'child', 'name' => 'dashboard', 'href' => '', 'icon' => 'home'],
     ['type' => 'parent', 'name' => 'area kerja'],
-    ['type' => 'child', 'name' => 'tugas saya', 'href' => 'tugas', 'icon' => ''],
-    ['type' => 'child', 'name' => 'dokumen saya', 'href' => 'dokumen', 'icon' => ''],
-    ['type' => 'child', 'name' => 'pasal saya', 'href' => 'pasal', 'icon' => ''],
-    ['type' => 'child', 'name' => 'jobdesk saya', 'href' => 'jobdesk', 'icon' => ''],
+    ['type' => 'child', 'name' => 'tugas saya', 'href' => 'tugas', 'icon' => 'chalkboard-teacher'],
+    ['type' => 'child', 'name' => 'dokumen saya', 'href' => 'dokumen', 'icon' => 'copy'],
+    ['type' => 'child', 'name' => 'pasal saya', 'href' => 'pasal', 'icon' => 'book'],
+    ['type' => 'child', 'name' => 'jobdesk saya', 'href' => 'jobdesk', 'icon' => 'id-badge'],
     ['type' => 'parent', 'name' => 'belajar'],
-    ['type' => 'child', 'name' => 'pasal standar', 'href' => 'pasals', 'icon' => ''],
+    ['type' => 'child', 'name' => 'pasal standar', 'href' => 'pasals', 'icon' => 'book'],
     ['type' => 'parent', 'name' => 'riwayat'],
-    ['type' => 'child', 'name' => 'aktifitas pengguna', 'href' => 'aktifitas', 'icon' => ''],
+    ['type' => 'child', 'name' => 'aktifitas pengguna', 'href' => 'aktifitas', 'icon' => 'archive'],
     ['type' => 'parent', 'name' => 'pengaturan'],
-    ['type' => 'child', 'name' => 'akun', 'href' => 'akun', 'icon' => ''],
-    ['type' => 'child', 'name' => 'notifikasi email', 'href' => 'notif', 'icon' => ''],
+    ['type' => 'child', 'name' => 'akun', 'href' => 'akun', 'icon' => 'user'],
+    ['type' => 'child', 'name' => 'notifikasi email', 'href' => 'notif', 'icon' => 'envelope'],
+    ['type' => 'hide', 'name' => 'notifikasi', 'href' => 'notifikasi', 'icon' => 'bell'],
 ];
 foreach ($menus as $k => $m) {
     if (isset($m['href'])) {
@@ -162,7 +163,7 @@ foreach ($menus as $k => $m) {
                                                 </div>
                                             <?php } ?>
                                         <?php } ?>
-                                        <a class="btn btn-sm btn-outline-primary form-control" href="<?= site_url('notif') ?>">Tampilkan lebih banyak</a>
+                                        <a class="btn btn-sm btn-outline-primary form-control" href="<?= site_url('users/notifikasi') ?>">Tampilkan lebih banyak</a>
                                     </div>
                                     &nbsp;&nbsp;&nbsp;
                                     <div >
@@ -217,7 +218,7 @@ foreach ($menus as $k => $m) {
                                 <?php foreach ($menus as $m) { ?>
                                     <?php if ($m['type'] == 'parent') { ?>
                                         <li class="app-sidebar__heading"><?= $m['name'] ?></li>
-                                    <?php } else { ?>
+                                    <?php } elseif($m['type'] == 'child') { ?>
                                         <li class="menu-item">
                                             <a href="<?= site_url('users/' . $m['href']) ?>" class="<?= $m['href'] == $this->uri->segment(2) ? 'mm-active' : '' ?>">
                                                 <i class="metismenu-icon fa fa-<?= empty($m['icon']) ? 'list-alt' : $m['icon'] ?>"></i>
@@ -238,7 +239,7 @@ foreach ($menus as $k => $m) {
                             <div class="page-title-wrapper">
                                 <div class="page-title-heading col-sm-6">
                                     <div class="page-title-icon">
-                                        <i class="fa fa-<?= empty($activeModule['icon']) ? 'list-alt' : $activeModule['icon'] ?> icon-gradient bg-mean-fruit">
+                                        <i class="fa fa-<?= empty($activeMenu['icon']) ? 'list-alt' : $activeMenu['icon'] ?> icon-gradient bg-mean-fruit">
                                         </i>
                                     </div>
                                     <div>

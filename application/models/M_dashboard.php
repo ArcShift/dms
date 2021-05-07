@@ -148,7 +148,7 @@ class M_dashboard extends CI_Model {
         $this->db->join('document d', 'd.id = t.id_document');
         $this->db->join('document_pasal dp', 'dp.id_document = d.id');
         $this->db->join('pasal ps', 'ps.id = dp.id_pasal AND ps.id_standard = ' . $standard);
-        if ($this->role == 'anggota') {
+        if ($this->session->user['role'] == 'anggota') {
             $this->db->where('p.id', $this->session->user['id_personil']);
         }
         switch ($periode_tugas) {

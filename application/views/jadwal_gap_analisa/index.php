@@ -28,8 +28,9 @@
                             </td>
                             <td><?= $v['tanggal'] ?></td>
                             <td>
+                                <button type="button" class="btn btn-sm btn-outline-primary fa fa-search" onclick="detail(<?= $v['id'] ?>)"></button>
                                 <button class="btn btn-sm btn-outline-primary fa fa-edit" name="initEdit" value="<?= $v['id'] ?>"></button>
-                                <?php if (empty($v['pertanyaan'])& empty($v['pl'])) { ?>
+                                <?php if (empty($v['pertanyaan']) & empty($v['pl'])) { ?>
                                     <button class="btn btn-sm btn-outline-danger fa fa-trash" name="delete" value="<?= $v['id'] ?>"></button>
                                 <?php } ?>
                             </td>
@@ -40,3 +41,8 @@
         </form>
     </div>
 </div>
+<script>
+    function () {
+
+    }
+</script>

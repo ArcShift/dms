@@ -15,7 +15,7 @@ class M_implementasi extends CI_Model {
             $this->db->join('tugas t', 't.id = j.id_tugas');
             $this->db->join('document d', 'd.id = t.id_document AND d.id_company = ' . $company);
             $this->db->join('pasal p', 'p.id = d.id_pasal AND p.id_standard = ' . $standard); //TODO: modiv to id standard
-            if ($this->role == 'anggota') {
+            if ($this->session->user['role'] == 'anggota') {
                 $this->db->join('personil_task pt', 'pt.id_tugas = t.id');
                 $this->db->join('position_personil pp', 'pp.id = pt.id_position_personil');
                 $this->db->where('pp.id_personil', $this->session->user['id_personil']);
