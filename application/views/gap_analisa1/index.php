@@ -144,19 +144,10 @@
                 </div>
                 <div class="modal-body">
                     <input class="input-id" name="id" hidden="">
-                    <div class="form-group">
+<!--                    <div class="form-group">
                         <label><b>Pasal</b></label>
                         <textarea class="form-control input-deskripsi" readonly=""></textarea>
-                    </div>
-
-                    <div class="form-group">
-                        <label><b>Deskripsi Pasal</b></label>
-                        <textarea class="form-control input-deskripsi" readonly=""></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label><b>Bukti yang diinginkan</b></label>
-                        <textarea class="form-control input-bukti" readonly=""></textarea>
-                    </div>
+                    </div>-->
                     <div class="form-group">
                         <label><b>Hasil Gap Analisa</b></label>
                         <textarea class="form-control inp input-hasil" name="hasil"></textarea>
@@ -236,8 +227,6 @@
             m.find('.input-status').val(d.status);
             m.find('.input-hasil').val(d.hasil);
             m.find('.input-saran').val(d.saran_perbaikan);
-            m.find('.input-deskripsi').val(d.long_desc);
-            m.find('.input-bukti').val(d.bukti);
             m.find('.input-target').val(d.target);
         });
     }
