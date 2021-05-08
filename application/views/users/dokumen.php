@@ -77,7 +77,11 @@
         m.find('.modal-title').text(title);
         m.find('.modal-body').empty();
         for (var key in data) {
-            m.find('.modal-body').append('<div class="row"><div class="col-sm-4"><label>' + key + '</label></div><div class="col-sm-8">' + data[key] + '</div></div>');
+//            m.find('.modal-body').append('<div class="row"><div class="col-sm-4"><label>' + key + '</label></div><div class="col-sm-8">' + data[key] + '</div></div>');
+            m.find('.modal-body').append('<div class="form-group">'
+                        + '<label><b>' + key + '</b></label>'
+                        + '<div class="card-body bg-light p-2" style="white-space: pre-wrap">' + data[key] + '</div>'
+                        + '</div>');
         }
     }
 </script>

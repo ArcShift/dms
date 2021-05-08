@@ -135,7 +135,7 @@ if ($role == 'anggota') {
                 </div>
                 <div class="modal-body modal-message">
                     <div class="form-group">
-                        <label><b>Judul</b></label>
+                        <label><b>Judul Pasal</b></label>
                         <div class="card-body bg-light p-2 text-judul"></div>
                     </div>
                     <div class="form-group">
