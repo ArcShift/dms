@@ -124,7 +124,7 @@ if ($role == 'anggota') {
 </div>
 <!--MODAL DETAIL PASAL-->
 <div class="modal fade" id="modalDetailPasal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-xl" style="max-width:900px">
+    <div class="modal-dialog modal-xl">
         <form>
             <div class="modal-content">
                 <div class="modal-header">
@@ -134,12 +134,20 @@ if ($role == 'anggota') {
                     </button>
                 </div>
                 <div class="modal-body modal-message">
+                    <div class="form-group">
+                        <label><b>Judul</b></label>
+                        <div class="card-body bg-light p-2 text-judul"></div>
+                    </div>
+                    <div class="form-group">
+                        <label><b>Deskripsi</b></label>
+                        <div class="card-body bg-light p-2 text-deskripsi" style="white-space: pre-wrap"></div>
+                    </div>
                     <table class="table">
                         <thead>
                             <tr>
                                 <th>No</th>
-                                <th>Judul Dokumen</th>
                                 <th>Pasal Terkait</th>
+                                <th>Judul Dokumen</th>
                                 <th style="width: 40%">Letak Pasal pada Dokumen</th>
                                 <th style="width: 90px">Aksi</th>
                             </tr>
@@ -1386,8 +1394,8 @@ if ($role == 'anggota') {
         var p = sortPasal[index];
         m.modal('show');
         m.find('.modal-title').text(p.fullname);
-        m.find('.item-sort-desc').val(p.sort_desc);
-        m.find('.item-long-desc').text(p.long_desc);
+        m.find('.text-judul').html(p.sort_desc);
+        m.find('.text-deskripsi').html(p.long_desc);
         m.find('.files').empty();
         for (var i = 0; i < p.index_child_documents.length; i++) {
             var d = sortDokumen[p.index_child_documents[i]];
@@ -1407,8 +1415,8 @@ if ($role == 'anggota') {
             if (show) {
                 m.find('.files').append('<tr>'
                         + '<td>' + (i + 1) + '</td>'
+                        + '<td><div class="card-body bg-light p-2" style="white-space: pre-wrap; height: 80px; overflow-y: auto">' + d.txt_pasals2 + '</div></td>'
                         + '<td>' + d.judul + '</td>'
-                        + '<td>' + d.txt_pasals2 + '</td>'
                         + '<td style="white-space: pre-wrap">' + (d.custom_deskripsi) + '</td>'
                         + '<td>' + link
                         + '&nbsp<span class="btn btn-danger btn-sm fa fa-trash" onclick="initHapusDokumen(' + p.index_documents[i] + ')"></span>'
@@ -1648,7 +1656,7 @@ if ($role == 'anggota') {
     $('#formDistribusi').submit(function (e) {
         e.preventDefault();
         post(this, 'set_distribusi');
-//        $.post('<?php // echo site_url($module);        ?>/set_distribusi', $(this).serialize(), function (data) {
+//        $.post('<?php // echo site_url($module);         ?>/set_distribusi', $(this).serialize(), function (data) {
 //            $('#modalDistribusi').modal('hide');
 //            getPasal();
 //        });

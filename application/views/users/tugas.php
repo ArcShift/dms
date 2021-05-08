@@ -142,6 +142,18 @@
                 </div>
                 <div class="modal-body">
                     <input class="input-id" name="id" hidden=""/>
+                    <div class="form-group">
+                        <label><b>Dokumen</b></label>
+                        <select class="form-control">
+                            <option value="">~Dokumen~</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label><b>Pilih Dokumen</b></label>
+                        <select class="form-control">
+                            <option value="">~Dokumen~</option>
+                        </select>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
