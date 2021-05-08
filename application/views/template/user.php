@@ -218,7 +218,7 @@ foreach ($menus as $k => $m) {
                                 <?php foreach ($menus as $m) { ?>
                                     <?php if ($m['type'] == 'parent') { ?>
                                         <li class="app-sidebar__heading"><?= $m['name'] ?></li>
-                                    <?php } elseif($m['type'] == 'child') { ?>
+                                    <?php } elseif ($m['type'] == 'child') { ?>
                                         <li class="menu-item">
                                             <a href="<?= site_url('users/' . $m['href']) ?>" class="<?= $m['href'] == $this->uri->segment(2) ? 'mm-active' : '' ?>">
                                                 <i class="metismenu-icon fa fa-<?= empty($m['icon']) ? 'list-alt' : $m['icon'] ?>"></i>
@@ -348,6 +348,10 @@ foreach ($menus as $k => $m) {
             </div>
         </div>
         <script>
+            var module = <?php echo json_encode($this->session->userdata('module')) ?>;
+            $('.data-table').DataTable({
+                "bLengthChange": false,
+            });
             $(document).ready(function () {
                 $('#modalContainer').append($('.modal'));
                 $('.input-jadwal').datepicker({
@@ -355,9 +359,7 @@ foreach ($menus as $k => $m) {
 //                    startDate: new Date(),
                     autoclose: true,
                 });
-                $('.data-table').DataTable();
             });
-            var module = <?php echo json_encode($this->session->userdata('module')) ?>;
             for (var i = 0; i < module.length; i++) {
                 var m = module[i];
                 $('#menu-' + m.name).replaceWith($('#module-' + m.name));

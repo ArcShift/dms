@@ -34,7 +34,7 @@
                                 <th>Judul Pasal</th>
                                 <th>Pertanyaan</th>
                                 <th>Unit</th>
-                                <th>Bukti Implementasi</th>
+                                <th>Hasil gap analisa</th>
                                 <th>Status</th>
                                 <th style="min-width: 90px">Aksi</th>
                             </tr>
@@ -86,31 +86,7 @@
                                                 }
                                                 ?>
                                                 <td><?= $v3['unit_kerja'] ?></td>
-                                                <td>
-                                                    <ul>
-                                                        <?php
-                                                        foreach ($v3['implementasi'] as $k => $v4) {
-                                                            switch (strtolower($v4['type'])) {
-                                                                case 'file':
-                                                                    $href = base_url('gap_analisa/' . $v4['path']);
-                                                                    $txt = substr($v4['path'], 0, 30);
-                                                                    break;
-                                                                case 'url':
-                                                                    $href = $v4['path'];
-                                                                    $txt = substr($v4['path'], 0, 30);
-                                                                    break;
-                                                                case 'doc':
-                                                                    $href = site_url('document_search/detail/' . $v4['id_document']);
-                                                                    $txt = $v4['judul'];
-                                                                    break;
-                                                            }
-                                                            ?>
-                                                            <li>
-                                                                <a target="_blank" href="<?= $href ?>"><?= $txt ?></a>
-                                                            </li>
-                                                        <?php } ?>
-                                                    </ul>
-                                                </td>
+                                                <td><?= $v3['hasil'] ?></td>
                                                 <td><span class="badge badge-<?= $color ?>"><?= $stt ?></span></td>
                                                 <td>
                                                     <button class="btn btn-sm btn-outline-primary fa fa-upload" name="upload" value="<?= $v3['id'] ?>"></button>
@@ -144,10 +120,10 @@
                 </div>
                 <div class="modal-body">
                     <input class="input-id" name="id" hidden="">
-<!--                    <div class="form-group">
-                        <label><b>Pasal</b></label>
-                        <textarea class="form-control input-deskripsi" readonly=""></textarea>
-                    </div>-->
+                    <!--                    <div class="form-group">
+                                            <label><b>Pasal</b></label>
+                                            <textarea class="form-control input-deskripsi" readonly=""></textarea>
+                                        </div>-->
                     <div class="form-group">
                         <label><b>Hasil Gap Analisa</b></label>
                         <textarea class="form-control inp input-hasil" name="hasil"></textarea>
@@ -256,7 +232,7 @@
                 Status: d.status + '%',
                 Target: d.target,
 //                Unit: d.unit,
-                
+
 //                'Bukti Implementasi': d.txt_imp,
 //                'Bukti Implementasi': d.txt_imp_rev,
             }
