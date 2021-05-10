@@ -548,9 +548,9 @@ if ($role == 'anggota') {
                 <div class="modal-body">
                     <div class="group-detail">
                         <div class="form-group">
-                        <label>Pasal</label>
-                        <div class="form-control input-pasal overflow-auto" style="height: 100px"></div>
-                    </div>
+                            <label>Pasal</label>
+                            <div class="form-control input-pasal overflow-auto" style="height: 100px"></div>
+                        </div>
                     </div>
                     <div class="form-group">
                         <label>Dokumen</label>
@@ -787,23 +787,6 @@ if ($role == 'anggota') {
                 </div>
             </div>
         </form>
-    </div>
-</div>
-<!--MODAL DETAIL-->
-<div class="modal fade" id="modalDetail">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title"></h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body"></div>
-            <div class="modal-footer">
-                <button class="btn btn-primary" data-dismiss="modal">Tutup</button>
-            </div>
-        </div>
     </div>
 </div>
 <script>
@@ -1215,7 +1198,7 @@ if ($role == 'anggota') {
                         ]);
                         $('#tbTugas2').append('<tr>'
                                 + '<td col>' + d.txt_pasals + '</td>'
-                                + '<td>'+'<span class="text-primary fa fa-plus" title="Tambah" onclick="initCreateTugas(' + i + ')"></span>'+d.judul+'</td>'                               
+                                + '<td>' + '<span class="text-primary fa fa-plus" title="Tambah" onclick="initCreateTugas(' + i + ')"></span>' + d.judul + '</td>'
                                 + '</tr>');
 
                         var nTgs = 0;
@@ -1287,11 +1270,11 @@ if ($role == 'anggota') {
                                     }
                                     nTgs++;
                                 }
-                                
-                        $('#tbTugas2').append('<tr>'
-                                + '<td>' + t.nama + '</td>'                            
-                                + '<td>' + (t.index_form_terkait == null ? '-' : sortDokumen[t.index_form_terkait].judul) + '</td>'                            
-                                + '</tr>');
+
+                                $('#tbTugas2').append('<tr>'
+                                        + '<td>' + t.nama + '</td>'
+                                        + '<td>' + (t.index_form_terkait == null ? '-' : sortDokumen[t.index_form_terkait].judul) + '</td>'
+                                        + '</tr>');
                                 t.indexJadwal = [];
                                 sortTugas.push(t);
                             }
@@ -1783,7 +1766,7 @@ if ($role == 'anggota') {
     $('#formDistribusi').submit(function (e) {
         e.preventDefault();
         post(this, 'set_distribusi');
-//        $.post('<?php // echo site_url($module);                       ?>/set_distribusi', $(this).serialize(), function (data) {
+//        $.post('<?php // echo site_url($module);                        ?>/set_distribusi', $(this).serialize(), function (data) {
 //            $('#modalDistribusi').modal('hide');
 //            getPasal();
 //        });
@@ -1970,12 +1953,8 @@ if ($role == 'anggota') {
     });
 
     function detailJadwal(index) {
-        var m = $('#modalDetail');
         var j = sortJadwal[index];
         var t = sortTugas[j.indexTugas];
-        m.modal('show');
-        m.find('.modal-title').text('Detail Jadwal');
-        m.find('.modal-body').empty();
         var dt_txt = '-';
         if (t.form_terkait != null) {
             var dt = sortDokumen[t.index_form_terkait];
@@ -1985,8 +1964,6 @@ if ($role == 'anggota') {
             } else if (dt.type_doc == 'URL') {
                 dt_txt += '<a class="btn btn-outline-primary btn-sm pull-right fa fa-search" href="' + dt.url + '"></a>';
             }
-        } else {
-            m.find('.group-form-terkait').hide();
         }
         var data = {
             Dokumen: sortDokumen[t.index_document].judul,
@@ -1997,13 +1974,21 @@ if ($role == 'anggota') {
             Jadwal: j.tanggal,
             Periode: (j.periode == null ? '-' : j.periode),
         };
-        for (var key in data) {
-            m.find('.modal-body').append('<div class="row"><div class="col-sm-4"><label>' + key + '</label></div><div class="col-sm-8">' + data[key] + '</div></div>');
-        }
+        showDetail('Detail Jadwal', data, 4);
     }
     function detailImplementasi(index) {
-        detailJadwal(index);
         var j = sortJadwal[index];
+        var t = sortTugas[j.indexTugas];
+        var dt_txt = '-';
+        if (t.form_terkait != null) {
+            var dt = sortDokumen[t.index_form_terkait];
+            dt_txt = dt.judul;
+            if (dt.type_doc == 'FILE') {
+                dt_txt += '<a class="btn btn-outline-primary btn-sm pull-right fa fa-download" href="<?= base_url('upload/dokumen') ?>/' + dt.file + '"></a>';
+            } else if (dt.type_doc == 'URL') {
+                dt_txt += '<a class="btn btn-outline-primary btn-sm pull-right fa fa-search" href="' + dt.url + '"></a>';
+            }
+        }
         var bukti = '-';
         if (j.doc_type == 'FILE') {
             bukti = j.path + '<a class="btn btn-outline-primary btn-sm pull-right fa fa-download" target="_blank" href="<?= base_url('upload/implementasi') ?>/' + j.path + '"></a>';
@@ -2011,15 +1996,18 @@ if ($role == 'anggota') {
             bukti = j.path + '<a class="btn btn-outline-primary btn-sm pull-right fa fa-search" target="_blank" href="' + j.path + '"></a>'
         }
         var data = {
+            Dokumen: sortDokumen[t.index_document].judul,
+            Tugas: t.nama,
+            'Form Terkait': dt_txt,
+            Sifat: t.sifat,
+            Pelaksana: t.txt_personil,
+            Jadwal: j.tanggal,
+            Periode: (j.periode == null ? '-' : j.periode),
             Status: j.status,
             Keterlambatan: j.keterlambatan,
             Bukti: bukti,
         };
-        var m = $('#modalDetail');
-        m.find('.modal-title').text('Detail Implementasi');
-        for (var key in data) {
-            m.find('.modal-body').append('<div class="row"><div class="col-sm-4"><label>' + key + '</label></div><div class="col-sm-8">' + data[key] + '</div></div>');
-        }
+        showDetail('Detail Pelaksana Tugas', data, 5);
     }
     function initEditJadwal(index) {
         var m = $('#modalJadwal');

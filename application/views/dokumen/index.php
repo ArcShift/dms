@@ -212,26 +212,6 @@ if ($role == 'anggota') {
         </form>
     </div>
 </div>
-<!--MODAL DETAIL DOCUMENT-->
-<div class="modal fade" id="modalDetailDocument">
-    <div class="modal-dialog" role="document">
-        <form method="post">
-            <input class="input-id" name="id" hidden="">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Detail Dokumen</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body modal-message"></div>
-                <div class="modal-footer">
-                    <button class="btn btn-primary" data-dismiss="modal">Tutup</button>
-                </div>
-            </div>
-        </form>
-    </div>
-</div>
 <!--MODAL EDIT DOKUMEN-->
 <div class="modal fade" id="modalDokumen" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -727,23 +707,6 @@ if ($role == 'anggota') {
                 </div>
             </div>
         </form>
-    </div>
-</div>
-<!--MODAL DETAIL-->
-<div class="modal fade" id="modalDetail">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title"></h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body"></div>
-            <div class="modal-footer">
-                <button class="btn btn-primary" data-dismiss="modal">Tutup</button>
-            </div>
-        </div>
     </div>
 </div>
 <script>
@@ -1489,9 +1452,6 @@ if ($role == 'anggota') {
     }
     function detailDocument(index) {
         var d = sortDokumen[index];
-        var m = $('#modalDetailDocument');
-        m.modal('show');
-        m.find('.modal-body').empty();
         var doc_terkait = '';
         for (var i = 0; i < d.index_documents_terkait.length; i++) {
             var d2 = sortDokumen[d.index_documents_terkait[i]];
@@ -1524,9 +1484,7 @@ if ($role == 'anggota') {
             'Dokumen Terkait': doc_terkait,
             'Dokumen': link + '<div class="no-wrap" style="width:85%">' + txt_doc + '</div>',
         }
-        for (var key in data) {
-            m.find('.modal-body').append('<div class="row"><div class="col-sm-4"><label>' + key + '</label></div><div class="col-sm-8">' + data[key] + '</div></div>');
-        }
+        showDetail('Detail Tugas', data, 5);
     }
     function editDokumen(index) {
         var m = $('#modalDokumen');
@@ -1614,17 +1572,21 @@ if ($role == 'anggota') {
         return {status: status, badge: badge};
     }
     function detailDistribusi(index) {
-        editDistribusi(index);
         var d = sortDokumen[index];
-        var m = $('#modalDistribusi');
-        m.find('.group-detail').show();
-        m.find('.group-edit').hide();
-        m.find('.label-user-disrtibusi').empty();
-//        var user = sortDokumen[sortJadwal[index].index_dokumen].user_distribusi;
-        m.find('.label-user-distribusi').html(d.txtDistribusi);
-//        for (var i = 0; i < user.length; i++) {
-//            m.find('.label-user-distribusi').append('<div>' + user[i] + '</div>');
-//        }
+        var doc = '';
+        for (var i = 0; i < d.index_documents_terkait.length; i++) {
+            var d2 = d.index_documents_terkait[i];
+            doc += '<div>' + sortDokumen[d2].judul + '</div>';
+        }
+        var data = {
+            Pasal: d.txt_pasals,
+            'Judul Dokumen': d.judul,
+            Klasifikasi: d.klasifikasi,
+            'Dokumen Terkait': doc,
+            'Pembuat Dokumen': d.creator_name,
+            Distribusi: d.txtDistribusi,
+        }
+        showDetail('Detail Distribusi', data, 3);
     }
     function editDistribusi(index) {
         var m = $('#modalDistribusi');
@@ -1661,7 +1623,7 @@ if ($role == 'anggota') {
     $('#formDistribusi').submit(function (e) {
         e.preventDefault();
         post(this, 'set_distribusi');
-//        $.post('<?php // echo site_url($module);             ?>/set_distribusi', $(this).serialize(), function (data) {
+//        $.post('<?php // echo site_url($module);              ?>/set_distribusi', $(this).serialize(), function (data) {
 //            $('#modalDistribusi').modal('hide');
 //            getPasal();
 //        });
@@ -1839,126 +1801,7 @@ if ($role == 'anggota') {
             $('#tglMulaiJadwal').text('Tanggal');
         }
     });
-
-    function detailJadwal(index) {
-        var m = $('#modalDetail');
-        var j = sortJadwal[index];
-        var t = sortTugas[j.indexTugas];
-        m.modal('show');
-        m.find('.modal-title').text('Detail Jadwal');
-        m.find('.modal-body').empty();
-        var dt_txt = '-';
-        if (t.form_terkait != null) {
-            var dt = sortDokumen[t.index_form_terkait];
-            dt_txt = dt.judul;
-            if (dt.type_doc == 'FILE') {
-                dt_txt += '<a class="btn btn-outline-primary btn-sm pull-right fa fa-download" href="<?= base_url('upload/dokumen') ?>/' + dt.file + '"></a>';
-            } else if (dt.type_doc == 'URL') {
-                dt_txt += '<a class="btn btn-outline-primary btn-sm pull-right fa fa-search" href="' + dt.url + '"></a>';
-            }
-        } else {
-            m.find('.group-form-terkait').hide();
-        }
-        var data = {
-            Dokumen: sortDokumen[t.index_document].judul,
-            Tugas: t.nama,
-            'Form Terkait': dt_txt,
-            Sifat: t.sifat,
-            Pelaksana: t.txt_personil,
-            Jadwal: j.tanggal,
-            Periode: (j.periode == null ? '-' : j.periode),
-        };
-        for (var key in data) {
-            m.find('.modal-body').append('<div class="row"><div class="col-sm-4"><label>' + key + '</label></div><div class="col-sm-8">' + data[key] + '</div></div>');
-        }
-    }
-    function detailImplementasi(index) {
-        detailJadwal(index);
-        var j = sortJadwal[index];
-        var bukti = '-';
-        if (j.doc_type == 'FILE') {
-            bukti = j.path + '<a class="btn btn-outline-primary btn-sm pull-right fa fa-download" target="_blank" href="<?= base_url('upload/implementasi') ?>/' + j.path + '"></a>';
-        } else if (j.doc_type == 'URL') {
-            bukti = j.path + '<a class="btn btn-outline-primary btn-sm pull-right fa fa-search" target="_blank" href="' + j.path + '"></a>'
-        }
-        var data = {
-            Status: j.status,
-            Keterlambatan: j.keterlambatan,
-            Bukti: bukti,
-        };
-        var m = $('#modalDetail');
-        m.find('.modal-title').text('Detail Implementasi');
-        for (var key in data) {
-            m.find('.modal-body').append('<div class="row"><div class="col-sm-4"><label>' + key + '</label></div><div class="col-sm-8">' + data[key] + '</div></div>');
-        }
-    }
-    function initEditJadwal(index) {
-        var m = $('#modalJadwal');
-        var j = sortJadwal[index];
-        var t = sortTugas[j.indexTugas];
-        m.modal('show');
-        m.find('.modal-title').text('Detail Jadwal');
-        m.find('.input-tugas').val(sortTugas[j.indexTugas].nama);
-        m.find('.input-jadwal').val(j.tanggal);
-        m.find('.input-status').val(j.status);
-        m.find('.input-sifat').val(t.sifat);
-        m.find('.select-periode').val(j.periode);
-        m.find('.input-field').prop('disabled', true);
-        m.find('.btn-submit').hide();
-        m.find('.detail-jadwal').show();
-    }
-    function editJadwal(index) {
-        initEditJadwal(index);
-        var m = $('#modalJadwal');
-        m.find('.modal-title').text('Edit Jadwal');
-        m.find('.input-id').val(sortJadwal[index].id);
-        m.find('.input-field').prop('disabled', false);
-        m.find('.btn-save').show();
-        m.find('.detail-jadwal').hide();
-    }
-    function initDeleteJadwal(index) {
-        initEditJadwal(index);
-        var m = $('#modalJadwal');
-        m.find('.modal-title').text('Modal Jadwal');
-        m.find('.btn-delete').show();
-        m.find('.input-delete-id').val(sortJadwal[index].id);
-    }
-    function hapusJadwal() {
-        $.post('<?php echo site_url($module); ?>/hapus_jadwal', {id: sortImplementasi[deleteIndex].id}, function (data) {
-            $('#modalDetailJadwal').modal('hide');
-            getJadwal();
-        });
-    }
-    function initUploadImplementasi(index) {
-        $('#formUploadImplementasi').trigger('reset');
-        var j = sortJadwal[index];
-        var m = $('#modalUploadImplementasi');
-        m.modal('show');
-        m.find('.input-id').val(j.id);
-        m.find('.input-tugas').val(sortTugas[j.indexTugas].nama);
-        m.find('.input-jadwal').val(j.tanggal);
-        m.find('.input-url, .input-file').hide();
-    }
-    $('#formUploadImplementasi').submit(function (e) {
-        e.preventDefault();
-        post(this, 'upload_bukti');
-    });
-    function showMoreJadwal(index) {
-        $('.jadwal-more' + index).show();
-        $('.jd-btn-more' + index).hide();
-    }
-    function hideMoreJadwal(index) {
-        $('.jadwal-more' + index).hide();
-        $('.jd-btn-more' + index).show();
-    }
-    function showMoreTugas(index) {
-        $('.tgs-more' + index).show();
-        $('.tgs-btn-more' + index).hide();
-    }
-    function hideMoreTugas(index) {
-        $('.tgs-more' + index).hide();
-        $('.tgs-btn-more' + index).show();
-    }
+    
     function filterUnitKerja(elem, table, index) {
         table.columns(index).search(elem.value).draw();
         var fp = $(elem).parents('.tab-pane').find('.filter-personil');

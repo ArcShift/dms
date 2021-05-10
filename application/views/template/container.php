@@ -447,6 +447,26 @@ if ($this->input->get('standard')) {
                     }
                 });
             }
+            function showDetail(title, data, count) {
+                var m = $('#modalDetail1');
+                m.modal('show');
+                m.find('.modal-title').text(title);
+                $('#colLeft, #colRight').empty();
+                var m = $('#modalDetail');
+                m.modal('show');
+                var i = 1
+                col = $('#colLeft');
+                for (var k in data) {
+                    if (i == count + 1) {
+                        col = $('#colRight');
+                    }
+                    col.append('<div class="form-group">'
+                            + '<label><b>' + i + '. ' + k + '</b></label>'
+                            + '<div class="card-body bg-light p-2" style="white-space: pre-wrap">' + data[k] + '</div>'
+                            + '</div>');
+                    i++;
+                }
+            }
         </script>
     </body>
 </html>
@@ -468,6 +488,25 @@ if ($this->input->get('standard')) {
                     </div>
                 </div>
             </form>
+        </div>
+    </div>
+    <div class="modal fade" id="modalDetail1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body row">
+                    <div class="col-sm-6" id="colLeft"></div>
+                    <div class="col-sm-6" id="colRight"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Tutup</button>
+                </div>
+            </div>
         </div>
     </div>
 </div>

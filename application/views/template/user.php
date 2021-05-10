@@ -409,6 +409,26 @@ foreach ($menus as $k => $m) {
                     }
                 });
             }
+            function showDetail(title, data, count) {
+                var m = $('#modalDetail1');
+                m.modal('show');
+                m.find('.modal-title').text(title);
+                $('#colLeft, #colRight').empty();
+                var m = $('#modalDetail');
+                m.modal('show');
+                var i = 1
+                col = $('#colLeft');
+                for (var k in data) {
+                    if (i == count + 1) {
+                        col = $('#colRight');
+                    }
+                    col.append('<div class="form-group">'
+                            + '<label><b>' + i + '. ' + k + '</b></label>'
+                            + '<div class="card-body bg-light p-2" style="white-space: pre-wrap">' + data[k] + '</div>'
+                            + '</div>');
+                    i++;
+                }
+            }
         </script>
     </body>
 </html>
@@ -450,25 +470,3 @@ foreach ($menus as $k => $m) {
         </div>
     </div>
 </div>
-<script>
-    function showDetail(title, data, count) {
-        var m = $('#modalDetail1');
-        m.modal('show');
-        m.find('.modal-title').text(title);
-        $('#colLeft, #colRight').empty();
-        var m = $('#modalDetail');
-        m.modal('show');
-        var i = 1
-        col = $('#colLeft');
-        for (var k in data) {
-            if (i == count+1) {
-                col = $('#colRight');
-            }
-            col.append('<div class="form-group">'
-                    + '<label><b>' + i + '. ' + k + '</b></label>'
-                    + '<div class="card-body bg-light p-2" style="white-space: pre-wrap">' + data[k] + '</div>'
-                    + '</div>');
-            i++;
-        }
-    }
-</script>

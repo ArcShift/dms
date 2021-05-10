@@ -38,23 +38,6 @@
         </table>
     </div>
 </div>
-<!--MODAL DETAIL-->
-<div class="modal fade" id="modalDetail">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title"></h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body"></div>
-            <div class="modal-footer">
-                <button class="btn btn-primary" data-dismiss="modal">Tutup</button>
-            </div>
-        </div>
-    </div>
-</div>
 <script>
     var pasal = <?= json_encode($pasal) ?>;
     $('.dataTables_filter .form-control').attr('placeholder', 'Search');
@@ -70,15 +53,6 @@
             'Judul Dokumen': d.dokumen.length == 0 ? '-' : d.dokumen[0].judul,
             'Letak Pasal pada Dokumen': d.dokumen.length == 0 ? '-' : d.dokumen[0].deskripsi,
         };
-        showDetail2('Detail Pasal', data);
-    }
-    function showDetail2(title, data) {
-        var m = $('#modalDetail');
-        m.modal('show');
-        m.find('.modal-title').text(title);
-        m.find('.modal-body').empty();
-        for (var key in data) {
-            m.find('.modal-body').append('<div class="row"><div class="col-sm-4"><label>' + key + '</label></div><div class="col-sm-8">' + data[key] + '</div></div>');
-        }
+        showDetail('Detail Pasal', data, 2);
     }
 </script>
