@@ -1,8 +1,5 @@
 <?php
-//echo $x
-$this->db->get('users');
-$activeCompany = $this->session->activeCompany;
-$this->db->join('company_standard cs', 'cs.id_standard = s.id AND cs.id_company = ' . $activeCompany['id']);
+$this->db->join('company_standard cs', 'cs.id_standard = s.id AND cs.id_company = ' . $this->session->activeCompany['id']);
 $company_standard = $this->db->get('standard s')->result_array();
 if ($this->input->get('standard')) {
     redirect($module);
@@ -167,7 +164,7 @@ foreach ($menus as $k => $m) {
                                     </div>
                                     &nbsp;&nbsp;&nbsp;
                                     <div >
-                                        <a href="<?php echo site_url('account/logout') ?>" class="nav-link fa fa-sign-out-alt text-dark">
+                                        <a href="<?php echo site_url('users/akun/logout') ?>" class="nav-link fa fa-sign-out-alt text-dark">
                                             &nbsp;
                                             <span>
                                                 Logout
@@ -416,23 +413,62 @@ foreach ($menus as $k => $m) {
     </body>
 </html>
 <div id="modalContainer">
-    <div class="modal fade" id="modalNotif" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <form>
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Message</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body modal-message">
-                    </div>
-                    <div class="modal-footer">
-                        <button type="submit" class="btn btn-primary" data-dismiss="modal">Tutup</button>
-                    </div>
+    <div class="modal fade" id="modalNotif">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Message</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
-            </form>
+                <div class="modal-body modal-message">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Tutup</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="modalDetail1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body row">
+                    <div class="col-sm-6" id="colLeft"></div>
+                    <div class="col-sm-6" id="colRight"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Tutup</button>
+                </div>
+            </div>
         </div>
     </div>
 </div>
+<script>
+    function showDetail(title, data, count) {
+        var m = $('#modalDetail1');
+        m.modal('show');
+        m.find('.modal-title').text(title);
+        $('#colLeft, #colRight').empty();
+        var m = $('#modalDetail');
+        m.modal('show');
+        var i = 1
+        col = $('#colLeft');
+        for (var k in data) {
+            if (i == count+1) {
+                col = $('#colRight');
+            }
+            col.append('<div class="form-group">'
+                    + '<label><b>' + i + '. ' + k + '</b></label>'
+                    + '<div class="card-body bg-light p-2" style="white-space: pre-wrap">' + data[k] + '</div>'
+                    + '</div>');
+            i++;
+        }
+    }
+</script>

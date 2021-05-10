@@ -80,7 +80,6 @@ if ($role == 'anggota') {
                                 <tr>
                                     <th>No</th>
                                     <th>Judul</th>
-                                    <th>Pasal</th>
                                     <th>Revisi</th>
                                     <th>Level</th>
                                     <th>Klasifikasi</th>
@@ -146,8 +145,8 @@ if ($role == 'anggota') {
                         <thead>
                             <tr>
                                 <th>No</th>
-                                <th>Pasal Terkait</th>
                                 <th>Judul Dokumen</th>
+                                <th>Pasal Terkait</th>
                                 <th style="width: 40%">Letak Pasal pada Dokumen</th>
                                 <th style="width: 90px">Aksi</th>
                             </tr>
@@ -1068,12 +1067,18 @@ if ($role == 'anggota') {
                 var btnDetail = '<span class="text-primary fa fa-info-circle" onclick="detailDocument(' + n + ')" title="Detail"></span>&nbsp';
                 var btnEdit = '<span class="text-primary fa fa-edit" onclick="editDokumen(' + n + ')"></span>&nbsp';
                 var btnDelete = '<span class="text-danger fa fa-trash" onclick="initHapusDokumen(' + n + ')"></span>';
-                var show = true;
+                d.judulLink = '-';
+                if (d.doc_type != null) {
+                    d.judulLink = d.judul;
+                } else if (d.doc_type == 'FILE') {
+                    d.judulLink = '<a href="<?= base_url('upload/dokumen') ?>' + d.path + '">' + d.judul + '</a>';
+                } else if (d.doc_type == 'URL') {
+                    d.judulLink = '<a href="' + d.path + '">' + d.judul + '</a>';
+                }
                 if (d.show) {
                     tbDocument.row.add([
                         d.nomor,
-                        d.judul,
-                        d.txt_pasals2,
+                        d.judulLink,
                         (d.versi == 0 | d.versi == null ? '-' : d.versi),
                         (d.jenis == null ? '-' : d.jenis),
                         (d.klasifikasi == null ? '-' : d.klasifikasi),
@@ -1415,8 +1420,8 @@ if ($role == 'anggota') {
             if (show) {
                 m.find('.files').append('<tr>'
                         + '<td>' + (i + 1) + '</td>'
-                        + '<td><div class="card-body bg-light p-2" style="white-space: pre-wrap; height: 80px; overflow-y: auto">' + d.txt_pasals2 + '</div></td>'
                         + '<td>' + d.judul + '</td>'
+                        + '<td><div class="card-body bg-light p-2" style="white-space: pre-wrap; height: 80px; overflow-y: auto">' + d.txt_pasals2 + '</div></td>'
                         + '<td style="white-space: pre-wrap">' + (d.custom_deskripsi) + '</td>'
                         + '<td>' + link
                         + '&nbsp<span class="btn btn-danger btn-sm fa fa-trash" onclick="initHapusDokumen(' + p.index_documents[i] + ')"></span>'
@@ -1656,7 +1661,7 @@ if ($role == 'anggota') {
     $('#formDistribusi').submit(function (e) {
         e.preventDefault();
         post(this, 'set_distribusi');
-//        $.post('<?php // echo site_url($module);         ?>/set_distribusi', $(this).serialize(), function (data) {
+//        $.post('<?php // echo site_url($module);             ?>/set_distribusi', $(this).serialize(), function (data) {
 //            $('#modalDistribusi').modal('hide');
 //            getPasal();
 //        });

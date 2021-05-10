@@ -17,6 +17,7 @@
                     <option value="">~ Status ~</option>
                     <option value="selesai">Selesai</option>
                     <option value="terlambat">Terlambat</option>
+                    <option value="menunggu">Menunggu</option>
                 </select>
             </div>
             <div class="col-sm-3">
@@ -55,23 +56,6 @@
                 <?php } ?>
             </tbody>
         </table>
-    </div>
-</div>
-<!--MODAL DETAIL-->
-<div class="modal fade" id="modalDetail">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title"></h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body"></div>
-            <div class="modal-footer">
-                <button class="btn btn-primary" data-dismiss="modal">Tutup</button>
-            </div>
-        </div>
     </div>
 </div>
 <!--MODAL UPLOAD IMPLEMENTASI-->
@@ -205,21 +189,12 @@
             'Tugas': d.tugas,
             'Form Terkait': d.form_terkait != null ? d.form_terkait.judul : '-',
             Sifat: d.sifat,
-            'PIC Pelaksana': txtPelaksana,
+            'PIC Pelaksana': '<div class="ml-3">' + txtPelaksana + '<div>',
             Periode: (d.periode != null ? d.periode + 'AN' : '-'),
             Jadwal: d.tanggal,
             Status: d.deadline,
         };
-        showDetail('Detail Tugas', data2);
-    }
-    function showDetail(title, data) {
-        var m = $('#modalDetail');
-        m.modal('show');
-        m.find('.modal-title').text(title);
-        m.find('.modal-body').empty();
-        for (var key in data) {
-            m.find('.modal-body').append('<div class="row"><div class="col-sm-4"><label>' + key + '</label></div><div class="col-sm-8">' + data[key] + '</div></div>');
-        }
+        showDetail('Detail Tugas', data2, 5);
     }
     function initUpload(idx) {
         $('#formUploadImplementasi').trigger('reset');

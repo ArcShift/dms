@@ -70,15 +70,15 @@
             'Judul Dokumen': d.dokumen.length == 0 ? '-' : d.dokumen[0].judul,
             'Letak Pasal pada Dokumen': d.dokumen.length == 0 ? '-' : d.dokumen[0].deskripsi,
         };
-        showDetail('Detail Tugas', data);
+        showDetail('Detail Pasal', data);
     }
-    function showDetail(title, data) {
-        var m = $('#modalDetail');
-        m.modal('show');
-        m.find('.modal-title').text(title);
-        m.find('.modal-body').empty();
-        for (var key in data) {
-            m.find('.modal-body').append('<div class="row"><div class="col-sm-4"><label>' + key + '</label></div><div class="col-sm-8">' + data[key] + '</div></div>');
-        }
-    }
+//    function showDetail(title, data) {
+//        var m = $('#modalDetail');
+//        m.modal('show');
+//        m.find('.modal-title').text(title);
+//        m.find('.modal-body').empty();
+//        for (var key in data) {
+//            m.find('.modal-body').append('<div class="row"><div class="col-sm-4"><label>' + key + '</label></div><div class="col-sm-8">' + data[key] + '</div></div>');
+//        }
+//    }
 </script>

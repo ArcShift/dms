@@ -50,5 +50,8 @@ class Akun extends MY_User {
         $this->data['data'] = $this->model->get();
         $this->render('akun');
     }
-
+    function logout() {
+        $this->session->unset_userdata('user');
+        redirect('login');
+    }
 }
