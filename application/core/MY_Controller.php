@@ -16,6 +16,9 @@ class MY_Controller extends CI_Controller {
         if (!$this->session->has_userdata('user')) {
             redirect('login');
         }
+        if($this->session->user['role'] == 'anggota'){
+            redirect('users');
+        }
         $this->load->model("base_model", "b_model");
         $this->load->model("m_setting");
         $this->role = $this->session->userdata['user']['role'];

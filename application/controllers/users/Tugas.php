@@ -32,8 +32,10 @@ class Tugas extends MY_User {
                 }
             }
         }
+        $this->data['menuStandard'] = true;
         $this->db->select('j.*, t.nama AS tugas, t.form_terkait, t.sifat, t.id_document');
         $this->db->join('tugas t', 't.id = j.id_tugas');
+        $this->db->join('document d', 'd.id = t.id_document AND d.id_standard='.$this->session->activeStandard['id']);
         $this->db->join('personil_task pt', 'pt.id_tugas = t.id');
         $this->db->join('position_personil pp', 'pp.id = pt.id_position_personil');
         $this->db->join('personil p', 'p.id = pp.id_personil');
@@ -49,7 +51,7 @@ class Tugas extends MY_User {
                     $d->deadline = 'selesai';
                 }
             } else {
-                $d->deadline = '-';
+                $d->deadline = 'menunggu';
             }
             $this->db->select('p.*');
             $this->db->join('position_personil pp', 'pp.id_personil = p.id');
