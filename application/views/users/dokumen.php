@@ -31,15 +31,18 @@
 </div>
 <!--MODAL DETAIL-->
 <div class="modal fade" id="modalDetail">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title"></h5>
+                <h5 class="modal-title">Detail Dokumen</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body"></div>
+            <div class="modal-body row">
+                <div class="col-sm-6" id="colLeft"></div>
+                <div class="col-sm-6" id="colRight"></div>
+            </div>
             <div class="modal-footer">
                 <button class="btn btn-primary" data-dismiss="modal">Tutup</button>
             </div>
@@ -56,32 +59,39 @@
         var path = d.type_doc == 'FILE' ? '<?= base_url('upload/dokumen/') ?>' + d.file : d.url;
         var pasal = '';
         for (var p of d.pasal) {
-            pasal += '<li>' + p.fullname + '</li>';
+            pasal += '<li class="ml-3">' + p.fullname + '</li>';
         }
-        var data = {
+        var dataLeft = {
             'Nomor Dokumen': d.nomor,
             'Judul Dokumen': d.judul,
             'Pasal Terkait': pasal,
             'Letak Pasal pada Dokumen': d.deskripsi,
+            'Revisi Dokumen': d.versi,
+        }
+        var dataRight = {
             'Pembuat Dokumen': d.pembuat,
             'Level Dokumen': d.jenis,
             'Klasifikasi Dokumen': (d.klasifikasi != null ? d.klasifikasi : '-'),
-            'Dokumen Terkait': (d.dokumen_terkait!= null?d.dokumen_terkait.judul:'-'),
+            'Dokumen Terkait': (d.dokumen_terkait != null ? d.dokumen_terkait.judul : '-'),
             'File Dokumen': '<a href="' + path + '" target="_blank">' + path + '</a>',
-        };
-        showDetail('Detail Tugas', data);
-    }
-    function showDetail(title, data) {
+        }
+        $('#colLeft, #colRight').empty();
         var m = $('#modalDetail');
         m.modal('show');
-        m.find('.modal-title').text(title);
-        m.find('.modal-body').empty();
-        for (var key in data) {
-//            m.find('.modal-body').append('<div class="row"><div class="col-sm-4"><label>' + key + '</label></div><div class="col-sm-8">' + data[key] + '</div></div>');
-            m.find('.modal-body').append('<div class="form-group">'
-                        + '<label><b>' + key + '</b></label>'
-                        + '<div class="card-body bg-light p-2" style="white-space: pre-wrap">' + data[key] + '</div>'
+        var i = 1
+            for (var k in dataLeft) {
+                $('#colLeft').append('<div class="form-group">'
+                        + '<label><b>' + i + '. ' + k + '</b></label>'
+                        + '<div class="card-body bg-light p-2" style="white-space: pre-wrap">' + dataLeft[k] + '</div>'
                         + '</div>');
-        }
+                i++;
+            }
+            for (var k in dataRight) {
+                $('#colRight').append('<div class="form-group">'
+                        + '<label><b>' + i + '. ' + k + '</b></label>'
+                        + '<div class="card-body bg-light p-2" style="white-space: pre-wrap">' + dataRight[k] + '</div>'
+                        + '</div>');
+                i++;
+            }
     }
 </script>
