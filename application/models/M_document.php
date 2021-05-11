@@ -148,7 +148,7 @@ class M_document extends CI_Model {
 
     function get_my_document() {
         $this->db->select('d.*');
-        $this->db->join->('distribution ds', 'ds.id_document');
+//        $this->db->join->('distribution ds', 'ds.id_document');
         $this->db->get('document d')->result();
     }
 

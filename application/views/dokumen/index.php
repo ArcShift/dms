@@ -1475,7 +1475,7 @@ if ($role == 'anggota') {
         }
         var data = {
             Nomor: d.nomor,
-            Pasal: d.txt_pasals_span,
+            Pasal: '<div style="height 120px; overflow-y:auto">'+d.txt_pasals_span+'</div>',
             'Letak Pasal Pada Dokumen': '<div style="white-space: pre-wrap">' + (d.deskripsi == null ? '-' : d.deskripsi) + '<div>',
             Judul: d.judul,
             'Pembuat Dokumen': (d.index_creator == null ? '-' : personil[d.index_creator].fullname),
