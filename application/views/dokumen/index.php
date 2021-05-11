@@ -1030,13 +1030,12 @@ if ($role == 'anggota') {
                 var btnDetail = '<span class="text-primary fa fa-info-circle" onclick="detailDocument(' + n + ')" title="Detail"></span>&nbsp';
                 var btnEdit = '<span class="text-primary fa fa-edit" onclick="editDokumen(' + n + ')"></span>&nbsp';
                 var btnDelete = '<span class="text-danger fa fa-trash" onclick="initHapusDokumen(' + n + ')"></span>';
-                d.judulLink = '-';
-                if (d.doc_type != null) {
+                if (d.type_doc == 'FILE') {
+                    d.judulLink = '<a target="_blank" href="<?= base_url('upload/dokumen/') ?>' + d.file + '">' + d.judul + '</a>';
+                } else if (d.type_doc == 'URL') {
+                    d.judulLink = '<a target="_blank" href="' + d.url + '">' + d.judul + '</a>';
+                }else{
                     d.judulLink = d.judul;
-                } else if (d.doc_type == 'FILE') {
-                    d.judulLink = '<a href="<?= base_url('upload/dokumen') ?>' + d.path + '">' + d.judul + '</a>';
-                } else if (d.doc_type == 'URL') {
-                    d.judulLink = '<a href="' + d.path + '">' + d.judul + '</a>';
                 }
                 if (d.show) {
                     tbDocument.row.add([
