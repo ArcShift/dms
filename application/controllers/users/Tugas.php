@@ -31,11 +31,42 @@ class Tugas extends MY_User {
                     $this->data['msgError'] = $this->db->error()['message'];
                 }
             }
+        } else if ($this->input->post('newTugas')) {
+            $this->db->set('id_document', $this->input->post('dokumen'));
+            $this->db->set('nama', $this->input->post('nama'));
+            $this->db->set('sifat', $this->input->post('sifat'));
+            $this->db->set('form_terkait', $this->input->post('form_terkait'));
+            $this->db->insert('tugas');
+            $id = $this->db->insert_id();
+            $this->db->set('id_tugas',$id);
+            $this->db->set('id_position_personil',$this->input->post('jabatan'));
+            $this->db->insert('personil_task');
+            $this->db->set('id_tugas', $id);
+            $this->db->set('tanggal', $this->input->post('jadwal'));
+            if ($this->input->post('type_dokumen')) {
+                $type = $this->input->post('type_dokumen');
+                $this->db->set('doc_type', $type);
+                if ($type == 'FILE') {
+                    $config['upload_path'] = './upload/implementasi';
+                    $config['allowed_types'] = '*';
+                    $this->load->library('upload', $config);
+                    if (!$this->upload->do_upload('dokumen')) {
+                        $this->data['msgError'] = $this->upload->display_errors();
+                    } else {
+                        $this->db->set('path', $this->upload->data()['file_name']);
+                        $this->db->set('upload_date', 'NOW()', false);
+                    }
+                } else {
+                    $this->db->set('path', $this->input->post('url'));
+                    $this->db->set('upload_date', 'NOW()', false);
+                }
+            }
+            $this->db->insert('jadwal');
         }
         $this->data['menuStandard'] = true;
         $this->db->select('j.*, t.nama AS tugas, t.form_terkait, t.sifat, t.id_document');
         $this->db->join('tugas t', 't.id = j.id_tugas');
-        $this->db->join('document d', 'd.id = t.id_document AND d.id_standard='.$this->session->activeStandard['id']);
+        $this->db->join('document d', 'd.id = t.id_document AND d.id_standard=' . $this->session->activeStandard['id']);
         $this->db->join('personil_task pt', 'pt.id_tugas = t.id');
         $this->db->join('position_personil pp', 'pp.id = pt.id_position_personil');
         $this->db->join('personil p', 'p.id = pp.id_personil');
@@ -63,7 +94,11 @@ class Tugas extends MY_User {
             $data[$k] = $d;
         }
         $this->data['data'] = $data;
-        $this->data['doc'] = $data;
+        $this->load->model('m_document');
+        $this->data['dokumen'] = $this->m_document->get_mine();
+        $this->db->select('uk.*, pp.id AS jabatan');
+        $this->db->join('position_personil pp', 'pp.id_unit_kerja = uk.id AND pp.id_personil='.$this->session->user['id_personil']);
+        $this->data['unit_kerja'] = $this->db->get('unit_kerja uk')->result();
         $this->render('tugas');
     }
 

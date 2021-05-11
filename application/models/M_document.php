@@ -144,12 +144,14 @@ class M_document extends CI_Model {
         $this->db->where('id_company', $company);
         $this->db->where('id_standard', $standard);
         return $this->db->get('document')->result_array();
-    }
+    }   
 
-    function get_my_document() {
+    function get_mine() {
         $this->db->select('d.*');
-//        $this->db->join->('distribution ds', 'ds.id_document');
-        $this->db->get('document d')->result();
+        $this->db->join('distribution ds', 'ds.id_document = d.id');
+        $this->db->join('position_personil pp', 'pp.id = ds.id_position_personil AND pp.id_personil='.$this->session->user['id_personil']);
+        $this->db->group_by('d.id');
+        return $this->db->get('document d')->result();
     }
 
 }

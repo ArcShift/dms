@@ -1,3 +1,6 @@
+<?php 
+//print_r($this->session->user);
+?>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
 <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
@@ -128,20 +131,60 @@
                     <input class="input-id" name="id" hidden=""/>
                     <div class="form-group">
                         <label><b>Dokumen</b></label>
-                        <select class="form-control">
+                        <select class="form-control" name="dokumen" required="">
                             <option value="">~Dokumen~</option>
+                            <?php foreach ($dokumen as $k => $d) { ?>
+                                <option value="<?= $d->id ?>"><?= $d->judul ?></option>
+                            <?php } ?>
                         </select>
                     </div>
                     <div class="form-group">
-                        <label><b>Pilih Dokumen</b></label>
-                        <select class="form-control">
+                        <label><b>Tugas</b></label>
+                        <input class="form-control" name="nama" required="">
+                    </div>
+                    <div class="form-group">
+                        <label><b>Form Terkait</b></label>
+                        <select class="form-control" name="form_terkait">
                             <option value="">~Dokumen~</option>
+                            <?php foreach ($dokumen as $k => $d) { ?>
+                            <option value="<?= $d->id ?>"><?= $d->judul ?></option>
+                            <?php } ?>
                         </select>
+                    </div>
+                    <div class="form-group">
+                        <label><b>Sifat</b></label>
+                        <select class="form-control" required="" name="sifat">
+                            <option value="">~Sifat~</option>
+                            <option value="WAJIB">Wajib</option>
+                            <option value="SITUASIONAL">Situasional</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label><b>Unit Kerja</b></label>
+                        <select class="form-control" required="" name="jabatan">
+                            <?php foreach ($unit_kerja as $k => $uk) { ?>
+                            <option value="<?= $uk->jabatan ?>"><?= $uk->name ?></option>
+                            <?php } ?>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label><b>Jadwal</b></label>
+                        <input class="form-control" type="date" name="jadwal">
+                    </div>
+                    <div class="form-group">
+                        <label><b>Bukti Implementasi</b></label>
+                        <br>
+                        <input class="radio-bukti2" type="radio" name="type_dokumen" value="file">
+                        <label>File</label>
+                        <input class="radio-bukti2" type="radio" name="type_dokumen" value="url">
+                        <label>Url</label>
+                        <input class="form-control input-bukti input-file" type="file" name="dokumen">
+                        <input class="form-control input-bukti input-url" type="url" name="url">
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-                    <button type="submit" class="btn btn-primary btn-simpan" name="upload" value="ok">Simpan</button>
+                    <button type="submit" class="btn btn-primary btn-simpan" name="newTugas" value="ok">Simpan</button>
                 </div>
             </div>
         </form>
@@ -241,6 +284,22 @@
     $('#btnTugasBaru').click(function () {
         var m = $('#modalTugasBaru');
         m.modal('show');
+        m.find('.input-bukti').hide();
+    });
+    $('.radio-bukti2').change(function () {
+        var type = $(this).val();
+        var m = $('#modalTugasBaru');
+        if (type == 'file') {
+            m.find('.input-file').show();
+            m.find('.input-file').prop('required', true);
+            m.find('.input-url').hide();
+            m.find('.input-url').prop('required', false);
+        } else if (type == 'url') {
+            m.find('.input-file').hide();
+            m.find('.input-file').prop('required', false);
+            m.find('.input-url').show();
+            m.find('.input-url').prop('required', true);
+        }
     });
     var start_date;
     var end_date;
