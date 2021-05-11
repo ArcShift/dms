@@ -6,7 +6,7 @@
     <div class="card-body">
         <button class="btn btn-sm btn-outline-primary float-right" id="btnTugasBaru">Buat Tugas Baru</button>
         <br/>    
-        <br/>    
+        <br/>
         <div class="row div-filter">
             <div class="col-sm-3"></div>
             <div class="col-sm-3">

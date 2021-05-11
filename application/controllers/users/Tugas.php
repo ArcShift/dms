@@ -63,7 +63,7 @@ class Tugas extends MY_User {
             $data[$k] = $d;
         }
         $this->data['data'] = $data;
-        $this->data['data'] = $data;
+        $this->data['doc'] = $data;
         $this->render('tugas');
     }
 

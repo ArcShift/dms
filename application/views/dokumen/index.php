@@ -938,6 +938,7 @@ if ($role == 'anggota') {
                 var d = data[i];
                 d.index_dokumen_pasal = [];
                 d.txt_pasals = '';
+                d.txt_pasals_span = '';
                 d.txt_pasals2 = '<div class="more-pasal-parent">';
                 var n2 = 0;
                 for (var j = 0; j < d.dokumen_pasal.length; j++) {
@@ -959,6 +960,7 @@ if ($role == 'anggota') {
                                 d.custom_deskripsi = '-';
                             }
                             d.txt_pasals += '<div><span class="badge badge-secondary">' + sortPasal[k].fullname + '</span></div>';
+                            d.txt_pasals_span += '<span class="badge badge-secondary mr-1">' + sortPasal[k].fullname + '</span>';
                             if (n2 == 10) {
                                 d.txt_pasals2 += '<div class="text-primary btn-show-more-pasal" style="cursor:pointer" onclick="showMorePasal(this)">lihat lebih lengkap</div>'
                                         + '<div class="more-pasal-child" style="display: none">'
@@ -1473,7 +1475,7 @@ if ($role == 'anggota') {
         }
         var data = {
             Nomor: d.nomor,
-            Pasal: d.txt_pasals2,
+            Pasal: d.txt_pasals_span,
             'Letak Pasal Pada Dokumen': '<div style="white-space: pre-wrap">' + (d.deskripsi == null ? '-' : d.deskripsi) + '<div>',
             Judul: d.judul,
             'Pembuat Dokumen': (d.index_creator == null ? '-' : personil[d.index_creator].fullname),
@@ -1483,7 +1485,7 @@ if ($role == 'anggota') {
             'Dokumen Terkait': doc_terkait,
             'Dokumen': link + '<div class="no-wrap" style="width:85%">' + txt_doc + '</div>',
         }
-        showDetail('Detail Tugas', data, 5);
+        showDetail('Detail Dokumen', data, 5);
     }
     function editDokumen(index) {
         var m = $('#modalDokumen');
