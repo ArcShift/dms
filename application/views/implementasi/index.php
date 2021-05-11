@@ -1024,7 +1024,6 @@ if ($role == 'anggota') {
         });
     }
     function getDokumen() {
-//        loadPage('dokumen_tabel', '#tab-test');
         $.getJSON('<?php echo site_url($module); ?>/get_dokumen', {'perusahaan': perusahaan, 'standar': standar}, function (data) {
             tbDocument.clear();
             tbDistribusi.clear();
@@ -1132,32 +1131,28 @@ if ($role == 'anggota') {
                 var btnDetail = '<span class="text-primary fa fa-info-circle" onclick="detailDocument(' + n + ')" title="Detail"></span>&nbsp';
                 var btnEdit = '<span class="text-primary fa fa-edit" onclick="editDokumen(' + n + ')"></span>&nbsp';
                 var btnDelete = '<span class="text-danger fa fa-trash" onclick="initHapusDokumen(' + n + ')"></span>';
-                var show = true;
-                if (d.show) {
-                    tbDocument.row.add([
+                if (d.type_doc == 'FILE') {
+                    d.judulLink = '<a target="_blank" href="<?= base_url('upload/dokumen/') ?>' + d.file + '">' + d.judul + '</a>';
+                } else if (d.type_doc == 'URL') {
+                    d.judulLink = '<a target="_blank" href="' + d.url + '">' + d.judul + '</a>';
+                } else {
+                    d.judulLink = d.judul;
+                }
+                $('.select-dokumen').append('<option value="' + d.id + '">' + d.judul + '</option>');
+                $('.select-2-document').append('<option value="' + d.id + '">' + d.judul + '</option>');
+                var btnDetail = '<span class="text-primary fa fa-info-circle" title="Detail" onclick="detailDistribusi(' + n + ')"></span>&nbsp';
+                var btnEdit = '<span class="text-primary fa fa-edit" title="Edit" onclick="editDistribusi(' + n + ')"></span>';
+                if (d.jenis < 4 & d.jenis >= 1) {
+                    tbDistribusi.row.add([
                         d.nomor,
                         d.judul,
-                        d.txt_pasals2,
-                        (d.versi == 0 | d.versi == null ? '-' : d.versi),
-                        (d.jenis == null ? '-' : d.jenis),
-                        (d.klasifikasi == null ? '-' : d.klasifikasi),
-                        (role == 'anggota' ? btnDetail : btnDetail + btnEdit + btnDelete),
+                        (d.jenis == null ? '-' : 'Level ' + d.jenis),
+                        d.creator_name,
+                        (role == 'anggota' ? d.txtDistribusi : d.txtDistribusi),
+                        (role == 'anggota' ? btnDetail : btnDetail + btnEdit),
                     ]);
-                    $('.select-dokumen').append('<option value="' + d.id + '">' + d.judul + '</option>');
-                    $('.select-2-document').append('<option value="' + d.id + '">' + d.judul + '</option>');
-                    var btnDetail = '<span class="text-primary fa fa-info-circle" title="Detail" onclick="detailDistribusi(' + n + ')"></span>&nbsp';
-                    var btnEdit = '<span class="text-primary fa fa-edit" title="Edit" onclick="editDistribusi(' + n + ')"></span>';
-                    if (d.jenis < 4 & d.jenis >= 1) {
-                        tbDistribusi.row.add([
-                            d.nomor,
-                            d.judul,
-                            (d.jenis == null ? '-' : 'Level ' + d.jenis),
-                            d.creator_name,
-                            (role == 'anggota' ? d.txtDistribusi : d.txtDistribusi),
-                            (role == 'anggota' ? btnDetail : btnDetail + btnEdit),
-                        ]);
-                    }
                 }
+
                 n++;
                 d.index_tugas = [];
                 sortDokumen.push(d);
@@ -1188,8 +1183,7 @@ if ($role == 'anggota') {
                     if (d.show) {
                         tbTugas.row.add([
                             '',
-//                            d.txt_pasals,
-                            d.judul,
+                            d.judulLink,
                             '',
                             '',
                             '',
@@ -1259,7 +1253,7 @@ if ($role == 'anggota') {
                                         t.txtUnitKerja,
                                         '',
                                         t.nama,
-                                        (t.index_form_terkait == null ? '-' : sortDokumen[t.index_form_terkait].judul),
+                                        (t.index_form_terkait == null ? '-' : sortDokumen[t.index_form_terkait].judulLink),
                                         '<span class="badge badge-secondary">' + t.sifat + '</span>',
                                         t.txt_personil,
                                         (role == 'anggota' ? btnDetail : btnDetail + btnEdit + btnHapus),
@@ -1317,9 +1311,9 @@ if ($role == 'anggota') {
                 if (t.show) {
                     tbJadwal.row.add([
                         '---',
-                        sortDokumen[t.index_document].judul,
+                        sortDokumen[t.index_document].judulLink,
                         t.nama,
-                        (t.index_form_terkait == null ? '-' : sortDokumen[t.index_form_terkait].judul),
+                        (t.index_form_terkait == null ? '-' : sortDokumen[t.index_form_terkait].judulLink),
                         '---',
                         '---',
                         '---',
@@ -1766,7 +1760,7 @@ if ($role == 'anggota') {
     $('#formDistribusi').submit(function (e) {
         e.preventDefault();
         post(this, 'set_distribusi');
-//        $.post('<?php // echo site_url($module);                        ?>/set_distribusi', $(this).serialize(), function (data) {
+//        $.post('<?php // echo site_url($module);                         ?>/set_distribusi', $(this).serialize(), function (data) {
 //            $('#modalDistribusi').modal('hide');
 //            getPasal();
 //        });
