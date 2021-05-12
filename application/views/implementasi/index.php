@@ -34,10 +34,10 @@ if ($role == 'anggota') {
     .div-filter{
         padding-bottom: 10px;
     }
-    tr.odd td:first-child,
+/*    tr.odd td:first-child,
     tr.even td:first-child {
         padding-left: 3em;
-    }
+    }*/
 </style>
 <!--CONTENT-->
 <div class="main-card mb-3 card">   
