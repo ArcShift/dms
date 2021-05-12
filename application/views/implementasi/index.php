@@ -9,7 +9,9 @@ if ($role == 'anggota') {
 ?>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/rowgroup/1.1.2/js/dataTables.rowGroup.min.js"></script>
 <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/rowgroup/1.1.2/css/rowGroup.dataTables.min.css" />
 <style>
     .col-tgl{
         min-width: 110;
@@ -32,6 +34,10 @@ if ($role == 'anggota') {
     .div-filter{
         padding-bottom: 10px;
     }
+    tr.odd td:first-child,
+    tr.even td:first-child {
+        padding-left: 3em;
+    }
 </style>
 <!--CONTENT-->
 <div class="main-card mb-3 card">   
@@ -41,9 +47,10 @@ if ($role == 'anggota') {
                 <!--TAB-->
                 <ul class="nav nav-tabs">
                     <!--<li class="nav-item"><a data-toggle="tab" href="#tab-pasal" class="nav-link active">Pasal</a></li>-->
-                    <li class="nav-item"><a data-toggle="tab" href="#tab-tugas" class="nav-link active">Tugas</a></li>
-                    <!--<li class="nav-item"><a data-toggle="tab" href="#tab-tugas2" class="nav-link active">Tugas2</a></li>-->
+                    <li class="nav-item"><a data-toggle="tab" href="#tab-tugas" class="nav-link">Tugas</a></li>
+                    <li class="nav-item"><a data-toggle="tab" href="#tab-tugas2" class="nav-link">Tugas2</a></li>
                     <li class="nav-item"><a data-toggle="tab" href="#tab-jadwal" class="nav-link">Jadwal</a></li>
+                    <li class="nav-item"><a data-toggle="tab" href="#tab-jadwal2" class="nav-link active">Jadwal2</a></li>
                     <li class="nav-item"><a data-toggle="tab" href="#tab-implementasi" class="nav-link">Pelaksana Tugas</a></li>
                 </ul>
                 <div class="tab-content">
@@ -85,7 +92,6 @@ if ($role == 'anggota') {
                                 <thead>
                                     <tr>
                                         <th>Unit Kerja</th>
-                                        <!--<th>Pasal</th>-->
                                         <th>Judul Dokumen</th>
                                         <th>Tugas</th>
                                         <th>Form Terkait</th>
@@ -100,11 +106,21 @@ if ($role == 'anggota') {
                     </div>
                     <!--TUGAS 2-->
                     <div class="tab-pane" id="tab-tugas2" role="tabpanel">
+                        <div class="row div-filter">
+                            <div class="col-sm-3"></div>
+                            <div class="col-sm-3"></div>
+                            <div class="col-sm-3">
+                                <select class="form-control form-control-sm filter-unit-kerja" onchange="filterUnitKerja(this, tbTugas2, 0)"></select>
+                            </div>
+                            <div class="col-sm-3">
+                                <select class="form-control form-control-sm filter-personil" onchange="filterPersonil(this, tbTugas2, 5)"></select>
+                            </div>
+                        </div>
                         <div class="table-responsive">
-                            <table class="table table-striped" id="table-tugas" style="min-width: 100%">
+                            <table class="table table-striped" id="table-tugas2" style="min-width: 100%">
                                 <thead>
                                     <tr>
-                                        <th>Pasal</th>
+                                        <th>Unit Kerja</th>
                                         <th>Judul Dokumen</th>
                                         <th>Tugas</th>
                                         <th>Form Terkait</th>
@@ -132,6 +148,36 @@ if ($role == 'anggota') {
                             </div>
                         </div>
                         <table class="table table-striped" id="table-jadwal" style="min-width: 100%">
+                            <thead>
+                                <tr>
+                                    <th>Unit Kerja</th>
+                                    <th>Judul Dokumen</th>
+                                    <th>Tugas</th>
+                                    <th>Form Terkait</th>
+                                    <th>Periode</th>
+                                    <th class="col-tgl">Jadwal</th>
+                                    <th>PIC Pelaksana</th>
+                                    <th class="col-aksi" style="min-width: 70px">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                    <!--JADWAL 2-->
+                    <div class="tab-pane" id="tab-jadwal2" role="tabpanel">
+                        <div class="row div-filter">
+                            <div class="col-sm-3"></div>
+                            <div class="col-sm-3">
+                                <input class="form-control form-control-sm pull-right datesearch" id="datesearchJd" placeholder="Search by date range..">
+                            </div>
+                            <div class="col-sm-3">
+                                <select class="form-control form-control-sm filter-unit-kerja" onchange="filterUnitKerja(this, tbJadwal2, 0)"></select>
+                            </div>
+                            <div class="col-sm-3">
+                                <select class="form-control form-control-sm filter-personil" onchange="filterPersonil(this, tbJadwal2, 6)"></select>
+                            </div>
+                        </div>
+                        <table class="table table-striped" id="table-jadwal2" style="min-width: 100%">
                             <thead>
                                 <tr>
                                     <th>Unit Kerja</th>
@@ -795,8 +841,7 @@ if ($role == 'anggota') {
             $('.group-select-perusahaan').hide();
             idPersonil = <?= $personil ?>;
         }
-        $('#perusahaan').change();
-        $('#tab-tugas').addClass('active');
+        $('#tab-jadwal2').addClass('active');
         $('.select-2').select2();
         $('.radio-ulangi-jadwal[value=TIDAK]').click();
         $('.input-path').hide();
@@ -880,6 +925,28 @@ if ($role == 'anggota') {
                 }
             ]
         });
+        tbJadwal2 = $('#table-jadwal2').DataTable({
+            "order": [],
+            rowGroup: {
+                dataSrc: [1, 2]
+            },
+            "ordering": false,
+            "paging": false,
+            "search": {
+                "smart": false
+            },
+            "bInfo": false,
+            "bLengthChange": true,
+            "language": {
+                "emptyTable": "Untuk membuat jadwal, buat dahulu detail tugas yang perlu dikerjakan pada Tab Tugas."
+            },
+            "columnDefs": [
+                {
+                    "targets": [0, 1, 2, 3, 4],
+                    "visible": false,
+                }
+            ]
+        });
         tbTugas = $('#table-tugas').DataTable({
             "order": [],
             "ordering": false,
@@ -895,6 +962,28 @@ if ($role == 'anggota') {
             "columnDefs": [
                 {
                     "targets": [0],
+                    "visible": false,
+                }
+            ]
+        });
+        tbTugas2 = $('#table-tugas2').DataTable({
+            order: [[1, 'asc']],
+            rowGroup: {
+                dataSrc: [1]
+            },
+            "ordering": false,
+            "paging": false,
+            "search": {
+                "smart": false
+            },
+            "bInfo": false,
+            "bLengthChange": true,
+            "language": {
+                "emptyTable": "Untuk membuat tugas, pertama ubah dahulu data Jenis Dokumen pada Tab Dokumen, menjadi Level 1 / Level 2 / Level 3 / Level 4"
+            },
+            "columnDefs": [
+                {
+                    "targets": [0, 1],
                     "visible": false,
                 }
             ]
@@ -1171,7 +1260,7 @@ if ($role == 'anggota') {
         $.getJSON('<?php echo site_url($module); ?>/get_tugas', {perusahaan: perusahaan, standar: standar}, function (data) {
             sortTugas = [];
             tbTugas.clear();
-            $('#tbTugas2').empty();
+            tbTugas2.clear();
             $('.input-form-terkait').empty();
             $('.input-form-terkait').append('<option value="">-- form terkait --</option>');
             for (var i = 0; i < sortDokumen.length; i++) {
@@ -1190,11 +1279,6 @@ if ($role == 'anggota') {
                             '',
                             (role == 'anggota' ? '' : '<span class="text-primary fa fa-plus" title="Tambah" onclick="initCreateTugas(' + i + ')"></span>'),
                         ]);
-                        $('#tbTugas2').append('<tr>'
-                                + '<td col>' + d.txt_pasals + '</td>'
-                                + '<td>' + '<span class="text-primary fa fa-plus" title="Tambah" onclick="initCreateTugas(' + i + ')"></span>' + d.judul + '</td>'
-                                + '</tr>');
-
                         var nTgs = 0;
                         for (var j = 0; j < data.length; j++) {
                             var t = data[j];
@@ -1258,6 +1342,15 @@ if ($role == 'anggota') {
                                         t.txt_personil,
                                         (role == 'anggota' ? btnDetail : btnDetail + btnEdit + btnHapus),
                                     ]).node();
+                                    tbTugas2.row.add([
+                                        t.txtUnitKerja,
+                                        d.judulLink + '<span class="text-primary float-right fa fa-plus  mt-2" title="Tambah" onclick="initCreateTugas(' + i + ')"></span>',
+                                        t.nama,
+                                        (t.index_form_terkait == null ? '-' : sortDokumen[t.index_form_terkait].judulLink),
+                                        '<span class="badge badge-secondary">' + t.sifat + '</span>',
+                                        t.txt_personil,
+                                        '<span class="float-right">' + (role == 'anggota' ? btnDetail : btnDetail + btnEdit + btnHapus) + '</span>',
+                                    ]);
                                     if (nTgs >= 3) {
                                         $(tr).addClass('tgs-more' + i);
                                         $(tr).addClass('tgs-more');
@@ -1296,6 +1389,7 @@ if ($role == 'anggota') {
                 }
             }
             tbTugas.draw();
+            tbTugas2.draw();
             getJadwal();
             $('.tgs-more').hide();
         });
@@ -1303,6 +1397,7 @@ if ($role == 'anggota') {
     function getJadwal() {
         $.getJSON('<?= site_url($module); ?>/get_jadwal', {'perusahaan': perusahaan, 'standar': standar}, function (data) {
             tbJadwal.clear();
+            tbJadwal2.clear();
             tbImplementasi.clear();
             sortJadwal = [];
             var n = 0;
@@ -1362,6 +1457,16 @@ if ($role == 'anggota') {
                                 t.txt_personil,
                                 btnDetail + (role == 'anggota' ? '' : btnEdit + btnDelete),
                             ]).node();
+                            tbJadwal2.row.add([
+                                t.txtUnitKerja,
+                                sortDokumen[t.index_document].judulLink,
+                                t.nama+'<span class="text-primary fa fa-plus float-right" title="Tambah" onclick="initCreateJadwal(' + i + ')"></span>',
+                                (t.index_form_terkait == null ? '-' : sortDokumen[t.index_form_terkait].judulLink),
+                                (jd.periode == null ? '-' : (jd.periode + 'AN')),
+                                jd.tgl,
+                                t.txt_personil,
+                                '<span class="float-right">' +btnDetail + (role == 'anggota' ? '' : btnEdit + btnDelete)+ '</span>',
+                            ]).node();
                             if (nJd >= 3) {
                                 $(tr).addClass('jadwal-more' + i);
                                 $(tr).addClass('jd-more');
@@ -1410,6 +1515,7 @@ if ($role == 'anggota') {
                 }
             }
             tbJadwal.draw();
+            tbJadwal2.draw();
             tbImplementasi.draw();
             $('.jd-more').hide();
         });
@@ -1760,7 +1866,7 @@ if ($role == 'anggota') {
     $('#formDistribusi').submit(function (e) {
         e.preventDefault();
         post(this, 'set_distribusi');
-//        $.post('<?php // echo site_url($module);                         ?>/set_distribusi', $(this).serialize(), function (data) {
+//        $.post('<?php // echo site_url($module);                               ?>/set_distribusi', $(this).serialize(), function (data) {
 //            $('#modalDistribusi').modal('hide');
 //            getPasal();
 //        });
