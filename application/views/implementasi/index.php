@@ -113,7 +113,7 @@ if ($role == 'anggota') {
                                 <select class="form-control form-control-sm filter-unit-kerja" onchange="filterUnitKerja(this, tbTugas2, 0)"></select>
                             </div>
                             <div class="col-sm-3">
-                                <select class="form-control form-control-sm filter-personil" onchange="filterPersonil(this, tbTugas2, 5)"></select>
+                                <select class="form-control form-control-sm filter-personil" onchange="filterPersonil(this, tbTugas2, 6)"></select>
                             </div>
                         </div>
                         <div class="table-responsive">
@@ -121,6 +121,7 @@ if ($role == 'anggota') {
                                 <thead>
                                     <tr>
                                         <th>Unit Kerja</th>
+                                        <th>Judul Dokumen</th>
                                         <th>Judul Dokumen</th>
                                         <th>Tugas</th>
                                         <th>Form Terkait</th>
@@ -174,13 +175,15 @@ if ($role == 'anggota') {
                                 <select class="form-control form-control-sm filter-unit-kerja" onchange="filterUnitKerja(this, tbJadwal2, 0)"></select>
                             </div>
                             <div class="col-sm-3">
-                                <select class="form-control form-control-sm filter-personil" onchange="filterPersonil(this, tbJadwal2, 6)"></select>
+                                <select class="form-control form-control-sm filter-personil" onchange="filterPersonil(this, tbJadwal2, 8)"></select>
                             </div>
                         </div>
                         <table class="table table-striped" id="table-jadwal2" style="min-width: 100%">
                             <thead>
                                 <tr>
                                     <th>Unit Kerja</th>
+                                    <th>Judul Dokumen</th>
+                                    <th>Tugas</th>
                                     <th>Judul Dokumen</th>
                                     <th>Tugas</th>
                                     <th>Form Terkait</th>
@@ -942,7 +945,7 @@ if ($role == 'anggota') {
             },
             "columnDefs": [
                 {
-                    "targets": [0, 1, 2, 3, 4],
+                    "targets": [0, 1, 2],
                     "visible": false,
                 }
             ]
@@ -1345,6 +1348,7 @@ if ($role == 'anggota') {
                                     tbTugas2.row.add([
                                         t.txtUnitKerja,
                                         d.judulLink + '<span class="text-primary float-right fa fa-plus  mt-2" title="Tambah" onclick="initCreateTugas(' + i + ')"></span>',
+                                        '',
                                         t.nama,
                                         (t.index_form_terkait == null ? '-' : sortDokumen[t.index_form_terkait].judulLink),
                                         '<span class="badge badge-secondary">' + t.sifat + '</span>',
@@ -1461,6 +1465,8 @@ if ($role == 'anggota') {
                                 t.txtUnitKerja,
                                 sortDokumen[t.index_document].judulLink,
                                 t.nama+'<span class="text-primary fa fa-plus float-right" title="Tambah" onclick="initCreateJadwal(' + i + ')"></span>',
+                                '',
+                                '',
                                 (t.index_form_terkait == null ? '-' : sortDokumen[t.index_form_terkait].judulLink),
                                 (jd.periode == null ? '-' : (jd.periode + 'AN')),
                                 jd.tgl,
