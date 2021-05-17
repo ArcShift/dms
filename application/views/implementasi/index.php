@@ -37,6 +37,9 @@ if ($role == 'anggota') {
     .dtrg-group td {
         padding-left: 0!important;
     }
+    .dtrg-level-0 td{
+        font-weight: normal!important;
+    }
 </style>
 <!--CONTENT-->
 <div class="main-card mb-3 card">   
