@@ -1,6 +1,6 @@
 <?php
 
-class M_Jadwal extends CI_Model {
+class M_jadwal2 extends CI_Model {
 
     function jadwal_saya() {
 //        $this->db->select('j.*, t.nama AS tugas, t.form_terkait, t.sifat, t.id_document');
