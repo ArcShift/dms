@@ -169,7 +169,7 @@
                     </div>
                     <div class="form-group">
                         <label><b>Jadwal</b></label>
-                        <input class="form-control" type="date" name="jadwal">
+                        <input class="form-control" type="date" name="jadwal" required="">
                     </div>
                     <div class="form-group">
                         <label><b>Bukti Implementasi</b></label>
