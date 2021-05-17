@@ -126,7 +126,7 @@ if ($role == 'anggota') {
                                         <th>Form Terkait</th>
                                         <th>Sifat</th>
                                         <th>PIC Pelakasana</th>
-                                        <th class="text-center" style="max-width: 60px">Aksi</th>
+                                        <th class="text-center" style="max-width: 70px">Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody id="tbTugas2"></tbody>
