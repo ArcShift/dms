@@ -34,10 +34,9 @@ if ($role == 'anggota') {
     .div-filter{
         padding-bottom: 10px;
     }
-/*    tr.odd td:first-child,
-    tr.even td:first-child {
-        padding-left: 3em;
-    }*/
+    .dtrg-group td {
+        padding-left: 0!important;
+    }
 </style>
 <!--CONTENT-->
 <div class="main-card mb-3 card">   
@@ -127,7 +126,7 @@ if ($role == 'anggota') {
                                         <th>Form Terkait</th>
                                         <th>Sifat</th>
                                         <th>PIC Pelakasana</th>
-                                        <th class="col-aksi" style="min-width: 70px">Aksi</th>
+                                        <th class="text-center" style="max-width: 60px">Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody id="tbTugas2"></tbody>
@@ -190,7 +189,7 @@ if ($role == 'anggota') {
                                     <th>Periode</th>
                                     <th class="col-tgl">Jadwal</th>
                                     <th>PIC Pelaksana</th>
-                                    <th class="col-aksi" style="min-width: 70px">Aksi</th>
+                                    <th class="text-center" style="max-width: 60px">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody></tbody>
@@ -996,6 +995,7 @@ if ($role == 'anggota') {
         $('.tab-pane').each(function (index) {
             $(this).find('.div-filter .col-sm-3').eq(0).append($(this).find('.dataTables_filter .form-control'));
         });
+        $('.dtrg-level-1').prepend('<td></td>');
     });
     function afterReady() {
         perusahaan = <?= $this->session->activeCompany['id'] ?>;
@@ -1522,6 +1522,7 @@ if ($role == 'anggota') {
             }
             tbJadwal.draw();
             tbJadwal2.draw();
+            $('.dtrg-level-1').prepend('<td></td>');
             tbImplementasi.draw();
             $('.jd-more').hide();
         });
