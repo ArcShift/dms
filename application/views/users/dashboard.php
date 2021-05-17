@@ -317,7 +317,7 @@ $pImp = json_decode($pemenuhan);
                 }
             }
             ?>
-            <div class="card-body">Total Tugas: <?= count($listTugas) ?>, Selesai: <?= $totalSelesai ?>
+            <div class="card-body">Total Tugas: <?= count($listJadwal) ?>, Selesai: <?= $totalSelesai ?>
                 <div class="table-responsive">
                     <table class="align-middle mb-0 table table-borderless table-striped table-hover" id="tableTugas">
                         <thead>
@@ -331,28 +331,28 @@ $pImp = json_decode($pemenuhan);
                             </tr>
                         </thead>
                         <tbody>
-                            <?php foreach ($listTugas as $k => $t) { ?>
+                            <?php foreach ($listJadwal as $k => $j) { ?>
                                 <tr>
                                     <td class="text-center text-muted"><?= $k + 1 ?></td>
                                     <td>
                                         <ul>
-                                            <?php foreach ($t['pelaksana'] as $tp) { ?>
+                                            <?php foreach ($j->tugas->pelaksana as $p) { ?>
                                                 <li>
-                                                    <b><?= $tp['nama'] ?></b>
-                                                    (<?= $tp['unit_kerja'] ?>)
+                                                    <b><?= $p->fullname ?></b>
+                                                    (<?= $p->unit_kerja ?>)
                                                 </li>
                                             <?php } ?>
                                         </ul>
                                     </td>
-                                    <td class="text-center"><?= $t['tugas'] ?></td>
-                                    <td class="text-center"><?= $t['tanggal'] ?></td>
+                                    <td class="text-center"><?= $j->tugas->nama ?></td>
+                                    <td class="text-center"><?= $j->tanggal ?></td>
                                     <?php
                                     $status = '-';
                                     $statusString = '-';
-                                    if ($t['upload_date'] > $t['tanggal']) {
+                                    if ($j->upload_date > $j->tanggal) {
                                         $status = '<div class="badge badge-danger">Terlambat</div>';
                                         $statusString = 'Terlambat';
-                                    } else if ($t['upload_date'] == null) {
+                                    } else if ($j->upload_date == null) {
                                         $status = '<div class="badge badge-info">Menunggu</div>';
                                         $statusString = 'Menunggu';
                                     } else {
@@ -360,18 +360,18 @@ $pImp = json_decode($pemenuhan);
                                         $statusString = 'Selesai';
                                     }
                                     $url_document = '-';
-                                    if ($t['file'] !== null) {
-                                        $url_document = $t['file'];
-                                    } else if ($t['url'] !== null) {
-                                        $url_document = $t['url'];
-                                    }
+//                                    if ($j->file !== null) {
+//                                        $url_document = $t['file'];
+//                                    } else if ($t['url'] !== null) {
+//                                        $url_document = $t['url'];
+//                                    }
                                     // form terkait
                                     $formTerkait = '';
                                     $this->db->reset_query();
-                                    $tugas = $this->db->select('*')->from('tugas')->where('id', $t['id_tugas'])->get()->row();
-                                    if ($tugas->form_terkait) {
-                                        $formTerkait = $this->db->select('*')->from('document')->where('id', $tugas->form_terkait)->get()->row()->judul;
-                                    }
+//                                    $tugas = $this->db->select('*')->from('tugas')->where('id', $t['id_tugas'])->get()->row();
+//                                    if ($tugas->form_terkait) {
+//                                        $formTerkait = $this->db->select('*')->from('document')->where('id', $tugas->form_terkait)->get()->row()->judul;
+//                                    }
                                     ?>
                                     <td class="text-center">
                                         <?= $status ?>
@@ -379,15 +379,15 @@ $pImp = json_decode($pemenuhan);
                                     <td class="text-center">
                                         <button type="button" class="btn btn-primary btn-sm" 
                                                 onclick="detailTugas(
-                                                                        '<?= $t['tugas'] ?>',
-                                                                        '<?= $t['tanggal'] ?>',
-                                                                        '<?= $t['judul'] ?>',
-                                                                        '<?= $formTerkait ?>',
-                                                                        '<?= $t['sifat'] ?>',
-                                                                        '<?= $t['name'] ?>',
-                                                                        '<?= $statusString ?>',
-                                                                        '<?= $url_document ?>'
-                                                                        )">Detail Tugas</button>
+                                                                '<?= $j->tugas->nama ?>',
+                                                                '<?= $j->tanggal ?>',
+                                                                '<?php // $t['judul'] ?>',
+                                                                '<?php // $formTerkait ?>',
+                                                                '<?= $j->tugas->sifat ?>',
+                                                                '<?php // $t['name'] ?>',
+                                                                '<?= $statusString ?>',
+                                                                '<?php // $url_document ?>'
+                                                                )">Detail Tugas</button>
                                     </td>
                                 </tr>
                             <?php } ?>
@@ -508,7 +508,7 @@ $pImp = json_decode($pemenuhan);
         m.find('#tugas-preview').html('<a href="' + preview + '">' + preview + '</a>');
         m.modal('show');
     }
-</script>
-<script>
-    function afterReady() {}
+    function periodeTugas() {
+        
+    }
 </script>
