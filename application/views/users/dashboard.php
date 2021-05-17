@@ -299,12 +299,13 @@ $pImp = json_decode($pemenuhan);
 <div class="row">
     <div class="col-md-12">
         <div class="main-card mb-3 card">
-            <div class="card-header">Tugas <?= $periode_tugas ?> Ini
+            <div class="card-header">
+                <span id="periodeTugasTitle"></span>
                 <div class="btn-actions-pane-right">
                     <div role="group" class="btn-group-sm btn-group">
-                        <button class="<?= $periode_tugas == 'hari' ? 'active' : '' ?> btn btn-focus" onclick="window.location.href = '<?= site_url($module . '?periode_tugas=hari'); ?>'">Hari ini</button>
-                        <button class="<?= $periode_tugas == 'minggu' ? 'active' : '' ?> btn btn-focus" onclick="window.location.href = '<?= site_url($module . '?periode_tugas=minggu'); ?>'">Minggu ini</button>
-                        <button class="<?= $periode_tugas == 'bulan' ? 'active' : '' ?> btn btn-focus" onclick="window.location.href = '<?= site_url($module . '?periode_tugas=bulan'); ?>'">Bulan ini</button>
+                        <button class="btn btn-focus" onclick="periodeTugas('<?= date('Y-m-d') ?>', 'Hari')">Hari ini</button>
+                        <button class="btn btn-focus" onclick="periodeTugas('<?= date('Y-m') ?>', 'Bulan')">Bulan ini</button>
+                        <button class="btn btn-focus" onclick="periodeTugas('<?= date('Y') ?>', 'Tahun')">Tahun ini</button>
                     </div>
                 </div>
             </div>
@@ -487,14 +488,15 @@ $pImp = json_decode($pemenuhan);
     });
     var dataTableConfig = {
         "ordering": false,
-        "searching": false,
+//        "searching": false,
         "info": false,
         "lengthChange": false,
         "pageLength": 9,
+        sDom: 'lrtip',
     }
     $('#tableDistribusi').DataTable(dataTableConfig);
     dataTableConfig.pageLength = 5;
-    $('#tableTugas').DataTable(dataTableConfig);
+    var tbTugas = $('#tableTugas').DataTable(dataTableConfig);
 
     function detailTugas(tugas, tanggal, dokumen, form_terkait, sifat, pic, status, preview) {
         var m = $('#modalTugas');
@@ -508,7 +510,9 @@ $pImp = json_decode($pemenuhan);
         m.find('#tugas-preview').html('<a href="' + preview + '">' + preview + '</a>');
         m.modal('show');
     }
-    function periodeTugas() {
-        
+    function periodeTugas(periode, label) {
+        tbTugas.column(3).search(periode).draw();
+        $('#periodeTugasTitle').html('Tugas '+label+' ini');
     }
+//    periodeTugas('<?= date('Y-m-d') ?>', 'Hari');
 </script>
