@@ -21,7 +21,7 @@
                         <td><?= $d['jenis'] ?></td>
                         <td><?= $d['klasifikasi'] ?></td>
                         <td>
-                            <button class="btn btn-sm btn-outline-primary fa fa-search" onclick="detail(<?= $k ?>)"></button>
+                            <button class="btn btn-sm btn-outline-primary fa fa-info-circle" onclick="detail(<?= $k ?>)"></button>
                         </td>
                     </tr>
                 <?php } ?>
