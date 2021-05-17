@@ -12,7 +12,6 @@
  * @author kaafi
  */
 class Dev extends CI_Controller {
-
     function sort() {
         $standard = $this->db->get('standard')->result_array();
         foreach ($standard as $std) {
@@ -140,4 +139,18 @@ class Dev extends CI_Controller {
             $this->db->update('document');
         }
     }
+    function document_set_pasal(){//if document has no pasal
+        $this->db->select('d.*');
+        $this->db->join('document_pasal dp', 'dp.id_document = d.id', 'LEFT');
+        $this->db->where('dp.id IS NULL');
+        $this->db->group_by('d.id');
+        $docs = $this->db->get('document d')->result();
+        foreach ($docs as $d) {
+            echo $d->id.'<br>';
+            $this->db->set('id_document', $d->id);
+            $this->db->set('id_pasal', $d->id_pasal);
+            $this->db->insert('document_pasal');
+        }
+    }
+    
 }
