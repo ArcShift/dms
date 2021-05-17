@@ -47,7 +47,7 @@ class Dashboard extends MY_User {
                 $this->db->where('id_company', $company['id']);
                 $this->data['countPersonil'] = $this->db->count_all_results('personil');
                 $this->data['listTugas'] = $this->model->listTugas($company['id'], $standard['id'], $periode_tugas);
-                $this->load->model('m_jadwal');
+                $this->load->model('M_jadwal');
                 $this->data['listJadwal'] = $this->m_jadwal->jadwal_saya();
             }
         }
