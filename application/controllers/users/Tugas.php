@@ -35,11 +35,12 @@ class Tugas extends MY_User {
             $this->db->set('id_document', $this->input->post('dokumen'));
             $this->db->set('nama', $this->input->post('nama'));
             $this->db->set('sifat', $this->input->post('sifat'));
-            $this->db->set('form_terkait', $this->input->post('form_terkait'));
+            if ($this->input->post('form_terkait'))
+                $this->db->set('form_terkait', $this->input->post('form_terkait'));
             $this->db->insert('tugas');
             $id = $this->db->insert_id();
-            $this->db->set('id_tugas',$id);
-            $this->db->set('id_position_personil',$this->input->post('jabatan'));
+            $this->db->set('id_tugas', $id);
+            $this->db->set('id_position_personil', $this->input->post('jabatan'));
             $this->db->insert('personil_task');
             $this->db->set('id_tugas', $id);
             $this->db->set('tanggal', $this->input->post('jadwal'));
@@ -98,7 +99,7 @@ class Tugas extends MY_User {
         $this->data['dokumen'] = $this->m_document->dokumen_saya();
         $this->data['form_terkait'] = $this->m_document->form_terkait();
         $this->db->select('uk.*, pp.id AS jabatan');
-        $this->db->join('position_personil pp', 'pp.id_unit_kerja = uk.id AND pp.id_personil='.$this->session->user['id_personil']);
+        $this->db->join('position_personil pp', 'pp.id_unit_kerja = uk.id AND pp.id_personil=' . $this->session->user['id_personil']);
         $this->data['unit_kerja'] = $this->db->get('unit_kerja uk')->result();
         $this->render('tugas');
     }
