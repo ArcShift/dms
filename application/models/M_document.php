@@ -146,12 +146,18 @@ class M_document extends CI_Model {
         return $this->db->get('document')->result_array();
     }   
 
-    function get_mine() {
+    function dokumen_saya(){
         $this->db->select('d.*');
         $this->db->join('distribution ds', 'ds.id_document = d.id');
         $this->db->join('position_personil pp', 'pp.id = ds.id_position_personil AND pp.id_personil='.$this->session->user['id_personil']);
         $this->db->group_by('d.id');
+        $this->db->where('d.id_standard', $this->session->activeStandard['id']);
         return $this->db->get('document d')->result();
     }
-
+    function form_terkait() {
+        $this->db->where('id_standard', $this->session->activeStandard['id']);
+        $this->db->where('id_company', $this->session->activeCompany['id']);
+        $this->db->where('jenis', 4);
+        return $this->db->get('document')->result();
+    }
 }

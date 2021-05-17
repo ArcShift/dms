@@ -403,7 +403,7 @@ foreach ($menus as $k => $m) {
                 });
             }
             function switchStandard(standard) {
-                $.get('<?= site_url('dashboard/switch_standard') ?>', {standard: standard}, function (data) {
+                $.get('<?= site_url('users/dashboard/switch_standard') ?>', {standard: standard}, function (data) {
                     if (data == 'success') {
                         location.reload();
                     }

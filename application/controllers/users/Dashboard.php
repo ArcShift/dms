@@ -52,4 +52,15 @@ class Dashboard extends MY_User {
         $this->render('dashboard');
     }
 
+    function switch_standard() {
+        if ($this->input->get('standard')) {
+            $this->db->select('s.*');
+            $this->db->join('company_standard cs', 'cs.id_standard = s.id');
+            $this->db->where('cs.id', $this->input->get('standard'));
+            $activeStandard = $this->db->get('standard s')->row_array();
+            $this->session->set_userdata('activeStandard', $activeStandard);
+            echo 'success';
+        }
+    }
+
 }

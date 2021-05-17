@@ -95,7 +95,8 @@ class Tugas extends MY_User {
         }
         $this->data['data'] = $data;
         $this->load->model('m_document');
-        $this->data['dokumen'] = $this->m_document->get_mine();
+        $this->data['dokumen'] = $this->m_document->dokumen_saya();
+        $this->data['form_terkait'] = $this->m_document->form_terkait();
         $this->db->select('uk.*, pp.id AS jabatan');
         $this->db->join('position_personil pp', 'pp.id_unit_kerja = uk.id AND pp.id_personil='.$this->session->user['id_personil']);
         $this->data['unit_kerja'] = $this->db->get('unit_kerja uk')->result();

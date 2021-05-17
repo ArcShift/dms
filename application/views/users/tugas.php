@@ -71,7 +71,7 @@
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
-                </div>s
+                </div>
                 <input class="input-id" name="id" hidden=""/>
                 <div class="modal-body">
                     <div class="form-group">
@@ -146,7 +146,7 @@
                         <label><b>Form Terkait</b></label>
                         <select class="form-control" name="form_terkait">
                             <option value="">~Dokumen~</option>
-                            <?php foreach ($dokumen as $k => $d) { ?>
+                            <?php foreach ($form_terkait as $k => $d) { ?>
                             <option value="<?= $d->id ?>"><?= $d->judul ?></option>
                             <?php } ?>
                         </select>
