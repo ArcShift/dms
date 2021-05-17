@@ -318,7 +318,9 @@ $pImp = json_decode($pemenuhan);
                 }
             }
             ?>
-            <div class="card-body">Total Tugas: <?= count($listJadwal) ?>, Selesai: <?= $totalSelesai ?>
+            <div class="card-body">Total Tugas: <?= count($listJadwal) ?>
+<!--                , Selesai: <?= $totalSelesai ?>
+                -->
                 <div class="table-responsive">
                     <table class="align-middle mb-0 table table-borderless table-striped table-hover" id="tableTugas">
                         <thead>
