@@ -152,5 +152,7 @@ class Dev extends CI_Controller {
             $this->db->insert('document_pasal');
         }
     }
-    
+    function datatable_test(){
+        $this->load->view('test/datatable2');
+    }
 }
