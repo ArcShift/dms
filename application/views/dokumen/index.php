@@ -1580,7 +1580,7 @@ if ($role == 'anggota') {
             doc += '<div>' + sortDokumen[d2].judul + '</div>';
         }
         var data = {
-            Pasal: d.txt_pasals,
+            Pasal: '<div style="max-height: 120px; overflow-y:auto">'+d.txt_pasals_span+'</div>',
             'Judul Dokumen': d.judul,
             Klasifikasi: d.klasifikasi,
             'Dokumen Terkait': doc,

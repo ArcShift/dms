@@ -1421,6 +1421,7 @@ if ($role == 'anggota') {
                         '---',
                         (role == 'anggota' ? '' : '<span class="text-primary fa fa-plus" title="Tambah" onclick="initCreateJadwal(' + i + ')"></span>'),
                     ]);
+
                     var nJd = 0;
                     for (var j = 0; j < data.length; j++) {
                         var jd = data[j];
@@ -1467,15 +1468,15 @@ if ($role == 'anggota') {
                             tbJadwal2.row.add([
                                 t.txtUnitKerja,
                                 sortDokumen[t.index_document].judulLink,
-                                t.nama+'<span class="text-primary fa fa-plus float-right" title="Tambah" onclick="initCreateJadwal(' + i + ')"></span>',
+                                t.nama + '<span class="text-primary fa fa-plus float-right" title="Tambah" onclick="initCreateJadwal(' + i + ')"></span>',
                                 '',
                                 '',
                                 (t.index_form_terkait == null ? '-' : sortDokumen[t.index_form_terkait].judulLink),
                                 (jd.periode == null ? '-' : (jd.periode + 'AN')),
                                 jd.tgl,
                                 t.txt_personil,
-                                '<span class="float-right">' +btnDetail + (role == 'anggota' ? '' : btnEdit + btnDelete)+ '</span>',
-                            ]).node();
+                                '<span class="float-right">' + btnDetail + (role == 'anggota' ? '' : btnEdit + btnDelete) + '</span>',
+                            ]);
                             if (nJd >= 3) {
                                 $(tr).addClass('jadwal-more' + i);
                                 $(tr).addClass('jd-more');
@@ -1503,7 +1504,7 @@ if ($role == 'anggota') {
 //                                        + btnPreview
                             ]);
                             jd.indexTugas = i;
-                            sortTugas[i].indexJadwal.push(n);
+                            sortTugas[i].indexJadwal.push(sortJadwal.length);
                             sortJadwal.push(jd);
                             n++;
                             nJd++;
@@ -1522,6 +1523,21 @@ if ($role == 'anggota') {
                         ]);
                     }
                 }
+                if (sortTugas[i].indexJadwal.length == 0) {
+                    tbJadwal2.row.add([
+                        t.txtUnitKerja,
+                        sortDokumen[t.index_document].judulLink,
+                        t.nama + '<span class="text-primary fa fa-plus float-right" title="Tambah" onclick="initCreateJadwal(' + i + ')"></span>',
+                        '',
+                        '',
+                        '',
+                        '',
+                        '',
+                        '',
+                        '',
+                    ]);
+                }
+                console.log(n);
             }
             tbJadwal.draw();
             tbJadwal2.draw();
@@ -1876,7 +1892,7 @@ if ($role == 'anggota') {
     $('#formDistribusi').submit(function (e) {
         e.preventDefault();
         post(this, 'set_distribusi');
-//        $.post('<?php // echo site_url($module);                               ?>/set_distribusi', $(this).serialize(), function (data) {
+//        $.post('<?php // echo site_url($module);                                 ?>/set_distribusi', $(this).serialize(), function (data) {
 //            $('#modalDistribusi').modal('hide');
 //            getPasal();
 //        });
