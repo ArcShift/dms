@@ -163,7 +163,7 @@ foreach ($menus as $k => $m) {
                                         <a class="btn btn-sm btn-outline-primary form-control" href="<?= site_url('users/notifikasi') ?>">Tampilkan lebih banyak</a>
                                     </div>
                                     &nbsp;&nbsp;&nbsp;
-                                    <div >
+                                    <div>
                                         <a href="<?php echo site_url('users/akun/logout') ?>" class="nav-link fa fa-sign-out-alt text-dark">
                                             &nbsp;
                                             <span>

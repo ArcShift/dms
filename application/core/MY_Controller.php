@@ -16,7 +16,7 @@ class MY_Controller extends CI_Controller {
         if (!$this->session->has_userdata('user')) {
             redirect('login');
         }
-        if($this->session->user['role'] == 'anggota'){
+        if ($this->session->user['role'] == 'anggota') {
             redirect('users');
         }
         $this->load->model("base_model", "b_model");
@@ -126,7 +126,7 @@ class MY_Controller extends CI_Controller {
 
 }
 
-class MY_Admin extends CI_Controller {
+class MY_Admin extends MY_Core {
 
     protected $data = [];
 
@@ -142,23 +142,36 @@ class MY_Admin extends CI_Controller {
 
 }
 
-class MY_User extends CI_Controller {
+class MY_Core extends CI_Controller {
 
     protected $data = [];
-    protected $role = null;
-     
-    function __construct() {
+
+//    protected $role = null;
+
+    public function __construct() {
         parent::__construct();
         if (!$this->session->has_userdata('user')) {
             redirect('login');
-            $this->role = $this->session->userdata['user']['role'];
+//            $this->role = $this->session->userdata['user']['role'];
         }
-        // check if logged_in
+    }
+
+}
+
+class MY_User extends MY_Core {
+
+    function __construct() {
+        parent::__construct();
+        if ($this->session->user['role'] != 'anggota') {
+            redirect();
+        }
     }
 
     function render($view) {
+        $this->load->model('m_notif', 'm_notif');
+        $this->data['count_unread'] = $this->m_notif->count_unread();
+        $this->data['notif'] = $this->m_notif->get(10);
         $this->data['view'] = $view;
-        $this->data['notif'] = [];//TODO: fix later
         $this->load->view('template/user', $this->data);
     }
 
