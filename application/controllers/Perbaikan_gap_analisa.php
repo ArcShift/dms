@@ -148,8 +148,12 @@ class Perbaikan_gap_analisa extends MY_Controller {
             }
             $this->db->insert('bukti_perbaikan_gap_analisa');
         } elseif ($this->input->post('hapus')) {
+            $data = $this->db->get_where('bukti_perbaikan_gap_analisa', ['id' => $this->input->post('id')])->row();
             $this->db->where('id', $this->input->post('id'));
             $this->db->delete('bukti_perbaikan_gap_analisa');
+            if ($data->type == 'FILE' & file_exists('upload/rev_gap_analisa/' . $data->path)) {//delete old file
+                unlink('upload/rev_gap_analisa/' . $data->path);
+            }
         }
         $this->subModule = 'edit';
         $this->subTitle = 'Upload Bukti';

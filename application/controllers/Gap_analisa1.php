@@ -127,7 +127,7 @@ class Gap_analisa1 extends MY_Controller {
         $this->db->join('kuesioner k', 'k.id = ks.id_kuesioner');
         $this->db->join('pasal p', 'p.id = k.id_pasal');
         $data = $this->db->get_where('kuesioner_status ks', ['ks.id' => $this->input->get('id')])->row_array();
-        $data['pasal']= $this->db->get_where('pasal',['id'=>$data['id_pasal']])->row();
+        $data['pasal'] = $this->db->get_where('pasal', ['id' => $data['id_pasal']])->row();
         echo json_encode($data);
     }
 
@@ -157,8 +157,12 @@ class Gap_analisa1 extends MY_Controller {
             }
             $this->db->insert('bukti_gap_analisa');
         } elseif ($this->input->post('hapus')) {
+            $data = $this->db->get_where('bukti_gap_analisa', ['id' => $this->input->post('id')])->row();
             $this->db->where('id', $this->input->post('id'));
             $this->db->delete('bukti_gap_analisa');
+            if ($data->type == 'FILE' & file_exists('upload/gap_analisa/' . $data->path)) {//delete old file
+                unlink('upload/gap_analisa/' . $data->path);
+            }
         }
         $this->subTitle = 'Upload Bukti';
         $this->subModule = 'edit';
