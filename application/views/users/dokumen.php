@@ -29,26 +29,6 @@
         </table>
     </div>
 </div>
-<!--MODAL DETAIL-->
-<div class="modal fade" id="modalDetail">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Detail Dokumen</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body row">
-                <div class="col-sm-6" id="colLeft"></div>
-                <div class="col-sm-6" id="colRight"></div>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-primary" data-dismiss="modal">Tutup</button>
-            </div>
-        </div>
-    </div>
-</div>
 <script>
     var docs = <?= json_encode($docs) ?>;
     function detail(idx) {
@@ -57,41 +37,23 @@
         var txtPasal = '';
         var txtPelaksana = '';
         var path = d.type_doc == 'FILE' ? '<?= base_url('upload/dokumen/') ?>' + d.file : d.url;
+        var file = d.type_doc == 'FILE' ?  d.file : d.url;
         var pasal = '';
         for (var p of d.pasal) {
             pasal += '<li class="ml-3">' + p.fullname + '</li>';
         }
-        var dataLeft = {
+        var data = {
             'Nomor Dokumen': d.nomor,
             'Judul Dokumen': d.judul,
             'Pasal Terkait': pasal,
             'Letak Pasal pada Dokumen': d.deskripsi,
             'Revisi Dokumen': d.versi,
-        }
-        var dataRight = {
             'Pembuat Dokumen': d.pembuat,
             'Level Dokumen': d.jenis,
             'Klasifikasi Dokumen': (d.klasifikasi != null ? d.klasifikasi : '-'),
             'Dokumen Terkait': (d.dokumen_terkait != null ? d.dokumen_terkait.judul : '-'),
-            'File Dokumen': '<a href="' + path + '" target="_blank">' + path + '</a>',
+            'File Dokumen': '<a href="' + path + '" target="_blank">' + (file==null?'':file) + '</a>',
         }
-        $('#colLeft, #colRight').empty();
-        var m = $('#modalDetail');
-        m.modal('show');
-        var i = 1
-            for (var k in dataLeft) {
-                $('#colLeft').append('<div class="form-group">'
-                        + '<label><b>' + i + '. ' + k + '</b></label>'
-                        + '<div class="card-body bg-light p-2" style="white-space: pre-wrap">' + dataLeft[k] + '</div>'
-                        + '</div>');
-                i++;
-            }
-            for (var k in dataRight) {
-                $('#colRight').append('<div class="form-group">'
-                        + '<label><b>' + i + '. ' + k + '</b></label>'
-                        + '<div class="card-body bg-light p-2" style="white-space: pre-wrap">' + dataRight[k] + '</div>'
-                        + '</div>');
-                i++;
-            }
+        showDetail('Detail Dokumen', data, 5);
     }
 </script>

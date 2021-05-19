@@ -78,6 +78,11 @@ foreach ($menus as $k => $m) {
                 padding: 20px;
                 padding-left: 30px;
             }
+            .box-detail{
+                white-space: pre-wrap;
+                max-height: 120px;
+                overflow-y: auto;
+            }
         </style>
     </head>
     <body>
@@ -424,7 +429,7 @@ foreach ($menus as $k => $m) {
                     }
                     col.append('<div class="form-group">'
                             + '<label><b>' + i + '. ' + k + '</b></label>'
-                            + '<div class="card-body bg-light p-2" style="white-space: pre-wrap">' + data[k] + '</div>'
+                            + '<div class="card-body bg-light p-2 box-detail">' + data[k] + '</div>'
                             + '</div>');
                     i++;
                 }

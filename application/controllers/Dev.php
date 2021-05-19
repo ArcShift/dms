@@ -155,4 +155,7 @@ class Dev extends CI_Controller {
     function datatable_test(){
         $this->load->view('test/datatable2');
     }
+    function file_test(){
+        print_r(scandir('upload/implementasi'));
+    }
 }

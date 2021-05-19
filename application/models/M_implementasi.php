@@ -79,6 +79,9 @@ class M_implementasi extends CI_Model {
         $this->db->join('jadwal j', 'j.id_tugas = t.id');
         $this->db->where('j.id', $j['id']);
         $t = $this->db->get('tugas t')->row_array();
+        if($j['doc_type']=='FILE'& file_exists('upload/implementasi/'.$j['path'])){//delete old file
+            unlink('upload/implementasi/'.$j['path']);
+        }
         $this->setLog('U_IMP', $j['id']);
         return true;
     }
