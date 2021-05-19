@@ -1,4 +1,4 @@
-<?php 
+<?php
 //print_r($this->session->user);
 ?>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
@@ -118,73 +118,79 @@
 </div>
 <!--MODAL TUGAS BARU-->
 <div class="modal fade" id="modalTugasBaru">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-lg" role="document">
         <form method="post" enctype="multipart/form-data">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Tugas Baru</h5>
+                    <h5 class="modal-title">Buat Tugas Baru</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
                     <input class="input-id" name="id" hidden=""/>
-                    <div class="form-group">
-                        <label><b>Dokumen</b></label>
-                        <select class="form-control" name="dokumen" required="">
-                            <option value="">~Dokumen~</option>
-                            <?php foreach ($dokumen as $k => $d) { ?>
-                                <option value="<?= $d->id ?>"><?= $d->judul ?></option>
-                            <?php } ?>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label><b>Tugas</b></label>
-                        <input class="form-control" name="nama" required="">
-                    </div>
-                    <div class="form-group">
-                        <label><b>Form Terkait</b></label>
-                        <select class="form-control" name="form_terkait">
-                            <option value="">~Dokumen~</option>
-                            <?php foreach ($form_terkait as $k => $d) { ?>
-                            <option value="<?= $d->id ?>"><?= $d->judul ?></option>
-                            <?php } ?>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label><b>Sifat</b></label>
-                        <select class="form-control" required="" name="sifat">
-                            <option value="">~Sifat~</option>
-                            <option value="WAJIB">Wajib</option>
-                            <option value="SITUASIONAL">Situasional</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label><b>Unit Kerja</b></label>
-                        <select class="form-control" required="" name="jabatan">
-                            <?php foreach ($unit_kerja as $k => $uk) { ?>
-                            <option value="<?= $uk->jabatan ?>"><?= $uk->name ?></option>
-                            <?php } ?>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label><b>Jadwal</b></label>
-                        <input class="form-control" type="date" name="jadwal" required="">
-                    </div>
-                    <div class="form-group">
-                        <label><b>Bukti Implementasi</b></label>
-                        <br>
-                        <input class="radio-bukti2" type="radio" name="type_dokumen" value="file">
-                        <label>File</label>
-                        <input class="radio-bukti2" type="radio" name="type_dokumen" value="url">
-                        <label>Url</label>
-                        <input class="form-control input-bukti input-file" type="file" name="dokumen">
-                        <input class="form-control input-bukti input-url" type="url" name="url">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label><b>Dokumen</b></label>
+                                <select class="form-control" name="dokumen" required="">
+                                    <option value="">~Dokumen~</option>
+                                    <?php foreach ($dokumen as $k => $d) { ?>
+                                        <option value="<?= $d->id ?>"><?= $d->judul ?></option>
+                                    <?php } ?>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label><b>Tugas</b></label>
+                                <input class="form-control" name="nama" required="">
+                            </div>
+                            <div class="form-group">
+                                <label><b>Form Terkait</b></label>
+                                <select class="form-control" name="form_terkait">
+                                    <option value="">~Dokumen~</option>
+                                    <?php foreach ($form_terkait as $k => $d) { ?>
+                                        <option value="<?= $d->id ?>"><?= $d->judul ?></option>
+                                    <?php } ?>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label><b>Sifat</b></label>
+                                <select class="form-control" required="" name="sifat">
+                                    <option value="">~Sifat~</option>
+                                    <option value="WAJIB">Wajib</option>
+                                    <option value="SITUASIONAL">Situasional</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label><b>Unit Kerja</b></label>
+                                <select class="form-control" required="" name="jabatan">
+                                    <?php foreach ($unit_kerja as $k => $uk) { ?>
+                                        <option value="<?= $uk->jabatan ?>"><?= $uk->name ?></option>
+                                    <?php } ?>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label><b>Jadwal</b></label>
+                                <input class="form-control" type="date" name="jadwal" required="" value="<?= date('Y-m-d') ?>">
+                            </div>
+                            <div class="form-group">
+                                <label><b>Bukti Implementasi</b></label>
+                                <br>
+                                <input class="radio-bukti2" type="radio" name="type_dokumen" value="file">
+                                <label>File</label>
+                                <input class="radio-bukti2" type="radio" name="type_dokumen" value="url">
+                                <label>Url</label>
+                                <input class="form-control input-bukti input-file" type="file" name="dokumen">
+                                <input class="form-control input-bukti input-url" type="url" name="url">
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-                    <button type="submit" class="btn btn-primary btn-simpan" name="newTugas" value="ok">Simpan</button>
+                    <button type="submit" class="btn btn-primary" name="newTugas" value="ok">Simpan</button>
                 </div>
             </div>
         </form>
@@ -236,6 +242,7 @@
             Periode: (d.periode != null ? d.periode + 'AN' : '-'),
             Jadwal: d.tanggal,
             Status: d.deadline,
+            Asal: d.asal,
         };
         showDetail('Detail Tugas', data2, 5);
     }
@@ -268,7 +275,7 @@
     $('.radio-bukti').change(function () {
         var type = $(this).val();
         var m = $('#modalUploadImplementasi');
-        $('.btn-simpan').show();
+        m.find('.btn-simpan').show();
         if (type == 'file') {
             m.find('.input-file').show();
             m.find('.input-file').prop('required', true);

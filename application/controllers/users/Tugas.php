@@ -35,6 +35,7 @@ class Tugas extends MY_User {
             $this->db->set('id_document', $this->input->post('dokumen'));
             $this->db->set('nama', $this->input->post('nama'));
             $this->db->set('sifat', $this->input->post('sifat'));
+            $this->db->set('asal', 'MANDIRI');
             if ($this->input->post('form_terkait'))
                 $this->db->set('form_terkait', $this->input->post('form_terkait'));
             $this->db->insert('tugas');
@@ -47,7 +48,7 @@ class Tugas extends MY_User {
             if ($this->input->post('type_dokumen')) {
                 $type = $this->input->post('type_dokumen');
                 $this->db->set('doc_type', $type);
-                if ($type == 'FILE') {
+                if ($type == 'file') {
                     $config['upload_path'] = './upload/implementasi';
                     $config['allowed_types'] = '*';
                     $this->load->library('upload', $config);
@@ -65,7 +66,7 @@ class Tugas extends MY_User {
             $this->db->insert('jadwal');
         }
         $this->data['menuStandard'] = true;
-        $this->db->select('j.*, t.nama AS tugas, t.form_terkait, t.sifat, t.id_document');
+        $this->db->select('j.*, t.nama AS tugas, t.form_terkait, t.sifat, t.id_document, t.asal');
         $this->db->join('tugas t', 't.id = j.id_tugas');
         $this->db->join('document d', 'd.id = t.id_document AND d.id_standard=' . $this->session->activeStandard['id']);
         $this->db->join('personil_task pt', 'pt.id_tugas = t.id');
