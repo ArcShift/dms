@@ -53,6 +53,7 @@
                             <td class="text-center"><span class="badge badge-secondary"><?= $countDocument ?></span></td>
                             <td class="text-center"><span class="badge badge-secondary"><?= $countDistribusi ?></span></td>
                             <td class="text-center">
+                                <button class="btn btn-outline-primary fa fa-edit" value="<?= $uk['id_position_personil'] ?>" name="jobdesk" title="Job Desk"></button>
                                 <span class="btn btn-outline-danger fa fa-trash" onclick="initDelete(<?= $k ?>)" title="Hapus"></span>
                             </td>
                         </tr>
