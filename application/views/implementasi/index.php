@@ -49,10 +49,10 @@ if ($role == 'anggota') {
                 <!--TAB-->
                 <ul class="nav nav-tabs">
                     <!--<li class="nav-item"><a data-toggle="tab" href="#tab-pasal" class="nav-link active">Pasal</a></li>-->
-                    <li class="nav-item"><a data-toggle="tab" href="#tab-tugas" class="nav-link">Tugas</a></li>
-                    <li class="nav-item"><a data-toggle="tab" href="#tab-tugas2" class="nav-link">Tugas2</a></li>
-                    <li class="nav-item"><a data-toggle="tab" href="#tab-jadwal" class="nav-link">Jadwal</a></li>
-                    <li class="nav-item"><a data-toggle="tab" href="#tab-jadwal2" class="nav-link active">Jadwal2</a></li>
+                    <!--<li class="nav-item"><a data-toggle="tab" href="#tab-tugas" class="nav-link">Tugas</a></li>-->
+                    <li class="nav-item"><a data-toggle="tab" href="#tab-tugas2" class="nav-link active">Tugas</a></li>
+                    <!--<li class="nav-item"><a data-toggle="tab" href="#tab-jadwal" class="nav-link">Jadwal</a></li>-->
+                    <li class="nav-item"><a data-toggle="tab" href="#tab-jadwal2" class="nav-link">Jadwal</a></li>
                     <li class="nav-item"><a data-toggle="tab" href="#tab-implementasi" class="nav-link">Pelaksana Tugas</a></li>
                 </ul>
                 <div class="tab-content">
@@ -846,7 +846,7 @@ if ($role == 'anggota') {
             $('.group-select-perusahaan').hide();
             idPersonil = <?= $personil ?>;
         }
-        $('#tab-jadwal2').addClass('active');
+        $('#tab-tugas2').addClass('active');
         $('.select-2').select2();
         $('.radio-ulangi-jadwal[value=TIDAK]').click();
         $('.input-path').hide();
