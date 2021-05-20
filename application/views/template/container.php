@@ -235,7 +235,7 @@ if ($this->input->get('standard')) {
                                 <?php foreach ($this->session->userdata('module') as $key => $m) { ?>
                                     <?php if ($m['on_menu'] == 'YES' & $m['acc_read']) { ?>
                                         <li id="module-<?php echo $m['name'] ?>" class="menu-item">
-                                            <a href="<?php echo site_url($m['name']) ?>" class="<?php echo $m['name'] == $this->uri->segment(1) ? 'mm-active' : '' ?>">
+                                            <a href="<?php echo site_url(ucfirst($m['name'])) ?>" class="<?php echo $m['name'] == strtolower($this->uri->segment(1)) ? 'mm-active' : '' ?>">
                                                 <i class="metismenu-icon fa fa-<?php echo $m['icon'] ?>"></i>
                                                 <b>
                                                     <?= isset($m['title']) ? $m['title'] : ucwords(str_replace('_', ' ', $m['name'])); ?>
