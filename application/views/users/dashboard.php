@@ -303,9 +303,9 @@ $pImp = json_decode($pemenuhan);
                 <span id="periodeTugasTitle"></span>
                 <div class="btn-actions-pane-right">
                     <div role="group" class="btn-group-sm btn-group">
-                        <button class="btn btn-focus" onclick="periodeTugas('<?= date('Y-m-d') ?>', 'Hari')">Hari ini</button>
-                        <button class="btn btn-focus" onclick="periodeTugas('<?= date('Y-m') ?>', 'Bulan')">Bulan ini</button>
-                        <button class="btn btn-focus" onclick="periodeTugas('<?= date('Y') ?>', 'Tahun')">Tahun ini</button>
+                        <button class="btn btn-focus" onclick="periodeTugas('<?= date('Y-m-d') ?>', 'Hari ini')">Hari ini</button>
+                        <button class="btn btn-focus" onclick="periodeTugas('<?= date('Y-m') ?>', 'Bulan ini')">Bulan ini</button>
+                        <button class="btn btn-focus" onclick="periodeTugas('<?= date('Y') ?>', 'Tahun ini')">Tahun ini</button>
                     </div>
                 </div>
             </div>
@@ -318,7 +318,7 @@ $pImp = json_decode($pemenuhan);
                 }
             }
             ?>
-            <div class="card-body">Total Tugas: <?= count($listJadwal) ?>
+            <div class="card-body">Total Tugas: <span id="totalTugas"></span>
 <!--                , Selesai: <?= $totalSelesai ?>
                 -->
                 <div class="table-responsive">
@@ -514,7 +514,9 @@ $pImp = json_decode($pemenuhan);
     }
     function periodeTugas(periode, label) {
         tbTugas.column(3).search(periode).draw();
-        $('#periodeTugasTitle').html('Tugas '+label+' ini');
+        $('#periodeTugasTitle').html('Tugas '+label);
+        $('#totalTugas').html(tbTugas.page.info().recordsDisplay);
+        console.log(tbTugas.page.info());
     }
-//    periodeTugas('<?= date('Y-m-d') ?>', 'Hari');
+    periodeTugas('', '');
 </script>
