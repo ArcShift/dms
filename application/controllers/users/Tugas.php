@@ -64,7 +64,7 @@ class Tugas extends MY_User {
                 }
             }
             $this->db->insert('jadwal');
-        }else if($this->input->post('delete')){
+        } else if ($this->input->post('delete')) {
             $this->db->where('id_tugas', $this->input->post('id'));
             $this->db->delete('personil_task');
             $this->db->where('id_tugas', $this->input->post('id'));
@@ -72,10 +72,22 @@ class Tugas extends MY_User {
             $this->db->where('id', $this->input->post('id'));
             $this->db->delete('tugas');
             //TODO: unlink file
-            $this->data['msgSuccess']= 'Berhasil menghapus data';
+            $this->data['msgSuccess'] = 'Berhasil menghapus data';
+        } else if ($this->input->post('edit')) {
+            $jd = $this->db->get_where('jadwal', ['id' => $this->input->post('id')])->row();
+            $this->db->set('id_document', $this->input->post('dokumen'));
+            $this->db->set('nama', $this->input->post('nama'));
+            if ($this->input->post('form_terkait')) {
+                $this->db->set('form_terkait', $this->input->post('form_terkait'));
+            }else{
+                $this->db->set('form_terkait', null);
+            }
+            $this->db->set('sifat', $this->input->post('sifat'));
+            $this->db->where('id', $jd->id_tugas);
+            $this->db->update('tugas');
         }
         $this->data['menuStandard'] = true;
-        $this->db->select('j.*, t.nama AS tugas, t.form_terkait, t.sifat, t.id_document, t.asal');
+        $this->db->select('j.*, t.nama AS tugas, t.form_terkait AS id_form, t.sifat, t.id_document, t.asal, pp.id AS jabatan');
         $this->db->join('tugas t', 't.id = j.id_tugas');
         $this->db->join('document d', 'd.id = t.id_document AND d.id_standard=' . $this->session->activeStandard['id']);
         $this->db->join('personil_task pt', 'pt.id_tugas = t.id');
@@ -99,7 +111,7 @@ class Tugas extends MY_User {
             $this->db->join('position_personil pp', 'pp.id_personil = p.id');
             $this->db->join('personil_task pt', 'pt.id_position_personil = pp.id AND pt.id_tugas =' . $d->id_tugas);
             $d->pelaksana = $this->db->get('personil p')->result();
-            $d->form_terkait = $this->db->get_where('document', ['id' => $d->form_terkait])->row();
+            $d->form_terkait = $this->db->get_where('document', ['id' => $d->id_form])->row();
             $this->load->model('m_document');
             $d->dokumen = $this->m_document->get($d->id_document);
             $data[$k] = $d;

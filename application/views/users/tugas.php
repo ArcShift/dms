@@ -200,6 +200,76 @@
         </form>
     </div>
 </div>
+<!--MODAL EDIT TUGAS-->
+<div class="modal fade" id="modalEdit">
+    <div class="modal-dialog modal-lg" role="document">
+        <form method="post" enctype="multipart/form-data">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Edit Tugas</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <input class="input-id" name="id" hidden=""/>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label><b>Dokumen</b></label>
+                                <select class="form-control select-dokumen" name="dokumen" required="">
+                                    <option value="">~Dokumen~</option>
+                                    <?php foreach ($dokumen as $k => $d) { ?>
+                                        <option value="<?= $d->id ?>"><?= $d->judul ?></option>
+                                    <?php } ?>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label><b>Tugas</b></label>
+                                <input class="form-control input-tugas" name="nama" required="">
+                            </div>
+                            <div class="form-group">
+                                <label><b>Form Terkait</b></label>
+                                <select class="form-control input-form" name="form_terkait">
+                                    <option value="">~Dokumen~</option>
+                                    <?php foreach ($form_terkait as $k => $d) { ?>
+                                        <option value="<?= $d->id ?>"><?= $d->judul ?></option>
+                                    <?php } ?>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label><b>Sifat</b></label>
+                                <select class="form-control select-sifat" required="" name="sifat">
+                                    <option value="">~Sifat~</option>
+                                    <option value="WAJIB">Wajib</option>
+                                    <option value="SITUASIONAL">Situasional</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label><b>Unit Kerja</b></label>
+                                <select class="form-control select-unit-kerja" required="" name="jabatan">
+                                    <?php foreach ($unit_kerja as $k => $uk) { ?>
+                                        <option value="<?= $uk->jabatan ?>"><?= $uk->name ?></option>
+                                    <?php } ?>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label><b>Jadwal</b></label>
+                                <input class="form-control input-jadwal" type="date" name="jadwal" required="" value="<?= date('Y-m-d') ?>">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-primary" name="edit" value="ok">Simpan</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
 <!--MODAL DELETE TUGAS-->
 <div class="modal fade" id="modalDelete">
     <div class="modal-dialog" role="document">
@@ -217,10 +287,6 @@
                     <input class="input-id-tugas" name="id" required="" hidden="">
                     <div class="input-tugas card-body bg-light p-2 box-detail"></div>
                 </div>
-<!--                <div class="alert alert-danger" role="alert">
-                    Peringatan <i class="fa fa-exclamation"></i><br>
-                    Dokumen ini sudah memiliki data distribusi, jadwal implementasi atau menjadi dokumen terkait.<br>Apa Anda yakin ingin menghapus dokumen ini?
-                </div>-->
             </div>
             <div class="modal-footer">
                 <button class="btn btn-outline-primary" data-dismiss="modal">Batal</button>
@@ -323,13 +389,6 @@
             m.find('.input-url').prop('required', true);
         }
     });
-    function initDelete(idx) {
-        var d = data[idx];
-        var m = $('#modalDelete');
-        m.modal('show');
-        m.find('.input-tugas').html(d.tugas);
-        m.find('.input-id-tugas').val(d.id_tugas);
-    }
     $('#btnTugasBaru').click(function () {
         var m = $('#modalTugasBaru');
         m.modal('show');
@@ -350,6 +409,26 @@
             m.find('.input-url').prop('required', true);
         }
     });
+    function initEdit(idx){
+        var m = $('#modalEdit');
+        var d = data[idx];
+        console.log(d);
+        m.modal('show');
+        m.find('.input-id').val(d.id);
+        m.find('.select-dokumen').val(d.dokumen.id);
+        m.find('.input-tugas').val(d.tugas);
+        m.find('.input-form').val(d.id_form);
+        m.find('.select-sifat').val(d.sifat);
+        m.find('.select-unit-kerja').val(d.jabatan);
+        m.find('.input-jadwal').val(d.tanggal);
+    }
+    function initDelete(idx) {
+        var d = data[idx];
+        var m = $('#modalDelete');
+        m.modal('show');
+        m.find('.input-tugas').html(d.tugas);
+        m.find('.input-id-tugas').val(d.id_tugas);
+    }
     var start_date;
     var end_date;
     var DateFilterFunction = (function (oSettings, aData, iDataIndex) {
