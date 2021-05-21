@@ -32,8 +32,8 @@
             $('#tbMain').empty();
             for (var d of data) {
                 $('#tbMain').append('<tr>'
-                        + '<td>' + d.name + '</td>'
-                        + '<td>-</td>'
+                        + '<td>' + d.jobdesk_unit + '</td>'
+                        + '<td>' + (d.jobdesk_personil==null?'-':d.jobdesk_personil) + '</td>'
                         + '</tr>');
             }
         });

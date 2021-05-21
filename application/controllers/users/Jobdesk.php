@@ -10,7 +10,9 @@ class Jobdesk extends MY_User {
     }
 
     function get_data() {
-        $data = $this->db->get_where('jobdesk',['id_unit_kerja'=>$this->input->get('id')])->result();
+        $this->db->select('jd.name AS jobdesk_unit, pj.desc AS jobdesk_personil');
+        $this->db->join('personil_jobdesk pj', 'pj.id_jobdesk = jd.id', 'LEFT');
+        $data = $this->db->get_where('jobdesk jd',['id_unit_kerja'=>$this->input->get('id')])->result();
         echo json_encode($data);
     }
 
