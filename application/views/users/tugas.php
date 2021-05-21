@@ -54,6 +54,10 @@
                         <td>
                             <button class="btn btn-sm btn-outline-primary fa fa-upload" onclick="initUpload(<?= $k ?>)"></button>
                             <button class="btn btn-sm btn-outline-primary fa fa-info-circle" onclick="detail(<?= $k ?>)"></button>
+                            <?php if ($d->asal == 'MANDIRI') { ?>
+                                <button class="btn btn-sm btn-outline-primary fa fa-edit" onclick="initEdit(<?= $k ?>)"></button>
+                                <button class="btn btn-sm btn-outline-danger fa fa-trash" onclick="initDelete(<?= $k ?>)"></button>
+                            <?php } ?>
                         </td>
                     </tr>
                 <?php } ?>
@@ -196,11 +200,42 @@
         </form>
     </div>
 </div>
+<!--MODAL DELETE TUGAS-->
+<div class="modal fade" id="modalDelete">
+    <div class="modal-dialog" role="document">
+        <form method="post">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Hapus Tugas</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Nama Tugas</label>
+                    <input class="input-id-tugas" name="id" required="" hidden="">
+                    <div class="input-tugas card-body bg-light p-2 box-detail"></div>
+                </div>
+<!--                <div class="alert alert-danger" role="alert">
+                    Peringatan <i class="fa fa-exclamation"></i><br>
+                    Dokumen ini sudah memiliki data distribusi, jadwal implementasi atau menjadi dokumen terkait.<br>Apa Anda yakin ingin menghapus dokumen ini?
+                </div>-->
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline-primary" data-dismiss="modal">Batal</button>
+                <button class="btn btn-outline-danger" name="delete" value="ok">Hapus</button>
+            </div>
+        </div>
+        </form>
+    </div>
+</div>
 <script>
     var data = <?= json_encode($data) ?>;
     $(document).ready(function () {
         tbMain = $('#tbMain').DataTable({
             "bLengthChange": false,
+            "order": [],
         });
         $('.dataTables_filter .form-control').attr('placeholder', 'Search');
         $('.div-filter .col-sm-3').eq(0).append($('.dataTables_filter .form-control'));
@@ -288,6 +323,13 @@
             m.find('.input-url').prop('required', true);
         }
     });
+    function initDelete(idx) {
+        var d = data[idx];
+        var m = $('#modalDelete');
+        m.modal('show');
+        m.find('.input-tugas').html(d.tugas);
+        m.find('.input-id-tugas').val(d.id_tugas);
+    }
     $('#btnTugasBaru').click(function () {
         var m = $('#modalTugasBaru');
         m.modal('show');

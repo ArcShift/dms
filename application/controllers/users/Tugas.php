@@ -64,6 +64,15 @@ class Tugas extends MY_User {
                 }
             }
             $this->db->insert('jadwal');
+        }else if($this->input->post('delete')){
+            $this->db->where('id_tugas', $this->input->post('id'));
+            $this->db->delete('personil_task');
+            $this->db->where('id_tugas', $this->input->post('id'));
+            $this->db->delete('jadwal');
+            $this->db->where('id', $this->input->post('id'));
+            $this->db->delete('tugas');
+            //TODO: unlink file
+            $this->data['msgSuccess']= 'Berhasil menghapus data';
         }
         $this->data['menuStandard'] = true;
         $this->db->select('j.*, t.nama AS tugas, t.form_terkait, t.sifat, t.id_document, t.asal');
