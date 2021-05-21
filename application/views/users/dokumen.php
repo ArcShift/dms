@@ -1,7 +1,7 @@
 <!--TABLE-->
 <div class="main-card card">   
     <div class="card-body"> 
-        <table class="table data-table">
+        <table class="table" id="mainTable">
             <thead>
                 <tr>
                     <th>No Dokumen</th>
@@ -31,6 +31,7 @@
 </div>
 <script>
     var docs = <?= json_encode($docs) ?>;
+    var tbMain = $('#mainTable').DataTable();
     function detail(idx) {
         var d = docs[idx];
         console.log(d);
@@ -56,4 +57,7 @@
         }
         showDetail('Detail Dokumen', data, 5);
     }
+    <?php if($this->input->get('s')){ ?>
+        $('input[type="search"]').val('<?=$this->input->get('s')?>').keyup()
+    <?php }?>
 </script>

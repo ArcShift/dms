@@ -120,12 +120,10 @@ foreach ($menus as $k => $m) {
                 <div class="app-header__content">
                     <div class="app-header-left">
                         <div class="search-wrapper">
-                            <!--<form action="<?= site_url('document_search') ?>">-->
                             <div class="input-holder">
-                                <input name="judul" class="search-input" placeholder="Cari judul dokumen">
+                                <input name="judul" class="search-input" placeholder="Cari dokumen">
                                 <button type="button" class="search-icon"><span></span></button>
                             </div>
-                            <!--</form>-->
                             <button class="close"></button>
                         </div>
                         <ul class="header-menu nav">
@@ -392,12 +390,12 @@ foreach ($menus as $k => $m) {
             }
             $('.search-wrapper .search-icon').click(function () {
                 if ($('.search-wrapper').hasClass('active')) {
-                    window.location.href = "<?= site_url('document_search') ?>?judul=" + $('.search-input').val();
+                    window.location.href = "<?= site_url('users/dokumen') ?>?s=" + $('.search-input').val();
                 }
             });
             $('.search-input').keypress(function (e) {
                 if (e.which == 13) {
-                    window.location.href = "<?= site_url('document_search') ?>?judul=" + $('.search-input').val();
+                    window.location.href = "<?= site_url('users/dokumen') ?>?s=" + $('.search-input').val();
                 }
             });
             function switchCompany(company) {
