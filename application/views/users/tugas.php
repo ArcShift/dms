@@ -257,7 +257,7 @@
                             </div>
                             <div class="form-group">
                                 <label><b>Jadwal</b></label>
-                                <input class="form-control input-jadwal" type="date" name="jadwal" required="" value="<?= date('Y-m-d') ?>">
+                                <input class="form-control input-jd" name="jadwal" type="date" required="" value="<?= date('Y-m-d') ?>">
                             </div>
                         </div>
                     </div>
@@ -420,7 +420,7 @@
         m.find('.input-form').val(d.id_form);
         m.find('.select-sifat').val(d.sifat);
         m.find('.select-unit-kerja').val(d.jabatan);
-        m.find('.input-jadwal').val(d.tanggal);
+        m.find('.input-jd').val(d.tanggal);
     }
     function initDelete(idx) {
         var d = data[idx];
