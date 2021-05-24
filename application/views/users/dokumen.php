@@ -41,7 +41,11 @@
         var file = d.type_doc == 'FILE' ?  d.file : d.url;
         var pasal = '';
         for (var p of d.pasal) {
-            pasal += '<li class="ml-3">' + p.name + '</li>';
+            pasal += '<span class="badge badge-secondary mr-1">' + p.name + '</span>';
+        }
+        var dist= '';
+        for (var ds of d.dist) {
+            dist += '<span class="badge badge-secondary mr-1">' + ds.personil+ ' - ' + ds.unit_kerja + '</span>';
         }
         var data = {
             'Nomor Dokumen': d.nomor,
@@ -50,6 +54,7 @@
             'Letak Pasal pada Dokumen': d.deskripsi,
             'Revisi Dokumen': d.versi,
             'Pembuat Dokumen': d.pembuat,
+            Distribusi: dist,
             'Level Dokumen': d.jenis,
             'Klasifikasi Dokumen': (d.klasifikasi != null ? d.klasifikasi : '-'),
             'Dokumen Terkait': (d.dokumen_terkait != null ? d.dokumen_terkait.judul : '-'),
