@@ -136,7 +136,7 @@
                 <div class="modal-body">
                     <input class="input-id" name="id" hidden="">
                     <div class="form-group">
-                        <label><b>Pasal</b></label>
+                        <label><b>Status</b></label>
                         <select class="form-control input-status" name="status">
                             <option value="">~ status ~</option>
                             <option value="100">OK</option>

@@ -14,7 +14,7 @@
                     <br>
                     <?= empty($data['pasal'])?'-':'' ?>
                     <?php foreach ($data['pasal'] as $v) { ?>
-                        <span class="badge badge-secondary"><?= $v['fullname'] ?></span>
+                        <span class="badge badge-secondary"><?= $v['name'] ?></span>
                     <?php } ?>
                 </div>
                 <div class="form-group">

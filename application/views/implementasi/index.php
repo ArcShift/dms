@@ -1153,13 +1153,13 @@ if ($role == 'anggota') {
                             } else {
                                 d.custom_deskripsi = '-';
                             }
-                            d.txt_pasals += '<div><span class="badge badge-secondary">' + sortPasal[k].fullname + '</span></div>';
-                            d.txt_pasals_span += '<span class="badge badge-secondary ml-1">' + sortPasal[k].fullname + '</span>';
+                            d.txt_pasals += '<div><span class="badge badge-secondary">' + sortPasal[k].name + '</span></div>';
+                            d.txt_pasals_span += '<span class="badge badge-secondary ml-1">' + sortPasal[k].name + '</span>';
                             if (n2 == 10) {
                                 d.txt_pasals2 += '<div class="text-primary btn-show-more-pasal" style="cursor:pointer" onclick="showMorePasal(this)">lihat lebih lengkap</div>'
                                         + '<div class="more-pasal-child" style="display: none">'
                             }
-                            d.txt_pasals2 += '<div><span class="badge badge-secondary">' + sortPasal[k].fullname + '</span></div>';
+                            d.txt_pasals2 += '<div><span class="badge badge-secondary">' + sortPasal[k].name + '</span></div>';
                             n2++;
                         }
                     }

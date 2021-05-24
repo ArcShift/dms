@@ -1094,12 +1094,12 @@ if ($role == 'anggota') {
                             } else {
                                 d.custom_deskripsi = '-';
                             }
-                            d.txt_pasals += '<div><span class="badge badge-secondary">' + sortPasal[k].fullname + '</span></div>';
+                            d.txt_pasals += '<div><span class="badge badge-secondary">' + sortPasal[k].name + '</span></div>';
                             if (n2 == 10) {
                                 d.txt_pasals2 += '<div class="text-primary btn-show-more-pasal" style="cursor:pointer" onclick="showMorePasal(this)">lihat lebih lengkap</div>'
                                         + '<div class="more-pasal-child" style="display: none">'
                             }
-                            d.txt_pasals2 += '<div><span class="badge badge-secondary">' + sortPasal[k].fullname + '</span></div>';
+                            d.txt_pasals2 += '<div><span class="badge badge-secondary">' + sortPasal[k].name + '</span></div>';
                             n2++;
                         }
                     }
@@ -1426,7 +1426,7 @@ if ($role == 'anggota') {
                     var d = data[j];
                     if (d.id == ps.id) {
                         var tr = tbPemenuhan.row.add([
-                            ps.fullname,
+                            ps.name,
                             (ps.sort_desc == null ? '' : ps.sort_desc),
                             '<div class="text-center">' + d.doc + '</div>',
                             '<div class="text-center"><span class="badge badge-' + percentColor(d.pemenuhanDoc) + '">' + d.pemenuhanDoc + '%</span></div>',

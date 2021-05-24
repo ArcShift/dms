@@ -170,7 +170,7 @@
                     $('#list-pasal').append('<div id="pasal' + p.id + '"><b><span class="pasal-id">' + p.id + '</span><span class="pasal-name">' + p.name + '</span></b></div>');
                     if (p.parent != null) {
                         var item = $('#pasal' + p.id + ' .pasal-name');
-                        var fullname = $('#pasal' + p.parent + ' .pasal-name').text() + ' - ' + item.text();
+                        var fullname = item.text();
                         item.text(fullname);
                         data[i].fullname = fullname;
                     } else {

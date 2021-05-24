@@ -40,7 +40,7 @@ if ($role == 'anggota') {
             <div id="container" class="card-body">
                 <!--TAB-->
                 <ul class="nav nav-tabs">
-                    <li class="nav-item"><a data-toggle="tab" href="#tab-pasal" class="nav-link">Pasal</a></li>
+                    <li class="nav-item"><a data-toggle="tab" href="#tab-pasal" class="nav-link active">Pasal</a></li>
                     <li class="nav-item"><a data-toggle="tab" href="#tab-dokumen" class="nav-link">Dokumen</a></li>
                     <li class="nav-item"><a data-toggle="tab" href="#tab-distribusi" class="nav-link">Distribusi</a></li>
                 </ul>
@@ -895,7 +895,7 @@ if ($role == 'anggota') {
             for (var i = 0; i < sortPasal.length; i++) {
                 var d = sortPasal[i];
                 var tr = tbPasal.row.add([
-                    d.fullname,
+                    d.name,
                     (d.sort_desc == null ? '-' : d.sort_desc),
                     '<p style="white-space: pre-wrap">' + (d.long_desc == null ? '-' : d.long_desc) + '</p>',
                     '',
@@ -959,13 +959,13 @@ if ($role == 'anggota') {
                             } else {
                                 d.custom_deskripsi = '-';
                             }
-                            d.txt_pasals += '<div><span class="badge badge-secondary">' + sortPasal[k].fullname + '</span></div>';
-                            d.txt_pasals_span += '<span class="badge badge-secondary mr-1">' + sortPasal[k].fullname + '</span>';
+                            d.txt_pasals += '<div><span class="badge badge-secondary">' + sortPasal[k].name + '</span></div>';
+                            d.txt_pasals_span += '<span class="badge badge-secondary mr-1">' + sortPasal[k].name + '</span>';
                             if (n2 == 10) {
                                 d.txt_pasals2 += '<div class="text-primary btn-show-more-pasal" style="cursor:pointer" onclick="showMorePasal(this)">lihat lebih lengkap</div>'
                                         + '<div class="more-pasal-child" style="display: none">'
                             }
-                            d.txt_pasals2 += '<div><span class="badge badge-secondary">' + sortPasal[k].fullname + '</span></div>';
+                            d.txt_pasals2 += '<div><span class="badge badge-secondary">' + sortPasal[k].name + '</span></div>';
                             n2++;
                         }
                     }
@@ -1362,7 +1362,7 @@ if ($role == 'anggota') {
         var m = $('#modalDetailPasal');
         var p = sortPasal[index];
         m.modal('show');
-        m.find('.modal-title').text(p.fullname);
+        m.find('.modal-title').text(p.name);
         m.find('.text-judul').html(p.sort_desc);
         m.find('.text-deskripsi').html(p.long_desc);
         m.find('.files').empty();

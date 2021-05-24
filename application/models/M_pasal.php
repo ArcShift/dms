@@ -125,7 +125,7 @@ class M_pasal extends CI_Model {
                 array_push($sort, $v);
                 $child = $this->getChild($v['id']);
                 foreach ($child as $v2) {
-                    $v2['name'] = $v['name'] . ' - ' . $v2['name'];
+//                    $v2['name'] = $v['name'] . ' - ' . $v2['name'];
                     array_push($sort, $v2);
                 }
             }
@@ -144,7 +144,7 @@ class M_pasal extends CI_Model {
             array_push($sort, $v);
             $child = $this->getChild($v['id']);
             foreach ($child as $k2 => $v2) {
-                $v2['name'] = $v['name'] . ' - ' . $v2['name'];
+//                $v2['name'] = $v['name'] . ' - ' . $v2['name'];
                 array_push($sort, $v2);
             }
         }
