@@ -66,12 +66,17 @@ class Tugas extends MY_User {
             $this->db->insert('jadwal');
         } else if ($this->input->post('delete')) {
             $this->db->where('id_tugas', $this->input->post('id'));
+            $jd = $this->db->get('jadwal')->row();
+            $this->db->where('id_tugas', $this->input->post('id'));
             $this->db->delete('personil_task');
             $this->db->where('id_tugas', $this->input->post('id'));
             $this->db->delete('jadwal');
             $this->db->where('id', $this->input->post('id'));
             $this->db->delete('tugas');
             //TODO: unlink file
+            if($jd->doc_type == 'FILE'& file_exists('upload/implementasi/' . $jd->path)){
+                unlink('upload/implementasi/' . $jd->path);
+            }
             $this->data['msgSuccess'] = 'Berhasil menghapus data';
         } else if ($this->input->post('edit')) {
             $jd = $this->db->get_where('jadwal', ['id' => $this->input->post('id')])->row();
