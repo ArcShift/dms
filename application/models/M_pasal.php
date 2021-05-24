@@ -150,7 +150,20 @@ class M_pasal extends CI_Model {
         }
         return $sort;
     }
-
+    function getByStandard($standard) {
+        $this->db->where('id_standard', $standard);
+            $this->db->where('parent IS NULL');
+            $result = $this->db->get_where('pasal p')->result_array();
+            $sort = [];
+            foreach ($result as $k => $v) {
+                array_push($sort, $v);
+                $child = $this->getChild($v['id']);
+                foreach ($child as $v2) {
+                    array_push($sort, $v2);
+                }
+            }
+            return $sort;
+    }
     function getByDocument($id_document) {
         $this->db->select('p.*');
         $this->db->join('document_pasal dp', 'dp.id_pasal = p.id AND dp.id_document = ' . $id_document);
