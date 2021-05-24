@@ -60,7 +60,7 @@
             'Dokumen Terkait': (d.dokumen_terkait != null ? d.dokumen_terkait.judul : '-'),
             'File Dokumen': '<a href="' + path + '" target="_blank">' + (file==null?'':file) + '</a>',
         }
-        showDetail('Detail Dokumen', data, 5);
+        showDetail('Detail Dokumen', data, 6);
     }
     <?php if($this->input->get('s')){ ?>
         $('input[type="search"]').val('<?=$this->input->get('s')?>').keyup()
