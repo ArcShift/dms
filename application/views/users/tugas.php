@@ -8,7 +8,7 @@
 <div class="main-card card">
     <div class="card-body">
         <button class="btn btn-sm btn-outline-primary float-right" id="btnTugasBaru">Buat Tugas Baru</button>
-        <br/>    
+        <br/>
         <br/>
         <div class="row div-filter">
             <div class="col-sm-3"></div>
@@ -332,7 +332,7 @@
             txtPelaksana += '<li>' + p.fullname + '</li>';
         }
         var data2 = {
-            Pasal: d.dokumen.pasal[0].fullname,
+            Pasal: d.dokumen.pasal[0].name,
             'Judul Pasal': d.dokumen.pasal[0].sort_desc,
             'Deskripsi Pasal': d.dokumen.pasal[0].long_desc,
             'Judul Dokumen': d.dokumen.judul,

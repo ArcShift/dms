@@ -41,7 +41,7 @@
         var file = d.type_doc == 'FILE' ?  d.file : d.url;
         var pasal = '';
         for (var p of d.pasal) {
-            pasal += '<li class="ml-3">' + p.fullname + '</li>';
+            pasal += '<li class="ml-3">' + p.name + '</li>';
         }
         var data = {
             'Nomor Dokumen': d.nomor,
