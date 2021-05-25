@@ -11,11 +11,14 @@
         <br/>
         <br/>
         <div class="row div-filter">
-            <div class="col-sm-3"></div>
-            <div class="col-sm-3">
-                <input class="form-control form-control-sm" id="dateSearch" placeholder="Search by date range..">
+            <div class="col-sm-2"></div>
+            <div class="col-sm-2">
+                <input class="form-control form-control-sm" onfocus="(this.type='date')" id="minDate" placeholder="Tanggal Awal">
             </div>
-            <div class="col-sm-3">
+            <div class="col-sm-2">
+                <input class="form-control form-control-sm" onfocus="(this.type='date')" id="maxDate" placeholder="Tanggal Akhir">
+            </div>
+            <div class="col-sm-2">
                 <select class="form-control form-control-sm" id='filterPersonil'>
                     <option value="">~ Status ~</option>
                     <option value="selesai">Selesai</option>
@@ -23,7 +26,7 @@
                     <option value="menunggu">Menunggu</option>
                 </select>
             </div>
-            <div class="col-sm-3">
+            <div class="col-sm-2">
                 <select class="form-control form-control-sm" id='filterPeriode'>
                     <option value="">~ Periode ~</option>
                     <option value="<?= date('d/m/Y') ?>">Hari ini</option>
@@ -46,7 +49,7 @@
             <tbody>
                 <?php foreach ($data as $k => $d) { ?>
                     <tr>
-                        <td><?= date_format(date_create($d->tanggal), 'd/m/Y') ?></td>
+                        <td><?= $d->tanggal ?></td>
                         <td><?= $d->tugas ?></td>
                         <td><?= empty($d->form_terkait) ? '-' : $d->form_terkait->judul ?></td>
                         <td><?= $d->path ?></td>
@@ -274,25 +277,25 @@
 <div class="modal fade" id="modalDelete">
     <div class="modal-dialog" role="document">
         <form method="post">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Hapus Tugas</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="form-group">
-                    <label>Nama Tugas</label>
-                    <input class="input-id-tugas" name="id" required="" hidden="">
-                    <div class="input-tugas card-body bg-light p-2 box-detail"></div>
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Hapus Tugas</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Nama Tugas</label>
+                        <input class="input-id-tugas" name="id" required="" hidden="">
+                        <div class="input-tugas card-body bg-light p-2 box-detail"></div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-outline-primary" data-dismiss="modal">Batal</button>
+                    <button class="btn btn-outline-danger" name="delete" value="ok">Hapus</button>
                 </div>
             </div>
-            <div class="modal-footer">
-                <button class="btn btn-outline-primary" data-dismiss="modal">Batal</button>
-                <button class="btn btn-outline-danger" name="delete" value="ok">Hapus</button>
-            </div>
-        </div>
         </form>
     </div>
 </div>
@@ -303,26 +306,12 @@
             "bLengthChange": false,
             "order": [],
         });
+        $('#minDate, #maxDate').on('change', function () {
+            tbMain.draw();
+        });
         $('.dataTables_filter .form-control').attr('placeholder', 'Search');
-        $('.div-filter .col-sm-3').eq(0).append($('.dataTables_filter .form-control'));
+        $('.div-filter .col-sm-2').eq(0).append($('.dataTables_filter .form-control'));
         $('.dataTables_filter').hide();
-        $('#dateSearch').daterangepicker({
-            autoUpdateInput: false
-        });
-        $('#dateSearch').on('apply.daterangepicker', function (ev, picker) {
-            $(this).val(picker.startDate.format('DD/MM/YYYY') + ' - ' + picker.endDate.format('DD/MM/YYYY'));
-            start_date = picker.startDate.format('DD/MM/YYYY');
-            end_date = picker.endDate.format('DD/MM/YYYY');
-            $.fn.dataTableExt.afnFiltering.push(DateFilterFunction);
-            tbMain.draw();
-        });
-        $('#dateSearch').on('cancel.daterangepicker', function (ev, picker) {
-            $(this).val('');
-            start_date = '';
-            end_date = '';
-            $.fn.dataTable.ext.search.splice($.fn.dataTable.ext.search.indexOf(DateFilterFunction, 1));
-            tbMain.draw();
-        });
     });
     function detail(idx) {
         var d = data[idx];
@@ -409,7 +398,7 @@
             m.find('.input-url').prop('required', true);
         }
     });
-    function initEdit(idx){
+    function initEdit(idx) {
         var m = $('#modalEdit');
         var d = data[idx];
         console.log(d);
@@ -429,26 +418,6 @@
         m.find('.input-tugas').html(d.tugas);
         m.find('.input-id-tugas').val(d.id_tugas);
     }
-    var start_date;
-    var end_date;
-    var DateFilterFunction = (function (oSettings, aData, iDataIndex) {
-        var dateStart = parseDateValue(start_date);
-        var dateEnd = parseDateValue(end_date);
-        var evalDate = parseDateValue(aData[0]);
-        if ((isNaN(dateStart) && isNaN(dateEnd)) ||
-                (isNaN(dateStart) && evalDate <= dateEnd) ||
-                (dateStart <= evalDate && isNaN(dateEnd)) ||
-                (dateStart <= evalDate && evalDate <= dateEnd))
-        {
-            return true;
-        }
-        return false;
-    });
-    function parseDateValue(rawDate) {
-        var dateArray = rawDate.split("/");
-        var parsedDate = new Date(dateArray[2], parseInt(dateArray[1]) - 1, dateArray[0]);  // -1 because months are from 0 to 11   
-        return parsedDate;
-    }
     $('#filterPersonil').change(function () {
         tbMain.columns(4).search($(this).val()).draw();
     });
@@ -456,4 +425,23 @@
         console.log('filter status');
         tbMain.columns(0).search($(this).val()).draw();
     });
+    var minDate, maxDate;
+    minDate = $('#minDate');
+    maxDate = $('#maxDate');
+    $.fn.dataTable.ext.search.push(
+            function (settings, data, dataIndex) {
+                var min = new Date(minDate.val());
+                var max = new Date(maxDate.val());
+                var date = new Date(data[0]);
+                if (
+                        (isNaN(min) && isNaN(max)) ||
+                        (isNaN(min) && date <= max) ||
+                        (min <= date && isNaN(max)) ||
+                        (min <= date && date <= max)
+                        ) {
+                    return true;
+                }
+                return false;
+            }
+    );
 </script>
