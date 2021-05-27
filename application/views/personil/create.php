@@ -39,7 +39,8 @@
                 <thead>
                     <tr>
                         <th>Nama</th>
-                        <th class="pl-5">Tugas Unit &<br>Tugas Personil</th>
+                        <th class="pl-5">Tugas Unit</th>
+                        <th class="pl-5">Tugas Personil</th>
                         <th class="text-center">Aksi</th>
                     </tr>
                 </thead>

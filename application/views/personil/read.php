@@ -1,7 +1,7 @@
 <div class="main-card mb-3 card">
     <div class="card-header">
         <?php if ($activeModule['acc_create']) { ?>
-            <a class="btn btn-outline-primary btn-sm fa fa-plus" style="text-transform: none" title="Tambah" href="<?php echo site_url($module . '/create') ?>"> Tambah <?= $activeModule['title'] ?></a>
+            <a class="btn btn-outline-primary" style="text-transform: none" title="Tambah" href="<?php echo site_url($module . '/create') ?>"> Tambah <?= $activeModule['title'] ?></a>
         <?php } ?>
     </div>
     <div class="card-body">
