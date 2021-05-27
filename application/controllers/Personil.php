@@ -101,7 +101,6 @@ class Personil extends MY_Controller {
     }
 
     function jobdesk() {
-        
         $this->subModule = 'edit';
         $this->subTitle = 'Jobdesk';
         $this->db->select('p.fullname, uk.name AS unit_kerja, pp.id_personil');
@@ -110,27 +109,36 @@ class Personil extends MY_Controller {
         $this->db->where('pp.id', $this->session->idData);
         $header = $this->db->get('position_personil pp')->row();
         $this->data['header'] = $header;
-        if ($this->input->post('edit')) {
-            $edit = $this->db->get_where('personil_jobdesk pj', ['id_personil' => $header->id_personil, 'id_jobdesk' => $this->input->post('id_ju')])->row();
+        if ($this->input->post('add')) {
             $this->db->set('desc', $this->input->post('jp'));
-            if (empty($edit)) {
-                $this->db->set('id_personil', $header->id_personil);
-                $this->db->set('id_jobdesk', $this->input->post('id_ju'));
-                $this->db->insert('personil_jobdesk');
-            } else {
-                $this->db->where('id_personil', $header->id_personil);
-                $this->db->where('id_jobdesk', $this->input->post('id_ju'));
-                $this->db->update('personil_jobdesk');
-            }
-        }else if($this->input->get('back')){
+            $this->db->set('id_personil', $header->id_personil);
+            $this->db->set('id_jobdesk', $this->input->post('id_ju'));
+            $this->db->insert('personil_jobdesk');
+        } elseif ($this->input->post('edit')) {
+//            $edit = $this->db->get_where('personil_jobdesk pj', ['id_personil' => $header->id_personil, 'id_jobdesk' => $this->input->post('id_ju')])->row();
+//            $this->db->set('desc', $this->input->post('jp'));
+//            if (empty($edit)) {
+//                $this->db->set('id_personil', $header->id_personil);
+//                $this->db->set('id_jobdesk', $this->input->post('id_ju'));
+//                $this->db->insert('personil_jobdesk');
+//            } else {
+//                $this->db->where('id_personil', $header->id_personil);
+//                $this->db->where('id_jobdesk', $this->input->post('id_ju'));
+//                $this->db->update('personil_jobdesk');
+//            }
+        } else if ($this->input->get('back')) {
             $this->session->set_userdata('idData', $header->id_personil);
-            redirect($this->module.'/edit');
+            redirect($this->module . '/edit');
         }
-        $this->db->select('jd.id AS id_jobdesk, jd.name AS jobdesk, pj.desc');
+        $this->db->select('jd.id AS id_jobdesk, jd.name AS jobdesk');
         $this->db->join('unit_kerja uk', 'uk.id = jd.id_unit_kerja');
         $this->db->join('position_personil pp', 'pp.id_unit_kerja = uk.id AND pp.id=' . $this->session->idData);
-        $this->db->join('personil_jobdesk pj', 'pj.id_jobdesk = jd.id AND pj.id_personil = pp.id_personil', 'LEFT');
-        $this->data['data'] = $this->db->get('jobdesk jd')->result();
+//        $this->db->join('personil_jobdesk pj', 'pj.id_jobdesk = jd.id AND pj.id_personil = pp.id_personil', 'LEFT');
+        $data = $this->db->get('jobdesk jd')->result();
+        foreach ($data as $k => $d) {
+            $data[$k]->jobdesk_personil = $this->db->get_where('personil_jobdesk', ['id_jobdesk' => $d->id_jobdesk, 'id_personil' => $header->id_personil])->result();
+        }
+        $this->data['data'] = $data;
         $this->render('jobdesk');
     }
 

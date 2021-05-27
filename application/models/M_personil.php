@@ -18,7 +18,7 @@ class M_personil extends CI_Model {
     }
 
     function get() {
-        return $this->db->get_where('personil',['id_company'=>$this->session->activeCompany['id']])->result_array();
+        return $this->db->get_where('personil', ['id_company' => $this->session->activeCompany['id']])->result_array();
     }
 
     function read() {
@@ -63,6 +63,13 @@ class M_personil extends CI_Model {
         $this->db->join('unit_kerja uk', 'uk.id = pp.id_unit_kerja');
         $this->db->where('pp.id_personil', $id);
         $r['unit_kerja'] = $this->db->get('position_personil pp')->result_array();
+        foreach ($r['unit_kerja'] as $k => $uk) {
+            $tugas_unit = $this->db->get_where('jobdesk', ['id_unit_kerja' => $uk['id']])->result_array();
+            foreach ($tugas_unit as $k2 => $tu) {
+                $tugas_unit[$k2]['jobdesk_personil'] = $this->db->get_where('personil_jobdesk', ['id_jobdesk' => $tu['id'], 'id_personil' => $id])->result_array();
+            }
+            $r['unit_kerja'][$k]['tugas_unit'] = $tugas_unit;
+        }
         $this->db->select('uk.*');
         $this->db->join('position_personil pp', 'pp.id_unit_kerja = uk.id AND pp.id_personil = ' . $id, 'LEFT');
         $this->db->where('uk.id_company', $r['id_company']);

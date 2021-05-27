@@ -13,8 +13,8 @@
         <table class="table">
             <thead>
                 <tr>
-                    <th>Jobdesk</th>
-                    <th>Jobdesk Saya</th>
+                    <th>Tugas Unit</th>
+                    <th>Tugas Personil</th>
                 </tr>
             </thead>
             <tbody id="tbMain">
@@ -30,10 +30,18 @@
     $('#selectUK').change(function () {
         $.getJSON('jobdesk/get_data', {id: $(this).val()}, function (data) {
             $('#tbMain').empty();
+            var title = 0;
+            var write = false;
             for (var d of data) {
+                console.log(title);
+                console.log(d.id_jobdesk);
+                if (title != d.id_jobdesk) {
+                    title = d.id_jobdesk;
+                    write = true;
+                }
                 $('#tbMain').append('<tr>'
-                        + '<td>' + d.jobdesk_unit + '</td>'
-                        + '<td>' + (d.jobdesk_personil==null?'-':d.jobdesk_personil) + '</td>'
+                        + '<td>' + (write ? d.jobdesk_unit : '') + '</td>'
+                        + '<td>' + (d.jobdesk_personil == null ? '-' : d.jobdesk_personil) + '</td>'
                         + '</tr>');
             }
         });

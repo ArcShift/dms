@@ -4,7 +4,7 @@
             <h5>Edit Data</h5>
         </div>
         <div class="card-body">
-            <!--<input hidden="" name="id" required="" value="<?php // $data['id']     ?>">-->
+            <!--<input hidden="" name="id" required="" value="<?php // $data['id']                 ?>">-->
             <input hidden="" name="id_company" required="" value="<?= $data['id_company'] ?>">
             <div class="form-group">
             </div>
@@ -33,27 +33,46 @@
                 <thead>
                     <tr>
                         <th>Nama</th>
-                        <th class="text-center">Pembuat<br>Dokumen</th>
-                        <th class="text-center">Distribusi</th>
+<!--                        <th class="text-center">Pembuat<br>Dokumen</th>
+                        <th class="text-center">Distribusi</th>-->
+                        <th class="pl-5">Tugas Unit &<br>Tugas Personil</th>
+                        <!--<th class="pl-5">Tugas<br>Personil</th>-->
                         <th class="text-center">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <?php foreach ($data['unit_kerja'] as $k => $uk) { 
+                    <?php
+                    foreach ($data['unit_kerja'] as $k => $uk) {
                         $countDocument = count($this->db->get_where('document', ['pembuat' => $uk['id_position_personil']])->result_array());
                         $countDistribusi = count($this->db->get_where('distribution', ['id_position_personil' => $uk['id_position_personil']])->result_array());
-                        if($countDocument == 0 & $countDistribusi == 0){
-                            $data['unit_kerja'][$k]['saveDelete'] = true; 
-                        }else{
+                        if ($countDocument == 0 & $countDistribusi == 0) {
+                            $data['unit_kerja'][$k]['saveDelete'] = true;
+                        } else {
                             $data['unit_kerja'][$k]['saveDelete'] = false;
                         }
                         ?>
                         <tr>
                             <td><?= $uk['name'] ?></td>
-                            <td class="text-center"><span class="badge badge-secondary"><?= $countDocument ?></span></td>
-                            <td class="text-center"><span class="badge badge-secondary"><?= $countDistribusi ?></span></td>
+                            <!--<td class="text-center"><span class="badge badge-secondary"><?= $countDocument ?></span></td>-->
+                            <!--<td class="text-center"><span class="badge badge-secondary"><?= $countDistribusi ?></span></td>-->
+                            <td>
+                                <ul>
+                                    <?php foreach ($uk['tugas_unit'] as $k2 => $tu) { ?>
+                                        <li><?= $tu['name'] ?></li>
+                                        <ul>
+                                            <?php foreach ($tu['jobdesk_personil'] as $k3 => $jp) { ?>
+                                                <li><?= $jp['desc'] ?></li>
+
+                                            <?php } ?>
+                                        </ul>
+                                    <?php } ?>
+                                </ul>
+                            </td>
+                            <!--<td></td>-->
                             <td class="text-center">
-                                <button class="btn btn-outline-primary fa fa-edit" value="<?= $uk['id_position_personil'] ?>" name="jobdesk" title="Job Desk"></button>
+                                <?php if (!empty($uk['tugas_unit'])) { ?>
+                                    <button class="btn btn-outline-primary fa fa-edit" value="<?= $uk['id_position_personil'] ?>" name="jobdesk" title="Job Desk"></button>
+                                <?php } ?>
                                 <span class="btn btn-outline-danger fa fa-trash" onclick="initDelete(<?= $k ?>)" title="Hapus"></span>
                             </td>
                         </tr>
@@ -80,7 +99,7 @@
                     <div class="form-group">
                         <select class="form-control" name="unit_kerja">
                             <?php foreach ($data['excluded_unit_kerja'] as $k => $v) { ?>
-                            <option value="<?= $v['id']?>"><?= $v['name'] ?></option>
+                                <option value="<?= $v['id'] ?>"><?= $v['name'] ?></option>
                             <?php } ?>
                         </select>
                     </div>
@@ -130,9 +149,9 @@
         var m = $('#modalDelete').modal('show');
         m.find('.input-nama').val(uk.name);
         m.find('.input-delete').val(uk.id_position_personil);
-        if(uk.saveDelete){
+        if (uk.saveDelete) {
             m.find('.div-warning').hide();
-        }else{
+        } else {
             m.find('.div-warning').show();
         }
     }

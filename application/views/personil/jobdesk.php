@@ -4,16 +4,16 @@
             <button class="btn btn-outline-primary float-right" name="back" value="ok">Kembali</button>
         </form>
         <h4>
-        <?= $header->fullname ?> -
-        <?= $header->unit_kerja ?>
+            <?= $header->fullname ?> -
+            <?= $header->unit_kerja ?>
         </h4>
         <br>
         <br>
         <table class="table">
             <thead>
                 <tr>
-                    <th>Jobdesk Unit</th>
-                    <th>Jobdesk Personil</th>
+                    <th>Tugas Unit</th>
+                    <th>Tugas Personil</th>
                     <th>Aksi</th>
                 </tr>
             </thead>
@@ -21,11 +21,20 @@
                 <?php foreach ($data as $k => $d) { ?>
                     <tr>
                         <td><?= $d->jobdesk ?></td>
-                        <td><?= $d->desc ?></td>
+                        <td></td>
                         <td>
-                            <button class="btn btn-outline-primary fa fa-edit" onclick="initEdit(<?= $k ?>)"></button>
+                            <button class="btn btn-outline-primary fa fa-plus" onclick="initEdit(<?= $k ?>)"></button>
                         </td>
                     </tr>
+                    <?php foreach ($d->jobdesk_personil as $k2 => $jp) { ?>
+                        <tr>
+                            <td></td>
+                            <td><?= $jp->desc ?></td>
+                            <td>
+                                <button class="btn btn-outline-danger fa fa-trash" onclick=""></button>
+                            </td>
+                        </tr>
+                    <?php } ?>
                 <?php } ?>
             </tbody>
         </table>
@@ -55,7 +64,7 @@
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-outline-primary" data-dismiss="modal">Batal</button>
-                    <button class="btn btn-outline-primary" name="edit" value="ok">Simpan</button>
+                    <button class="btn btn-outline-primary" name="add" value="ok">Simpan</button>
                 </div>
             </div>
         </div>

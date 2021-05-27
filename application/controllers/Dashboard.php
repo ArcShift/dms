@@ -34,17 +34,9 @@ class Dashboard extends MY_Controller {
         if (!empty($company)) {
             $this->data['companies'] = $this->db->get('company')->result_array();
             $this->data['company_standard'] = $this->model->company_standard($company['id']);
+            $this->load->model('m_unit_kerja');
+            $this->data['unit_kerja'] = $this->m_unit_kerja->get();
             if (!empty($standard)) {
-                $this->load->model('M_treeview_detail', 'm_treeview');
-                $pemenuhan = $this->m_treeview->getPemenuhan($company['id'], $standard['id']);
-                $parentPemenuhan = [];
-                $pemenuhanDoc = [];
-                foreach ($pemenuhan as $k => $p) {
-                    if ($p['parent'] == null) {
-                        array_push($parentPemenuhan, $p);
-                    }
-                }
-                $this->data['pemenuhan'] = json_encode($parentPemenuhan);
                 $this->load->model('M_implementasi', 'm_imp');
                 $this->data['progressImp'] = json_encode($this->m_imp->progress($company['id'], $standard['id']));
                 $this->data['distribusi2'] = $this->model->distribusi2($company['id'], $standard['id']);
@@ -79,6 +71,19 @@ class Dashboard extends MY_Controller {
             $this->session->set_userdata('activeStandard', $activeStandard);
             echo 'success';
         }
+    }
+
+    function get_pemenuhan() {
+        $this->load->model('M_treeview_detail', 'm_treeview');
+        $pemenuhan = $this->m_treeview->getPemenuhan($this->session->activeCompany['id'], $this->session->activeStandard['id']);
+        $parentPemenuhan = [];
+        $pemenuhanDoc = [];
+        foreach ($pemenuhan as $k => $p) {
+            if ($p['parent'] == null) {
+                array_push($parentPemenuhan, $p);
+            }
+        }
+        echo json_encode($parentPemenuhan);
     }
 
 }

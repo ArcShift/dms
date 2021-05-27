@@ -67,9 +67,26 @@ if (empty($this->session->activeCompany)) {
         echo 'Perusahaan ini belum memiliki standar';
     } else {
         $g2 = json_decode($progressImp);
-        $pImp = json_decode($pemenuhan);
+//        $pImp = json_decode($pemenuhan);
+        $pImp = array();//TODO: calculate this
         ?>
         <div class="row">
+            <div class="col-sm-6">
+                <label><b>Unit Kerja</b></label>
+                <select class="form-control" id="selectPemenuhanUnitKerja">
+                    <option value="">~ Unit Kerja ~</option>
+                    <?php foreach ($unit_kerja as $k => $uk) { ?>
+                        <option value="<?= $uk->id ?>"><?= $uk->name ?></option>
+                    <?php } ?>
+                </select>
+            </div>
+            <div class="col-sm-6">
+                <label><b>Personil</b></label>
+                <select class="form-control" id="inputPemenuhanUnitKerja">
+                </select>
+            </div>
+        </div>
+        <div class="row  mt-3">
             <div class="col-sm-6">
                 <div class="card mb-3 widget-content bg-midnight-bloom">
                     <div class="widget-content-wrapper text-white">
@@ -341,12 +358,12 @@ if (empty($this->session->activeCompany)) {
                                             <td class="text-center text-muted"><?= $k + 1 ?></td>
                                             <td>
                                                 <ul>
-                                                <?php foreach ($t['pelaksana'] as $tp) { ?>
-                                                    <li>
-                                                        <b><?= $tp['nama'] ?></b>
-                                                        (<?= $tp['unit_kerja'] ?>)
-                                                    </li>
-                                                <?php } ?>
+                                                    <?php foreach ($t['pelaksana'] as $tp) { ?>
+                                                        <li>
+                                                            <b><?= $tp['nama'] ?></b>
+                                                            (<?= $tp['unit_kerja'] ?>)
+                                                        </li>
+                                                    <?php } ?>
                                                 </ul>
                                             </td>
                                             <td class="text-center"><?= $t['tugas'] ?></td>
@@ -384,15 +401,15 @@ if (empty($this->session->activeCompany)) {
                                             <td class="text-center">
                                                 <button type="button" class="btn btn-primary btn-sm" 
                                                         onclick="detailTugas(
-                                                                        '<?= $t['tugas'] ?>',
-                                                                        '<?= $t['tanggal'] ?>',
-                                                                        '<?= $t['judul'] ?>',
-                                                                        '<?= $formTerkait ?>',
-                                                                        '<?= $t['sifat'] ?>',
-                                                                        '<?= $t['name'] ?>',
-                                                                        '<?= $statusString ?>',
-                                                                        '<?= $url_document ?>'
-                                                                        )">Detail Tugas</button>
+                                                                                    '<?= $t['tugas'] ?>',
+                                                                                    '<?= $t['tanggal'] ?>',
+                                                                                    '<?= $t['judul'] ?>',
+                                                                                    '<?= $formTerkait ?>',
+                                                                                    '<?= $t['sifat'] ?>',
+                                                                                    '<?= $t['name'] ?>',
+                                                                                    '<?= $statusString ?>',
+                                                                                    '<?= $url_document ?>'
+                                                                                    )">Detail Tugas</button>
                                             </td>
                                         </tr>
                                     <?php } ?>
@@ -412,56 +429,64 @@ if (empty($this->session->activeCompany)) {
                 console.log('zoom');
             }
             console.log(zoom, device);
-            var pemenuhan = <?= $pemenuhan ?>;
-            var label = [];
-            var doc = [];
-            var hope = [];
-            var imp = [];
-            for (var i = 0; i < pemenuhan.length; i++) {
-                var p = pemenuhan[i];
-                label.push(p.name);
-                doc.push(p.pemenuhanDoc);
-                imp.push(p.pemenuhanImp);
-                hope.push((p.hope==null?70:p.hope));
-            }
-            $('#averageDoc').text(average(doc));
-            $('#averageImp').text(average(imp));
-            chart = new Chart(document.getElementById('chartPemenuhan'), {
-                type: 'radar',
-                data: {
-                    labels: label,
-                    datasets: [{
-                            label: 'Harapan',
-                            data: hope,
-                            backgroundColor: 'rgba(255, 0, 0, 0.2)',
-                            borderColor: 'rgb(255, 0, 0)',
-                            pointBackgroundColor: 'rgb(255, 0, 0)',
-                        }, {
-                            label: 'Dokumen',
-                            data: doc,
-                            backgroundColor: 'rgba(0, 0, 255, 0.2)',
-                            borderColor: 'rgb(0, 0, 255)',
-                            pointBackgroundColor: 'rgb(0, 0, 255)',
-                        }, {
-                            label: 'Implementasi',
-                            data: imp,
-                            backgroundColor: 'rgba(255, 255, 0, 0.2)',
-                            borderColor: 'rgb(255, 255, 0)',
-                            pointBackgroundColor: 'rgb(255, 255, 0)',
-                        }]
-                },
-                options: {
-                    scale: {
-                        angleLines: {
-                            display: false
-                        },
-                        ticks: {
-                            suggestedMin: 0,
-                            suggestedMax: 100
-                        }
-                    }
-                }
+            $('#selectPemenuhanUnitKerja').change(function () {
+                grafikPemenuhan();
             });
+            function grafikPemenuhan() {
+                $.getJSON('<?= $module . '/get_pemenuhan' ?>', null, function (data) {
+                    console.log(data);
+                    var pemenuhan = data;
+                    var label = [];
+                    var doc = [];
+                    var hope = [];
+                    var imp = [];
+                    for (var i = 0; i < pemenuhan.length; i++) {
+                        var p = pemenuhan[i];
+                        label.push(p.name);
+                        doc.push(p.pemenuhanDoc);
+                        imp.push(p.pemenuhanImp);
+                        hope.push((p.hope == null ? 70 : p.hope));
+                    }
+                    $('#averageDoc').text(average(doc));
+                    $('#averageImp').text(average(imp));
+                    new Chart(document.getElementById('chartPemenuhan'), {
+                        type: 'radar',
+                        data: {
+                            labels: label,
+                            datasets: [{
+                                    label: 'Harapan',
+                                    data: hope,
+                                    backgroundColor: 'rgba(255, 0, 0, 0.2)',
+                                    borderColor: 'rgb(255, 0, 0)',
+                                    pointBackgroundColor: 'rgb(255, 0, 0)',
+                                }, {
+                                    label: 'Dokumen',
+                                    data: doc,
+                                    backgroundColor: 'rgba(0, 0, 255, 0.2)',
+                                    borderColor: 'rgb(0, 0, 255)',
+                                    pointBackgroundColor: 'rgb(0, 0, 255)',
+                                }, {
+                                    label: 'Implementasi',
+                                    data: imp,
+                                    backgroundColor: 'rgba(255, 255, 0, 0.2)',
+                                    borderColor: 'rgb(255, 255, 0)',
+                                    pointBackgroundColor: 'rgb(255, 255, 0)',
+                                }]
+                        },
+                        options: {
+                            scale: {
+                                angleLines: {
+                                    display: false
+                                },
+                                ticks: {
+                                    suggestedMin: 0,
+                                    suggestedMax: 100
+                                }
+                            }
+                        }
+                    });
+                });
+            }
             function average(arr) {
                 var sum = 0;
                 for (var i = 0; i < arr.length; i++) {
