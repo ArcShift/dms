@@ -1350,7 +1350,7 @@ if ($role == 'anggota') {
                                     ]).node();
                                     tbTugas2.row.add([
                                         t.txtUnitKerja,
-                                        d.judulLink + '<span class="text-primary float-right fa fa-plus  mt-2" title="Tambah" onclick="initCreateTugas(' + i + ')"></span>',
+                                        '<i class="p-1"></i>'+d.judulLink + '<span class="text-primary float-right fa fa-plus  mt-2" title="Tambah" onclick="initCreateTugas(' + i + ')"></span>',
                                         '',
                                         t.nama,
                                         (t.index_form_terkait == null ? '-' : sortDokumen[t.index_form_terkait].judulLink),
@@ -1397,7 +1397,7 @@ if ($role == 'anggota') {
                 if (d.index_tugas.length == 0) {
                     tbTugas2.row.add([
                         '',
-                        d.judulLink + '<span class="text-primary float-right fa fa-plus  mt-2" title="Tambah" onclick="initCreateTugas(' + i + ')"></span>',
+                        '<i class="p-1"></i>'+d.judulLink + '<span class="text-primary float-right fa fa-plus  mt-2" title="Tambah" onclick="initCreateTugas(' + i + ')"></span>',
                         '',
                         '',
                         '',

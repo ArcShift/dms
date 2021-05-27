@@ -1,5 +1,5 @@
 <div class="main-card mb-3 card">
-    <form class="form-horizontal" method="post">
+    <form method="post">
         <div class="card-body">
             <input hidden="" name="id" required="" value="<?php echo $data['id'] ?>">
             <div class="form-group">
@@ -11,8 +11,8 @@
             </div>
         </div>
         <div class="d-block text-right card-footer">
-            <a class="mr-2 btn btn-outline-primary" href="<?php echo site_url($module) ?>">Kembali</a>
-            <button class="btn btn-outline-primary pull-right" name="edit" value="ok">Simpan</button>
+            <a class="btn btn-outline-primary" href="<?php echo site_url($module) ?>">Kembali</a>
+            <button class="btn btn-outline-primary" name="edit" value="ok">Simpan</button>
         </div>
     </form>
 </div>
@@ -20,6 +20,7 @@
     <div class="card-body">
         <span class="btn btn-outline-primary pull-right" onclick="add()">Tambah</span>
         <h5>Tugas Unit</h5>
+        <br>
         <table class="table">
             <thead>
                 <tr>
