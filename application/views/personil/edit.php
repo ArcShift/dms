@@ -30,8 +30,8 @@
                         <th>Nama</th>
 <!--                        <th class="text-center">Pembuat<br>Dokumen</th>
                         <th class="text-center">Distribusi</th>-->
-                        <th class="pl-5">Tugas Unit &<br>Tugas Personil</th>
-                        <!--<th class="pl-5">Tugas<br>Personil</th>-->
+                        <th class="pl-5">Tugas Unit</th>
+                        <th class="pl-5">Tugas Personil</th>
                         <th class="text-center">Aksi</th>
                     </tr>
                 </thead>
@@ -46,23 +46,12 @@
                             $data['unit_kerja'][$k]['saveDelete'] = false;
                         }
                         ?>
-                        <tr>
+                        <tr class="table-secondary">
                             <td><?= $uk['name'] ?></td>
                             <!--<td class="text-center"><span class="badge badge-secondary"><?= $countDocument ?></span></td>-->
                             <!--<td class="text-center"><span class="badge badge-secondary"><?= $countDistribusi ?></span></td>-->
-                            <td>
-                                <ul>
-                                    <?php foreach ($uk['tugas_unit'] as $k2 => $tu) { ?>
-                                        <li><?= $tu['name'] ?></li>
-                                        <ul>
-                                            <?php foreach ($tu['jobdesk_personil'] as $k3 => $jp) { ?>
-                                                <li><?= $jp['desc'] ?></li>
-
-                                            <?php } ?>
-                                        </ul>
-                                    <?php } ?>
-                                </ul>
-                            </td>
+                            <td></td>
+                            <td></td>
                             <!--<td></td>-->
                             <td class="text-center">
                                 <?php if (!empty($uk['tugas_unit'])) { ?>
@@ -71,6 +60,23 @@
                                 <span class="btn btn-outline-danger fa fa-trash" onclick="initDelete(<?= $k ?>)" title="Hapus"></span>
                             </td>
                         </tr>
+                        <?php foreach ($uk['tugas_unit'] as $k2 => $tu) { ?>
+                            <tr>
+                                <td></td>
+                                <td>                           
+                                    <?= $tu['name'] ?>
+                                </td>
+                            </tr>
+
+                            <?php foreach ($tu['jobdesk_personil'] as $k3 => $jp) { ?>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td><?= $jp['desc'] ?></td>
+                                </tr>
+                            <?php } ?>
+
+                        <?php } ?>
                     <?php } ?>
                 </tbody>
             </table>
