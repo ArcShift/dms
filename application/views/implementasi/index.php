@@ -1394,6 +1394,18 @@ if ($role == 'anggota') {
                 } else if (d.jenis == 4) {
                     $('.input-form-terkait').append('<option value="' + d.id + '">' + d.judul + '</option>');
                 }
+                if (d.index_tugas.length == 0) {
+                    tbTugas2.row.add([
+                        '',
+                        d.judulLink + '<span class="text-primary float-right fa fa-plus  mt-2" title="Tambah" onclick="initCreateTugas(' + i + ')"></span>',
+                        '',
+                        '',
+                        '',
+                        '',
+                        '',
+                        '',
+                    ]);
+                }
             }
             tbTugas.draw();
             tbTugas2.draw();
@@ -1892,7 +1904,7 @@ if ($role == 'anggota') {
     $('#formDistribusi').submit(function (e) {
         e.preventDefault();
         post(this, 'set_distribusi');
-//        $.post('<?php // echo site_url($module);                                 ?>/set_distribusi', $(this).serialize(), function (data) {
+//        $.post('<?php // echo site_url($module);                                  ?>/set_distribusi', $(this).serialize(), function (data) {
 //            $('#modalDistribusi').modal('hide');
 //            getPasal();
 //        });

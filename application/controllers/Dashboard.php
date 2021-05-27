@@ -75,7 +75,7 @@ class Dashboard extends MY_Controller {
 
     function get_pemenuhan() {
         $this->load->model('M_treeview_detail', 'm_treeview');
-        $pemenuhan = $this->m_treeview->getPemenuhan($this->session->activeCompany['id'], $this->session->activeStandard['id']);
+        $pemenuhan = $this->model->getPemenuhan($this->session->activeCompany['id'], $this->session->activeStandard['id'], $this->input->get('unit_kerja'));
         $parentPemenuhan = [];
         $pemenuhanDoc = [];
         foreach ($pemenuhan as $k => $p) {

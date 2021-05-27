@@ -70,7 +70,7 @@ if (empty($this->session->activeCompany)) {
 //        $pImp = json_decode($pemenuhan);
         $pImp = array();//TODO: calculate this
         ?>
-        <div class="row">
+        <div class="row d-none">
             <div class="col-sm-6">
                 <label><b>Unit Kerja</b></label>
                 <select class="form-control" id="selectPemenuhanUnitKerja">
@@ -430,10 +430,11 @@ if (empty($this->session->activeCompany)) {
             }
             console.log(zoom, device);
             $('#selectPemenuhanUnitKerja').change(function () {
-                grafikPemenuhan();
+                grafikPemenuhan($(this).val());
             });
-            function grafikPemenuhan() {
-                $.getJSON('<?= $module . '/get_pemenuhan' ?>', null, function (data) {
+            $('#selectPemenuhanUnitKerja').change();
+            function grafikPemenuhan(unitKerja) {
+                $.getJSON('<?= $module . '/get_pemenuhan' ?>', {unit_kerja: unitKerja}, function (data) {
                     console.log(data);
                     var pemenuhan = data;
                     var label = [];
