@@ -32,10 +32,8 @@
                             </td>
                             <td><?php echo $r['company'] ?></td>
                             <td>
-                                <?php if ($activeModule['acc_update']) { ?>
+                                <?php if ($this->session->user['role'] == 'admin' | ($this->session->user['role'] == 'pic' & $r['rl'] == 'anggota')) { ?>
                                     <button class="btn btn-outline-primary btn-sm fa fa-edit" title="Edit" name="initEdit" value="<?php echo $r['id'] ?>" formaction="<?php echo site_url($module . '/edit') ?>"></button>
-                                <?php } ?>
-                                <?php if ($activeModule['acc_delete']) { ?>
                                     <button class="btn btn-outline-danger btn-sm fa fa-trash" title="Hapus" name="initHapus" value="<?php echo $r['id'] ?>" formaction="<?php echo site_url($module . '/delete') ?>"></button>
                                 <?php } ?>
                             </td>
@@ -55,8 +53,7 @@
                 this.api().columns().every(function () {
                     var column = this;
                     if (column[0][0] == 5) {
-                        console.log();
-                        var select = $('<select style="width:50%; margin-left:10px" class="form-control form-control-sm pull-right"><option value="">-- Perusahaan --</option></select>')
+                        var select = $('<select style="width:50%; margin-left:10px" id="filterByCompany" class="form-control form-control-sm pull-right"><option value="">-- Perusahaan --</option></select>')
                                 .prependTo($('.dataTables_filter'))
                                 .on('change', function () {
                                     var val = $.fn.dataTable.util.escapeRegex($(this).val());
@@ -65,6 +62,9 @@
                         column.data().unique().sort().each(function (d, j) {
                             select.append('<option value="' + d + '">' + d + '</option>');
                         });
+<?php if ($this->session->user['role'] != 'admin') { ?>
+                            $('#filterByCompany').remove();
+<?php } ?>
                     }
                 });
             }

@@ -38,10 +38,14 @@ class M_dashboard extends CI_Model {
     }
 
     function getPemenuhan($company, $standard, $unit_kerja = null) {
-        $this->db->where('id_standard', $standard);
-        $this->db->where('parent', null);
-        $pasal = $this->db->get('pasal');
-        
+        $this->db->select('p.*, h.persentase AS hope');
+        $this->db->join('hope h', 'h.id_pasal = p.id', 'LEFT');
+        $this->db->where('p.id_standard', $standard);
+        $pasal = $this->db->get('pasal p')->result_array();
+        foreach ($pasal as $k => $p) {
+            $pasal[$k]= $p;
+        }
+//        return $pasal;
         $this->db->select('p.id, p.name, p.parent, COUNT(p2.id) AS child,h.persentase AS hope, COUNT(DISTINCT d.id) AS doc, GROUP_CONCAT(DISTINCT d.id) AS docs, COUNT(DISTINCT t.id) AS tugas, COUNT(DISTINCT j.id) AS jadwal,  GROUP_CONCAT(DISTINCT j.id) AS jadwals, SUM(IF(j.upload_date <= j.tanggal AND j.upload_date IS NOT NULL,1,0)) AS jadwal_ok');
         $this->db->join('pasal p2', 'p2.parent = p.id', 'LEFT');
         $this->db->join('pasal_access pa', 'pa.id_pasal = p.id AND pa.id_company = ' . $company, 'LEFT');

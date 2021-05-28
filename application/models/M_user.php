@@ -8,6 +8,7 @@ class M_user extends CI_Model {
         $this->db->order_by('id', 'ASC');
         if ($this->session->userdata('user')['role'] == 'pic') {
             $this->db->where('name', 'anggota');
+            $this->db->or_where('name', 'pic');
         }
         return $this->db->get('role')->result_array();
     }
@@ -24,12 +25,12 @@ class M_user extends CI_Model {
     }
 
     function read() {
-        $this->db->select('u.id, u.username, p.fullname, u.id_role, r.title AS role, c.name AS company, u.id_personil');
+        $this->db->select('u.id, u.username, p.fullname, u.id_role, r.title AS role, r.name AS rl, c.name AS company, u.id_personil');
         $this->db->join('role r', 'r.id = u.id_role');
         $this->db->join('personil p', 'p.id = u.id_personil', 'LEFT');
         $this->db->join('company c', 'c.id = p.id_company', 'LEFT');
         if ($this->session->userdata('user')['role'] == 'pic') {
-            $this->db->where('r.name', 'anggota');
+//            $this->db->where('r.name', 'anggota');
             $this->db->where('c.id', $this->session->userdata['user']['id_company']);
         }
         $data = $this->db->get($this->table . ' u')->result_array();

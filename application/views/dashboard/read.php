@@ -434,7 +434,7 @@ if (empty($this->session->activeCompany)) {
             });
             $('#selectPemenuhanUnitKerja').change();
             function grafikPemenuhan(unitKerja) {
-                $.getJSON('<?= $module . '/get_pemenuhan' ?>', {unit_kerja: unitKerja}, function (data) {
+                $.getJSON('<?= site_url($module . '/get_pemenuhan') ?>', {unit_kerja: unitKerja}, function (data) {
                     console.log(data);
                     var pemenuhan = data;
                     var label = [];
