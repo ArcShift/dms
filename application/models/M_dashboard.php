@@ -37,7 +37,7 @@ class M_dashboard extends CI_Model {
         return $this->db->get('standard s')->row_array();
     }
 
-    function getPemenuhan($company, $standard, $unit_kerja = null) {
+    function getPemenuhan($company, $standard, $unit_kerja = null, $personil= null) {
         $this->db->select('p.id, p.parent, p.name, h.persentase AS hope');
         $this->db->join('hope h', 'h.id_pasal = p.id', 'LEFT');
         $this->db->where('p.id_standard', $standard);
@@ -61,6 +61,8 @@ class M_dashboard extends CI_Model {
             $this->db->join('distribution ds', 'ds.id_document = d.id');
             if (!empty($unit_kerja)) {
                 $this->db->join('position_personil pp', 'pp.id = ds.id_position_personil AND pp.id_unit_kerja = ' . $unit_kerja);
+            }elseif(!empty($personil)){
+                $this->db->join('position_personil pp', 'pp.id = ds.id_position_personil AND pp.id = ' . $personil);
             }
             $data = $this->db->get('document d')->result();
             $p['doc'] = count($data);

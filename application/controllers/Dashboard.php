@@ -75,7 +75,7 @@ class Dashboard extends MY_Controller {
 
     function get_pemenuhan() {
         $this->load->model('M_treeview_detail', 'm_treeview');
-        $pemenuhan = $this->model->getPemenuhan($this->session->activeCompany['id'], $this->session->activeStandard['id'], $this->input->get('unit_kerja'));
+        $pemenuhan = $this->model->getPemenuhan($this->session->activeCompany['id'], $this->session->activeStandard['id'], $this->input->get('unit_kerja'),  $this->input->get('personil'));
         $parentPemenuhan = [];
         $pemenuhanDoc = [];
         foreach ($pemenuhan as $k => $p) {
@@ -88,7 +88,7 @@ class Dashboard extends MY_Controller {
     }
     
     function get_personil() {
-        $this->db->select('p.id, p.fullname');
+        $this->db->select('pp.id, p.fullname');
         $this->db->join('position_personil pp', 'pp.id_personil = p.id AND pp.id_unit_kerja ='.$this->input->get('unit_kerja'));
         $personil = $this->db->get('personil p')->result();
         echo json_encode($personil);

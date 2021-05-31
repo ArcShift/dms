@@ -82,7 +82,7 @@ if (empty($this->session->activeCompany)) {
             </div>
             <div class="col-sm-6">
                 <label><b>Personil</b></label>
-                <select class="form-control" id="inputPemenuhanPersonil">
+                <select class="form-control" id="selectPemenuhanPersonil">
                 </select>
             </div>
         </div>
@@ -431,21 +431,24 @@ if (empty($this->session->activeCompany)) {
             console.log(zoom, device);
             $('#selectPemenuhanUnitKerja').change(function () {
                 var unitKerja = $(this).val();
-                var sl = $('#inputPemenuhanPersonil');
+                var sl = $('#selectPemenuhanPersonil');
                 sl.empty();
                 if (Number.isInteger(parseInt(unitKerja))) {
-                    $.getJSON('<?= site_url($module . '/get_personil') ?>', {unit_kerja: $(this).val()}, function (data) {
+                    $.getJSON('<?= site_url($module . '/get_personil') ?>', {unit_kerja: $(this).val(), personil: null}, function (data) {
                         sl.append('<option value="">~ Personil ~</option>');
                         for (var d of data) {
                             sl.append('<option value="' + d.id + '">' + d.fullname + '</option>');
                         }
                     });
                 }
-                grafikPemenuhan($(this).val());
+                grafikPemenuhan($(this).val(), null);
             });
             $('#selectPemenuhanUnitKerja').change();
-            function grafikPemenuhan(unitKerja) {
-                $.getJSON('<?= site_url($module . '/get_pemenuhan') ?>', {unit_kerja: unitKerja}, function (data) {
+            $('#selectPemenuhanPersonil').change(function () {
+                grafikPemenuhan(null,$(this).val());
+            });
+            function grafikPemenuhan(unitKerja, personil) {
+                $.getJSON('<?= site_url($module . '/get_pemenuhan') ?>', {unit_kerja: unitKerja, personil: personil}, function (data) {
         //                    console.log(data);
                     var pemenuhan = data;
                     var label = [];
