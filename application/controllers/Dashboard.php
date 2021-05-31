@@ -83,7 +83,15 @@ class Dashboard extends MY_Controller {
                 array_push($parentPemenuhan, $p);
             }
         }
-        echo json_encode($parentPemenuhan);
+//        echo json_encode($parentPemenuhan);
+        echo json_encode($pemenuhan);
     }
-
+    
+    function get_personil() {
+        $this->db->select('p.id, p.fullname');
+        $this->db->join('position_personil pp', 'pp.id_personil = p.id AND pp.id_unit_kerja ='.$this->input->get('unit_kerja'));
+        $personil = $this->db->get('personil p')->result();
+        echo json_encode($personil);
+    }
+    
 }

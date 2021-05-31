@@ -38,53 +38,125 @@ class M_dashboard extends CI_Model {
     }
 
     function getPemenuhan($company, $standard, $unit_kerja = null) {
-        $this->db->select('p.*, h.persentase AS hope');
+        $this->db->select('p.id, p.parent, p.name, h.persentase AS hope');
         $this->db->join('hope h', 'h.id_pasal = p.id', 'LEFT');
         $this->db->where('p.id_standard', $standard);
         $pasal = $this->db->get('pasal p')->result_array();
         foreach ($pasal as $k => $p) {
-            $pasal[$k]= $p;
-        }
-//        return $pasal;
-        $this->db->select('p.id, p.name, p.parent, COUNT(p2.id) AS child,h.persentase AS hope, COUNT(DISTINCT d.id) AS doc, GROUP_CONCAT(DISTINCT d.id) AS docs, COUNT(DISTINCT t.id) AS tugas, COUNT(DISTINCT j.id) AS jadwal,  GROUP_CONCAT(DISTINCT j.id) AS jadwals, SUM(IF(j.upload_date <= j.tanggal AND j.upload_date IS NOT NULL,1,0)) AS jadwal_ok');
-        $this->db->join('pasal p2', 'p2.parent = p.id', 'LEFT');
-        $this->db->join('pasal_access pa', 'pa.id_pasal = p.id AND pa.id_company = ' . $company, 'LEFT');
-        $this->db->join('document_pasal dp', 'dp.id_pasal = p.id', 'LEFT');
-        $this->db->join('document d', 'd.id = dp.id_document AND d.id_company = ' . $company, 'LEFT');
-        $this->db->join('tugas t', 't.id_document = d.id', 'LEFT');
-        $this->db->join('jadwal j', 'j.id_tugas = t.id', 'LEFT');
-        $this->db->join('hope h', 'h.id_pasal = p.id', 'LEFT');
-        $this->db->where('p.id_standard', $standard);
-        $this->db->where('pa.status IS NULL');
-        if(!empty($unit_kerja)){
-            $this->db->join('personil_task pt', 'pt.id_tugas = t.id');
-        }
-        $this->db->or_where('pa.status', 'ENABLE');
-        $this->db->order_by('p.id');
-        $this->db->group_by('p.id, p.parent, h.persentase');
-        $pasal = $this->db->get('pasal p')->result_array();
-        foreach ($pasal as $k => $p) {
-            $pasal[$k]['indexChild'] = [];
-            if ($pasal[$k]['parent'] == null) {
-                $pasal[$k]['indexParent'] = null;
+            $p['indexChild'] = [];
+            if ($p['parent'] == null) {
+                $p['indexParent'] = null;
             }
             foreach ($pasal as $k2 => $p2) {
                 if ($p['id'] === $p2['parent']) {
                     $pasal[$k2]['indexParent'] = $k;
-                    array_push($pasal[$k]['indexChild'], $k2);
+                    array_push($p['indexChild'], $k2);
                 }
             }
             if (empty($pasal[$k]['hope'])) {
                 $pasal[$k]['hope'] == 70;
             }
+            //GET count DOC
+            $this->db->join('document_pasal dp', 'dp.id_document = d.id AND dp.id_pasal = ' . $p['id']);
+            $this->db->join('distribution ds', 'ds.id_document = d.id');
+            if (!empty($unit_kerja)) {
+                $this->db->join('position_personil pp', 'pp.id = ds.id_position_personil AND pp.id_unit_kerja = ' . $unit_kerja);
+            }
+            $data = $this->db->get('document d')->result();
+            $p['doc'] = count($data);
+//            $p['que'] = $this->db->last_query();
+//            GET COUNT IMP
+            $this->db->select('COUNT(j.id) AS jd, SUM(IF(j.path IS NULL, 0, 1)) AS complete');
+            $this->db->join('tugas t', 't.id = j.id_tugas');
+            if (!empty($unit_kerja)) {
+                $this->db->join('personil_task pt', 'pt.id_tugas = t.id');
+                $this->db->join('position_personil pp', 'pp.id = pt.id_position_personil AND pp.id_unit_kerja = ' . $unit_kerja);
+            }
+            $this->db->join('document d', 'd.id = t.id_document');
+            $this->db->join('document_pasal dp', 'dp.id_document = d.id AND dp.id_pasal = ' . $p['id']);
+            $this->db->group_by('dp.id_pasal');
+            $data = $this->db->get('jadwal j')->row();
+            $p['jadwal'] = empty($data) ? '0' : $data->jd;
+            $p['jadwal_ok'] = empty($data) ? '0' : $data->complete;
+            $pasal[$k] = $p;
         }
         $this->pasal = $pasal;
-        foreach ($this->pasal as $k => $p) {
+        foreach ($pasal as $k => $p) {
             if ($p['parent'] == null) {
-                $this->persentasePemenuhan($k);
+                $this->persentasePemenuhan2($k);
             }
         }
         return $this->pasal;
+//        $this->db->select('p.id, p.name, p.parent, COUNT(p2.id) AS child,h.persentase AS hope, COUNT(DISTINCT d.id) AS doc, GROUP_CONCAT(DISTINCT d.id) AS docs, COUNT(DISTINCT t.id) AS tugas, COUNT(DISTINCT j.id) AS jadwal,  GROUP_CONCAT(DISTINCT j.id) AS jadwals, SUM(IF(j.upload_date <= j.tanggal AND j.upload_date IS NOT NULL,1,0)) AS jadwal_ok');
+//        $this->db->join('pasal p2', 'p2.parent = p.id', 'LEFT');
+//        $this->db->join('pasal_access pa', 'pa.id_pasal = p.id AND pa.id_company = ' . $company, 'LEFT');
+//        $this->db->join('document_pasal dp', 'dp.id_pasal = p.id', 'LEFT');
+//        $this->db->join('document d', 'd.id = dp.id_document AND d.id_company = ' . $company, 'LEFT');
+//        $this->db->join('tugas t', 't.id_document = d.id', 'LEFT');
+//        $this->db->join('jadwal j', 'j.id_tugas = t.id', 'LEFT');
+//        $this->db->join('hope h', 'h.id_pasal = p.id', 'LEFT');
+//        $this->db->where('p.id_standard', $standard);
+//        $this->db->where('pa.status IS NULL');
+//        $this->db->or_where('pa.status', 'ENABLE');
+//        $this->db->order_by('p.id');
+//        $this->db->group_by('p.id, p.parent, h.persentase');
+//        $pasal = $this->db->get('pasal p')->result_array();
+//        foreach ($pasal as $k => $p) {
+//            $pasal[$k]['indexChild'] = [];
+//            if ($pasal[$k]['parent'] == null) {
+//                $pasal[$k]['indexParent'] = null;
+//            }
+//            foreach ($pasal as $k2 => $p2) {
+//                if ($p['id'] === $p2['parent']) {
+//                    $pasal[$k2]['indexParent'] = $k;
+//                    array_push($pasal[$k]['indexChild'], $k2);
+//                }
+//            }
+//            if (empty($pasal[$k]['hope'])) {
+//                $pasal[$k]['hope'] == 70;
+//            }
+//        }
+//        $this->pasal = $pasal;
+//        foreach ($this->pasal as $k => $p) {
+//            if ($p['parent'] == null) {
+//                $this->persentasePemenuhan($k);
+//            }
+//        }
+//        return $this->pasal;
+    }
+
+    private function persentasePemenuhan2($index) {
+        $p = $this->pasal[$index];
+        $pemenuhanDoc = 0;
+        $pemenuhanImp = 0;
+        $impStatus = false;
+        if (!empty($p['indexChild'])) {
+            foreach ($p['indexChild'] as $k => $c) {
+                $this->persentasePemenuhan2($c);
+                $pemenuhanDoc += $this->pasal[$c]['pemenuhanDoc'];
+                $pemenuhanImp += $this->pasal[$c]['pemenuhanImp'];
+                if ($this->pasal[$c]['impStatus']) {
+                    $impStatus = true;
+                }
+            }
+            $pemenuhanDoc = round($pemenuhanDoc / count($p['indexChild']), 2);
+            $pemenuhanImp = round($pemenuhanImp / count($p['indexChild']), 2);
+            $this->pasal[$index]['doc'] = '';
+        } else {
+            if ($p['doc'] != 0) {
+                $pemenuhanDoc = 100;
+                if ($p['jadwal'] != 0) {
+                    $impStatus = true;
+                }
+            }
+            if ($p['jadwal_ok'] != 0) {
+                $pemenuhanImp = round($p['jadwal_ok'] * 100 / $p['jadwal'], 2);
+            }
+        }
+        $this->pasal[$index]['pemenuhanDoc'] = $pemenuhanDoc;
+        $this->pasal[$index]['pemenuhanImp'] = 0;
+        $this->pasal[$index]['pemenuhanImp'] = $pemenuhanImp;
+        $this->pasal[$index]['impStatus'] = $impStatus;
     }
 
     private function persentasePemenuhan($index) {

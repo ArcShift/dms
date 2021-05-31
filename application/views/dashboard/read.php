@@ -68,9 +68,9 @@ if (empty($this->session->activeCompany)) {
     } else {
         $g2 = json_decode($progressImp);
 //        $pImp = json_decode($pemenuhan);
-        $pImp = array();//TODO: calculate this
+        $pImp = array(); //TODO: calculate this
         ?>
-        <div class="row d-none">
+        <div class="row">
             <div class="col-sm-6">
                 <label><b>Unit Kerja</b></label>
                 <select class="form-control" id="selectPemenuhanUnitKerja">
@@ -82,7 +82,7 @@ if (empty($this->session->activeCompany)) {
             </div>
             <div class="col-sm-6">
                 <label><b>Personil</b></label>
-                <select class="form-control" id="inputPemenuhanUnitKerja">
+                <select class="form-control" id="inputPemenuhanPersonil">
                 </select>
             </div>
         </div>
@@ -401,15 +401,15 @@ if (empty($this->session->activeCompany)) {
                                             <td class="text-center">
                                                 <button type="button" class="btn btn-primary btn-sm" 
                                                         onclick="detailTugas(
-                                                                                    '<?= $t['tugas'] ?>',
-                                                                                    '<?= $t['tanggal'] ?>',
-                                                                                    '<?= $t['judul'] ?>',
-                                                                                    '<?= $formTerkait ?>',
-                                                                                    '<?= $t['sifat'] ?>',
-                                                                                    '<?= $t['name'] ?>',
-                                                                                    '<?= $statusString ?>',
-                                                                                    '<?= $url_document ?>'
-                                                                                    )">Detail Tugas</button>
+                                                                        '<?= $t['tugas'] ?>',
+                                                                        '<?= $t['tanggal'] ?>',
+                                                                        '<?= $t['judul'] ?>',
+                                                                        '<?= $formTerkait ?>',
+                                                                        '<?= $t['sifat'] ?>',
+                                                                        '<?= $t['name'] ?>',
+                                                                        '<?= $statusString ?>',
+                                                                        '<?= $url_document ?>'
+                                                                        )">Detail Tugas</button>
                                             </td>
                                         </tr>
                                     <?php } ?>
@@ -430,12 +430,23 @@ if (empty($this->session->activeCompany)) {
             }
             console.log(zoom, device);
             $('#selectPemenuhanUnitKerja').change(function () {
+                var unitKerja = $(this).val();
+                var sl = $('#inputPemenuhanPersonil');
+                sl.empty();
+                if (Number.isInteger(parseInt(unitKerja))) {
+                    $.getJSON('<?= site_url($module . '/get_personil') ?>', {unit_kerja: $(this).val()}, function (data) {
+                        sl.append('<option value="">~ Personil ~</option>');
+                        for (var d of data) {
+                            sl.append('<option value="' + d.id + '">' + d.fullname + '</option>');
+                        }
+                    });
+                }
                 grafikPemenuhan($(this).val());
             });
             $('#selectPemenuhanUnitKerja').change();
             function grafikPemenuhan(unitKerja) {
                 $.getJSON('<?= site_url($module . '/get_pemenuhan') ?>', {unit_kerja: unitKerja}, function (data) {
-                    console.log(data);
+        //                    console.log(data);
                     var pemenuhan = data;
                     var label = [];
                     var doc = [];
@@ -445,11 +456,14 @@ if (empty($this->session->activeCompany)) {
                         var p = pemenuhan[i];
                         label.push(p.name);
                         doc.push(p.pemenuhanDoc);
+        //                        doc.push(p.doc);//DEV
                         imp.push(p.pemenuhanImp);
+        //                        imp.push(p.imp);//DEV
                         hope.push((p.hope == null ? 70 : p.hope));
                     }
                     $('#averageDoc').text(average(doc));
                     $('#averageImp').text(average(imp));
+                    $('#chartPemenuhan').empty();
                     new Chart(document.getElementById('chartPemenuhan'), {
                         type: 'radar',
                         data: {
