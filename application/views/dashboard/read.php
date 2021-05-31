@@ -95,7 +95,7 @@ if (empty($this->session->activeCompany)) {
                             <div class="widget-subheading">Pembuatan dokumen</div>
                         </div>
                         <div class="widget-content-right">
-                            <div class="widget-numbers text-white"><span id="averageDoc"></span>%</div>
+                            <div class="widget-numbers text-white"><span id="averageDoc"></span></div>
                         </div>
                     </div>
                 </div>
@@ -108,7 +108,7 @@ if (empty($this->session->activeCompany)) {
                             <div class="widget-subheading">Penerapan dokumen</div>
                         </div>
                         <div class="widget-content-right">
-                            <div class="widget-numbers text-white"><span id="averageImp"></span>%</div>
+                            <div class="widget-numbers text-white"><span id="averageImp"></span></div>
                         </div>
                     </div>
                 </div>
@@ -465,8 +465,10 @@ if (empty($this->session->activeCompany)) {
         //                        imp.push(p.imp);//DEV
                         hope.push((p.hope == null ? 70 : p.hope));
                     }
-                    $('#averageDoc').text(average(doc));
-                    $('#averageImp').text(average(imp));
+                    var aveDoc = average(doc);
+                    var aveImp = average(imp);
+                    $('#averageDoc').text((isNaN(aveDoc)?'-':aveDoc+'%'));
+                    $('#averageImp').text((isNaN(aveImp)?'-':aveImp+'%'));
                     $('#divChartPemenuhan').empty();
                     $('#divChartPemenuhan').append('<canvas id="chartPemenuhan"></canvas>');
                     new Chart(document.getElementById('chartPemenuhan'), {
