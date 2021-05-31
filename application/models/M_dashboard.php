@@ -37,7 +37,7 @@ class M_dashboard extends CI_Model {
         return $this->db->get('standard s')->row_array();
     }
 
-    function getPemenuhan($company, $standard, $unit_kerja = null, $personil= null) {
+    function getPemenuhan($company, $standard, $unit_kerja = null, $personil = null) {
         $this->db->select('p.id, p.parent, p.name, h.persentase AS hope');
         $this->db->join('hope h', 'h.id_pasal = p.id', 'LEFT');
         $this->db->where('p.id_standard', $standard);
@@ -61,7 +61,7 @@ class M_dashboard extends CI_Model {
             $this->db->join('distribution ds', 'ds.id_document = d.id');
             if (!empty($unit_kerja)) {
                 $this->db->join('position_personil pp', 'pp.id = ds.id_position_personil AND pp.id_unit_kerja = ' . $unit_kerja);
-            }elseif(!empty($personil)){
+            } elseif (!empty($personil)) {
                 $this->db->join('position_personil pp', 'pp.id = ds.id_position_personil AND pp.id = ' . $personil);
             }
             $data = $this->db->get('document d')->result();
@@ -70,9 +70,11 @@ class M_dashboard extends CI_Model {
 //            GET COUNT IMP
             $this->db->select('COUNT(j.id) AS jd, SUM(IF(j.path IS NULL, 0, 1)) AS complete');
             $this->db->join('tugas t', 't.id = j.id_tugas');
+            $this->db->join('personil_task pt', 'pt.id_tugas = t.id');
             if (!empty($unit_kerja)) {
-                $this->db->join('personil_task pt', 'pt.id_tugas = t.id');
                 $this->db->join('position_personil pp', 'pp.id = pt.id_position_personil AND pp.id_unit_kerja = ' . $unit_kerja);
+            } elseif (!empty($personil)) {
+                $this->db->join('position_personil pp', 'pp.id = pt.id_position_personil AND pp.id_personil = ' . $personil);
             }
             $this->db->join('document d', 'd.id = t.id_document');
             $this->db->join('document_pasal dp', 'dp.id_document = d.id AND dp.id_pasal = ' . $p['id']);
