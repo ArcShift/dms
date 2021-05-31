@@ -83,8 +83,8 @@ class Dashboard extends MY_Controller {
                 array_push($parentPemenuhan, $p);
             }
         }
-//        echo json_encode($parentPemenuhan);
-        echo json_encode($pemenuhan);
+        echo json_encode($parentPemenuhan);
+//        echo json_encode($pemenuhan);
     }
     
     function get_personil() {
