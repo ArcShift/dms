@@ -79,7 +79,7 @@ class Dashboard extends MY_Controller {
         $parentPemenuhan = [];
         $pemenuhanDoc = [];
         foreach ($pemenuhan as $k => $p) {
-            if ($p['parent'] == null) {
+            if ($p['parent'] == null & $p['pemenuhanDoc']!= 0) {
                 array_push($parentPemenuhan, $p);
             }
         }
