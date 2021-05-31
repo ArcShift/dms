@@ -119,7 +119,8 @@ if (empty($this->session->activeCompany)) {
                 <div class="main-card mb-3 card">
                     <div class="card-body">
                         <h5 class="card-title">Nilai Pemenuhan Dokumen dan Implementasi</h5>
-                        <canvas id="chartPemenuhan"></canvas>
+                        <div id="divChartPemenuhan"></div>
+                        <!--<canvas id="chartPemenuhan"></canvas>-->
                     </div>
                 </div>
             </div>
@@ -466,7 +467,8 @@ if (empty($this->session->activeCompany)) {
                     }
                     $('#averageDoc').text(average(doc));
                     $('#averageImp').text(average(imp));
-                    $('#chartPemenuhan').empty();
+                    $('#divChartPemenuhan').empty();
+                    $('#divChartPemenuhan').append('<canvas id="chartPemenuhan"></canvas>');
                     new Chart(document.getElementById('chartPemenuhan'), {
                         type: 'radar',
                         data: {
