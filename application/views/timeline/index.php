@@ -266,9 +266,6 @@ $n = 1;
                         <input class="form-control input-bukti input-url" type="url" name="url">
                         <select class="form-control input-bukti select-doc" name="doc">
                             <option value="">~ Pilih Dokumen ~</option>
-                            <?php foreach ($document as $d) { ?>
-                                <option value="<?= $d['id'] ?>"><?= $d['judul'] ?></option>
-                            <?php } ?>
                         </select>
                     </div>
                 </div>
