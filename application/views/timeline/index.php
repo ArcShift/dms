@@ -1,4 +1,6 @@
-<?php $n = 1 ?>
+<?php
+$n = 1;
+?>
 <style>
     .col-cust{
         width: 20%;
@@ -30,12 +32,11 @@
                 <tr>
                     <td><?= $n++ ?></td>
                     <td>Gap Analisa</td>
-                    <td>Gap Analisa 2021</td>
+                    <td id="judulGap"></td>
                     <td>
-                        <button class="btn btn-sm btn-outline-primary fa fa-upload"></button>
-                        <button class="btn btn-sm btn-outline-primary fa fa-edit"></button>
+                        <button class="btn btn-sm btn-outline-primary fa fa-edit" onclick="initGap()"></button>
                     </td>
-                    <td><span class="badge badge-danger">0%</span></td>
+                    <td><span class="badge badge-danger" id="statusGap"></span></td>
                     <td></td>
                 </tr>
                 <tr>
@@ -279,6 +280,35 @@
         </form>
     </div>
 </div>
+<!--MODAL GAP-->
+<div class="modal fade" id="modalGap">
+    <div class="modal-dialog">
+        <form id="formGap" method="post">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Modal Gap</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <select class="form-control" name="gap">
+                            <option value="">~ Pilih Gap ~</option>
+                            <?php foreach ($gapAnalisa as $g) { ?>
+                                <option value="<?= $g->id ?>"><?= $g->judul ?></option>
+                            <?php } ?>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" data-dismiss="modal">Tutup</button>
+                    <button class="btn btn-primary" id="btnSubmit" name="tambah" value="ok">Simpan</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
 <script>
     $('.fa-upload').click(function () {
         var m = $('#modalUpload');
@@ -311,4 +341,28 @@
             m.find('.select-doc').prop('required', true);
         }
     });
+    function getGap() {
+
+    }
+    function initGap() {
+        var m = $('#modalGap');
+        m.modal('show');
+    }
+    $('#formGap').submit(function (e) {
+        e.preventDefault();
+        $('#modalGap').modal('hide');
+        $.post('<?= $module . '/set_gap' ?>', $(this).serialize(), function (data) {
+            getTimeline();
+        });
+    });
+    getTimeline();
+    function getTimeline() {
+        $.getJSON('<?= $module . '/get_timeline' ?>', null, function (data) {
+            console.log(data);
+            if(data!=null){
+                $('#judulGap').html(data.gap_analisa);
+                $('#statusGap').html(data.statusGap+'%');
+            }
+        });
+    }
 </script>
