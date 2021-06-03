@@ -297,8 +297,9 @@ $n = 1;
                     <div class="form-group group-upload">
                         <input class="form-control input-bukti input-file" type="file" name="file">
                         <input class="form-control input-bukti input-url" type="url" name="url">
-                        <input class="form-control input-bukti input-foto" type="file" name="foto" accept="image/*">
+                        <input class="form-control input-bukti input-foto" type="file" name="foto" id="inputFoto" accept="image/*">
                     </div>
+                    <img class="text-center" id="imgUpload" src="#" width="200"/>
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-primary" data-dismiss="modal">Tutup</button>
@@ -434,8 +435,16 @@ $n = 1;
         m.modal('show');
         $('.input-bukti').hide();
         m.find('#inputHeader').val(header);
-        m.find('.modal-title').html('Upload '+title);
-        m.find('.radio-upload').prop('checked', false);   
+        m.find('.modal-title').html('Upload ' + title);
+        m.find('.radio-upload').prop('checked', false);
+    }
+    var imgInp = document.getElementById('inputFoto');
+    var blah = document.getElementById('imgUpload');
+    imgInp.onchange = evt => {
+        const [file] = imgInp.files
+        if (file) {
+            blah.src = URL.createObjectURL(file);
+        }
     }
     $('.radio-upload').change(function () {
         var type = $(this).val();
