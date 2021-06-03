@@ -36,7 +36,7 @@ $n = 1;
                     <td>
                         <button class="btn btn-sm btn-outline-primary fa fa-edit" onclick="initGap()"></button>
                     </td>
-                    <td><span class="badge badge-danger" id="statusGap"></span></td>
+                    <td id="statusGap"></td>
                     <td></td>
                 </tr>
                 <tr>
@@ -44,10 +44,10 @@ $n = 1;
                     <td>Training</td>
                     <td>Training Awareness</td>
                     <td>
-                        <button class="btn btn-sm btn-outline-primary fa fa-upload"></button>
+                        <button class="btn btn-sm btn-outline-primary fa fa-upload" onclick="initUpload1('training_awareness')"></button>
                         <button class="btn btn-sm btn-outline-primary fa fa-edit"></button>
                     </td>
-                    <td><span class="badge badge-danger">0%</span></td>
+                    <td id="statusTrainingAwareness"></td>
                     <td></td>
                 </tr>
                 <tr>
@@ -235,6 +235,76 @@ $n = 1;
         </table>
     </div>
 </div>
+<!--MODAL GAP-->
+<div class="modal fade" id="modalGap">
+    <div class="modal-dialog">
+        <form id="formGap" method="post">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Modal Gap</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <select class="form-control" name="gap">
+                            <option value="">~ Pilih Gap ~</option>
+                            <?php foreach ($gapAnalisa as $g) { ?>
+                                <option value="<?= $g->id ?>"><?= $g->judul ?></option>
+                            <?php } ?>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" data-dismiss="modal">Tutup</button>
+                    <button class="btn btn-primary" id="btnSubmit" name="tambah" value="ok">Simpan</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<!--MODAL UPLOAD FOTO-->
+<div class="modal fade" id="modalUpload1">
+    <div class="modal-dialog">
+        <form method="post" id="formUpload1" enctype="multipart/form-data">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Upload</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <input name="header" hidden="" id="inputHeader">
+                    <div class="form-group group-upload">
+                        <div class="custom-control custom-radio custom-control-inline">
+                            <input type="radio" id="customRadio1" name="type" value="file" class="custom-control-input radio-upload">
+                            <label class="custom-control-label" for="customRadio1">File</label>
+                        </div>
+                        <div class="custom-control custom-radio custom-control-inline">
+                            <input type="radio" id="customRadio2" name="type" value="url" class="custom-control-input radio-upload">
+                            <label class="custom-control-label" for="customRadio2">Url</label>
+                        </div>
+                        <div class="custom-control custom-radio custom-control-inline">
+                            <input type="radio" id="customRadio3" name="type" value="foto" class="custom-control-input radio-upload">
+                            <label class="custom-control-label" for="customRadio3">Foto</label>
+                        </div>
+                    </div>
+                    <div class="form-group group-upload">
+                        <input class="form-control input-bukti input-file" type="file" name="file">
+                        <input class="form-control input-bukti input-url" type="url" name="url">
+                        <input class="form-control input-bukti input-foto" type="file" name="foto" accept="image/*">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" data-dismiss="modal">Tutup</button>
+                    <button class="btn btn-primary" id="btnSubmit" name="tambah" value="ok">Simpan</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
 <!--MODAL UPLOAD-->
 <div class="modal fade" id="modalUpload">
     <div class="modal-dialog">
@@ -277,37 +347,8 @@ $n = 1;
         </form>
     </div>
 </div>
-<!--MODAL GAP-->
-<div class="modal fade" id="modalGap">
-    <div class="modal-dialog">
-        <form id="formGap" method="post">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Modal Gap</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="form-group">
-                        <select class="form-control" name="gap">
-                            <option value="">~ Pilih Gap ~</option>
-                            <?php foreach ($gapAnalisa as $g) { ?>
-                                <option value="<?= $g->id ?>"><?= $g->judul ?></option>
-                            <?php } ?>
-                        </select>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button class="btn btn-primary" data-dismiss="modal">Tutup</button>
-                    <button class="btn btn-primary" id="btnSubmit" name="tambah" value="ok">Simpan</button>
-                </div>
-            </div>
-        </form>
-    </div>
-</div>
 <script>
-    $('.fa-upload').click(function () {
+    $('.fa-upload2').click(function () {
         var m = $('#modalUpload');
         m.modal('show');
         m.find('#btnSubmit').attr('name', 'tambah');
@@ -356,10 +397,99 @@ $n = 1;
     function getTimeline() {
         $.getJSON('<?= $module . '/get_timeline' ?>', null, function (data) {
             console.log(data);
-            if(data!=null){
-                $('#judulGap').html(data.gap_analisa);
-                $('#statusGap').html(data.statusGap+'%');
+            $('#judulGap').html(data.gap_analisa);
+            $('#statusGap').html(badgeColor(data.statusGap));
+            if (data.training_awareness_path != null & data.training_awareness_type != null) {
+                $('#statusTrainingAwareness').html(badgeColor(100));
+            } else {
+                $('#statusTrainingAwareness').html(badgeColor(0));
             }
+        });
+    }
+    function badgeColor(val) {
+        var badge = '';
+        switch (val) {
+            case 0:
+                badge = 'danger';
+                break;
+            case 100:
+                badge = 'success';
+                break;
+            default:
+                badge = 'warning';
+                break;
+        }
+        return '<span class="badge badge-' + badge + '">' + val + '%</span>';
+    }
+    function initUpload1(header) {
+        var m = $('#modalUpload1');
+        m.modal('show');
+        $('.input-bukti').hide();
+        m.find('#inputHeader').val(header);
+        m.find('.radio-upload').prop('checked', false);
+    }
+    $('.radio-upload').change(function () {
+        var type = $(this).val();
+        var m = $('#modalUpload1');
+        if (type == 'file') {
+            m.find('.input-bukti').prop('required', false);
+            m.find('.input-bukti').hide();
+            m.find('.input-file').prop('required', true);
+            m.find('.input-file').show();
+        } else if (type == 'url') {
+            m.find('.input-bukti').hide();
+            m.find('.input-bukti').prop('required', false);
+            m.find('.input-url').show();
+            m.find('.input-url').prop('required', true);
+        } else if (type == 'foto') {
+            m.find('.input-bukti').hide();
+            m.find('.input-bukti').prop('required', false);
+            m.find('.input-foto').show();
+            m.find('.input-foto').prop('required', true);
+        }
+    });
+    $('#formUpload1').submit(function (e) {
+        e.preventDefault();
+        $('#modalUpload1').modal('hide');
+        console.log($(this).serialize());
+        post(this, 'upload1');
+    });
+    function post(form, url) {
+        $('.modal').modal('hide');
+        $('#modalNotif .modal-title').text('Menyimpan data');
+        $('#modalNotif .modal-message').html('loading....');
+        $('#modalNotif').modal('show');
+        $.ajax({
+            url: '<?php echo site_url($module . '/') ?>' + url,
+            type: "post",
+            data: new FormData(form),
+            processData: false,
+            contentType: false,
+            cache: false,
+            async: false,
+            success: function (data) {
+                try {
+                    data = JSON.parse(data);
+                    if (data.status == 'success') {
+                        getTimeline();
+                        if (data.message) {
+                            $('#modalNotif .modal-message').html(data.message);
+                        } else {
+                            $('#modalNotif .modal-message').html('Data Berhasil Disimpan');
+                        }
+                        $('#modalNotif .modal-title').text('Success');
+                    } else if (data.status === 'error') {
+                        $('#modalNotif .modal-title').text('Error');
+                        $('#modalNotif .modal-message').html(data.message);
+                    }
+                } catch (e) {
+                    $('#modalNotif .modal-message').html(data);
+                }
+            },
+            error: function (data) {
+                $('#modalNotif .modal-title').text('Error');
+                $('#modalNotif .modal-message').text('Error 500');
+            },
         });
     }
 </script>

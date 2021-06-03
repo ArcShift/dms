@@ -10,6 +10,52 @@ if (empty($this->session->activeCompany)) {
         }
     </style>
     <script type="text/javascript" src="<?= base_url('assets/js/detect-zoom.min.js') ?>"></script>
+    <!--MENU UNIT KERJA-->
+    <div class="d-inline-block dropdown" id="menuUnitKerja">
+        <button type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn-shadow dropdown-toggle btn btn-info">
+            <span class="btn-icon-wrapper pr-2 opacity-7">
+                <i class="fa fa-file fa-w-20"></i>
+            </span>
+            ~ Unit Kerja ~
+        </button>
+        <div tabindex="-1" role="menu" aria-hidden="true" class="dropdown-menu dropdown-menu-right">
+            <ul class="nav flex-column">
+                <?php foreach ($gap_analisa as $ga) { ?>
+                    <li class="nav-item">
+                        <a class="nav-link" onclick="switchGapAnalisa(<?= $ga['id'] ?>)">
+                            <i class="nav-link-icon lnr-inbox"></i>
+                            <span>
+                                <?= $ga['judul'] ?>
+                            </span>
+                        </a>
+                    </li>
+                <?php } ?>
+            </ul>
+        </div>
+    </div>
+    <!--MENU UNIT KERJA-->
+    <div class="d-inline-block dropdown ml-1" id="menuPersonil">
+        <button type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn-shadow dropdown-toggle btn btn-info">
+            <span class="btn-icon-wrapper pr-2 opacity-7">
+                <i class="fa fa-file fa-w-20"></i>
+            </span>
+            ~ Personil ~
+        </button>
+        <div tabindex="-1" role="menu" aria-hidden="true" class="dropdown-menu dropdown-menu-right">
+            <ul class="nav flex-column">
+                <?php foreach ($gap_analisa as $ga) { ?>
+                    <li class="nav-item">
+                        <a class="nav-link" onclick="switchGapAnalisa(<?= $ga['id'] ?>)">
+                            <i class="nav-link-icon lnr-inbox"></i>
+                            <span>
+                                <?= $ga['judul'] ?>
+                            </span>
+                        </a>
+                    </li>
+                <?php } ?>
+            </ul>
+        </div>
+    </div>
     <!--MODAL TUGAS-->
     <div class="modal fade" id="modalTugas">
         <div class="modal-dialog" role="document">
@@ -70,7 +116,7 @@ if (empty($this->session->activeCompany)) {
 //        $pImp = json_decode($pemenuhan);
         $pImp = array(); //TODO: calculate this
         ?>
-        <div class="row">
+        <div class="row d-none">
             <div class="col-sm-6">
                 <label><b>Unit Kerja</b></label>
                 <select class="form-control" id="selectPemenuhanUnitKerja">
@@ -425,6 +471,8 @@ if (empty($this->session->activeCompany)) {
         <script>
             var zoom = detectZoom.zoom();
             var device = detectZoom.device();
+            $('.page-title-actions').append($('#menuUnitKerja'));
+            $('.page-title-actions').append($('#menuPersonil'));
             if (zoom > 0.7) {
                 $('.div-zoom').css('height', '560px');
                 console.log('zoom');
@@ -446,7 +494,7 @@ if (empty($this->session->activeCompany)) {
             });
             $('#selectPemenuhanUnitKerja').change();
             $('#selectPemenuhanPersonil').change(function () {
-                grafikPemenuhan(null,$(this).val());
+                grafikPemenuhan(null, $(this).val());
             });
             function grafikPemenuhan(unitKerja, personil) {
                 $.getJSON('<?= site_url($module . '/get_pemenuhan') ?>', {unit_kerja: unitKerja, personil: personil}, function (data) {
@@ -467,8 +515,8 @@ if (empty($this->session->activeCompany)) {
                     }
                     var aveDoc = average(doc);
                     var aveImp = average(imp);
-                    $('#averageDoc').text((isNaN(aveDoc)?'-':aveDoc+'%'));
-                    $('#averageImp').text((isNaN(aveImp)?'-':aveImp+'%'));
+                    $('#averageDoc').text((isNaN(aveDoc) ? '-' : aveDoc + '%'));
+                    $('#averageImp').text((isNaN(aveImp) ? '-' : aveImp + '%'));
                     $('#divChartPemenuhan').empty();
                     $('#divChartPemenuhan').append('<canvas id="chartPemenuhan"></canvas>');
                     new Chart(document.getElementById('chartPemenuhan'), {

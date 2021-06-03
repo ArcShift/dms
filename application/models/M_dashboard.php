@@ -25,14 +25,14 @@ class M_dashboard extends CI_Model {
         return $this->db->count_all_results('standard s');
     }
 
-    function company_standard($c) {
-        $this->db->select('s.*');
-        $this->db->join('company_standard cs', 'cs.id_standard = s.id AND cs.id_company = ' . $c);
-        return $this->db->get('standard s')->result_array();
-    }
+//    function company_standard($c) {
+//        $this->db->select('s.*');
+//        $this->db->join('company_standard cs', 'cs.id_standard = s.id AND cs.id_company = ' . $c);
+//        return $this->db->get('standard s')->result_array();
+//    }
 
     function getDefaultStandard($company) {
-        $this->db->select('s.*');
+        $this->db->select('s.*, cs.id AS id_company_standard');
         $this->db->join('company_standard cs', 'cs.id_standard = s.id AND cs.id_company = ' . $company);
         return $this->db->get('standard s')->row_array();
     }

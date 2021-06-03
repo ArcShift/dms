@@ -33,7 +33,7 @@ class Dashboard extends MY_Controller {
         $this->data['menuStandard'] = 'standard';
         if (!empty($company)) {
             $this->data['companies'] = $this->db->get('company')->result_array();
-            $this->data['company_standard'] = $this->model->company_standard($company['id']);
+//            $this->data['company_standard'] = $this->model->company_standard($company['id']);
             $this->load->model('m_unit_kerja');
             $this->data['unit_kerja'] = $this->m_unit_kerja->get();
             if (!empty($standard)) {
