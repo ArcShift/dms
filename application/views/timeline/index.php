@@ -8,7 +8,7 @@ $n = 1;
 </style>
 <div class="card">
     <div class="card-body">
-        <b>Progress Timeline Sertifikasi <?= $this->session->activeStandard['name'] ?></b>
+        <b>Progress Kesiapan Sertifikasi <?= $this->session->activeStandard['name'] ?></b>
         <div class="progress">
             <div class="progress-bar bg-danger" style="width: 20%">Tidak Siap Sama Sekali</div>
             <div class="progress-bar bg-warning" style="width: 20%">Belum Siap</div>
