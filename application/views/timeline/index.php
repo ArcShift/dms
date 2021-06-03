@@ -44,7 +44,7 @@ $n = 1;
                     <td>Training</td>
                     <td>Training Awareness</td>
                     <td>
-                        <button class="btn btn-sm btn-outline-primary fa fa-upload" onclick="initUpload1('training_awareness')"></button>
+                        <button class="btn btn-sm btn-outline-primary fa fa-upload" onclick="initUpload1('training_awareness', 'Training Awareness')"></button>
                         <button class="btn btn-sm btn-outline-primary fa fa-edit"></button>
                     </td>
                     <td id="statusTrainingAwareness"></td>
@@ -54,7 +54,10 @@ $n = 1;
                     <td></td>
                     <td></td>
                     <td>Training Internal</td>
-                    <td></td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-primary fa fa-upload" onclick="initUpload1('training_internal', 'Training Internal')"></button>
+                        <button class="btn btn-sm btn-outline-primary fa fa-edit"></button>
+                    </td>
                     <td></td>
                     <td></td>
                 </tr>
@@ -279,7 +282,7 @@ $n = 1;
                     <input name="header" hidden="" id="inputHeader">
                     <div class="form-group group-upload">
                         <div class="custom-control custom-radio custom-control-inline">
-                            <input type="radio" id="customRadio1" name="type" value="file" class="custom-control-input radio-upload">
+                            <input type="radio" id="customRadio1" name="type" value="file" class="custom-control-input radio-upload" required="">
                             <label class="custom-control-label" for="customRadio1">File</label>
                         </div>
                         <div class="custom-control custom-radio custom-control-inline">
@@ -421,11 +424,12 @@ $n = 1;
         }
         return '<span class="badge badge-' + badge + '">' + val + '%</span>';
     }
-    function initUpload1(header) {
+    function initUpload1(header, title) {
         var m = $('#modalUpload1');
         m.modal('show');
         $('.input-bukti').hide();
         m.find('#inputHeader').val(header);
+        m.find('.modal-title').html('Upload '+title);
         m.find('.radio-upload').prop('checked', false);
     }
     $('.radio-upload').change(function () {

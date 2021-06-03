@@ -36,9 +36,9 @@ class Timeline extends MY_Controller {
 //        $timeline = $this->db->get_where('timeline', ['id_company_standard' => $this->session->activeStandard['id_company_standard']])->result();
         $this->data['status'] = 'success';
         $header = $this->input->post('header');
-        if ($header == 'training_awareness') {
+        if (!empty($header)) {
             $type = $this->input->post('type');
-            $this->db->set('training_awareness_type', $type);
+            $this->db->set($header.'_type', $type);
             $path = null;
             if ($type == 'file' | $type == 'foto') {
                 $config['upload_path'] = './upload/' . $header;
@@ -55,7 +55,7 @@ class Timeline extends MY_Controller {
                 $path = $this->input->post('url');
             }
             if ($this->data['status'] == 'success') {
-                $this->db->set('training_awareness_path', $path);
+                $this->db->set($header.'_path', $path);
                 $this->db->where('id', $this->session->activeStandard['id_company_standard']);
                 $this->db->update('company_standard');
             }
