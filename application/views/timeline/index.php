@@ -58,7 +58,7 @@ $n = 1;
                         <button class="btn btn-sm btn-outline-primary fa fa-upload" onclick="initUpload1('training_internal', 'Training Internal')"></button>
                         <button class="btn btn-sm btn-outline-primary fa fa-edit"></button>
                     </td>
-                    <td></td>
+                    <td id="statusTrainingInternal"></td>
                     <td></td>
                 </tr>
                 <tr>
@@ -407,6 +407,11 @@ $n = 1;
             } else {
                 $('#statusTrainingAwareness').html(badgeColor(0));
             }
+            if (data.training_internal_path != null & data.training_internal_type != null) {
+                $('#statusTrainingInternal').html(badgeColor(100));
+            } else {
+                $('#statusTrainingInternal').html(badgeColor(0));
+            }
         });
     }
     function badgeColor(val) {
@@ -430,7 +435,7 @@ $n = 1;
         $('.input-bukti').hide();
         m.find('#inputHeader').val(header);
         m.find('.modal-title').html('Upload '+title);
-        m.find('.radio-upload').prop('checked', false);
+        m.find('.radio-upload').prop('checked', false);   
     }
     $('.radio-upload').change(function () {
         var type = $(this).val();
