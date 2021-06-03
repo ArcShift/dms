@@ -22,7 +22,7 @@ if (empty($this->session->activeCompany)) {
             <ul class="nav flex-column">
                 <?php // foreach ($gap_analisa as $ga) { ?>
 <!--                    <li class="nav-item">
-                        <a class="nav-link" onclick="switchGapAnalisa(<?php//echo $ga['id'] ?>)">
+                        <a class="nav-link" onclick="switchGapAnalisa(<?php //echo $ga['id'] ?>)">
                             <i class="nav-link-icon lnr-inbox"></i>
                             <span>
                                 <?php // echo $ga['judul'] ?>
