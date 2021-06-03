@@ -299,7 +299,7 @@ $n = 1;
                         <input class="form-control input-bukti input-url" type="url" name="url">
                         <input class="form-control input-bukti input-foto" type="file" name="foto" id="inputFoto" accept="image/*">
                     </div>
-                    <img class="text-center" id="imgUpload" src="#" width="200"/>
+                    <img class="text-center" id="imgUpload" src="#" alt="" width="200"/>
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-primary" data-dismiss="modal">Tutup</button>
