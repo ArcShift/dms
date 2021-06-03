@@ -20,16 +20,16 @@ if (empty($this->session->activeCompany)) {
         </button>
         <div tabindex="-1" role="menu" aria-hidden="true" class="dropdown-menu dropdown-menu-right">
             <ul class="nav flex-column">
-                <?php foreach ($gap_analisa as $ga) { ?>
-                    <li class="nav-item">
+                <?php // foreach ($gap_analisa as $ga) { ?>
+<!--                    <li class="nav-item">
                         <a class="nav-link" onclick="switchGapAnalisa(<?= $ga['id'] ?>)">
                             <i class="nav-link-icon lnr-inbox"></i>
                             <span>
                                 <?= $ga['judul'] ?>
                             </span>
                         </a>
-                    </li>
-                <?php } ?>
+                    </li>-->
+                <?php // } ?>
             </ul>
         </div>
     </div>
@@ -43,16 +43,16 @@ if (empty($this->session->activeCompany)) {
         </button>
         <div tabindex="-1" role="menu" aria-hidden="true" class="dropdown-menu dropdown-menu-right">
             <ul class="nav flex-column">
-                <?php foreach ($gap_analisa as $ga) { ?>
-                    <li class="nav-item">
+                <?php // foreach ($gap_analisa as $ga) { ?>
+<!--                    <li class="nav-item">
                         <a class="nav-link" onclick="switchGapAnalisa(<?= $ga['id'] ?>)">
                             <i class="nav-link-icon lnr-inbox"></i>
                             <span>
                                 <?= $ga['judul'] ?>
                             </span>
                         </a>
-                    </li>
-                <?php } ?>
+                    </li>-->
+                <?php // } ?>
             </ul>
         </div>
     </div>

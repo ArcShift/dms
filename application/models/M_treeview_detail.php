@@ -43,6 +43,9 @@ class M_treeview_detail extends CI_Model {
     }
 
     function create_document() {
+        if ($this->input->post('id')) {
+            $old = $this->db->get_where('document', ['id' => $this->input->post('id')])->row();
+        }
         $this->db->set('id_pasal', $this->input->post('pasal'));
         $this->db->set('nomor', $this->input->post('nomor'));
         $this->db->set('judul', $this->input->post('judul'));
@@ -72,6 +75,9 @@ class M_treeview_detail extends CI_Model {
         if ($this->input->post('id')) {
             $this->db->where('id', $this->input->post('id'));
             if ($this->db->update('document')) {
+                if ($old->type_doc == 'FILE' & !empty($type) & file_exists('upload/dokumen/' . $old->file)) {//delete old file
+                    unlink('upload/dokumen/' . $old->file);
+                }
                 $this->setLog('U_DOC', $this->input->post('id'));
                 if ($this->editDokumenPasal()) {
                     return $this->editDocumentTerkait();
@@ -540,7 +546,7 @@ class M_treeview_detail extends CI_Model {
     private $pasal = [];
 
     function getPemenuhan($company, $standard) {
-        $this->db->select('p.*,COUNT(p2.id) AS child,h.persentase AS hope, COUNT(DISTINCT d.id) AS doc, GROUP_CONCAT(DISTINCT d.id) AS docs, COUNT(DISTINCT t.id) AS tugas, COUNT(DISTINCT j.id) AS jadwal,  GROUP_CONCAT(DISTINCT j.id) AS jadwals, SUM(IF(j.upload_date <= j.tanggal AND j.upload_date IS NOT NULL,1,0)) AS jadwal_ok');
+        $this->db->select('p.id, p.name, p.parent, COUNT(p2.id) AS child,h.persentase AS hope, COUNT(DISTINCT d.id) AS doc, GROUP_CONCAT(DISTINCT d.id) AS docs, COUNT(DISTINCT t.id) AS tugas, COUNT(DISTINCT j.id) AS jadwal,  GROUP_CONCAT(DISTINCT j.id) AS jadwals, SUM(IF(j.upload_date <= j.tanggal AND j.upload_date IS NOT NULL,1,0)) AS jadwal_ok');
         $this->db->join('pasal p2', 'p2.parent = p.id', 'LEFT');
         $this->db->join('pasal_access pa', 'pa.id_pasal = p.id AND pa.id_company = ' . $company, 'LEFT');
         $this->db->join('document_pasal dp', 'dp.id_pasal = p.id', 'LEFT');
@@ -552,7 +558,8 @@ class M_treeview_detail extends CI_Model {
         $this->db->where('pa.status IS NULL');
         $this->db->or_where('pa.status', 'ENABLE');
         $this->db->order_by('p.id');
-        $this->db->group_by('p.id');
+//        $this->db->group_by('p.id');
+        $this->db->group_by('p.id, p.parent, h.persentase');
         $pasal = $this->db->get('pasal p')->result_array();
         foreach ($pasal as $k => $p) {
             $pasal[$k]['indexChild'] = [];
