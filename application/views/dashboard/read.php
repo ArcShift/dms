@@ -18,26 +18,21 @@ if (empty($this->session->activeCompany)) {
     <script type="text/javascript" src="<?= base_url('assets/js/detect-zoom.min.js') ?>"></script>
     <!--MENU UNIT KERJA-->
     <div class="d-inline-block dropdown" id="menuUnitKerja">
-        <button type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn-shadow dropdown-toggle btn btn-info">
+        <button class="btn btn-info dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <span class="btn-icon-wrapper pr-2 opacity-7">
                 <i class="fa fa-file fa-w-20"></i>
             </span>
             ~ Unit Kerja ~
         </button>
-        <div tabindex="-1" role="menu" data-toggle="dropdown" aria-haspopup="true" aria-hidden="true" class="dropdown-menu dropdown-menu-right">
-            <ul class="nav flex-column">
-                <?php foreach ($unit_kerja as $k => $uk) { ?>
-                    <li class="nav-item">
-                        <a class="nav-link" onclick="switchUnitKerja(<?= $k ?>)">
-                            <i class="nav-link-icon lnr-inbox"></i>
-                            <span>
-                                <?= $uk->name ?>
-                            </span>
-                        </a>
-                    </li>
-                <?php } ?>
-            </ul>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <?php foreach ($unit_kerja as $k => $uk) { ?>
+                <a class="dropdown-item" onclick="switchUnitKerja(<?= $k ?>)">
+                    <?= $uk->name ?>
+                    </span>
+                </a>
+            <?php } ?>
         </div>
+
     </div>
     <!--MENU PERSONIL-->
     <div class="d-inline-block dropdown ml-1" id="menuPersonil">
@@ -47,7 +42,7 @@ if (empty($this->session->activeCompany)) {
             </span>
             ~ Personil ~
         </button>
-        <div tabindex="-1" data-toggle="dropdown" aria-haspopup="true" role="menu" aria-hidden="true" class="dropdown-menu dropdown-menu-right">
+        <div tabindex="-1" class="dropdown-menu dropdown-menu-right">
             <ul class="nav flex-column"></ul>
         </div>
     </div>
@@ -516,11 +511,13 @@ if (empty($this->session->activeCompany)) {
                 });
                 grafikPemenuhan(uk.id, null);
                 $('#menuUnitKerja button').text(uk.name);
+                $('#menuUnitKerja .dropdown-menu').removeClass('show');
             }
             var personil = [];
             function switchPersonil(idx) {
                 var p = personil[idx];
                 $('#menuPersonil button').text(p.fullname);
+                $('#menuPersonil .dropdown-menu').removeClass('show');
                 grafikPemenuhan(null, p.id);
             }
             grafikPemenuhan(null, null);
