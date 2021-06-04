@@ -512,6 +512,7 @@ if (empty($this->session->activeCompany)) {
                 grafikPemenuhan(uk.id, null);
                 $('#menuUnitKerja button').text(uk.name);
                 $('#menuUnitKerja .dropdown-menu').removeClass('show');
+                $('#menuPersonil button').text('~ Personil ~');
             }
             var personil = [];
             function switchPersonil(idx) {
