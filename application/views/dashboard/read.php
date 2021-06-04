@@ -11,6 +11,9 @@ if (empty($this->session->activeCompany)) {
         #chartPemenuhan{
             height: 150%;
         }
+        .dropdown .dropdown-toggle{
+            max-width: 150px;
+        }
     </style>
     <script type="text/javascript" src="<?= base_url('assets/js/detect-zoom.min.js') ?>"></script>
     <!--MENU UNIT KERJA-->
@@ -164,15 +167,11 @@ if (empty($this->session->activeCompany)) {
             <div class="col-sm-5">
                 <div class="main-card mb-3 card">
                     <div class="card-body">
-                        <h5 class="card-title">Grafik Pemenuhan Unit Kerja</h5>
                         <div id="divChartPemenuhanUnitKerja"></div>
-                    </div>
-                </div>
-                <div class="main-card mb-3 card">
-                    <div class="card-body">
-                        <h5 class="card-title">Grafik Pemenuhan Personil</h5>
+                        <h6 class="text-center">Grafik Pemenuhan Unit Kerja</h6>
+                        <hr>
                         <div id="divChartPemenuhanPersonil"></div>
-                        <!--<canvas id="chartPemenuhan"></canvas>-->
+                        <h6 class="text-center">Grafik Pemenuhan Personil</h6>
                     </div>
                 </div>
             </div>
@@ -499,7 +498,7 @@ if (empty($this->session->activeCompany)) {
                 }
                 grafikPemenuhan($(this).val(), null);
             });
-            
+
             function switchUnitKerja(idx) {
                 console.log(unitKerja[idx]);
                 var uk = unitKerja[idx];
@@ -520,7 +519,7 @@ if (empty($this->session->activeCompany)) {
             }
             var personil = [];
             function switchPersonil(idx) {
-            var p = personil[idx];
+                var p = personil[idx];
                 $('#menuPersonil button').text(p.fullname);
                 grafikPemenuhan(null, p.id);
             }
@@ -582,7 +581,7 @@ if (empty($this->session->activeCompany)) {
                                 }]
                         },
                         options: {
-                            aspectRatio: 1,
+                            aspectRatio: (chart == '' ? 1.1 : 1.7),
                             scale: {
                                 angleLines: {
                                     display: false
@@ -591,8 +590,17 @@ if (empty($this->session->activeCompany)) {
                                     suggestedMin: 0,
                                     suggestedMax: 100
                                 }
-                            }
+                            },
+        //                            title: {
+        //                                display: true,
+        //                                text: 'Custom Chart Title',
+        //                                padding: {
+        //                                    top: 10,
+        //                                    bottom: 30
+        //                                }
+        //                            }
                         }
+
                     });
                 });
             }
