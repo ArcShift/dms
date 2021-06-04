@@ -493,7 +493,9 @@ if (empty($this->session->activeCompany)) {
                 }
                 grafikPemenuhan($(this).val(), null);
             });
-
+            if (unitKerja.length > 0 || unitKerja != undefined) {
+                switchUnitKerja(0);
+            }
             function switchUnitKerja(idx) {
                 console.log(unitKerja[idx]);
                 var uk = unitKerja[idx];
@@ -508,11 +510,14 @@ if (empty($this->session->activeCompany)) {
                                 + '</a>'
                                 + '</li>');
                     }
+                    grafikPemenuhan(uk.id, null);
+                    $('#menuUnitKerja button').text(uk.name);
+                    $('#menuUnitKerja .dropdown-menu').removeClass('show');
+                    $('#menuPersonil button').text('~ Personil ~');
+                    if (personil.length > 0 || personil != undefined) {
+                        switchPersonil(0);
+                    }
                 });
-                grafikPemenuhan(uk.id, null);
-                $('#menuUnitKerja button').text(uk.name);
-                $('#menuUnitKerja .dropdown-menu').removeClass('show');
-                $('#menuPersonil button').text('~ Personil ~');
             }
             var personil = [];
             function switchPersonil(idx) {
