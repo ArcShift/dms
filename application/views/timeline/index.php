@@ -438,6 +438,10 @@ $n = 1;
         m.find('.modal-title').html('Upload ' + title);
         m.find('.radio-upload').prop('checked', false);
     }
+    $('#modalUpload1').on('hidden.bs.modal', function () {
+        console.log('close');
+        document.getElementById('imgUpload').scr = '';//TODO: reset image not work
+    });
     var imgInp = document.getElementById('inputFoto');
     var blah = document.getElementById('imgUpload');
     imgInp.onchange = evt => {

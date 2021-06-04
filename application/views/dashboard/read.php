@@ -8,6 +8,9 @@ if (empty($this->session->activeCompany)) {
         #tableDistribusi_paginate{
             margin-top: 20px;
         }
+        #chartPemenuhan{
+            height: 150%;
+        }
     </style>
     <script type="text/javascript" src="<?= base_url('assets/js/detect-zoom.min.js') ?>"></script>
     <!--MENU UNIT KERJA-->
@@ -18,22 +21,22 @@ if (empty($this->session->activeCompany)) {
             </span>
             ~ Unit Kerja ~
         </button>
-        <div tabindex="-1" role="menu" aria-hidden="true" class="dropdown-menu dropdown-menu-right">
+        <div tabindex="-1" role="menu" data-toggle="dropdown" aria-haspopup="true" aria-hidden="true" class="dropdown-menu dropdown-menu-right">
             <ul class="nav flex-column">
-                <?php // foreach ($gap_analisa as $ga) { ?>
-<!--                    <li class="nav-item">
-                        <a class="nav-link" onclick="switchGapAnalisa(<?php //echo $ga['id'] ?>)">
+                <?php foreach ($unit_kerja as $k => $uk) { ?>
+                    <li class="nav-item">
+                        <a class="nav-link" onclick="switchUnitKerja(<?= $k ?>)">
                             <i class="nav-link-icon lnr-inbox"></i>
                             <span>
-                                <?php // echo $ga['judul'] ?>
+                                <?= $uk->name ?>
                             </span>
                         </a>
-                    </li>-->
-                <?php // } ?>
+                    </li>
+                <?php } ?>
             </ul>
         </div>
     </div>
-    <!--MENU UNIT KERJA-->
+    <!--MENU PERSONIL-->
     <div class="d-inline-block dropdown ml-1" id="menuPersonil">
         <button type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn-shadow dropdown-toggle btn btn-info">
             <span class="btn-icon-wrapper pr-2 opacity-7">
@@ -41,19 +44,8 @@ if (empty($this->session->activeCompany)) {
             </span>
             ~ Personil ~
         </button>
-        <div tabindex="-1" role="menu" aria-hidden="true" class="dropdown-menu dropdown-menu-right">
-            <ul class="nav flex-column">
-                <?php // foreach ($gap_analisa as $ga) { ?>
-<!--                    <li class="nav-item">
-                        <a class="nav-link" onclick="switchGapAnalisa(<?php // echo $ga['id'] ?>)">
-                            <i class="nav-link-icon lnr-inbox"></i>
-                            <span>
-                                <?php // echo $ga['judul'] ?>
-                            </span>
-                        </a>
-                    </li>-->
-                <?php // } ?>
-            </ul>
+        <div tabindex="-1" data-toggle="dropdown" aria-haspopup="true" role="menu" aria-hidden="true" class="dropdown-menu dropdown-menu-right">
+            <ul class="nav flex-column"></ul>
         </div>
     </div>
     <!--MODAL TUGAS-->
@@ -161,11 +153,25 @@ if (empty($this->session->activeCompany)) {
             </div>
         </div>
         <div class="row">
-            <div class="col-md-12">
+            <div class="col-sm-7">
                 <div class="main-card mb-3 card">
                     <div class="card-body">
                         <h5 class="card-title">Nilai Pemenuhan Dokumen dan Implementasi</h5>
                         <div id="divChartPemenuhan"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-5">
+                <div class="main-card mb-3 card">
+                    <div class="card-body">
+                        <h5 class="card-title">Grafik Pemenuhan Unit Kerja</h5>
+                        <div id="divChartPemenuhanUnitKerja"></div>
+                    </div>
+                </div>
+                <div class="main-card mb-3 card">
+                    <div class="card-body">
+                        <h5 class="card-title">Grafik Pemenuhan Personil</h5>
+                        <div id="divChartPemenuhanPersonil"></div>
                         <!--<canvas id="chartPemenuhan"></canvas>-->
                     </div>
                 </div>
@@ -469,6 +475,7 @@ if (empty($this->session->activeCompany)) {
             </div>
         </div>
         <script>
+            var unitKerja = <?= json_encode($unit_kerja) ?>;
             var zoom = detectZoom.zoom();
             var device = detectZoom.device();
             $('.page-title-actions').append($('#menuUnitKerja'));
@@ -492,7 +499,32 @@ if (empty($this->session->activeCompany)) {
                 }
                 grafikPemenuhan($(this).val(), null);
             });
-            $('#selectPemenuhanUnitKerja').change();
+            
+            function switchUnitKerja(idx) {
+                console.log(unitKerja[idx]);
+                var uk = unitKerja[idx];
+                $.getJSON('<?= site_url($module . '/get_personil') ?>', {unit_kerja: uk.id, personil: null}, function (data) {
+                    $('#menuPersonil ul').empty();
+                    personil = data;
+                    for (var i = 0; i < data.length; i++) {
+                        $('#menuPersonil ul').append('<li class="nav-item">'
+                                + '<a class="nav-link" onclick="switchPersonil(' + i + ')">'
+                                + '<i class="nav-link-icon lnr-inbox"></i>'
+                                + '<span>' + data[i].fullname + '</span>'
+                                + '</a>'
+                                + '</li>');
+                    }
+                });
+                grafikPemenuhan(uk.id, null);
+                $('#menuUnitKerja button').text(uk.name);
+            }
+            var personil = [];
+            function switchPersonil(idx) {
+            var p = personil[idx];
+                $('#menuPersonil button').text(p.fullname);
+                grafikPemenuhan(null, p.id);
+            }
+            grafikPemenuhan(null, null);
             $('#selectPemenuhanPersonil').change(function () {
                 grafikPemenuhan(null, $(this).val());
             });
@@ -517,9 +549,15 @@ if (empty($this->session->activeCompany)) {
                     var aveImp = average(imp);
                     $('#averageDoc').text((isNaN(aveDoc) ? '-' : aveDoc + '%'));
                     $('#averageImp').text((isNaN(aveImp) ? '-' : aveImp + '%'));
-                    $('#divChartPemenuhan').empty();
-                    $('#divChartPemenuhan').append('<canvas id="chartPemenuhan"></canvas>');
-                    new Chart(document.getElementById('chartPemenuhan'), {
+                    var chart = '';
+                    if (personil != null) {
+                        chart = 'Personil';
+                    } else if (unitKerja != null) {
+                        chart = 'UnitKerja';
+                    }
+                    $('#divChartPemenuhan' + chart).empty();
+                    $('#divChartPemenuhan' + chart).append('<canvas id="canvasChartPemenuhan' + chart + '"></canvas>');
+                    new Chart(document.getElementById('canvasChartPemenuhan' + chart), {
                         type: 'radar',
                         data: {
                             labels: label,
@@ -544,6 +582,7 @@ if (empty($this->session->activeCompany)) {
                                 }]
                         },
                         options: {
+                            aspectRatio: 1,
                             scale: {
                                 angleLines: {
                                     display: false
@@ -595,7 +634,6 @@ if (empty($this->session->activeCompany)) {
             $('#tableDistribusi').DataTable(dataTableConfig);
             dataTableConfig.pageLength = 5;
             $('#tableTugas').DataTable(dataTableConfig);
-
             function detailTugas(tugas, tanggal, dokumen, form_terkait, sifat, pic, status, preview) {
                 var m = $('#modalTugas');
                 m.find('#tugas-nama').text(tugas);
