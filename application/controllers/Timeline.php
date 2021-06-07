@@ -29,6 +29,7 @@ class Timeline extends MY_Controller {
         } else {
             $timeline->statusGap = 0;
         }
+        $timeline->statusDistribusi = $this->status_distribusi();
         echo json_encode($timeline);
     }
 
@@ -38,7 +39,7 @@ class Timeline extends MY_Controller {
         $header = $this->input->post('header');
         if (!empty($header)) {
             $type = $this->input->post('type');
-            $this->db->set($header.'_type', $type);
+            $this->db->set($header . '_type', $type);
             $path = null;
             if ($type == 'file' | $type == 'foto') {
                 $config['upload_path'] = './upload/' . $header;
@@ -55,12 +56,25 @@ class Timeline extends MY_Controller {
                 $path = $this->input->post('url');
             }
             if ($this->data['status'] == 'success') {
-                $this->db->set($header.'_path', $path);
+                $this->db->set($header . '_path', $path);
                 $this->db->where('id', $this->session->activeStandard['id_company_standard']);
                 $this->db->update('company_standard');
             }
             echo json_encode($this->data);
         }
+    }
+
+    private function status_distribusi() {
+        $this->db->select('p.*');
+        $this->db->join('position_personil pp', 'pp.id_personil = p.id');
+        $this->db->join('distribution ds', 'ds.id_position_personil = pp.id');
+        $this->db->where('p.id_company',$this->session->activeCompany['id']);
+        $this->db->group_by('p.id');
+        $this->db->from('personil p');
+        $cDist = $this->db->count_all_results();
+        $this->db->where('p.id_company',$this->session->activeCompany['id']);
+        $cPers = $this->db->count_all_results('personil p');
+        return round($cDist / $cPers *100);
     }
 
 }

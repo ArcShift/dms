@@ -82,7 +82,7 @@ $n = 1;
                     <td>Distribusi Dokumen</td>
                     <td></td>
                     <td></td>
-                    <td id="statusImp"></td>
+                    <td id="statusDistribusi"></td>
                     <td></td>
                 </tr>
                 <tr>
@@ -90,7 +90,7 @@ $n = 1;
                     <td>Implementasi Dokumen</td>
                     <td></td>
                     <td></td>
-                    <td><span class="badge badge-danger">n%</span></td>
+                    <td id="statusImp"></td>
                     <td></td>
                 </tr>
                 <tr>
@@ -413,6 +413,7 @@ $n = 1;
             } else {
                 $('#statusTrainingInternal').html(badgeColor(0));
             }
+            $('#statusDistribusi').html(badgeColor(data.statusDistribusi));
         });
         $.getJSON('<?= 'dashboard/get_pemenuhan' ?>', null, function (data) {
             console.log(data);
