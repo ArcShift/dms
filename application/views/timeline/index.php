@@ -66,7 +66,7 @@ $n = 1;
                     <td>Analisa Resiko</td>
                     <td>[doc pasal 6]</td>
                     <td></td>
-                    <td><span class="badge badge-danger">0%</span></td>
+                    <td><span class="badge badge-danger">n%</span></td>
                     <td></td>
                 </tr>
                 <tr>
@@ -74,7 +74,7 @@ $n = 1;
                     <td>Pengembangan Dokumen</td>
                     <td></td>
                     <td></td>
-                    <td><span class="badge badge-danger">0%</span></td>
+                    <td id="statusDoc"></td>
                     <td></td>
                 </tr>
                 <tr>
@@ -82,7 +82,7 @@ $n = 1;
                     <td>Distribusi Dokumen</td>
                     <td></td>
                     <td></td>
-                    <td><span class="badge badge-danger">0%</span></td>
+                    <td id="statusImp"></td>
                     <td></td>
                 </tr>
                 <tr>
@@ -90,7 +90,7 @@ $n = 1;
                     <td>Implementasi Dokumen</td>
                     <td></td>
                     <td></td>
-                    <td><span class="badge badge-danger">0%</span></td>
+                    <td><span class="badge badge-danger">n%</span></td>
                     <td></td>
                 </tr>
                 <tr>
@@ -98,14 +98,14 @@ $n = 1;
                     <td>Audit Internal Sistem</td>
                     <td></td>
                     <td></td>
-                    <td><span class="badge badge-danger">0%</span></td>
+                    <td><span class="badge badge-danger">n%</span></td>
                 </tr>
                 <tr>
                     <td>8</td>
                     <td>Tinjauan Manajemen</td>
                     <td></td>
                     <td></td>
-                    <td><span class="badge badge-danger">0%</span></td>
+                    <td><span class="badge badge-danger">n%</span></td>
                 </tr>
                 <tr>
                     <td>9</td>
@@ -115,7 +115,7 @@ $n = 1;
                         <button class="btn btn-sm btn-outline-primary fa fa-upload"></button>
                         <button class="btn btn-sm btn-outline-primary fa fa-edit"></button>
                     </td>
-                    <td><span class="badge badge-danger">0%</span></td>
+                    <td><span class="badge badge-danger">n%</span></td>
                 </tr>
                 <tr>
                     <td></td>
@@ -125,7 +125,7 @@ $n = 1;
                         <button class="btn btn-sm btn-outline-primary fa fa-upload"></button>
                         <button class="btn btn-sm btn-outline-primary fa fa-edit"></button>
                     </td>
-                    <td><span class="badge badge-danger">0%</span></td>
+                    <td><span class="badge badge-danger">n%</span></td>
                 </tr>
                 <tr>
                     <td></td>
@@ -175,7 +175,7 @@ $n = 1;
                         <button class="btn btn-sm btn-outline-primary fa fa-upload"></button>
                         <button class="btn btn-sm btn-outline-primary fa fa-edit"></button>
                     </td>
-                    <td><span class="badge badge-danger">0%</span></td>
+                    <td><span class="badge badge-danger">n%</span></td>
                 </tr>
                 <tr>
                     <td></td>
@@ -232,7 +232,7 @@ $n = 1;
                     <td>Pemenuhan Total</td>
                     <td></td>
                     <td>9/9</td>
-                    <td><span class="badge badge-success">100%</span></td>
+                    <td><span class="badge badge-success">n%</span></td>
                 </tr>
             </tbody>
         </table>
@@ -400,7 +400,7 @@ $n = 1;
     getTimeline();
     function getTimeline() {
         $.getJSON('<?= $module . '/get_timeline' ?>', null, function (data) {
-            console.log(data);
+//            console.log(data);
             $('#judulGap').html(data.gap_analisa);
             $('#statusGap').html(badgeColor(data.statusGap));
             if (data.training_awareness_path != null & data.training_awareness_type != null) {
@@ -413,6 +413,18 @@ $n = 1;
             } else {
                 $('#statusTrainingInternal').html(badgeColor(0));
             }
+        });
+        $.getJSON('<?= 'dashboard/get_pemenuhan' ?>', null, function (data) {
+            console.log(data);
+            var doc = [];
+            var imp = [];
+            for (var i = 0; i < data.length; i++) {
+                var p = data[i];
+                doc.push(p.pemenuhanDoc);
+                imp.push(p.pemenuhanImp);
+            }
+            $('#statusDoc').html(badgeColor(average(doc)));
+            $('#statusImp').html(badgeColor(average(imp)));
         });
     }
     function badgeColor(val) {
@@ -429,6 +441,13 @@ $n = 1;
                 break;
         }
         return '<span class="badge badge-' + badge + '">' + val + '%</span>';
+    }
+    function average(arr) {
+        var sum = 0;
+        for (var i = 0; i < arr.length; i++) {
+            sum += parseInt(arr[i], 10);
+        }
+        return Math.round(sum / arr.length);
     }
     function initUpload1(header, title) {
         var m = $('#modalUpload1');

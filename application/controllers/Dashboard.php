@@ -90,7 +90,6 @@ class Dashboard extends MY_Controller {
             }
         }
         echo json_encode($parentPemenuhan);
-//        echo json_encode($pemenuhan);
     }
 
     function get_personil() {

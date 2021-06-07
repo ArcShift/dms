@@ -27,7 +27,7 @@ class Dashboard extends MY_User {
         $this->data['menuStandard'] = true;
         if (!empty($company)) {
             $this->data['companies'] = $this->db->get('company')->result_array();
-            $this->data['company_standard'] = $this->model->company_standard($company['id']);
+//            $this->data['company_standard'] = $this->model->company_standard($company['id']);
             if (!empty($standard)) {
                 $this->load->model('M_treeview_detail', 'm_treeview');
                 $pemenuhan = $this->m_treeview->getPemenuhan($company['id'], $standard['id']);
