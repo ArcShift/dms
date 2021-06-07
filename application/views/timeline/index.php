@@ -112,7 +112,7 @@ $n = 1;
                     <td>Submit Dokumen</td>
                     <td></td>
                     <td>
-                        <button class="btn btn-sm btn-outline-primary fa fa-upload"></button>
+                        <button class="btn btn-sm btn-outline-primary fa fa-upload" onclick="initUpload1('submit_dokumen', 'Submit Dokumen')"></button>
                         <button class="btn btn-sm btn-outline-primary fa fa-edit"></button>
                     </td>
                     <td><span class="badge badge-danger">n%</span></td>
@@ -190,6 +190,16 @@ $n = 1;
                 <tr>
                     <td></td>
                     <td></td>
+                    <td>Audit Plan</td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-primary fa fa-upload"></button>
+                        <button class="btn btn-sm btn-outline-primary fa fa-edit"></button>
+                    </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
                     <td>Foto Audit</td>
                     <td>
                         <button class="btn btn-sm btn-outline-primary fa fa-upload"></button>
@@ -201,16 +211,6 @@ $n = 1;
                     <td></td>
                     <td></td>
                     <td>Temuan Audit</td>
-                    <td>
-                        <button class="btn btn-sm btn-outline-primary fa fa-upload"></button>
-                        <button class="btn btn-sm btn-outline-primary fa fa-edit"></button>
-                    </td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td>Hasil Perbaikan Audit</td>
                     <td>
                         <button class="btn btn-sm btn-outline-primary fa fa-upload"></button>
                         <button class="btn btn-sm btn-outline-primary fa fa-edit"></button>
