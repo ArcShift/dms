@@ -115,7 +115,7 @@ $n = 1;
                         <button class="btn btn-sm btn-outline-primary fa fa-upload" onclick="initUpload1('submit_dokumen', 'Submit Dokumen')"></button>
                         <button class="btn btn-sm btn-outline-primary fa fa-edit"></button>
                     </td>
-                    <td><span class="badge badge-danger">n%</span></td>
+                    <td id="statusSubmitDokumen"></td>
                 </tr>
                 <tr>
                     <td></td>
@@ -414,6 +414,11 @@ $n = 1;
                 $('#statusTrainingInternal').html(badgeColor(0));
             }
             $('#statusDistribusi').html(badgeColor(data.statusDistribusi));
+            if (data.submit_dokumen_path != null & data.submit_dokumen_type != null) {
+                $('#statusSubmitDokumen').html(badgeColor(100));
+            } else {
+                $('#statusSubmitDokumen').html(badgeColor(0));
+            }
         });
         $.getJSON('<?= 'dashboard/get_pemenuhan' ?>', null, function (data) {
             console.log(data);
