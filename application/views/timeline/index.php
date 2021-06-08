@@ -359,6 +359,7 @@ $n = 1;
                 </button>
             </div>
             <div class="modal-body">
+                <div id="previewMessage"><b>File belum diupload</b></div>
                 <div class="form-group">
                     <label><b>Type</b></label>
                     <div class="card-body bg-light p-2" id="previewType"></div>
@@ -472,7 +473,7 @@ $n = 1;
     function initUpload1(header, title, nofoto = false) {
         var m = $('#modalUpload1');
         m.modal('show');
-        blah.src='';
+        blah.src = '';
         $('.input-bukti').hide();
         m.find('#inputHeader').val(header);
         m.find('.modal-title').html('Upload ' + title);
@@ -527,8 +528,10 @@ $n = 1;
         m.find('.modal-title').html('Preview ' + title);
         var type = timeline[header + '_type'];
         var path = timeline[header + '_path'];
-        $('#previewType').html('<div class="badge badge-secondary">'+type+'</div>');
+        $('#previewType').html('<div class="badge badge-secondary">' + type + '</div>');
         var prev = '';
+        m.find('.form-group').show();
+        $('#previewMessage').hide();
         switch (type) {
             case 'FILE':
                 prev = '<a href="<?= base_url('upload/') ?>' + header + '/' + path + '">' + path + '</a>';
@@ -538,6 +541,12 @@ $n = 1;
                 break;
             case 'FOTO':
                 prev = '<img src="<?= base_url('upload/') ?>' + header + '/' + path + '" height="200"></img>';
+                break;
+            case null:
+                m.find('.form-group').hide();
+                $('#previewMessage').show();
+                break;
+
         }
         $('#previewFile').html(prev);
     }
