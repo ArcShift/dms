@@ -95,7 +95,7 @@ $n = 1;
                 </tr>
                 <tr>
                     <td><?= $n++ ?></td>
-                    <td>Pentest</td>
+                    <td>Penetration Testing</td>
                     <td></td>
                     <td></td>
                     <td></td>
@@ -103,7 +103,7 @@ $n = 1;
                 </tr>
                 <tr>
                     <td><?= $n++ ?></td>
-                    <td>BJP</td>
+                    <td>Business Continuity Planning</td>
                     <td></td>
                     <td></td>
                     <td></td>
