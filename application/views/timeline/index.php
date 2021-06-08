@@ -97,16 +97,22 @@ $n = 1;
                     <td><?= $n++ ?></td>
                     <td>Penetration Testing</td>
                     <td></td>
-                    <td></td>
-                    <td></td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-primary fa fa-upload" onclick="initUpload1('pentest', 'Penetration Testing', true)"></button>
+                        <button class="btn btn-sm btn-outline-primary fa fa-edit"></button>
+                    </td>
+                    <td id="statusPentest"></td>
                     <td></td>
                 </tr>
                 <tr>
                     <td><?= $n++ ?></td>
                     <td>Business Continuity Planning</td>
                     <td></td>
-                    <td></td>
-                    <td></td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-primary fa fa-upload" onclick="initUpload1('bcp', 'Business Continuity Planning')"></button>
+                        <button class="btn btn-sm btn-outline-primary fa fa-edit"></button>
+                    </td>
+                    <td id="statusBcp"></td>
                     <td></td>
                 </tr>
                 <tr>
@@ -248,7 +254,7 @@ $n = 1;
                     <td></td>
                     <td>Pemenuhan Total</td>
                     <td></td>
-                    <td><?= 'N/'.--$n ?></td>
+                    <td><?= 'N/' . --$n ?></td>
                     <td><span class="badge badge-success">n%</span></td>
                 </tr>
             </tbody>
@@ -306,7 +312,7 @@ $n = 1;
                             <input type="radio" id="customRadio2" name="type" value="url" class="custom-control-input radio-upload">
                             <label class="custom-control-label" for="customRadio2">Url</label>
                         </div>
-                        <div class="custom-control custom-radio custom-control-inline">
+                        <div class="custom-control custom-radio custom-control-inline radio-group-foto">
                             <input type="radio" id="customRadio3" name="type" value="foto" class="custom-control-input radio-upload">
                             <label class="custom-control-label" for="customRadio3">Foto</label>
                         </div>
@@ -436,19 +442,25 @@ $n = 1;
             } else {
                 $('#statusSubmitDokumen').html(badgeColor(0));
             }
+            status('pentest', 'Pentest');
+            status('bcp', 'Bcp');
             var stage1 = ['jadwal_audit', 'audit_plan', 'foto_audit', 'temuan_audit', 'hasil_perbaikan_audit'];
             var stage2 = ['gap_analisa_audit', 'jadwal_audit2', 'audit_plan2', 'foto_audit2', 'temuan_audit2', 'hasil_perbaikan_audit2'];
             stage(stage1, 'Stage1');
             stage(stage2, 'Stage2');
         });
+        function status(header, status) {
+            if (timeline[header + '_type'] != null & timeline[header + '_path'] != null) {
+                $('#status' + status).html(badgeColor(100));
+            } else {
+                $('#status' + status).html(badgeColor(0));
+            }
+        }
         function stage(stage, status) {
             var count = 0
             for (var st of stage) {
-//                console.log(timeline[st + '_type']);
-//                console.log(timeline[st + '_path']);
                 if (timeline[st + '_type'] != null & timeline[st + '_path'] != null) {
                     count++;
-//                console.log(count);
                 }
                 console.log(Math.round(count / stage.length * 100));
                 console.log('#status' + status);
@@ -490,13 +502,18 @@ $n = 1;
         }
         return Math.round(sum / arr.length);
     }
-    function initUpload1(header, title) {
+    function initUpload1(header, title, nofoto = false) {
         var m = $('#modalUpload1');
         m.modal('show');
         $('.input-bukti').hide();
         m.find('#inputHeader').val(header);
         m.find('.modal-title').html('Upload ' + title);
         m.find('.radio-upload').prop('checked', false);
+        if(nofoto){
+            m.find('.radio-group-foto').hide();
+        }else{
+            m.find('.radio-group-foto').show();
+        }
     }
     $('#modalUpload1').on('hidden.bs.modal', function () {
         document.getElementById('imgUpload').scr = '';//TODO: reset image not work
