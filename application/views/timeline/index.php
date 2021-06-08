@@ -144,7 +144,7 @@ $n = 1;
                     </td>
                     <td id="statusSubmitDokumen"></td>
                 </tr>
-                <tr>
+                <tr id="group_jadwal_audit">
                     <td><?= $n++ ?></td>
                     <td>Audit Eksternal Stage 1</td>
                     <td>Jadwal Audit External Stage 1</td>
@@ -156,7 +156,7 @@ $n = 1;
                     <td id="statusStage1"></td>
                     <td></td>
                 </tr>
-                <tr>
+                <tr id="group_audit_plan">
                     <td></td>
                     <td></td>
                     <td>Audit Plan</td>
@@ -167,7 +167,7 @@ $n = 1;
                     </td>
                     <td></td>
                 </tr>
-                <tr>
+                <tr id="group_foto_audit">
                     <td></td>
                     <td></td>
                     <td>Foto Audit</td>
@@ -178,7 +178,7 @@ $n = 1;
                     </td>
                     <td></td>
                 </tr>
-                <tr>
+                <tr id="group_temuan_audit">
                     <td></td>
                     <td></td>
                     <td>Temuan Audit</td>
@@ -189,7 +189,7 @@ $n = 1;
                     </td>
                     <td></td>
                 </tr>
-                <tr>
+                <tr id="group_hasil_perbaikan_audit">
                     <td></td>
                     <td></td>
                     <td>Hasil Perbaikan Audit</td>
@@ -200,7 +200,7 @@ $n = 1;
                     </td>
                     <td></td>
                 </tr>
-                <tr>
+                <tr id="group_gap_analisa_audit">
                     <td><?= $n++ ?></td>
                     <td>Audit Eksternal Stage 2</td>
                     <td>Gap Analisa 2021</td>
@@ -211,7 +211,7 @@ $n = 1;
                     </td>
                     <td id="statusStage2"></td>
                 </tr>
-                <tr>
+                <tr id="group_jadwal_audit2">
                     <td></td>
                     <td></td>
                     <td>Jadwal Audit External Stage 2</td>
@@ -222,7 +222,7 @@ $n = 1;
                     </td>
                     <td></td>
                 </tr>
-                <tr>
+                <tr id="group_audit_plan2">
                     <td></td>
                     <td></td>
                     <td>Audit Plan</td>
@@ -233,7 +233,7 @@ $n = 1;
                     </td>
                     <td></td>
                 </tr>
-                <tr>
+                <tr id="group_foto_audit2">
                     <td></td>
                     <td></td>
                     <td>Foto Audit</td>
@@ -244,7 +244,7 @@ $n = 1;
                     </td>
                     <td></td>
                 </tr>
-                <tr>
+                <tr id="group_temuan_audit2">
                     <td></td>
                     <td></td>
                     <td>Temuan Audit</td>
@@ -255,7 +255,7 @@ $n = 1;
                     </td>
                     <td></td>
                 </tr>
-                <tr>
+                <tr id="group_hasil_perbaikan_audit2">
                     <td></td>
                     <td></td>
                     <td>Hasil Perbaikan Audit</td>
@@ -412,11 +412,21 @@ $n = 1;
             }
             status('pentest', 'Pentest');
             status('bcp', 'Bcp');
-            var stage1 = ['jadwal_audit', 'audit_plan', 'foto_audit', 'temuan_audit', 'hasil_perbaikan_audit'];
-            var stage2 = ['gap_analisa_audit', 'jadwal_audit2', 'audit_plan2', 'foto_audit2', 'temuan_audit2', 'hasil_perbaikan_audit2'];
             stage(stage1, 'Stage1');
             stage(stage2, 'Stage2');
+            updateTable();
         });
+        var stage1 = ['jadwal_audit', 'audit_plan', 'foto_audit', 'temuan_audit', 'hasil_perbaikan_audit'];
+        var stage2 = ['gap_analisa_audit', 'jadwal_audit2', 'audit_plan2', 'foto_audit2', 'temuan_audit2', 'hasil_perbaikan_audit2'];
+        var stage3 = stage1.concat(stage2);
+        function updateTable() {
+            for (var s of stage3) {
+                $('#group_' + s + ' td .fa-check').remove();
+                if (timeline[s + '_type'] != null & timeline[s + '_path'] != null) {
+                    $('#group_' + s + ' td').eq(2).append(' <span class="text-success fa fa-check"></span>');
+                }
+            }
+        }
         function status(header, status) {
             if (timeline[header + '_type'] != null & timeline[header + '_path'] != null) {
                 $('#status' + status).html(badgeColor(100));
@@ -430,8 +440,6 @@ $n = 1;
                 if (timeline[st + '_type'] != null & timeline[st + '_path'] != null) {
                     count++;
                 }
-                console.log(Math.round(count / stage.length * 100));
-                console.log('#status' + status);
                 $('#status' + status).html(badgeColor(Math.round(count / stage.length * 100)));
             }
 
@@ -546,7 +554,6 @@ $n = 1;
                 m.find('.form-group').hide();
                 $('#previewMessage').show();
                 break;
-
         }
         $('#previewFile').html(prev);
     }
