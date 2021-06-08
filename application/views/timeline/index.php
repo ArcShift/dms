@@ -53,7 +53,7 @@ $n = 1;
                 <tr>
                     <td></td>
                     <td></td>
-                    <td>Training Internal</td>
+                    <td>Training Audit Internal</td>
                     <td>
                         <button class="btn btn-sm btn-outline-primary fa fa-upload" onclick="initUpload1('training_internal', 'Training Internal')"></button>
                         <button class="btn btn-sm btn-outline-primary fa fa-edit"></button>
@@ -64,7 +64,7 @@ $n = 1;
                 <tr>
                     <td><?= $n++ ?></td>
                     <td>Analisa Resiko</td>
-                    <td>[doc pasal 6]</td>
+                    <td></td>
                     <td></td>
                     <td><span class="badge badge-danger">n%</span></td>
                     <td></td>
@@ -95,20 +95,36 @@ $n = 1;
                 </tr>
                 <tr>
                     <td><?= $n++ ?></td>
+                    <td>Pentest</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td><?= $n++ ?></td>
+                    <td>BJP</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td><?= $n++ ?></td>
                     <td>Audit Internal Sistem</td>
                     <td></td>
                     <td></td>
                     <td><span class="badge badge-danger">n%</span></td>
                 </tr>
                 <tr>
-                    <td>8</td>
+                    <td><?= $n++ ?></td>
                     <td>Tinjauan Manajemen</td>
                     <td></td>
                     <td></td>
                     <td><span class="badge badge-danger">n%</span></td>
                 </tr>
                 <tr>
-                    <td>9</td>
+                    <td><?= $n++ ?></td>
                     <td>Submit Dokumen</td>
                     <td></td>
                     <td>
@@ -118,7 +134,7 @@ $n = 1;
                     <td id="statusSubmitDokumen"></td>
                 </tr>
                 <tr>
-                    <td></td>
+                    <td><?= $n++ ?></td>
                     <td>Audit Eksternal Stage 1</td>
                     <td>Jadwal Audit External Stage 1</td>
                     <td>
@@ -169,7 +185,7 @@ $n = 1;
                     <td></td>
                 </tr>
                 <tr>
-                    <td></td>
+                    <td><?= $n++ ?></td>
                     <td>Audit Eksternal Stage 2</td>
                     <td>Gap Analisa 2021</td>
                     <td>
@@ -232,7 +248,7 @@ $n = 1;
                     <td></td>
                     <td>Pemenuhan Total</td>
                     <td></td>
-                    <td>9/9</td>
+                    <td><?= 'N/'.--$n ?></td>
                     <td><span class="badge badge-success">n%</span></td>
                 </tr>
             </tbody>
