@@ -46,6 +46,7 @@ $n = 1;
                     <td>
                         <button class="btn btn-sm btn-outline-primary fa fa-upload" onclick="initUpload1('training_awareness', 'Training Awareness')"></button>
                         <button class="btn btn-sm btn-outline-primary fa fa-edit"></button>
+                        <button class="btn btn-sm btn-outline-primary fa fa-info-circle" onclick="preview('training_awareness', 'Training Awareness')"></button>
                     </td>
                     <td id="statusTrainingAwareness"></td>
                     <td></td>
@@ -57,6 +58,7 @@ $n = 1;
                     <td>
                         <button class="btn btn-sm btn-outline-primary fa fa-upload" onclick="initUpload1('training_internal', 'Training Internal')"></button>
                         <button class="btn btn-sm btn-outline-primary fa fa-edit"></button>
+                        <button class="btn btn-sm btn-outline-primary fa fa-info-circle" onclick="preview('training_internal', 'Training Internal')"></button>
                     </td>
                     <td id="statusTrainingInternal"></td>
                     <td></td>
@@ -100,6 +102,7 @@ $n = 1;
                     <td>
                         <button class="btn btn-sm btn-outline-primary fa fa-upload" onclick="initUpload1('pentest', 'Penetration Testing', true)"></button>
                         <button class="btn btn-sm btn-outline-primary fa fa-edit"></button>
+                        <button class="btn btn-sm btn-outline-primary fa fa-info-circle" onclick="preview('pentest', 'Penetration Testing')"></button>
                     </td>
                     <td id="statusPentest"></td>
                     <td></td>
@@ -111,6 +114,7 @@ $n = 1;
                     <td>
                         <button class="btn btn-sm btn-outline-primary fa fa-upload" onclick="initUpload1('bcp', 'Business Continuity Planning')"></button>
                         <button class="btn btn-sm btn-outline-primary fa fa-edit"></button>
+                        <button class="btn btn-sm btn-outline-primary fa fa-info-circle" onclick="preview('bcp', 'Business Continuity Planning')"></button>
                     </td>
                     <td id="statusBcp"></td>
                     <td></td>
@@ -136,6 +140,7 @@ $n = 1;
                     <td>
                         <button class="btn btn-sm btn-outline-primary fa fa-upload" onclick="initUpload1('submit_dokumen', 'Submit Dokumen')"></button>
                         <button class="btn btn-sm btn-outline-primary fa fa-edit"></button>
+                        <button class="btn btn-sm btn-outline-primary fa fa-info-circle" onclick="preview('submit_dokumen', 'Submit Dokumen')"></button>
                     </td>
                     <td id="statusSubmitDokumen"></td>
                 </tr>
@@ -146,6 +151,7 @@ $n = 1;
                     <td>
                         <button class="btn btn-sm btn-outline-primary fa fa-upload" onclick="initUpload1('jadwal_audit', 'Jadwal Audit Eksternal Stage 1')"></button>
                         <button class="btn btn-sm btn-outline-primary fa fa-edit"></button>
+                        <button class="btn btn-sm btn-outline-primary fa fa-info-circle" onclick="preview('jadwal_audit', 'Jadwal Audit Eksternal Stage 1')"></button>
                     </td>
                     <td id="statusStage1"></td>
                     <td></td>
@@ -157,6 +163,7 @@ $n = 1;
                     <td>
                         <button class="btn btn-sm btn-outline-primary fa fa-upload" onclick="initUpload1('audit_plan', 'Audit Plan Stage 1')"></button>
                         <button class="btn btn-sm btn-outline-primary fa fa-edit"></button>
+                        <button class="btn btn-sm btn-outline-primary fa fa-info-circle" onclick="preview('audit_plan', 'Audit Plan Stage 1')"></button>
                     </td>
                     <td></td>
                 </tr>
@@ -167,6 +174,7 @@ $n = 1;
                     <td>
                         <button class="btn btn-sm btn-outline-primary fa fa-upload" onclick="initUpload1('foto_audit', 'Foto Audit Stage 1')"></button>
                         <button class="btn btn-sm btn-outline-primary fa fa-edit"></button>
+                        <button class="btn btn-sm btn-outline-primary fa fa-info-circle" onclick="preview('foto_audit', 'Foto Audit Stage 1')"></button>
                     </td>
                     <td></td>
                 </tr>
@@ -177,6 +185,7 @@ $n = 1;
                     <td>
                         <button class="btn btn-sm btn-outline-primary fa fa-upload" onclick="initUpload1('temuan_audit', 'Temuan Audit Stage 1')"></button>
                         <button class="btn btn-sm btn-outline-primary fa fa-edit"></button>
+                        <button class="btn btn-sm btn-outline-primary fa fa-info-circle" onclick="preview('temuan_audit', 'Temuan Audit Stage 1')"></button>
                     </td>
                     <td></td>
                 </tr>
@@ -187,6 +196,7 @@ $n = 1;
                     <td>
                         <button class="btn btn-sm btn-outline-primary fa fa-upload" onclick="initUpload1('hasil_perbaikan_audit', 'Hasil Perbaikan Audit Stage 1')"></button>
                         <button class="btn btn-sm btn-outline-primary fa fa-edit"></button>
+                        <button class="btn btn-sm btn-outline-primary fa fa-info-circle" onclick="preview('hasil_perbaikan_audit', 'Hasil Perbaikan Audit Stage 1')"></button>
                     </td>
                     <td></td>
                 </tr>
@@ -197,6 +207,7 @@ $n = 1;
                     <td>
                         <button class="btn btn-sm btn-outline-primary fa fa-upload" onclick="initUpload1('gap_analisa_audit', 'Gap Analisa Audit')"></button>
                         <button class="btn btn-sm btn-outline-primary fa fa-edit"></button>
+                        <button class="btn btn-sm btn-outline-primary fa fa-info-circle" onclick="preview('gap_analisa_audit', 'Gap Analisa Audit')"></button>
                     </td>
                     <td id="statusStage2"></td>
                 </tr>
@@ -207,6 +218,7 @@ $n = 1;
                     <td>
                         <button class="btn btn-sm btn-outline-primary fa fa-upload" onclick="initUpload1('jadwal_audit2', 'Jadwal Audit External Stage 2')"></button>
                         <button class="btn btn-sm btn-outline-primary fa fa-edit"></button>
+                        <button class="btn btn-sm btn-outline-primary fa fa-info-circle" onclick="preview('jadwal_audit2', 'Jadwal Audit External Stage 2')"></button>
                     </td>
                     <td></td>
                 </tr>
@@ -217,6 +229,7 @@ $n = 1;
                     <td>
                         <button class="btn btn-sm btn-outline-primary fa fa-upload" onclick="initUpload1('audit_plan2', 'Audit Plan Stage 2')"></button>
                         <button class="btn btn-sm btn-outline-primary fa fa-edit"></button>
+                        <button class="btn btn-sm btn-outline-primary fa fa-info-circle" onclick="preview('audit_plan2', 'Audit Plan Stage 2')"></button>
                     </td>
                     <td></td>
                 </tr>
@@ -227,6 +240,7 @@ $n = 1;
                     <td>
                         <button class="btn btn-sm btn-outline-primary fa fa-upload" onclick="initUpload1('foto_audit2', 'Foto Audit Stage 2')"></button>
                         <button class="btn btn-sm btn-outline-primary fa fa-edit"></button>
+                        <button class="btn btn-sm btn-outline-primary fa fa-info-circle" onclick="preview('foto_audit2', 'Foto Audit Stage 2')"></button>
                     </td>
                     <td></td>
                 </tr>
@@ -237,6 +251,7 @@ $n = 1;
                     <td>
                         <button class="btn btn-sm btn-outline-primary fa fa-upload" onclick="initUpload1('temuan_audit2', 'Temuan Audit Stage 2')"></button>
                         <button class="btn btn-sm btn-outline-primary fa fa-edit"></button>
+                        <button class="btn btn-sm btn-outline-primary fa fa-info-circle" onclick="preview('temuan_audit2', 'Temuan Audit Stage 2')"></button>
                     </td>
                     <td></td>
                 </tr>
@@ -247,6 +262,7 @@ $n = 1;
                     <td>
                         <button class="btn btn-sm btn-outline-primary fa fa-upload" onclick="initUpload1('hasil_perbaikan_audit2', 'Hasil Perbaikan Audit Stage 2')"></button>
                         <button class="btn btn-sm btn-outline-primary fa fa-edit"></button>
+                        <button class="btn btn-sm btn-outline-primary fa fa-info-circle" onclick="preview('hasil_perbaikan_audit2', 'Hasil Perbaikan Audit Stage 2')"></button>
                     </td>
                     <td></td>
                 </tr>
@@ -332,83 +348,34 @@ $n = 1;
         </form>
     </div>
 </div>
-<!--MODAL UPLOAD-->
-<div class="modal fade" id="modalUpload">
+<!--MODAL PREVIEW-->
+<div class="modal fade" id="modalPreview">
     <div class="modal-dialog">
-        <form method="post" enctype="multipart/form-data">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title"></h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label><b>Type</b></label>
+                    <div class="card-body bg-light p-2" id="previewType"></div>
                 </div>
-                <div class="modal-body">
-                    <div class="form-group group-upload">
-                        <div class="custom-control custom-radio custom-control-inline">
-                            <input type="radio" id="customRadio1" name="type" value="file" class="custom-control-input radio-bukti">
-                            <label class="custom-control-label" for="customRadio1">File</label>
-                        </div>
-                        <div class="custom-control custom-radio custom-control-inline">
-                            <input type="radio" id="customRadio2" name="type" value="url" class="custom-control-input radio-bukti">
-                            <label class="custom-control-label" for="customRadio2">Url</label>
-                        </div>
-                        <div class="custom-control custom-radio custom-control-inline">
-                            <input type="radio" id="customRadio3" name="type" value="doc" class="custom-control-input radio-bukti">
-                            <label class="custom-control-label" for="customRadio3">Pilih dari Menu Dokumen</label>
-                        </div>
-                    </div>
-                    <div class="form-group group-upload">
-                        <input class="form-control input-bukti input-file" type="file" name="userfile">
-                        <input class="form-control input-bukti input-url" type="url" name="url">
-                        <select class="form-control input-bukti select-doc" name="doc">
-                            <option value="">~ Pilih Dokumen ~</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button class="btn btn-primary" data-dismiss="modal">Tutup</button>
-                    <button class="btn btn-primary" id="btnSubmit" name="tambah" value="ok">Simpan</button>
+                <div class="form-group">
+                    <label><b>File</b></label>
+                    <div class="card-body bg-light p-2" id="previewFile"></div>
                 </div>
             </div>
-        </form>
+            <div class="modal-footer">
+                <button class="btn btn-primary" data-dismiss="modal">Tutup</button>
+                <button class="btn btn-primary" id="btnSubmit" name="tambah" value="ok">Simpan</button>
+            </div>
+        </div>
     </div>
 </div>
 <script>
-    $('.fa-upload2').click(function () {
-        var m = $('#modalUpload');
-        m.modal('show');
-        m.find('#btnSubmit').attr('name', 'tambah');
-        m.find('#btnSubmit').html('Upload');
-        m.find('.modal-title').html('Upload');
-        $('.input-bukti').hide();
-        $('.radio-bukti').prop('checked', false);
-        $('.input-bukti').prop('required', false);
-        $('.input-bukti').val('');
-    });
-    $('.radio-bukti').change(function () {
-        var type = $(this).val();
-        var m = $('#modalUpload');
-        if (type == 'file') {
-            m.find('.input-bukti').prop('required', false);
-            m.find('.input-bukti').hide();
-            m.find('.input-file').prop('required', true);
-            m.find('.input-file').show();
-        } else if (type == 'url') {
-            m.find('.input-bukti').hide();
-            m.find('.input-bukti').prop('required', false);
-            m.find('.input-url').show();
-            m.find('.input-url').prop('required', true);
-        } else if (type == 'doc') {
-            m.find('.input-bukti').hide();
-            m.find('.input-bukti').prop('required', false);
-            m.find('.select-doc').show();
-            m.find('.select-doc').prop('required', true);
-        }
-    });
-    function getGap() {
-
-    }
     function initGap() {
         var m = $('#modalGap');
         m.modal('show');
@@ -505,15 +472,17 @@ $n = 1;
     function initUpload1(header, title, nofoto = false) {
         var m = $('#modalUpload1');
         m.modal('show');
+        blah.src='';
         $('.input-bukti').hide();
         m.find('#inputHeader').val(header);
         m.find('.modal-title').html('Upload ' + title);
         m.find('.radio-upload').prop('checked', false);
-        if(nofoto){
+        m.find('.form-control').val('');
+        if (nofoto) {
             m.find('.radio-group-foto').hide();
-        }else{
+        } else {
             m.find('.radio-group-foto').show();
-        }
+    }
     }
     $('#modalUpload1').on('hidden.bs.modal', function () {
         document.getElementById('imgUpload').scr = '';//TODO: reset image not work
@@ -551,6 +520,27 @@ $n = 1;
         $('#modalUpload1').modal('hide');
         post(this, 'upload1');
     });
+    function preview(header, title) {
+        var m = $('#modalPreview');
+        m.find('.card-body').empty();
+        m.modal('show');
+        m.find('.modal-title').html('Preview ' + title);
+        var type = timeline[header + '_type'];
+        var path = timeline[header + '_path'];
+        $('#previewType').html('<div class="badge badge-secondary">'+type+'</div>');
+        var prev = '';
+        switch (type) {
+            case 'FILE':
+                prev = '<a href="<?= base_url('upload/') ?>' + header + '/' + path + '">' + path + '</a>';
+                break;
+            case 'URL':
+                prev = '<a href="' + path + '">' + path + '</a>';
+                break;
+            case 'FOTO':
+                prev = '<img src="<?= base_url('upload/') ?>' + header + '/' + path + '" height="200"></img>';
+        }
+        $('#previewFile').html(prev);
+    }
     function post(form, url) {
         $('.modal').modal('hide');
         $('#modalNotif .modal-title').text('Menyimpan data');
