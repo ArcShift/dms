@@ -122,17 +122,18 @@ $n = 1;
                     <td>Audit Eksternal Stage 1</td>
                     <td>Jadwal Audit External Stage 1</td>
                     <td>
-                        <button class="btn btn-sm btn-outline-primary fa fa-upload"></button>
+                        <button class="btn btn-sm btn-outline-primary fa fa-upload" onclick="initUpload1('jadwal_audit', 'Jadwal Audit Eksternal Stage 1')"></button>
                         <button class="btn btn-sm btn-outline-primary fa fa-edit"></button>
                     </td>
-                    <td><span class="badge badge-danger">n%</span></td>
+                    <td id="statusStage1"></td>
+                    <td></td>
                 </tr>
                 <tr>
                     <td></td>
                     <td></td>
                     <td>Audit Plan</td>
                     <td>
-                        <button class="btn btn-sm btn-outline-primary fa fa-upload"></button>
+                        <button class="btn btn-sm btn-outline-primary fa fa-upload" onclick="initUpload1('audit_plan', 'Audit Plan Stage 1')"></button>
                         <button class="btn btn-sm btn-outline-primary fa fa-edit"></button>
                     </td>
                     <td></td>
@@ -142,7 +143,7 @@ $n = 1;
                     <td></td>
                     <td>Foto Audit</td>
                     <td>
-                        <button class="btn btn-sm btn-outline-primary fa fa-upload"></button>
+                        <button class="btn btn-sm btn-outline-primary fa fa-upload" onclick="initUpload1('foto_audit', 'Foto Audit Stage 1')"></button>
                         <button class="btn btn-sm btn-outline-primary fa fa-edit"></button>
                     </td>
                     <td></td>
@@ -152,7 +153,7 @@ $n = 1;
                     <td></td>
                     <td>Temuan Audit</td>
                     <td>
-                        <button class="btn btn-sm btn-outline-primary fa fa-upload"></button>
+                        <button class="btn btn-sm btn-outline-primary fa fa-upload" onclick="initUpload1('temuan_audit', 'Temuan Audit Stage 1')"></button>
                         <button class="btn btn-sm btn-outline-primary fa fa-edit"></button>
                     </td>
                     <td></td>
@@ -162,7 +163,7 @@ $n = 1;
                     <td></td>
                     <td>Hasil Perbaikan Audit</td>
                     <td>
-                        <button class="btn btn-sm btn-outline-primary fa fa-upload"></button>
+                        <button class="btn btn-sm btn-outline-primary fa fa-upload" onclick="initUpload1('hasil_perbaikan_audit', 'Hasil Perbaikan Audit Stage 1')"></button>
                         <button class="btn btn-sm btn-outline-primary fa fa-edit"></button>
                     </td>
                     <td></td>
@@ -172,17 +173,17 @@ $n = 1;
                     <td>Audit Eksternal Stage 2</td>
                     <td>Gap Analisa 2021</td>
                     <td>
-                        <button class="btn btn-sm btn-outline-primary fa fa-upload"></button>
+                        <button class="btn btn-sm btn-outline-primary fa fa-upload" onclick="initUpload1('gap_analisa_audit', 'Gap Analisa Audit')"></button>
                         <button class="btn btn-sm btn-outline-primary fa fa-edit"></button>
                     </td>
-                    <td><span class="badge badge-danger">n%</span></td>
+                    <td id="statusStage2"></td>
                 </tr>
                 <tr>
                     <td></td>
                     <td></td>
                     <td>Jadwal Audit External Stage 2</td>
                     <td>
-                        <button class="btn btn-sm btn-outline-primary fa fa-upload"></button>
+                        <button class="btn btn-sm btn-outline-primary fa fa-upload" onclick="initUpload1('jadwal_audit2', 'Jadwal Audit External Stage 2')"></button>
                         <button class="btn btn-sm btn-outline-primary fa fa-edit"></button>
                     </td>
                     <td></td>
@@ -192,7 +193,7 @@ $n = 1;
                     <td></td>
                     <td>Audit Plan</td>
                     <td>
-                        <button class="btn btn-sm btn-outline-primary fa fa-upload"></button>
+                        <button class="btn btn-sm btn-outline-primary fa fa-upload" onclick="initUpload1('audit_plan2', 'Audit Plan Stage 2')"></button>
                         <button class="btn btn-sm btn-outline-primary fa fa-edit"></button>
                     </td>
                     <td></td>
@@ -202,7 +203,7 @@ $n = 1;
                     <td></td>
                     <td>Foto Audit</td>
                     <td>
-                        <button class="btn btn-sm btn-outline-primary fa fa-upload"></button>
+                        <button class="btn btn-sm btn-outline-primary fa fa-upload" onclick="initUpload1('foto_audit2', 'Foto Audit Stage 2')"></button>
                         <button class="btn btn-sm btn-outline-primary fa fa-edit"></button>
                     </td>
                     <td></td>
@@ -212,7 +213,7 @@ $n = 1;
                     <td></td>
                     <td>Temuan Audit</td>
                     <td>
-                        <button class="btn btn-sm btn-outline-primary fa fa-upload"></button>
+                        <button class="btn btn-sm btn-outline-primary fa fa-upload" onclick="initUpload1('temuan_audit2', 'Temuan Audit Stage 2')"></button>
                         <button class="btn btn-sm btn-outline-primary fa fa-edit"></button>
                     </td>
                     <td></td>
@@ -222,7 +223,7 @@ $n = 1;
                     <td></td>
                     <td>Hasil Perbaikan Audit</td>
                     <td>
-                        <button class="btn btn-sm btn-outline-primary fa fa-upload"></button>
+                        <button class="btn btn-sm btn-outline-primary fa fa-upload" onclick="initUpload1('hasil_perbaikan_audit2', 'Hasil Perbaikan Audit Stage 2')"></button>
                         <button class="btn btn-sm btn-outline-primary fa fa-edit"></button>
                     </td>
                     <td></td>
@@ -400,7 +401,7 @@ $n = 1;
     getTimeline();
     function getTimeline() {
         $.getJSON('<?= $module . '/get_timeline' ?>', null, function (data) {
-//            console.log(data);
+            timeline = data;
             $('#judulGap').html(data.gap_analisa);
             $('#statusGap').html(badgeColor(data.statusGap));
             if (data.training_awareness_path != null & data.training_awareness_type != null) {
@@ -419,9 +420,27 @@ $n = 1;
             } else {
                 $('#statusSubmitDokumen').html(badgeColor(0));
             }
+            var stage1 = ['jadwal_audit', 'audit_plan', 'foto_audit', 'temuan_audit', 'hasil_perbaikan_audit'];
+            var stage2 = ['gap_analisa_audit', 'jadwal_audit2', 'audit_plan2', 'foto_audit2', 'temuan_audit2', 'hasil_perbaikan_audit2'];
+            stage(stage1, 'Stage1');
+            stage(stage2, 'Stage2');
         });
+        function stage(stage, status) {
+            var count = 0
+            for (var st of stage) {
+//                console.log(timeline[st + '_type']);
+//                console.log(timeline[st + '_path']);
+                if (timeline[st + '_type'] != null & timeline[st + '_path'] != null) {
+                    count++;
+//                console.log(count);
+                }
+                console.log(Math.round(count / stage.length * 100));
+                console.log('#status' + status);
+                $('#status' + status).html(badgeColor(Math.round(count / stage.length * 100)));
+            }
+
+        }
         $.getJSON('<?= 'dashboard/get_pemenuhan' ?>', null, function (data) {
-            console.log(data);
             var doc = [];
             var imp = [];
             for (var i = 0; i < data.length; i++) {
@@ -464,7 +483,6 @@ $n = 1;
         m.find('.radio-upload').prop('checked', false);
     }
     $('#modalUpload1').on('hidden.bs.modal', function () {
-        console.log('close');
         document.getElementById('imgUpload').scr = '';//TODO: reset image not work
     });
     var imgInp = document.getElementById('inputFoto');
@@ -498,7 +516,6 @@ $n = 1;
     $('#formUpload1').submit(function (e) {
         e.preventDefault();
         $('#modalUpload1').modal('hide');
-        console.log($(this).serialize());
         post(this, 'upload1');
     });
     function post(form, url) {
