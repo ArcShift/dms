@@ -10,11 +10,11 @@ $n = 1;
     <div class="card-body">
         <b>Progress Kesiapan Sertifikasi <?= $this->session->activeStandard['name'] ?></b>
         <div class="progress">
-            <div class="progress-bar bg-danger" style="width: 20%">Tidak Siap Sama Sekali</div>
-            <div class="progress-bar bg-warning" style="width: 20%">Belum Siap</div>
-            <div class="progress-bar" style="width: 20%; background-color: yellow">Setengah Siap</div>
-            <div class="progress-bar bg-primary" style="width: 20%">Sudah Siap</div>
-            <div class="progress-bar bg-success" style="width: 20%">Sudah Siap Sekali</div>
+            <div id="progress20" class="progress-bar bg-danger" style="width: 20%">Tidak Siap Sama Sekali</div>
+            <div id="progress40" class="progress-bar bg-warning" style="width: 20%">Belum Siap</div>
+            <div id="progress60" class="progress-bar" style="width: 20%; background-color: yellow">Setengah Siap</div>
+            <div id="progress80" class="progress-bar bg-primary" style="width: 20%">Sudah Siap</div>
+            <div id="progress100" class="progress-bar bg-success" style="width: 20%">Sudah Siap Sekali</div>
         </div>
         <br>
         <table class="table">
@@ -377,6 +377,7 @@ $n = 1;
     </div>
 </div>
 <script>
+    function afterReady() {}
     function initGap() {
         var m = $('#modalGap');
         m.modal('show');
@@ -389,60 +390,47 @@ $n = 1;
         });
     });
     getTimeline();
+    var listProgress;
+    var stage1 = ['jadwal_audit', 'audit_plan', 'foto_audit', 'temuan_audit', 'hasil_perbaikan_audit'];
+    var stage2 = ['gap_analisa_audit', 'jadwal_audit2', 'audit_plan2', 'foto_audit2', 'temuan_audit2', 'hasil_perbaikan_audit2'];
+    var stage3 = stage1.concat(stage2);
+    var timeline;
     function getTimeline() {
         $.getJSON('<?= $module . '/get_timeline' ?>', null, function (data) {
             timeline = data;
             $('#judulGap').html(data.gap_analisa);
             $('#statusGap').html(badgeColor(data.statusGap));
-            if (data.training_awareness_path != null & data.training_awareness_type != null) {
-                $('#statusTrainingAwareness').html(badgeColor(100));
-            } else {
-                $('#statusTrainingAwareness').html(badgeColor(0));
-            }
-            if (data.training_internal_path != null & data.training_internal_type != null) {
-                $('#statusTrainingInternal').html(badgeColor(100));
-            } else {
-                $('#statusTrainingInternal').html(badgeColor(0));
-            }
             $('#statusDistribusi').html(badgeColor(data.statusDistribusi));
-            if (data.submit_dokumen_path != null & data.submit_dokumen_type != null) {
-                $('#statusSubmitDokumen').html(badgeColor(100));
-            } else {
-                $('#statusSubmitDokumen').html(badgeColor(0));
-            }
-            status('pentest', 'Pentest');
-            status('bcp', 'Bcp');
-            stage(stage1, 'Stage1');
             stage(stage2, 'Stage2');
             updateTable();
         });
-        var stage1 = ['jadwal_audit', 'audit_plan', 'foto_audit', 'temuan_audit', 'hasil_perbaikan_audit'];
-        var stage2 = ['gap_analisa_audit', 'jadwal_audit2', 'audit_plan2', 'foto_audit2', 'temuan_audit2', 'hasil_perbaikan_audit2'];
-        var stage3 = stage1.concat(stage2);
-        function updateTable() {
-            for (var s of stage3) {
-                $('#group_' + s + ' td .fa-check').remove();
-                if (timeline[s + '_type'] != null & timeline[s + '_path'] != null) {
-                    $('#group_' + s + ' td').eq(2).append(' <span class="text-success fa fa-check"></span>');
-                }
+    }
+    function status(header, status) {
+        var s = 0;
+        if (timeline[header + '_type'] != null & timeline[header + '_path'] != null) {
+            s = 100;
+        }
+        $('#status' + status).html(badgeColor(s));
+        return s;
+    }
+    function stage(stage, status) {
+        var count = 0
+        var sum = 0
+        for (var st of stage) {
+            if (timeline[st + '_type'] != null & timeline[st + '_path'] != null) {
+                count++;
             }
         }
-        function status(header, status) {
-            if (timeline[header + '_type'] != null & timeline[header + '_path'] != null) {
-                $('#status' + status).html(badgeColor(100));
-            } else {
-                $('#status' + status).html(badgeColor(0));
+        sum = Math.round(count / stage.length * 100);
+        $('#status' + status).html(badgeColor(sum));
+        return sum;
+    }
+    function updateTable() {
+        for (var s of stage3) {
+            $('#group_' + s + ' td .fa-check').remove();
+            if (timeline[s + '_type'] != null & timeline[s + '_path'] != null) {
+                $('#group_' + s + ' td').eq(2).append(' <span class="text-success fa fa-check"></span>');
             }
-        }
-        function stage(stage, status) {
-            var count = 0
-            for (var st of stage) {
-                if (timeline[st + '_type'] != null & timeline[st + '_path'] != null) {
-                    count++;
-                }
-                $('#status' + status).html(badgeColor(Math.round(count / stage.length * 100)));
-            }
-
         }
         $.getJSON('<?= 'dashboard/get_pemenuhan' ?>', null, function (data) {
             var doc = [];
@@ -454,6 +442,42 @@ $n = 1;
             }
             $('#statusDoc').html(badgeColor(average(doc)));
             $('#statusImp').html(badgeColor(average(imp)));
+            listProgress = {
+                gap: timeline.statusGap,
+                training: Math.round((status('training_awareness', 'TrainingAwareness') + status('training_internal', 'TrainingInternal')) / 2),
+                analisaResiko: 0,
+                pengembanganDokumen: average(doc),
+                distribusiDokumen: timeline.statusDistribusi,
+                implementasiDokumen: average(imp),
+                pentest: status('pentest', 'Pentest'),
+                bcp: status('bcp', 'Bcp'),
+                auditInternal: 0,
+                tinjauanManajemen: 0,
+                submitDokumen: status('submit_dokumen', 'SubmitDokumen'),
+                auditStage1: stage(stage1, 'Stage1'),
+                auditStage2: stage(stage2, 'Stage2'),
+            }
+            var sum = 0;
+            var length = 0;
+            for (var item in listProgress) {
+                sum += listProgress[item];
+                length++;
+            }
+            aveProgress = Math.round(sum / length);
+            for (var i = 1; i <= 5; i++) {
+                var n = i * 20;
+//                console.log(aveProgress);
+                if (aveProgress >= n) {
+                    $('#progress' + n).width('20%');
+                    console.log(20);
+                } else if (aveProgress <= n - 20) {
+                    $('#progress' + n).width('0%');
+                    console.log(0);
+                } else {
+                    $('#progress' + n).width((aveProgress - (n-20))+'%');
+                    console.log(aveProgress - (n-20));
+                }
+            }
         });
     }
     function badgeColor(val) {
