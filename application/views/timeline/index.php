@@ -9,12 +9,19 @@ $n = 1;
 <div class="card">
     <div class="card-body">
         <b>Progress Kesiapan Sertifikasi <?= $this->session->activeStandard['name'] ?></b>
-        <div class="progress">
-            <div id="progress20" class="progress-bar bg-danger" style="width: 20%">Tidak Siap Sama Sekali</div>
-            <div id="progress40" class="progress-bar bg-warning" style="width: 20%">Belum Siap</div>
-            <div id="progress60" class="progress-bar" style="width: 20%; background-color: yellow">Setengah Siap</div>
-            <div id="progress80" class="progress-bar bg-primary" style="width: 20%">Sudah Siap</div>
-            <div id="progress100" class="progress-bar bg-success" style="width: 20%">Sudah Siap Sekali</div>
+        <div class="row">
+            <div class="col-sm-11">
+                <div class="progress mt-1">
+                    <div id="progress20" class="progress-bar bg-danger" style="width: 20%">Tidak Siap Sama Sekali</div>
+                    <div id="progress40" class="progress-bar bg-warning" style="width: 20%">Belum Siap</div>
+                    <div id="progress60" class="progress-bar text-primary" style="width: 20%; background-color: yellow">Setengah Siap</div>
+                    <div id="progress80" class="progress-bar bg-primary" style="width: 20%">Sudah Siap</div>
+                    <div id="progress100" class="progress-bar bg-success" style="width: 20%">Sudah Siap Sekali</div>
+                </div>
+            </div> 
+            <div class="col-sm-1">
+                <b><span id="titleProgress" class="text-primary"></span></b>
+            </div> 
         </div>
         <br>
         <table class="table">
@@ -68,7 +75,7 @@ $n = 1;
                     <td>Analisa Resiko</td>
                     <td></td>
                     <td></td>
-                    <td><span class="badge badge-danger">n%</span></td>
+                    <td><span class="badge badge-danger">0%</span></td>
                     <td></td>
                 </tr>
                 <tr>
@@ -124,14 +131,14 @@ $n = 1;
                     <td>Audit Internal Sistem</td>
                     <td></td>
                     <td></td>
-                    <td><span class="badge badge-danger">n%</span></td>
+                    <td><span class="badge badge-danger">0%</span></td>
                 </tr>
                 <tr>
                     <td><?= $n++ ?></td>
                     <td>Tinjauan Manajemen</td>
                     <td></td>
                     <td></td>
-                    <td><span class="badge badge-danger">n%</span></td>
+                    <td><span class="badge badge-danger">0%</span></td>
                 </tr>
                 <tr>
                     <td><?= $n++ ?></td>
@@ -271,7 +278,7 @@ $n = 1;
                     <td>Pemenuhan Total</td>
                     <td></td>
                     <td><?= 'N/' . --$n ?></td>
-                    <td><span class="badge badge-success">n%</span></td>
+                    <td><span class="badge badge-success">0%</span></td>
                 </tr>
             </tbody>
         </table>
@@ -474,10 +481,11 @@ $n = 1;
                     $('#progress' + n).width('0%');
                     console.log(0);
                 } else {
-                    $('#progress' + n).width((aveProgress - (n-20))+'%');
-                    console.log(aveProgress - (n-20));
+                    $('#progress' + n).width((aveProgress - (n - 20)) + '%');
+                    console.log(aveProgress - (n - 20));
                 }
             }
+            $('#titleProgress').html(aveProgress + '%');
         });
     }
     function badgeColor(val) {
