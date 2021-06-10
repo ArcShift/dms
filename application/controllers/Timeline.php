@@ -16,7 +16,7 @@ class Timeline extends MY_Controller {
             $standard = $this->db->get_where('standard', ['id' => $this->session->activeStandard['id']])->row_array();
             $pasals = ['analisa_resiko', 'audit_internal', 'tinjauan_manajemen'];
             foreach ($pasals as $k => $p) {
-                $standard['pasal_' . $p] = $this->db->get_where('pasal', ['id' => $standard['pasal_' . $p]])->row()->name;
+                $standard['pasal_' . $p] = $this->db->get_where('pasal', ['id' => $standard['pasal_' . $p]])->row_array()['name'];
             }
             $this->data['standard'] = $standard;
             $this->data['gapAnalisa'] = $this->db->get_where('gap_analisa', ['id_company' => $this->session->activeCompany['id'], 'id_standard' => $this->session->activeStandard['id']])->result();

@@ -1,6 +1,5 @@
 <?php
 $n = 1;
-print_r($standard);
 ?>
 <style>
     .col-cust{
