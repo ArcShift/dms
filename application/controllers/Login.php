@@ -13,6 +13,7 @@ class Login extends CI_Controller {
             $this->load->model('m_login', 'model');
             if ($this->model->login()) {
                 $this->session->set_userdata('module', $this->model->access());
+                $this->session->set_userdata('activeStandards', $this->db->get('standard')->row_array());
                 if (!empty($this->session->activeCompany)) {
                     $this->load->model('M_dashboard', 'm_dashboard');
                     $this->session->set_userdata('activeStandard', $this->m_dashboard->getDefaultStandard($this->session->activeCompany['id']));

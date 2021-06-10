@@ -5,10 +5,18 @@ class Timeline extends MY_Controller {
     protected $module = 'timeline';
 
     function index() {
-        $this->data['menuStandard'] = 'standard';
         $this->subModule = 'read';
-        $this->data['gapAnalisa'] = $this->db->get_where('gap_analisa', ['id_company' => $this->session->activeCompany['id'], 'id_standard' => $this->session->activeStandard['id']])->result();
-        $this->render('index');
+        if ($this->session->user['role'] == 'admin') {
+            $this->data['menuStandard'] = 'standardOnly';
+            $this->load->model('m_pasal');
+            $this->data['pasal'] = $this->m_pasal->getByStandard($this->session->activeStandards['id']);
+//            $this->data['pasal'] = $this->db->get_where('pasal',['id_standard'=>$this->session->activeStandards['id']])->result_array();
+            $this->render('indexAdmin');
+        } else {//pic
+            $this->data['menuStandard'] = 'standard';
+            $this->data['gapAnalisa'] = $this->db->get_where('gap_analisa', ['id_company' => $this->session->activeCompany['id'], 'id_standard' => $this->session->activeStandard['id']])->result();
+            $this->render('index');
+        }
     }
 
     function set_gap() {
@@ -68,13 +76,33 @@ class Timeline extends MY_Controller {
         $this->db->select('p.*');
         $this->db->join('position_personil pp', 'pp.id_personil = p.id');
         $this->db->join('distribution ds', 'ds.id_position_personil = pp.id');
-        $this->db->where('p.id_company',$this->session->activeCompany['id']);
+        $this->db->where('p.id_company', $this->session->activeCompany['id']);
         $this->db->group_by('p.id');
         $this->db->from('personil p');
         $cDist = $this->db->count_all_results();
-        $this->db->where('p.id_company',$this->session->activeCompany['id']);
+        $this->db->where('p.id_company', $this->session->activeCompany['id']);
         $cPers = $this->db->count_all_results('personil p');
-        return round($cDist / $cPers *100);
+        return round($cDist / $cPers * 100);
+    }
+
+    function get_for_admin() {
+        $this->db->where('id', $this->session->activeStandards['id']);
+        $data = $this->db->get('standard')->row();
+        echo json_encode($data);
+    }
+
+    function edit() {
+        $data = [];
+        if (!empty($this->input->post('header'))) {
+            $this->db->set('desc_' . $this->input->post('header'), $this->input->post('asal_data'));
+            if ($this->input->post('set_pasal') == 2 & !empty($this->input->post('pasal'))) {
+                $this->db->set('pasal_' . $this->input->post('header'), $this->input->post('pasal'));
+            }
+            $this->db->where('id', $this->session->activeStandards['id']);
+            $this->db->update('standard');
+            $data['message'] = 'success';
+            die(json_encode($data));
+        }
     }
 
 }

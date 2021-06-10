@@ -72,6 +72,11 @@ class Dashboard extends MY_Controller {
             echo 'success';
         }
     }
+    function switch_standards() {
+        $s = $this->db->get_where('standard',['id'=>$this->input->get('standard')])->row_array();
+        $this->session->set_userdata('activeStandards', $s);
+        echo 'success';
+    }
 
     function get_pemenuhan() {
         $this->load->model('M_treeview_detail', 'm_treeview');

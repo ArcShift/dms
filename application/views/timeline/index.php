@@ -29,7 +29,7 @@ $n = 1;
                 <tr>
                     <th>No</th>
                     <th>Timeline</th>
-                    <th>Judul Dokumen</th>
+                    <th>Paramater</th>
                     <th>Aksi</th>
                     <th>Status</th>
                     <th>Asal Data</th>
@@ -41,7 +41,7 @@ $n = 1;
                     <td>Gap Analisa</td>
                     <td id="judulGap"></td>
                     <td>
-                        <button class="btn btn-sm btn-outline-primary fa fa-edit" onclick="initGap()"></button>
+                        <button class="btn btn-sm btn-outline-primary fa fa-upload" onclick="initGap()"></button>
                     </td>
                     <td id="statusGap"></td>
                     <td></td>
@@ -52,7 +52,6 @@ $n = 1;
                     <td>Training Awareness</td>
                     <td>
                         <button class="btn btn-sm btn-outline-primary fa fa-upload" onclick="initUpload1('training_awareness', 'Training Awareness')"></button>
-                        <button class="btn btn-sm btn-outline-primary fa fa-edit"></button>
                         <button class="btn btn-sm btn-outline-primary fa fa-info-circle" onclick="preview('training_awareness', 'Training Awareness')"></button>
                     </td>
                     <td id="statusTrainingAwareness"></td>
@@ -64,7 +63,6 @@ $n = 1;
                     <td>Training Audit Internal</td>
                     <td>
                         <button class="btn btn-sm btn-outline-primary fa fa-upload" onclick="initUpload1('training_internal', 'Training Internal')"></button>
-                        <button class="btn btn-sm btn-outline-primary fa fa-edit"></button>
                         <button class="btn btn-sm btn-outline-primary fa fa-info-circle" onclick="preview('training_internal', 'Training Internal')"></button>
                     </td>
                     <td id="statusTrainingInternal"></td>
@@ -108,7 +106,6 @@ $n = 1;
                     <td></td>
                     <td>
                         <button class="btn btn-sm btn-outline-primary fa fa-upload" onclick="initUpload1('pentest', 'Penetration Testing', true)"></button>
-                        <button class="btn btn-sm btn-outline-primary fa fa-edit"></button>
                         <button class="btn btn-sm btn-outline-primary fa fa-info-circle" onclick="preview('pentest', 'Penetration Testing')"></button>
                     </td>
                     <td id="statusPentest"></td>
@@ -120,7 +117,6 @@ $n = 1;
                     <td></td>
                     <td>
                         <button class="btn btn-sm btn-outline-primary fa fa-upload" onclick="initUpload1('bcp', 'Business Continuity Planning')"></button>
-                        <button class="btn btn-sm btn-outline-primary fa fa-edit"></button>
                         <button class="btn btn-sm btn-outline-primary fa fa-info-circle" onclick="preview('bcp', 'Business Continuity Planning')"></button>
                     </td>
                     <td id="statusBcp"></td>
@@ -146,7 +142,6 @@ $n = 1;
                     <td></td>
                     <td>
                         <button class="btn btn-sm btn-outline-primary fa fa-upload" onclick="initUpload1('submit_dokumen', 'Submit Dokumen')"></button>
-                        <button class="btn btn-sm btn-outline-primary fa fa-edit"></button>
                         <button class="btn btn-sm btn-outline-primary fa fa-info-circle" onclick="preview('submit_dokumen', 'Submit Dokumen')"></button>
                     </td>
                     <td id="statusSubmitDokumen"></td>
@@ -157,7 +152,6 @@ $n = 1;
                     <td>Jadwal Audit External Stage 1</td>
                     <td>
                         <button class="btn btn-sm btn-outline-primary fa fa-upload" onclick="initUpload1('jadwal_audit', 'Jadwal Audit Eksternal Stage 1')"></button>
-                        <button class="btn btn-sm btn-outline-primary fa fa-edit"></button>
                         <button class="btn btn-sm btn-outline-primary fa fa-info-circle" onclick="preview('jadwal_audit', 'Jadwal Audit Eksternal Stage 1')"></button>
                     </td>
                     <td id="statusStage1"></td>
@@ -169,7 +163,6 @@ $n = 1;
                     <td>Audit Plan</td>
                     <td>
                         <button class="btn btn-sm btn-outline-primary fa fa-upload" onclick="initUpload1('audit_plan', 'Audit Plan Stage 1')"></button>
-                        <button class="btn btn-sm btn-outline-primary fa fa-edit"></button>
                         <button class="btn btn-sm btn-outline-primary fa fa-info-circle" onclick="preview('audit_plan', 'Audit Plan Stage 1')"></button>
                     </td>
                     <td></td>
@@ -180,7 +173,6 @@ $n = 1;
                     <td>Foto Audit</td>
                     <td>
                         <button class="btn btn-sm btn-outline-primary fa fa-upload" onclick="initUpload1('foto_audit', 'Foto Audit Stage 1')"></button>
-                        <button class="btn btn-sm btn-outline-primary fa fa-edit"></button>
                         <button class="btn btn-sm btn-outline-primary fa fa-info-circle" onclick="preview('foto_audit', 'Foto Audit Stage 1')"></button>
                     </td>
                     <td></td>
@@ -191,7 +183,6 @@ $n = 1;
                     <td>Temuan Audit</td>
                     <td>
                         <button class="btn btn-sm btn-outline-primary fa fa-upload" onclick="initUpload1('temuan_audit', 'Temuan Audit Stage 1')"></button>
-                        <button class="btn btn-sm btn-outline-primary fa fa-edit"></button>
                         <button class="btn btn-sm btn-outline-primary fa fa-info-circle" onclick="preview('temuan_audit', 'Temuan Audit Stage 1')"></button>
                     </td>
                     <td></td>
@@ -202,7 +193,6 @@ $n = 1;
                     <td>Hasil Perbaikan Audit</td>
                     <td>
                         <button class="btn btn-sm btn-outline-primary fa fa-upload" onclick="initUpload1('hasil_perbaikan_audit', 'Hasil Perbaikan Audit Stage 1')"></button>
-                        <button class="btn btn-sm btn-outline-primary fa fa-edit"></button>
                         <button class="btn btn-sm btn-outline-primary fa fa-info-circle" onclick="preview('hasil_perbaikan_audit', 'Hasil Perbaikan Audit Stage 1')"></button>
                     </td>
                     <td></td>
@@ -213,7 +203,6 @@ $n = 1;
                     <td>Gap Analisa 2021</td>
                     <td>
                         <button class="btn btn-sm btn-outline-primary fa fa-upload" onclick="initUpload1('gap_analisa_audit', 'Gap Analisa Audit')"></button>
-                        <button class="btn btn-sm btn-outline-primary fa fa-edit"></button>
                         <button class="btn btn-sm btn-outline-primary fa fa-info-circle" onclick="preview('gap_analisa_audit', 'Gap Analisa Audit')"></button>
                     </td>
                     <td id="statusStage2"></td>
@@ -224,7 +213,6 @@ $n = 1;
                     <td>Jadwal Audit External Stage 2</td>
                     <td>
                         <button class="btn btn-sm btn-outline-primary fa fa-upload" onclick="initUpload1('jadwal_audit2', 'Jadwal Audit External Stage 2')"></button>
-                        <button class="btn btn-sm btn-outline-primary fa fa-edit"></button>
                         <button class="btn btn-sm btn-outline-primary fa fa-info-circle" onclick="preview('jadwal_audit2', 'Jadwal Audit External Stage 2')"></button>
                     </td>
                     <td></td>
@@ -235,7 +223,6 @@ $n = 1;
                     <td>Audit Plan</td>
                     <td>
                         <button class="btn btn-sm btn-outline-primary fa fa-upload" onclick="initUpload1('audit_plan2', 'Audit Plan Stage 2')"></button>
-                        <button class="btn btn-sm btn-outline-primary fa fa-edit"></button>
                         <button class="btn btn-sm btn-outline-primary fa fa-info-circle" onclick="preview('audit_plan2', 'Audit Plan Stage 2')"></button>
                     </td>
                     <td></td>
@@ -246,7 +233,6 @@ $n = 1;
                     <td>Foto Audit</td>
                     <td>
                         <button class="btn btn-sm btn-outline-primary fa fa-upload" onclick="initUpload1('foto_audit2', 'Foto Audit Stage 2')"></button>
-                        <button class="btn btn-sm btn-outline-primary fa fa-edit"></button>
                         <button class="btn btn-sm btn-outline-primary fa fa-info-circle" onclick="preview('foto_audit2', 'Foto Audit Stage 2')"></button>
                     </td>
                     <td></td>
@@ -257,7 +243,6 @@ $n = 1;
                     <td>Temuan Audit</td>
                     <td>
                         <button class="btn btn-sm btn-outline-primary fa fa-upload" onclick="initUpload1('temuan_audit2', 'Temuan Audit Stage 2')"></button>
-                        <button class="btn btn-sm btn-outline-primary fa fa-edit"></button>
                         <button class="btn btn-sm btn-outline-primary fa fa-info-circle" onclick="preview('temuan_audit2', 'Temuan Audit Stage 2')"></button>
                     </td>
                     <td></td>
@@ -268,7 +253,6 @@ $n = 1;
                     <td>Hasil Perbaikan Audit</td>
                     <td>
                         <button class="btn btn-sm btn-outline-primary fa fa-upload" onclick="initUpload1('hasil_perbaikan_audit2', 'Hasil Perbaikan Audit Stage 2')"></button>
-                        <button class="btn btn-sm btn-outline-primary fa fa-edit"></button>
                         <button class="btn btn-sm btn-outline-primary fa fa-info-circle" onclick="preview('hasil_perbaikan_audit2', 'Hasil Perbaikan Audit Stage 2')"></button>
                     </td>
                     <td></td>

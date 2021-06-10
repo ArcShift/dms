@@ -259,7 +259,7 @@ if ($this->input->get('standard')) {
                                     </div>
                                     <div>
                                         <?php if (isset($menuStandard) & $role == 'admin') { ?>
-                                            <?php if (empty($this->session->user['id_company'])) { ?>
+                                            <?php if (empty($this->session->user['id_company']) & $menuStandard != 'standardOnly') { ?>
                                                 <button type="button" title="Pilih Perusahaan" data-toggle="dropdown" class="btn-shadow mr-3 btn btn-dark">
                                                     <i class="fa fa-angle-double-down"></i>
                                                 </button>
@@ -308,6 +308,34 @@ if ($this->input->get('standard')) {
                                                                     <i class="nav-link-icon lnr-inbox"></i>
                                                                     <span>
                                                                         <?= $cs['name'] ?>
+                                                                    </span>
+                                                                </a>
+                                                            </li>
+                                                        <?php } ?>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <?php
+                                    } elseif ($menuStandard = 'standardOnly') {
+                                        $standards = $this->db->get('standard')->result_array()
+                                        ?>
+                                        <div class="page-title-actions">
+                                            <div class="d-inline-block dropdown">
+                                                <button type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn-shadow dropdown-toggle btn btn-info">
+                                                    <span class="btn-icon-wrapper pr-2 opacity-7">
+                                                        <i class="fa fa-file fa-w-20"></i>
+                                                    </span>
+                                                    <?= $this->session->activeStandards['name'] ?>
+                                                </button>
+                                                <div tabindex="-1" role="menu" aria-hidden="true" class="dropdown-menu dropdown-menu-right">
+                                                    <ul class="nav flex-column">
+                                                        <?php foreach ($standards as $s) { ?>
+                                                            <li class="nav-item">
+                                                                <a class="nav-link" onclick="switchStandards(<?= $s['id'] ?>)">
+                                                                    <i class="nav-link-icon lnr-inbox"></i>
+                                                                    <span>
+                                                                        <?= $s['name'] ?>
                                                                     </span>
                                                                 </a>
                                                             </li>
@@ -447,6 +475,13 @@ if ($this->input->get('standard')) {
             }
             function switchStandard(standard) {
                 $.get('<?= site_url('dashboard/switch_standard') ?>', {standard: standard}, function (data) {
+                    if (data == 'success') {
+                        location.reload();
+                    }
+                });
+            }
+            function switchStandards(standard) {
+                $.get('<?= site_url('dashboard/switch_standards') ?>', {standard: standard}, function (data) {
                     if (data == 'success') {
                         location.reload();
                     }
