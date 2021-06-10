@@ -1,5 +1,6 @@
 <?php
 $n = 1;
+print_r($standard);
 ?>
 <style>
     .col-cust{
@@ -44,7 +45,7 @@ $n = 1;
                         <button class="btn btn-sm btn-outline-primary fa fa-upload" onclick="initGap()"></button>
                     </td>
                     <td id="statusGap"></td>
-                    <td></td>
+                    <td><?= $standard['desc_gap_analisa'] ?></td>
                 </tr>
                 <tr>
                     <td><?= $n++ ?></td>
@@ -55,7 +56,7 @@ $n = 1;
                         <button class="btn btn-sm btn-outline-primary fa fa-info-circle" onclick="preview('training_awareness', 'Training Awareness')"></button>
                     </td>
                     <td id="statusTrainingAwareness"></td>
-                    <td></td>
+                    <td><?= $standard['desc_training_awareness'] ?></td>
                 </tr>
                 <tr>
                     <td></td>
@@ -66,15 +67,15 @@ $n = 1;
                         <button class="btn btn-sm btn-outline-primary fa fa-info-circle" onclick="preview('training_internal', 'Training Internal')"></button>
                     </td>
                     <td id="statusTrainingInternal"></td>
-                    <td></td>
+                    <td><?= $standard['desc_training_audit_internal'] ?></td>
                 </tr>
                 <tr>
                     <td><?= $n++ ?></td>
                     <td>Analisa Resiko</td>
-                    <td></td>
+                    <td><?= $standard['pasal_analisa_resiko'] ?></td>
                     <td></td>
                     <td><span class="badge badge-danger">0%</span></td>
-                    <td></td>
+                    <td><?= $standard['desc_analisa_resiko'] ?></td>
                 </tr>
                 <tr>
                     <td><?= $n++ ?></td>
@@ -82,7 +83,7 @@ $n = 1;
                     <td></td>
                     <td></td>
                     <td id="statusDoc"></td>
-                    <td></td>
+                    <td><?= $standard['desc_pengembangan_dokumen'] ?></td>
                 </tr>
                 <tr>
                     <td><?= $n++ ?></td>
@@ -90,7 +91,7 @@ $n = 1;
                     <td></td>
                     <td></td>
                     <td id="statusDistribusi"></td>
-                    <td></td>
+                    <td><?= $standard['desc_distribusi_dokumen'] ?></td>
                 </tr>
                 <tr>
                     <td><?= $n++ ?></td>
@@ -98,7 +99,7 @@ $n = 1;
                     <td></td>
                     <td></td>
                     <td id="statusImp"></td>
-                    <td></td>
+                    <td><?= $standard['desc_implementasi_dokumen'] ?></td>
                 </tr>
                 <tr>
                     <td><?= $n++ ?></td>
@@ -109,7 +110,7 @@ $n = 1;
                         <button class="btn btn-sm btn-outline-primary fa fa-info-circle" onclick="preview('pentest', 'Penetration Testing')"></button>
                     </td>
                     <td id="statusPentest"></td>
-                    <td></td>
+                    <td><?= $standard['desc_pentest'] ?></td>
                 </tr>
                 <tr>
                     <td><?= $n++ ?></td>
@@ -120,21 +121,23 @@ $n = 1;
                         <button class="btn btn-sm btn-outline-primary fa fa-info-circle" onclick="preview('bcp', 'Business Continuity Planning')"></button>
                     </td>
                     <td id="statusBcp"></td>
-                    <td></td>
+                    <td><?= $standard['desc_bcp'] ?></td>
                 </tr>
                 <tr>
                     <td><?= $n++ ?></td>
                     <td>Audit Internal Sistem</td>
-                    <td></td>
+                    <td><?= $standard['pasal_audit_internal'] ?></td>
                     <td></td>
                     <td><span class="badge badge-danger">0%</span></td>
+                    <td><?= $standard['desc_audit_internal'] ?></td>
                 </tr>
                 <tr>
                     <td><?= $n++ ?></td>
                     <td>Tinjauan Manajemen</td>
-                    <td></td>
+                    <td><?= $standard['pasal_tinjauan_manajemen'] ?></td>
                     <td></td>
                     <td><span class="badge badge-danger">0%</span></td>
+                    <td><?= $standard['desc_tinjauan_manajemen'] ?></td>
                 </tr>
                 <tr>
                     <td><?= $n++ ?></td>
@@ -145,6 +148,7 @@ $n = 1;
                         <button class="btn btn-sm btn-outline-primary fa fa-info-circle" onclick="preview('submit_dokumen', 'Submit Dokumen')"></button>
                     </td>
                     <td id="statusSubmitDokumen"></td>
+                    <td><?= $standard['desc_submit_dokumen'] ?></td>
                 </tr>
                 <tr id="group_jadwal_audit">
                     <td><?= $n++ ?></td>
@@ -155,7 +159,7 @@ $n = 1;
                         <button class="btn btn-sm btn-outline-primary fa fa-info-circle" onclick="preview('jadwal_audit', 'Jadwal Audit Eksternal Stage 1')"></button>
                     </td>
                     <td id="statusStage1"></td>
-                    <td></td>
+                    <td><?= $standard['desc_jadwal_audit'] ?></td>
                 </tr>
                 <tr id="group_audit_plan">
                     <td></td>
@@ -165,7 +169,7 @@ $n = 1;
                         <button class="btn btn-sm btn-outline-primary fa fa-upload" onclick="initUpload1('audit_plan', 'Audit Plan Stage 1')"></button>
                         <button class="btn btn-sm btn-outline-primary fa fa-info-circle" onclick="preview('audit_plan', 'Audit Plan Stage 1')"></button>
                     </td>
-                    <td></td>
+                    <td><?= $standard['desc_audit_plan'] ?></td>
                 </tr>
                 <tr id="group_foto_audit">
                     <td></td>
@@ -185,7 +189,7 @@ $n = 1;
                         <button class="btn btn-sm btn-outline-primary fa fa-upload" onclick="initUpload1('temuan_audit', 'Temuan Audit Stage 1')"></button>
                         <button class="btn btn-sm btn-outline-primary fa fa-info-circle" onclick="preview('temuan_audit', 'Temuan Audit Stage 1')"></button>
                     </td>
-                    <td></td>
+                    <td><?= $standard['desc_temuan_audit'] ?></td>
                 </tr>
                 <tr id="group_hasil_perbaikan_audit">
                     <td></td>
@@ -195,7 +199,7 @@ $n = 1;
                         <button class="btn btn-sm btn-outline-primary fa fa-upload" onclick="initUpload1('hasil_perbaikan_audit', 'Hasil Perbaikan Audit Stage 1')"></button>
                         <button class="btn btn-sm btn-outline-primary fa fa-info-circle" onclick="preview('hasil_perbaikan_audit', 'Hasil Perbaikan Audit Stage 1')"></button>
                     </td>
-                    <td></td>
+                    <td><?= $standard['desc_hasil_perbaikan_audit'] ?></td>
                 </tr>
                 <tr id="group_gap_analisa_audit">
                     <td><?= $n++ ?></td>
@@ -206,6 +210,7 @@ $n = 1;
                         <button class="btn btn-sm btn-outline-primary fa fa-info-circle" onclick="preview('gap_analisa_audit', 'Gap Analisa Audit')"></button>
                     </td>
                     <td id="statusStage2"></td>
+                    <td><?= $standard['desc_gap_analisa_audit'] ?></td>
                 </tr>
                 <tr id="group_jadwal_audit2">
                     <td></td>
@@ -215,7 +220,7 @@ $n = 1;
                         <button class="btn btn-sm btn-outline-primary fa fa-upload" onclick="initUpload1('jadwal_audit2', 'Jadwal Audit External Stage 2')"></button>
                         <button class="btn btn-sm btn-outline-primary fa fa-info-circle" onclick="preview('jadwal_audit2', 'Jadwal Audit External Stage 2')"></button>
                     </td>
-                    <td></td>
+                    <td><?= $standard['desc_jadwal_audit2'] ?></td>
                 </tr>
                 <tr id="group_audit_plan2">
                     <td></td>
@@ -225,7 +230,7 @@ $n = 1;
                         <button class="btn btn-sm btn-outline-primary fa fa-upload" onclick="initUpload1('audit_plan2', 'Audit Plan Stage 2')"></button>
                         <button class="btn btn-sm btn-outline-primary fa fa-info-circle" onclick="preview('audit_plan2', 'Audit Plan Stage 2')"></button>
                     </td>
-                    <td></td>
+                    <td><?= $standard['desc_audit_plan2'] ?></td>
                 </tr>
                 <tr id="group_foto_audit2">
                     <td></td>
@@ -235,7 +240,7 @@ $n = 1;
                         <button class="btn btn-sm btn-outline-primary fa fa-upload" onclick="initUpload1('foto_audit2', 'Foto Audit Stage 2')"></button>
                         <button class="btn btn-sm btn-outline-primary fa fa-info-circle" onclick="preview('foto_audit2', 'Foto Audit Stage 2')"></button>
                     </td>
-                    <td></td>
+                    <td><?= $standard['desc_foto_audit2'] ?></td>
                 </tr>
                 <tr id="group_temuan_audit2">
                     <td></td>
@@ -244,8 +249,8 @@ $n = 1;
                     <td>
                         <button class="btn btn-sm btn-outline-primary fa fa-upload" onclick="initUpload1('temuan_audit2', 'Temuan Audit Stage 2')"></button>
                         <button class="btn btn-sm btn-outline-primary fa fa-info-circle" onclick="preview('temuan_audit2', 'Temuan Audit Stage 2')"></button>
-                    </td>
-                    <td></td>
+                    </td>   
+                    <td><?= $standard['desc_temuan_audit2'] ?></td>
                 </tr>
                 <tr id="group_hasil_perbaikan_audit2">
                     <td></td>
@@ -255,7 +260,7 @@ $n = 1;
                         <button class="btn btn-sm btn-outline-primary fa fa-upload" onclick="initUpload1('hasil_perbaikan_audit2', 'Hasil Perbaikan Audit Stage 2')"></button>
                         <button class="btn btn-sm btn-outline-primary fa fa-info-circle" onclick="preview('hasil_perbaikan_audit2', 'Hasil Perbaikan Audit Stage 2')"></button>
                     </td>
-                    <td></td>
+                    <td><?= $standard['desc_hasil_perbaikan_audit2'] ?></td>
                 </tr>
                 <tr>
                     <td></td>
