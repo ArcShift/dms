@@ -72,7 +72,7 @@ $n = 1;
                 <tr>
                     <td><?= $n++ ?></td>
                     <td>Analisa Resiko</td>
-                    <td><?= $standard['pasal_name_analisa_resiko'] ?></td>
+                    <td><?= isset($standard['pasal_name_analisa_resiko'])?$standard['pasal_name_analisa_resiko']:'' ?></td>
                     <td></td>
                     <td id="statusPasalAnalisaResiko"></span></td>
                     <td><?= $standard['desc_analisa_resiko'] ?></td>
@@ -126,7 +126,7 @@ $n = 1;
                 <tr>
                     <td><?= $n++ ?></td>
                     <td>Audit Internal Sistem</td>
-                    <td><?= $standard['pasal_name_audit_internal'] ?></td>
+                    <td><?= isset($standard['pasal_name_audit_internal'])?$standard['pasal_name_audit_internal']:'' ?></td>
                     <td></td>
                     <td id="statusPasalAuditInternal"></td>
                     <td><?= $standard['desc_audit_internal'] ?></td>
@@ -134,7 +134,7 @@ $n = 1;
                 <tr>
                     <td><?= $n++ ?></td>
                     <td>Tinjauan Manajemen</td>
-                    <td><?= $standard['pasal_name_tinjauan_manajemen'] ?></td>
+                    <td><?= isset($standard['pasal_name_tinjauan_manajemen'])?$standard['pasal_name_tinjauan_manajemen']:'' ?></td>
                     <td></td>
                     <td id="statusPasalTinjauanManajemen"></td>
                     <td><?= $standard['desc_tinjauan_manajemen'] ?></td>

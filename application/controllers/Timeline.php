@@ -21,6 +21,7 @@ class Timeline extends MY_Controller {
                     $pemenuhan = $this->getPemenuhanByPasal($standard['pasal_' . $p]);
                     $standard['status_pasal_' . $p] = round(($pemenuhan['doc'] + $pemenuhan['imp'])/2);
                 }
+                    $standard['status_pasal_' . $p] = '0';
             }
             $this->data['standard'] = $standard;
             $this->data['gapAnalisa'] = $this->db->get_where('gap_analisa', ['id_company' => $this->session->activeCompany['id'], 'id_standard' => $this->session->activeStandard['id']])->result();
