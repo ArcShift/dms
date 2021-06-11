@@ -17,7 +17,9 @@ class Timeline extends MY_Controller {
             $pasals = ['analisa_resiko', 'audit_internal', 'tinjauan_manajemen'];
             foreach ($pasals as $k => $p) {
                 if (!empty($standard['pasal_' . $p])) {
-                    $standard['pasal_' . $p] = $this->db->get_where('pasal', ['id' => $standard['pasal_' . $p]])->row_array()['name'];
+                    $standard['pasal_name_' . $p] = $this->db->get_where('pasal', ['id' => $standard['pasal_' . $p]])->row_array()['name'];
+                    $pemenuhan = $this->getPemenuhanByPasal($standard['pasal_' . $p]);
+                    $standard['status_pasal_' . $p] = round(($pemenuhan['doc'] + $pemenuhan['imp'])/2);
                 }
             }
             $this->data['standard'] = $standard;
@@ -110,6 +112,44 @@ class Timeline extends MY_Controller {
             $data['message'] = 'success';
             die(json_encode($data));
         }
+    }
+
+    private function getPemenuhanByPasal($id_pasal) {
+        $child = $this->db->get_where('pasal p', ['p.parent' => $id_pasal])->result();
+        $doc = 0;
+        $imp = 0;
+        if (empty($child)) {//tidak memiliki anak
+            $docs = $this->db->get_where('document_pasal', ['id_pasal' => $id_pasal])->result();
+            if (empty($docs)) {
+                
+            } else {
+                foreach ($docs as $k => $d) {
+                    $imp += $this->getPemenuhanImplementasiByDocument($d->id_document);
+                }
+                $imp = round($imp / count($docs));
+                $doc = 100;
+            }
+        } else {//memiliki anak
+            $sumDoc = 0;
+            $sumImp = 0;
+            foreach ($child as $k => $c) {
+                $data = $this->getPemenuhanByPasal($c->id);
+                $sumDoc += $data['doc'];
+                $sumImp += $data['imp'];
+            }
+            $doc = floor($sumDoc / count($child));
+            $imp = floor($sumImp / count($child));
+        }
+        return ['doc' => $doc, 'imp' => $imp];
+    }
+
+    private function getPemenuhanImplementasiByDocument($id_document) {
+        $this->db->select('COUNT(j.id) AS total, SUM(IF(j.path IS NULL, 0, 1)) AS complete');
+        $this->db->join('tugas t', 't.id_document = d.id');
+        $this->db->join('jadwal j', 'j.id_tugas = t.id');
+        $this->db->group_by('d.id');
+        $data = $this->db->get('document d')->row();
+        return floor($data->complete / $data->total * 100);
     }
 
 }

@@ -1,5 +1,6 @@
 <?php
 $n = 1;
+//print_r($standard);
 ?>
 <style>
     .col-cust{
@@ -71,9 +72,9 @@ $n = 1;
                 <tr>
                     <td><?= $n++ ?></td>
                     <td>Analisa Resiko</td>
-                    <td><?= $standard['pasal_analisa_resiko'] ?></td>
+                    <td><?= $standard['pasal_name_analisa_resiko'] ?></td>
                     <td></td>
-                    <td><span class="badge badge-danger">0%</span></td>
+                    <td id="statusPasalAnalisaResiko"></span></td>
                     <td><?= $standard['desc_analisa_resiko'] ?></td>
                 </tr>
                 <tr>
@@ -125,17 +126,17 @@ $n = 1;
                 <tr>
                     <td><?= $n++ ?></td>
                     <td>Audit Internal Sistem</td>
-                    <td><?= $standard['pasal_audit_internal'] ?></td>
+                    <td><?= $standard['pasal_name_audit_internal'] ?></td>
                     <td></td>
-                    <td><span class="badge badge-danger">0%</span></td>
+                    <td id="statusPasalAuditInternal"></td>
                     <td><?= $standard['desc_audit_internal'] ?></td>
                 </tr>
                 <tr>
                     <td><?= $n++ ?></td>
                     <td>Tinjauan Manajemen</td>
-                    <td><?= $standard['pasal_tinjauan_manajemen'] ?></td>
+                    <td><?= $standard['pasal_name_tinjauan_manajemen'] ?></td>
                     <td></td>
-                    <td><span class="badge badge-danger">0%</span></td>
+                    <td id="statusPasalTinjauanManajemen"></td>
                     <td><?= $standard['desc_tinjauan_manajemen'] ?></td>
                 </tr>
                 <tr>
@@ -372,7 +373,12 @@ $n = 1;
     </div>
 </div>
 <script>
-    function afterReady() {}
+    var standard = <?= json_encode($standard) ?>;
+    function afterReady() {
+        $('#statusPasalAnalisaResiko').html(badgeColor(standard['status_pasal_analisa_resiko']));
+        $('#statusPasalAuditInternal').html(badgeColor(standard['status_pasal_audit_internal']));
+        $('#statusPasalTinjauanManajemen').html(badgeColor(standard['status_pasal_audit_internal']));
+    }
     function initGap() {
         var m = $('#modalGap');
         m.modal('show');
