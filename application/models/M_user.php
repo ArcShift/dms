@@ -6,9 +6,10 @@ class M_user extends CI_Model {
 
     function role() {
         $this->db->order_by('id', 'ASC');
-        if ($this->session->userdata('user')['role'] == 'pic') {
+        if ($this->session->userdata('user')['role'] == 'pic' | $this->session->userdata('user')['role'] == 'ketua') {
             $this->db->where('name', 'anggota');
             $this->db->or_where('name', 'pic');
+            $this->db->or_where('name', 'ketua');
         }
         return $this->db->get('role')->result_array();
     }

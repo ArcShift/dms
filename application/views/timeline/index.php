@@ -483,6 +483,7 @@ $n = 1;
         });
     }
     function badgeColor(val) {
+        val = parseInt(val);
         var badge = '';
         switch (val) {
             case 0:

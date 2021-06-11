@@ -59,7 +59,7 @@
     });
     $('#role').change(function () {
         var v = $(this).val();
-        if (v == 2 || v == 4) {//pic - anggota
+        if (v == 2 || v == 4 || v == 5) {//pic - anggota - ketua
             $('.input-set-corp').removeClass('d-none');
             $('.input-set-corp').children('select').attr("required", "");
         } else {
