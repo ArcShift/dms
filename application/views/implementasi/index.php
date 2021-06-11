@@ -1922,6 +1922,7 @@ if ($role == 'anggota') {
         m.find('form').trigger('reset');
         m.find('.modal-title').text('Tambah Tugas');
         m.find('.input-id').val('');
+        m.find('.input-pasal').html(d.txt_pasals_span);
         m.find('.input-document-id').val(d.id);
         m.find('.input-document-judul').val(d.judul);
         m.find('.input-field').prop('disabled', false);

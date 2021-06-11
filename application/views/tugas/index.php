@@ -50,20 +50,19 @@
                 <?php foreach ($data as $k => $d) { ?>
                     <tr>
                         <td><?= $d->tanggal ?></td>
-                        <td></td>
                         <td><?= $d->tugas->nama ?></td>
                         <td>form terkait</td>
                         <td><?= empty($d->form_terkait) ? '-' : $d->form_terkait->judul ?></td>
                         <td>bukti</td>
                         <!--<td><?= $d->path ?></td>-->
-                        <td><?= $d->deadline ?></td>
+                        <!--<td><?= $d->deadline ?></td>-->
                         <td>
                             <button class="btn btn-sm btn-outline-primary fa fa-upload" onclick="initUpload(<?= $k ?>)"></button>
                             <button class="btn btn-sm btn-outline-primary fa fa-info-circle" onclick="detail(<?= $k ?>)"></button>
-                            <?php if ($d->asal == 'MANDIRI') { ?>
+                            <?php // if ($d->asal == 'MANDIRI') { ?>
                                 <button class="btn btn-sm btn-outline-primary fa fa-edit" onclick="initEdit(<?= $k ?>)"></button>
                                 <button class="btn btn-sm btn-outline-danger fa fa-trash" onclick="initDelete(<?= $k ?>)"></button>
-                            <?php } ?>
+                            <?php // } ?>   
                         </td>
                     </tr>
                 <?php } ?>
