@@ -72,7 +72,7 @@ $n = 1;
                 <tr>
                     <td><?= $n++ ?></td>
                     <td>Analisa Resiko</td>
-                    <td><?= isset($standard['pasal_name_analisa_resiko'])?$standard['pasal_name_analisa_resiko']:'' ?></td>
+                    <td><?= isset($standard['pasal_name_analisa_resiko']) ? $standard['pasal_name_analisa_resiko'] : '' ?></td>
                     <td></td>
                     <td id="statusPasalAnalisaResiko"></span></td>
                     <td><?= $standard['desc_analisa_resiko'] ?></td>
@@ -126,7 +126,7 @@ $n = 1;
                 <tr>
                     <td><?= $n++ ?></td>
                     <td>Audit Internal Sistem</td>
-                    <td><?= isset($standard['pasal_name_audit_internal'])?$standard['pasal_name_audit_internal']:'' ?></td>
+                    <td><?= isset($standard['pasal_name_audit_internal']) ? $standard['pasal_name_audit_internal'] : '' ?></td>
                     <td></td>
                     <td id="statusPasalAuditInternal"></td>
                     <td><?= $standard['desc_audit_internal'] ?></td>
@@ -134,7 +134,7 @@ $n = 1;
                 <tr>
                     <td><?= $n++ ?></td>
                     <td>Tinjauan Manajemen</td>
-                    <td><?= isset($standard['pasal_name_tinjauan_manajemen'])?$standard['pasal_name_tinjauan_manajemen']:'' ?></td>
+                    <td><?= isset($standard['pasal_name_tinjauan_manajemen']) ? $standard['pasal_name_tinjauan_manajemen'] : '' ?></td>
                     <td></td>
                     <td id="statusPasalTinjauanManajemen"></td>
                     <td><?= $standard['desc_tinjauan_manajemen'] ?></td>
@@ -446,28 +446,31 @@ $n = 1;
             listProgress = {
                 gap: timeline.statusGap,
                 training: Math.round((status('training_awareness', 'TrainingAwareness') + status('training_internal', 'TrainingInternal')) / 2),
-                analisaResiko: 0,
+                analisaResiko: standard['status_pasal_analisa_resiko'],
                 pengembanganDokumen: average(doc),
                 distribusiDokumen: timeline.statusDistribusi,
                 implementasiDokumen: average(imp),
                 pentest: status('pentest', 'Pentest'),
                 bcp: status('bcp', 'Bcp'),
-                auditInternal: 0,
-                tinjauanManajemen: 0,
+                auditInternal: standard['status_pasal_audit_internal'],
+                tinjauanManajemen: standard['status_pasal_audit_internal'],
                 submitDokumen: status('submit_dokumen', 'SubmitDokumen'),
                 auditStage1: stage(stage1, 'Stage1'),
                 auditStage2: stage(stage2, 'Stage2'),
             }
             var sum = 0;
             var length = 0;
+            var cComplete = 0;
             for (var item in listProgress) {
                 sum += listProgress[item];
-                length++;
+                    length++;
+                if (parseInt(listProgress[item]) != 0) {
+                    cComplete++;//TODO: count total pemenuhan
+                }
             }
             aveProgress = Math.round(sum / length);
             for (var i = 1; i <= 5; i++) {
                 var n = i * 20;
-//                console.log(aveProgress);
                 if (aveProgress >= n) {
                     $('#progress' + n).width('20%');
                     console.log(20);

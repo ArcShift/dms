@@ -304,7 +304,7 @@ if ($this->input->get('standard')) {
                                                     <ul class="nav flex-column">
                                                         <?php foreach ($company_standard as $cs) { ?>
                                                             <li class="nav-item">
-                                                                <a class="nav-link" onclick="switchStandard(<?= $cs['id'] ?>)">
+                                                                <a class="nav-link" onclick="switchStandard(<?= $cs['id_standard'] ?>)">
                                                                     <i class="nav-link-icon lnr-inbox"></i>
                                                                     <span>
                                                                         <?= $cs['name'] ?>
