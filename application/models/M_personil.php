@@ -102,5 +102,15 @@ class M_personil extends CI_Model {
         $this->db->set('id_unit_kerja', $this->input->post('unit_kerja'));
         $this->db->insert('position_personil');
     }
+    function position_personil($id_tugas = null) {
+        $this->db->select('pp.*, CONCAT(p.fullname, " - ", uk.name) AS fullname');
+        $this->db->join('personil p', 'p.id = pp.id_personil');
+        $this->db->join('unit_kerja uk', 'uk.id = pp.id_unit_kerja');
+        if(isset($id_tugas)){
+            $this->db->join('personil_task pt', 'pt.id_position_personil = pp.id AND pt.id_tugas='.$id_tugas);
+        }
+        $this->db->where('p.id_company', $this->session->activeCompany['id']);
+        return $this->db->get('position_personil pp')->result();
+    }
 
 }

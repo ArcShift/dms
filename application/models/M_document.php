@@ -143,6 +143,12 @@ class M_document extends CI_Model {
         $this->db->where('d.id_standard', $this->session->activeStandard['id']);
         return $this->db->get('document d')->result();
     }
+    function dokumen_tugas() {
+        $this->db->where('id_company', $this->session->activeCompany['id']);
+        $this->db->where('id_standard', $this->session->activeStandard['id']);
+        $this->db->where('jenis <>', 4);
+        return $this->db->get('document')->result();
+    }
     function form_terkait() {
         $this->db->where('id_standard', $this->session->activeStandard['id']);
         $this->db->where('id_company', $this->session->activeCompany['id']);

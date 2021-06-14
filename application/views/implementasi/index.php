@@ -597,6 +597,10 @@ if ($role == 'anggota') {
                     <input class="form-control input-document-id" name="id-document" hidden="">
                 </div>
                 <div class="modal-body">
+                    <div class="form-group">
+                        <label>Tugas</label>
+                        <input class="form-control input-field input-tugas" name="tugas" required="">
+                    </div>
                     <div class="group-detail">
                         <div class="form-group">
                             <label>Pasal</label>
@@ -606,10 +610,6 @@ if ($role == 'anggota') {
                     <div class="form-group">
                         <label>Dokumen</label>
                         <input class="form-control input-document-judul" disabled="">
-                    </div>
-                    <div class="form-group">
-                        <label>Tugas</label>
-                        <input class="form-control input-field input-tugas" name="tugas" required="">
                     </div>
                     <div class="form-group item-edit">
                         <label>Form Terkait</label>

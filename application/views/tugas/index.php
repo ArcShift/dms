@@ -13,10 +13,10 @@
         <div class="row div-filter">
             <div class="col-sm-2"></div>
             <div class="col-sm-2">
-                <input class="form-control form-control-sm" onfocus="(this.type='date')" id="minDate" placeholder="Tanggal Awal">
+                <input class="form-control form-control-sm" onfocus="(this.type = 'date')" id="minDate" placeholder="Tanggal Awal">
             </div>
             <div class="col-sm-2">
-                <input class="form-control form-control-sm" onfocus="(this.type='date')" id="maxDate" placeholder="Tanggal Akhir">
+                <input class="form-control form-control-sm" onfocus="(this.type = 'date')" id="maxDate" placeholder="Tanggal Akhir">
             </div>
             <div class="col-sm-2">
                 <select class="form-control form-control-sm" id='filterPersonil'>
@@ -38,9 +38,9 @@
         <table class="table" id="tbMain">
             <thead>
                 <tr>
-                    <th>Jadwal</th>
+                    <th>Proyek</th>
                     <th>Tugas</th>
-                    <th>Form Terkait</th>
+                    <th>Pelaksana</th>
                     <th>Bukti</th>
                     <th>Status</th>
                     <th>Aksi</th>
@@ -49,9 +49,13 @@
             <tbody>
                 <?php foreach ($data as $k => $d) { ?>
                     <tr>
-                        <td><?= $d->tanggal ?></td>
-                        <td><?= $d->tugas->nama ?></td>
-                        <td><?= empty($d->form_terkait) ? '-' : $d->form_terkait->judul ?></td>
+                        <td><?= $d->project ?></td>
+                        <td><?= $d->tugas ?></td>
+                        <td>
+                            <?php foreach ($d->pelaksana as $k => $p) { ?>
+                                <div><span class="badge badge-secondary"><?= $p->fullname ?></span></div>
+                            <?php } ?>
+                        </td>
                         <td>bukti</td>
                         <td>status</td>
                         <!--<td><?= $d->path ?></td>-->
@@ -60,8 +64,8 @@
                             <button class="btn btn-sm btn-outline-primary fa fa-upload" onclick="initUpload(<?= $k ?>)"></button>
                             <button class="btn btn-sm btn-outline-primary fa fa-info-circle" onclick="detail(<?= $k ?>)"></button>
                             <?php // if ($d->asal == 'MANDIRI') { ?>
-                                <button class="btn btn-sm btn-outline-primary fa fa-edit" onclick="initEdit(<?= $k ?>)"></button>
-                                <button class="btn btn-sm btn-outline-danger fa fa-trash" onclick="initDelete(<?= $k ?>)"></button>
+                            <button class="btn btn-sm btn-outline-primary fa fa-edit" onclick="initEdit(<?= $k ?>)"></button>
+                            <button class="btn btn-sm btn-outline-danger fa fa-trash" onclick="initDelete(<?= $k ?>)"></button>
                             <?php // } ?>   
                         </td>
                     </tr>
@@ -143,7 +147,7 @@
                             <div class="form-group">
                                 <label><b>Dokumen</b></label>
                                 <select class="form-control" name="dokumen" required="">
-                                    <option value="">~Dokumen~</option>
+                                    <option value="">~ Dokumen ~</option>
                                     <?php foreach ($dokumen as $k => $d) { ?>
                                         <option value="<?= $d->id ?>"><?= $d->judul ?></option>
                                     <?php } ?>
@@ -156,7 +160,7 @@
                             <div class="form-group">
                                 <label><b>Form Terkait</b></label>
                                 <select class="form-control" name="form_terkait">
-                                    <option value="">~Dokumen~</option>
+                                    <option value="">~ Form Terkait ~</option>
                                     <?php foreach ($form_terkait as $k => $d) { ?>
                                         <option value="<?= $d->id ?>"><?= $d->judul ?></option>
                                     <?php } ?>
@@ -165,7 +169,7 @@
                             <div class="form-group">
                                 <label><b>Sifat</b></label>
                                 <select class="form-control" required="" name="sifat">
-                                    <option value="">~Sifat~</option>
+                                    <option value="">~ Sifat ~</option>
                                     <option value="WAJIB">Wajib</option>
                                     <option value="SITUASIONAL">Situasional</option>
                                 </select>
@@ -173,26 +177,25 @@
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label><b>Unit Kerja</b></label>
-                                <select class="form-control" required="" name="jabatan">
-                                    <?php foreach ($unit_kerja as $k => $uk) { ?>
-                                        <option value="<?= $uk->jabatan ?>"><?= $uk->name ?></option>
+                                <label><b>Proyek</b></label>
+                                <select class="form-control" name="proyek">
+                                    <option value="">~ Proyek ~</option>
+                                    <?php foreach ($project as $k => $p) { ?>
+                                        <option value="<?= $p->id ?>"><?= $p->nama ?></option>
+                                    <?php } ?>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label><b>Personil</b></label>
+                                <select class="form-control select2" multiple="" required="" name="personil[]" style="width: 100% !important;">
+                                    <?php foreach ($personil as $k => $p) { ?>
+                                        <option value="<?= $p->id ?>"><?= $p->fullname ?></option>
                                     <?php } ?>
                                 </select>
                             </div>
                             <div class="form-group">
                                 <label><b>Jadwal</b></label>
                                 <input class="form-control" type="date" name="jadwal" required="" value="<?= date('Y-m-d') ?>">
-                            </div>
-                            <div class="form-group">
-                                <label><b>Bukti Implementasi</b></label>
-                                <br>
-                                <input class="radio-bukti2" type="radio" name="type_dokumen" value="file">
-                                <label>File</label>
-                                <input class="radio-bukti2" type="radio" name="type_dokumen" value="url">
-                                <label>Url</label>
-                                <input class="form-control input-bukti input-file" type="file" name="dokumen">
-                                <input class="form-control input-bukti input-url" type="url" name="url">
                             </div>
                         </div>
                     </div>
@@ -314,7 +317,12 @@
         $('.dataTables_filter .form-control').attr('placeholder', 'Search');
         $('.div-filter .col-sm-2').eq(0).append($('.dataTables_filter .form-control'));
         $('.dataTables_filter').hide();
+
     });
+    function afterReady() {
+        $('.select2').select2();
+//        $('.select2.select2-container').addClass('form-control');
+    }
     function detail(idx) {
         var d = data[idx];
         console.log(d);

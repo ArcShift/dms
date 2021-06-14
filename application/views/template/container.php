@@ -197,6 +197,7 @@ if ($this->input->get('standard')) {
                             <ul class="vertical-nav-menu">
                                 <li class="app-sidebar__heading">DASHBOARDS</li>
                                 <li id="menu-dashboard">-</li>
+                                <li id="menu-timeline">-</li>
                                 <li class="app-sidebar__heading">MANAJEMEN PENGGUNA</li>
                                 <li id="menu-company">-</li>
                                 <li id="menu-unit_kerja">-</li>
@@ -216,6 +217,9 @@ if ($this->input->get('standard')) {
                                 <li id="menu-dokumen">-</li>
                                 <li id="menu-implementasi">-</li>
                                 <li id="menu-document_search">-</li>
+                                <li class="app-sidebar__heading">PROJECT & TUGAS</li>
+                                <li id="menu-project">-</li>
+                                <li id="menu-tugas">-</li>
                                 <li class="app-sidebar__heading">MONITORING & EVALUASI</li>
                                 <li id="menu-pemenuhan">-</li>
                                 <li class="app-sidebar__heading">GAP ANALISA</li>
@@ -317,7 +321,7 @@ if ($this->input->get('standard')) {
                                             </div>
                                         </div>
                                         <?php
-                                    } elseif ($menuStandard = 'standardOnly') {
+                                    } elseif ($menuStandard === 'standardOnly') {
                                         $standards = $this->db->get('standard')->result_array()
                                         ?>
                                         <div class="page-title-actions">
