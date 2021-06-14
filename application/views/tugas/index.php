@@ -51,9 +51,9 @@
                     <tr>
                         <td><?= $d->tanggal ?></td>
                         <td><?= $d->tugas->nama ?></td>
-                        <td>form terkait</td>
                         <td><?= empty($d->form_terkait) ? '-' : $d->form_terkait->judul ?></td>
                         <td>bukti</td>
+                        <td>status</td>
                         <!--<td><?= $d->path ?></td>-->
                         <!--<td><?= $d->deadline ?></td>-->
                         <td>
