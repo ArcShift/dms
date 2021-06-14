@@ -4,7 +4,7 @@
         <table class="table">
             <thead>
                 <tr>
-                    <th>Project</th>
+                    <th>Proyek</th>
                     <th>Deskripsi</th>
                     <th>Tugas</th>
                 </tr>
@@ -27,7 +27,7 @@
         <form method="post">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Buat Project Baru</h5>
+                    <h5 class="modal-title">Buat Proyek Baru</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
