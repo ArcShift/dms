@@ -1960,7 +1960,6 @@ if ($role == 'anggota') {
                 m.find('.input-group-append').append('<a class="btn btn-outline-primary btn-sm pull-right fa fa-download" href="<?= base_url('upload/dokumen') ?>/' + dt.file + '"></a>');
             } else if (dt.type_doc == 'URL') {
                 m.find('.input-group-append').append('<a class="btn btn-outline-primary btn-sm pull-right fa fa-search" href="' + dt.url + '"></a>');
-
             }
         } else {
             m.find('.group-form-terkait').hide();

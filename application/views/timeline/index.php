@@ -462,7 +462,7 @@ $n = 1;
             var length = 0;
             var cComplete = 0;
             for (var item in listProgress) {
-                sum += listProgress[item];
+                sum += parseInt(listProgress[item]);
                     length++;
                 if (parseInt(listProgress[item]) != 0) {
                     cComplete++;//TODO: count total pemenuhan
@@ -473,13 +473,13 @@ $n = 1;
                 var n = i * 20;
                 if (aveProgress >= n) {
                     $('#progress' + n).width('20%');
-                    console.log(20);
+//                    console.log(20);
                 } else if (aveProgress <= n - 20) {
                     $('#progress' + n).width('0%');
-                    console.log(0);
+//                    console.log(0);
                 } else {
                     $('#progress' + n).width((aveProgress - (n - 20)) + '%');
-                    console.log(aveProgress - (n - 20));
+//                    console.log(aveProgress - (n - 20));
                 }
             }
             $('#titleProgress').html(aveProgress + '%');
