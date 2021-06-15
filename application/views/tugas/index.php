@@ -239,6 +239,9 @@
         tbMain = $('#tbMain').DataTable({
             "bLengthChange": false,
             "order": [],
+            "columnDefs": [
+                {"width": "20%", "targets": 3}
+            ]
         });
         $('#minDate, #maxDate').on('change', function () {
             tbMain.draw();
