@@ -144,17 +144,26 @@
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label><b>Dokumen</b></label>
-                                <select class="form-control select-dokumen" name="dokumen" required="">
-                                    <option value="">~ Dokumen ~</option>
-                                    <?php foreach ($dokumen as $k => $d) { ?>
-                                        <option value="<?= $d->id ?>"><?= $d->judul ?></option>
+                                <label><b>Proyek</b></label>
+                                <select class="form-control select-proyek" name="proyek">
+                                    <option value="">~ Proyek ~</option>
+                                    <?php foreach ($project as $k => $p) { ?>
+                                        <option value="<?= $p->id ?>"><?= $p->nama ?></option>
                                     <?php } ?>
                                 </select>
                             </div>
                             <div class="form-group">
                                 <label><b>Tugas</b></label>
                                 <input class="form-control input-tugas" name="nama" required="">
+                            </div>
+                            <div class="form-group">
+                                <label><b>SOP Terkait</b></label>
+                                <select class="form-control select-dokumen" name="dokumen" required="">
+                                    <option value="">~ Dokumen ~</option>
+                                    <?php foreach ($dokumen as $k => $d) { ?>
+                                        <option value="<?= $d->id ?>"><?= $d->judul ?></option>
+                                    <?php } ?>
+                                </select>
                             </div>
                             <div class="form-group">
                                 <label><b>Form Terkait</b></label>
@@ -165,31 +174,22 @@
                                     <?php } ?>
                                 </select>
                             </div>
-                            <div class="form-group">
-                                <label><b>Sifat</b></label>
-                                <select class="form-control select-sifat" required="" name="sifat">
-                                    <option value="">~ Sifat ~</option>
-                                    <option value="WAJIB">Wajib</option>
-                                    <option value="SITUASIONAL">Situasional</option>
-                                </select>
-                            </div>
                         </div>
                         <div class="col-sm-6">
-                            <div class="form-group">
-                                <label><b>Proyek</b></label>
-                                <select class="form-control select-proyek" name="proyek">
-                                    <option value="">~ Proyek ~</option>
-                                    <?php foreach ($project as $k => $p) { ?>
-                                        <option value="<?= $p->id ?>"><?= $p->nama ?></option>
-                                    <?php } ?>
-                                </select>
-                            </div>
                             <div class="form-group">
                                 <label><b>Personil</b></label>
                                 <select class="form-control select-personil select2" multiple="" required="" name="personil[]" style="width: 100% !important;">
                                     <?php foreach ($personil as $k => $p) { ?>
                                         <option value="<?= $p->id ?>"><?= $p->fullname ?></option>
                                     <?php } ?>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label><b>Sifat</b></label>
+                                <select class="form-control select-sifat" required="" name="sifat">
+                                    <option value="">~ Sifat ~</option>
+                                    <option value="WAJIB">Wajib</option>
+                                    <option value="SITUASIONAL">Situasional</option>
                                 </select>
                             </div>
                             <div class="form-group">
@@ -262,12 +262,13 @@
             txtPelaksana += '<span class="badge badge-secondary ml-2">' + p.fullname + '</span>';
         }
         var data2 = {
-            Dokumen: $('.select-dokumen option[value=' + d.id_document + ']').html(),
-            Tugas: d.tugas,
-            'Form Terkait': (d.form_terkait != null ? $('.select-form option[value=' + d.form_terkait + ']').html() : '-'),
-            Sifat: d.sifat,
             Proyek: (d.project != null ? d.project : '-'),
-            Personil: txtPelaksana,
+            Tugas: d.tugas,
+            'SOP Terkait': $('.select-dokumen option[value=' + d.id_document + ']').html(),
+            'Form Terkait': (d.form_terkait != null ? $('.select-form option[value=' + d.form_terkait + ']').html() : '-'),
+            'Pemberi Tugas': '-',
+            'Pelaksana Tugas': txtPelaksana,
+            Sifat: d.sifat,
             Jadwal: d.tanggal,
         };
         showDetail('Detail Tugas', data2, 4);
