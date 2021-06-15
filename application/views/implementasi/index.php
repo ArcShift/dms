@@ -1133,6 +1133,7 @@ if ($role == 'anggota') {
                 d.index_dokumen_pasal = [];
                 d.txt_pasals = '';
                 d.txt_pasals_span = '';
+                d.jenis = parseInt(d.jenis);
                 d.txt_pasals2 = '<div class="more-pasal-parent">';
                 var n2 = 0;
                 for (var j = 0; j < d.dokumen_pasal.length; j++) {
@@ -1271,7 +1272,9 @@ if ($role == 'anggota') {
             $('.input-form-terkait').append('<option value="">-- form terkait --</option>');
             for (var i = 0; i < sortDokumen.length; i++) {
                 var d = sortDokumen[i];
+                console.log(d.jenis);
                 if (d.jenis < 4 & d.jenis >= 1) {
+                    console.log('in');
                     var listTugas = '';
                     var listPersonil = '';
                     var listPersonil2 = [];
@@ -1394,7 +1397,7 @@ if ($role == 'anggota') {
                 } else if (d.jenis == 4) {
                     $('.input-form-terkait').append('<option value="' + d.id + '">' + d.judul + '</option>');
                 }
-                if (d.index_tugas.length == 0) {
+                if (d.index_tugas.length == 0 & d.jenis < 4 & d.jenis >= 1) {
                     tbTugas2.row.add([
                         '',
                         '<i class="p-1"></i>' + d.judulLink + '<span class="text-primary float-right fa fa-plus  mt-2" title="Tambah" onclick="initCreateTugas(' + i + ')"></span>',
@@ -1549,7 +1552,6 @@ if ($role == 'anggota') {
                         '',
                     ]);
                 }
-                console.log(n);
             }
             tbJadwal.draw();
             tbJadwal2.draw();
@@ -1904,7 +1906,7 @@ if ($role == 'anggota') {
     $('#formDistribusi').submit(function (e) {
         e.preventDefault();
         post(this, 'set_distribusi');
-//        $.post('<?php // echo site_url($module);                                   ?>/set_distribusi', $(this).serialize(), function (data) {
+//        $.post('<?php // echo site_url($module);                                    ?>/set_distribusi', $(this).serialize(), function (data) {
 //            $('#modalDistribusi').modal('hide');
 //            getPasal();
 //        });
