@@ -34,6 +34,8 @@ class Tugas extends MY_Controller {
             }
             $this->db->where('id', $this->input->post('id_tugas'));
             $this->db->update('tugas');
+            $this->load->model('m_tugas');
+            $this->m_tugas->editPelaksana($this->input->post('id_tugas'), $this->input->post('personil'));
             $this->db->set('tanggal', $this->input->post('jadwal'));
             $this->db->where('id', $this->input->post('id_jadwal'));
             $this->db->update('jadwal');
@@ -81,5 +83,4 @@ class Tugas extends MY_Controller {
         $this->data['data'] = $jadwal;
         $this->render('index');
     }
-
 }
