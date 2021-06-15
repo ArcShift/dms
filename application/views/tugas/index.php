@@ -158,7 +158,7 @@
                             </div>
                             <div class="form-group">
                                 <label><b>Form Terkait</b></label>
-                                <select class="form-control input-form" name="form_terkait">
+                                <select class="form-control select-form" name="form_terkait">
                                     <option value="">~ Form Terkait ~</option>
                                     <?php foreach ($form_terkait as $k => $d) { ?>
                                         <option value="<?= $d->id ?>"><?= $d->judul ?></option>
@@ -256,99 +256,93 @@
         console.log(d);
         var txtPelaksana = '';
         for (var p of d.pelaksana) {
-            txtPelaksana += '<li>' + p.fullname + '</li>';
+            txtPelaksana += '<span class="badge badge-secondary ml-2">' + p.fullname + '</span>';
         }
         var data2 = {
-            Pasal: d.dokumen.pasal[0].name,
-            'Judul Pasal': d.dokumen.pasal[0].sort_desc,
-            'Deskripsi Pasal': d.dokumen.pasal[0].long_desc,
-            'Judul Dokumen': d.dokumen.judul,
-            'Tugas': d.tugas,
-            'Form Terkait': d.form_terkait != null ? d.form_terkait.judul : '-',
+            Dokumen: $('.select-dokumen option[value=' + d.id_document + ']').html(),
+            Tugas: d.tugas,
+            'Form Terkait': (d.form_terkait != null ? $('.select-form option[value=' + d.form_terkait + ']').html() : '-'),
             Sifat: d.sifat,
-            'PIC Pelaksana': '<div class="ml-3">' + txtPelaksana + '<div>',
-            Periode: (d.periode != null ? d.periode + 'AN' : '-'),
+            Proyek: (d.project != null ? d.project : '-'),
+            Personil: txtPelaksana,
             Jadwal: d.tanggal,
-            Status: d.deadline,
-            Asal: d.asal,
         };
-        showDetail('Detail Tugas', data2, 5);
+        showDetail('Detail Tugas', data2, 4);
     }
-    function initUpload(idx) {
-        $('#formUploadImplementasi').trigger('reset');
-        var d = data[idx];
-        var m = $('#modalUploadImplementasi');
-        m.modal('show');
-        m.find('.input-id').val(d.id);
-        m.find('.input-tugas').val(d.tugas);
-        m.find('.input-jadwal').val(d.tanggal);
-        m.find('.input-url, .input-file').hide();
-        console.log(d);
-        if (d.path == null) {
-            initUpload2();
-        } else {
-            $('.group-link').show();
-            $('.group-upload').hide();
-            $('.btn-simpan').hide();
-            m.find('.input-path').val(d.path);
-        }
-        $('.input-file,.input-url').hide();
-        $('.radio-bukti').prop('checked', false);
-        $('.input-file,.input-url').prop('required', false);
-    }
-    function initUpload2() {
-        $('.group-link').hide();
-        $('.group-upload').show();
-    }
-    $('.radio-bukti').change(function () {
-        var type = $(this).val();
-        var m = $('#modalUploadImplementasi');
-        m.find('.btn-simpan').show();
-        if (type == 'file') {
-            m.find('.input-file').show();
-            m.find('.input-file').prop('required', true);
-            m.find('.input-url').hide();
-            m.find('.input-url').prop('required', false);
-        } else if (type == 'url') {
-            m.find('.input-file').hide();
-            m.find('.input-file').prop('required', false);
-            m.find('.input-url').show();
-            m.find('.input-url').prop('required', true);
-        }
-    });
+//    function initUpload(idx) {
+//        $('#formUploadImplementasi').trigger('reset');
+//        var d = data[idx];
+//        var m = $('#modalUploadImplementasi');
+//        m.modal('show');
+//        m.find('.input-id').val(d.id);
+//        m.find('.input-tugas').val(d.tugas);
+//        m.find('.input-jadwal').val(d.tanggal);
+//        m.find('.input-url, .input-file').hide();
+//        console.log(d);
+//        if (d.path == null) {
+//            initUpload2();
+//        } else {
+//            $('.group-link').show();
+//            $('.group-upload').hide();
+//            $('.btn-simpan').hide();
+//            m.find('.input-path').val(d.path);
+//        }
+//        $('.input-file,.input-url').hide();
+//        $('.radio-bukti').prop('checked', false);
+//        $('.input-file,.input-url').prop('required', false);
+//    }
+//    function initUpload2() {
+//        $('.group-link').hide();
+//        $('.group-upload').show();
+//    }
+//    $('.radio-bukti').change(function () {
+//        var type = $(this).val();
+//        var m = $('#modalUploadImplementasi');
+//        m.find('.btn-simpan').show();
+//        if (type == 'file') {
+//            m.find('.input-file').show();
+//            m.find('.input-file').prop('required', true);
+//            m.find('.input-url').hide();
+//            m.find('.input-url').prop('required', false);
+//        } else if (type == 'url') {
+//            m.find('.input-file').hide();
+//            m.find('.input-file').prop('required', false);
+//            m.find('.input-url').show();
+//            m.find('.input-url').prop('required', true);
+//        }
+//    });
     $('#btnTugasBaru').click(function () {
         var m = $('#modalTugasBaru');
         m.modal('show');
         m.find('.modal-title').html('Buat Tugas Baru');
         $('#submitButton').attr('name', 'newTugas');
     });
-    $('.radio-bukti2').change(function () {
-        var type = $(this).val();
-        var m = $('#modalTugasBaru');
-        if (type == 'file') {
-            m.find('.input-file').show();
-            m.find('.input-file').prop('required', true);
-            m.find('.input-url').hide();
-            m.find('.input-url').prop('required', false);
-        } else if (type == 'url') {
-            m.find('.input-file').hide();
-            m.find('.input-file').prop('required', false);
-            m.find('.input-url').show();
-            m.find('.input-url').prop('required', true);
-        }
-    });
+//    $('.radio-bukti2').change(function () {
+//        var type = $(this).val();
+//        var m = $('#modalTugasBaru');
+//        if (type == 'file') {
+//            m.find('.input-file').show();
+//            m.find('.input-file').prop('required', true);
+//            m.find('.input-url').hide();
+//            m.find('.input-url').prop('required', false);
+//        } else if (type == 'url') {
+//            m.find('.input-file').hide();
+//            m.find('.input-file').prop('required', false);
+//            m.find('.input-url').show();
+//            m.find('.input-url').prop('required', true);
+//        }
+//    });
     function initEdit(idx) {
         var m = $('#modalTugasBaru');
         m.modal('show');
         var d = data[idx];
         m.find('.modal-title').html('Edit Tugas');
         $('#submitButton').attr('name', 'editTugas');
-//        console.log(d);
         m.find('.input-id-tugas').val(d.id_tugas);
         m.find('.input-id-jadwal').val(d.id);
         m.find('.select-dokumen').val(d.id_document);
         m.find('.input-tugas').val(d.tugas);
-        m.find('.input-form').val(d.form_terkait);
+        m.find('.select-form').val(d.form_terkait);
         m.find('.select-sifat').val(d.sifat);
         m.find('.select-proyek').val(d.id_project);
         var pel = [];

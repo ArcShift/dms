@@ -57,7 +57,7 @@ class Tugas extends MY_Controller {
         $this->data['project'] = $this->m_project->get();
         $this->load->model('m_personil');
         $this->data['personil'] = $this->m_personil->position_personil();
-        $this->db->select('j.*, pr.nama AS project, t.nama AS tugas, t.id_document, t.form_terkait, t.sifat');
+        $this->db->select('j.*, pr.nama AS project, t.nama AS tugas, t.id_document, t.form_terkait, t.sifat, t.id_project');
         $this->db->join('tugas t', 't.id = j.id_tugas');
         $this->db->join('document d', 'd.id = t.id_document');
         $this->db->join('project pr', 'pr.id = t.id_project', 'LEFT');
