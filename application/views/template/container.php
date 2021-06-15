@@ -217,7 +217,7 @@ if ($this->input->get('standard')) {
                                 <li id="menu-dokumen">-</li>
                                 <li id="menu-implementasi">-</li>
                                 <li id="menu-document_search">-</li>
-                                <li class="app-sidebar__heading">PROJECT & TUGAS</li>
+                                <li class="app-sidebar__heading">PROYEK & TUGAS</li>
                                 <li id="menu-project">-</li>
                                 <li id="menu-tugas">-</li>
                                 <li class="app-sidebar__heading">MONITORING & EVALUASI</li>

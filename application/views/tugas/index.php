@@ -52,19 +52,19 @@
                         <td><?= $d->project ?></td>
                         <td><?= $d->tugas ?></td>
                         <td>
-                            <?php foreach ($d->pelaksana as $k => $p) { ?>
+                            <?php foreach ($d->pelaksana as $k2 => $p) { ?>
                                 <div><span class="badge badge-secondary"><?= $p->fullname ?></span></div>
                             <?php } ?>
                         </td>
-                        <td>bukti</td>
-                        <td>status</td>
+                        <td>
+                            <a href="<?= $d->doc_type == 'FILE' ? base_url('upload/implementasi/' . $d->path) : $d->path ?>"><?= $d->path ?></a>
+                        </td>
+                        <td><?= $d->deadline ?></td>
                         <td>
                             <button class="btn btn-sm btn-outline-primary fa fa-upload" onclick="initUpload(<?= $k ?>)"></button>
                             <button class="btn btn-sm btn-outline-primary fa fa-info-circle" onclick="detail(<?= $k ?>)"></button>
-                            <?php // if ($d->asal == 'MANDIRI') { ?>
                             <button class="btn btn-sm btn-outline-primary fa fa-edit" onclick="initEdit(<?= $k ?>)"></button>
                             <button class="btn btn-sm btn-outline-danger fa fa-trash" onclick="initDelete(<?= $k ?>)"></button>
-                            <?php // } ?>   
                         </td>
                     </tr>
                 <?php } ?>
@@ -127,104 +127,26 @@
         </form>
     </div>
 </div>
-<!--MODAL TUGAS BARU-->
+<!--MODAL TUGAS BARU & EDIT TUGAS-->
 <div class="modal fade" id="modalTugasBaru">
     <div class="modal-dialog modal-lg" role="document">
         <form method="post" enctype="multipart/form-data">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Buat Tugas Baru</h5>
+                    <h5 class="modal-title"></h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    <input class="input-id" name="id" hidden=""/>
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label><b>Dokumen</b></label>
-                                <select class="form-control" name="dokumen" required="">
-                                    <option value="">~ Dokumen ~</option>
-                                    <?php foreach ($dokumen as $k => $d) { ?>
-                                        <option value="<?= $d->id ?>"><?= $d->judul ?></option>
-                                    <?php } ?>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label><b>Tugas</b></label>
-                                <input class="form-control" name="nama" required="">
-                            </div>
-                            <div class="form-group">
-                                <label><b>Form Terkait</b></label>
-                                <select class="form-control" name="form_terkait">
-                                    <option value="">~ Form Terkait ~</option>
-                                    <?php foreach ($form_terkait as $k => $d) { ?>
-                                        <option value="<?= $d->id ?>"><?= $d->judul ?></option>
-                                    <?php } ?>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label><b>Sifat</b></label>
-                                <select class="form-control" required="" name="sifat">
-                                    <option value="">~ Sifat ~</option>
-                                    <option value="WAJIB">Wajib</option>
-                                    <option value="SITUASIONAL">Situasional</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label><b>Proyek</b></label>
-                                <select class="form-control" name="proyek">
-                                    <option value="">~ Proyek ~</option>
-                                    <?php foreach ($project as $k => $p) { ?>
-                                        <option value="<?= $p->id ?>"><?= $p->nama ?></option>
-                                    <?php } ?>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label><b>Personil</b></label>
-                                <select class="form-control select2" multiple="" required="" name="personil[]" style="width: 100% !important;">
-                                    <?php foreach ($personil as $k => $p) { ?>
-                                        <option value="<?= $p->id ?>"><?= $p->fullname ?></option>
-                                    <?php } ?>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label><b>Jadwal</b></label>
-                                <input class="form-control" type="date" name="jadwal" required="" value="<?= date('Y-m-d') ?>">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-                    <button type="submit" class="btn btn-primary" name="newTugas" value="ok">Simpan</button>
-                </div>
-            </div>
-        </form>
-    </div>
-</div>
-<!--MODAL EDIT TUGAS-->
-<div class="modal fade" id="modalEdit">
-    <div class="modal-dialog modal-lg" role="document">
-        <form method="post" enctype="multipart/form-data">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Edit Tugas</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <input class="input-id" name="id" hidden=""/>
+                    <input class="input-id-tugas" name="id_tugas" hidden="">
+                    <input class="input-id-jadwal" name="id_jadwal" hidden=""/>
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label><b>Dokumen</b></label>
                                 <select class="form-control select-dokumen" name="dokumen" required="">
-                                    <option value="">~Dokumen~</option>
+                                    <option value="">~ Dokumen ~</option>
                                     <?php foreach ($dokumen as $k => $d) { ?>
                                         <option value="<?= $d->id ?>"><?= $d->judul ?></option>
                                     <?php } ?>
@@ -237,40 +159,49 @@
                             <div class="form-group">
                                 <label><b>Form Terkait</b></label>
                                 <select class="form-control input-form" name="form_terkait">
-                                    <option value="">~Dokumen~</option>
+                                    <option value="">~ Form Terkait ~</option>
                                     <?php foreach ($form_terkait as $k => $d) { ?>
                                         <option value="<?= $d->id ?>"><?= $d->judul ?></option>
                                     <?php } ?>
                                 </select>
                             </div>
-                        </div>
-                        <div class="col-sm-6">
                             <div class="form-group">
                                 <label><b>Sifat</b></label>
                                 <select class="form-control select-sifat" required="" name="sifat">
-                                    <option value="">~Sifat~</option>
+                                    <option value="">~ Sifat ~</option>
                                     <option value="WAJIB">Wajib</option>
                                     <option value="SITUASIONAL">Situasional</option>
                                 </select>
                             </div>
+                        </div>
+                        <div class="col-sm-6">
                             <div class="form-group">
-                                <label><b>Unit Kerja</b></label>
-                                <select class="form-control select-unit-kerja" required="" name="jabatan">
-                                    <?php foreach ($unit_kerja as $k => $uk) { ?>
-                                        <option value="<?= $uk->jabatan ?>"><?= $uk->name ?></option>
+                                <label><b>Proyek</b></label>
+                                <select class="form-control select-proyek" name="proyek">
+                                    <option value="">~ Proyek ~</option>
+                                    <?php foreach ($project as $k => $p) { ?>
+                                        <option value="<?= $p->id ?>"><?= $p->nama ?></option>
+                                    <?php } ?>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label><b>Personil</b></label>
+                                <select class="form-control select-personil select2" multiple="" required="" name="personil[]" style="width: 100% !important;">
+                                    <?php foreach ($personil as $k => $p) { ?>
+                                        <option value="<?= $p->id ?>"><?= $p->fullname ?></option>
                                     <?php } ?>
                                 </select>
                             </div>
                             <div class="form-group">
                                 <label><b>Jadwal</b></label>
-                                <input class="form-control input-jd" name="jadwal" type="date" required="" value="<?= date('Y-m-d') ?>">
+                                <input class="form-control input-tanggal" type="date" name="jadwal" required="" value="<?= date('Y-m-d') ?>">
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-                    <button type="submit" class="btn btn-primary" name="edit" value="ok">Simpan</button>
+                    <button type="submit" class="btn btn-primary" id="submitButton" name="newTugas" value="ok">Simpan</button>
                 </div>
             </div>
         </form>
@@ -289,8 +220,8 @@
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
-                        <label>Nama Tugas</label>
                         <input class="input-id-tugas" name="id" required="" hidden="">
+                        <label>Nama Tugas</label>
                         <div class="input-tugas card-body bg-light p-2 box-detail"></div>
                     </div>
                 </div>
@@ -319,7 +250,6 @@
     });
     function afterReady() {
         $('.select2').select2();
-//        $('.select2.select2-container').addClass('form-control');
     }
     function detail(idx) {
         var d = data[idx];
@@ -389,7 +319,8 @@
     $('#btnTugasBaru').click(function () {
         var m = $('#modalTugasBaru');
         m.modal('show');
-        m.find('.input-bukti').hide();
+        m.find('.modal-title').html('Buat Tugas Baru');
+        $('#submitButton').attr('name', 'newTugas');
     });
     $('.radio-bukti2').change(function () {
         var type = $(this).val();
@@ -407,17 +338,25 @@
         }
     });
     function initEdit(idx) {
-        var m = $('#modalEdit');
-        var d = data[idx];
-        console.log(d);
+        var m = $('#modalTugasBaru');
         m.modal('show');
-        m.find('.input-id').val(d.id);
-        m.find('.select-dokumen').val(d.dokumen.id);
+        var d = data[idx];
+        m.find('.modal-title').html('Edit Tugas');
+        $('#submitButton').attr('name', 'editTugas');
+//        console.log(d);
+        m.find('.input-id-tugas').val(d.id_tugas);
+        m.find('.input-id-jadwal').val(d.id);
+        m.find('.select-dokumen').val(d.id_document);
         m.find('.input-tugas').val(d.tugas);
-        m.find('.input-form').val(d.id_form);
+        m.find('.input-form').val(d.form_terkait);
         m.find('.select-sifat').val(d.sifat);
-        m.find('.select-unit-kerja').val(d.jabatan);
-        m.find('.input-jd').val(d.tanggal);
+        m.find('.select-proyek').val(d.id_project);
+        var pel = [];
+        for (var p of d.pelaksana) {
+            pel.push(p.id);
+        }
+        m.find('.select-personil').val(pel).trigger('change');
+        m.find('.input-tanggal').val(d.tanggal);
     }
     function initDelete(idx) {
         var d = data[idx];
