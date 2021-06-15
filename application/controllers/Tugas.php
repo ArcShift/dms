@@ -47,6 +47,26 @@ class Tugas extends MY_Controller {
             $this->db->where('id', $this->input->post('id'));
             $this->db->delete('tugas');
             $this->data['msgSuccess'] = 'Berhasil Menghapus Data';
+        } elseif ($this->input->post('upload')) {
+            $step = true;
+            $this->load->model('m_implementasi');
+            if (strtoupper($this->input->post('type_dokumen')) ==  'FILE') {
+                $config['upload_path'] = './upload/implementasi';
+                $config['allowed_types'] = '*';
+                $this->load->library('upload', $config);
+                if (!$this->upload->do_upload('dokumen')) {
+                    $this->data['msgError'] = $this->upload->display_errors();
+                    $step = false;
+                }
+                    $path = $this->upload->data()['file_name'];
+            } else {
+                $path = $this->input->post('url');
+            }
+            if ($step) {
+                if ($this->m_implementasi->upload($path)) {
+                    $this->data['msgSuccess'] = 'Data Berhasil Diupload';
+                }
+            }
         }
         $this->subModule = 'read';
         $this->data['menuStandard'] = 'standard';
@@ -83,4 +103,5 @@ class Tugas extends MY_Controller {
         $this->data['data'] = $jadwal;
         $this->render('index');
     }
+
 }

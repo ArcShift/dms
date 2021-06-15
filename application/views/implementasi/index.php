@@ -601,7 +601,7 @@ if ($role == 'anggota') {
                         <label>Tugas</label>
                         <input class="form-control input-field input-tugas" name="tugas" required="">
                     </div>
-                    <div class="group-detail">
+                    <div class="">
                         <div class="form-group">
                             <label>Pasal</label>
                             <div class="form-control input-pasal overflow-auto" style="height: 100px"></div>
@@ -1350,7 +1350,7 @@ if ($role == 'anggota') {
                                     ]).node();
                                     tbTugas2.row.add([
                                         t.txtUnitKerja,
-                                        '<i class="p-1"></i>'+d.judulLink + '<span class="text-primary float-right fa fa-plus  mt-2" title="Tambah" onclick="initCreateTugas(' + i + ')"></span>',
+                                        '<i class="p-1"></i>' + d.judulLink + '<span class="text-primary float-right fa fa-plus  mt-2" title="Tambah" onclick="initCreateTugas(' + i + ')"></span>',
                                         '',
                                         t.nama,
                                         (t.index_form_terkait == null ? '-' : sortDokumen[t.index_form_terkait].judulLink),
@@ -1397,7 +1397,7 @@ if ($role == 'anggota') {
                 if (d.index_tugas.length == 0) {
                     tbTugas2.row.add([
                         '',
-                        '<i class="p-1"></i>'+d.judulLink + '<span class="text-primary float-right fa fa-plus  mt-2" title="Tambah" onclick="initCreateTugas(' + i + ')"></span>',
+                        '<i class="p-1"></i>' + d.judulLink + '<span class="text-primary float-right fa fa-plus  mt-2" title="Tambah" onclick="initCreateTugas(' + i + ')"></span>',
                         '',
                         '',
                         '',
@@ -1904,7 +1904,7 @@ if ($role == 'anggota') {
     $('#formDistribusi').submit(function (e) {
         e.preventDefault();
         post(this, 'set_distribusi');
-//        $.post('<?php // echo site_url($module);                                  ?>/set_distribusi', $(this).serialize(), function (data) {
+//        $.post('<?php // echo site_url($module);                                   ?>/set_distribusi', $(this).serialize(), function (data) {
 //            $('#modalDistribusi').modal('hide');
 //            getPasal();
 //        });
@@ -1926,7 +1926,8 @@ if ($role == 'anggota') {
         m.find('.input-document-id').val(d.id);
         m.find('.input-document-judul').val(d.judul);
         m.find('.input-field').prop('disabled', false);
-        m.find('.btn-save').show();
+        m.find('.item-edit').show();
+//        m.find('.btn-save').show();
         m.find('.btn-delete').hide();
         m.find('.item-view').hide();
         loadUserDistribusi(index);

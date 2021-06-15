@@ -98,7 +98,7 @@
                         <div class="input-group">
                             <input class="form-control input-path" readonly="">
                             <div class="input-group-append">
-                                <button type="button" class="btn btn-outline-danger fa fa-trash link-bukti" onclick="initUpload2()"></button>
+                                <button type="button" class="btn btn-outline-danger fa fa-trash link-bukti" onclick="switchUpload()"></button>
                             </div>
                         </div>
                     </div>
@@ -130,7 +130,7 @@
 <!--MODAL TUGAS BARU & EDIT TUGAS-->
 <div class="modal fade" id="modalTugasBaru">
     <div class="modal-dialog modal-lg" role="document">
-        <form method="post" enctype="multipart/form-data">
+        <form method="post" enctype="multipart/form-data" id="formTugas">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title"></h5>
@@ -269,53 +269,55 @@
         };
         showDetail('Detail Tugas', data2, 4);
     }
-//    function initUpload(idx) {
-//        $('#formUploadImplementasi').trigger('reset');
-//        var d = data[idx];
-//        var m = $('#modalUploadImplementasi');
-//        m.modal('show');
-//        m.find('.input-id').val(d.id);
-//        m.find('.input-tugas').val(d.tugas);
-//        m.find('.input-jadwal').val(d.tanggal);
-//        m.find('.input-url, .input-file').hide();
-//        console.log(d);
-//        if (d.path == null) {
-//            initUpload2();
-//        } else {
-//            $('.group-link').show();
-//            $('.group-upload').hide();
-//            $('.btn-simpan').hide();
-//            m.find('.input-path').val(d.path);
-//        }
-//        $('.input-file,.input-url').hide();
-//        $('.radio-bukti').prop('checked', false);
-//        $('.input-file,.input-url').prop('required', false);
-//    }
-//    function initUpload2() {
-//        $('.group-link').hide();
-//        $('.group-upload').show();
-//    }
-//    $('.radio-bukti').change(function () {
-//        var type = $(this).val();
-//        var m = $('#modalUploadImplementasi');
-//        m.find('.btn-simpan').show();
-//        if (type == 'file') {
-//            m.find('.input-file').show();
-//            m.find('.input-file').prop('required', true);
-//            m.find('.input-url').hide();
-//            m.find('.input-url').prop('required', false);
-//        } else if (type == 'url') {
-//            m.find('.input-file').hide();
-//            m.find('.input-file').prop('required', false);
-//            m.find('.input-url').show();
-//            m.find('.input-url').prop('required', true);
-//        }
-//    });
+    function initUpload(idx) {
+        $('#formUploadImplementasi').trigger('reset');
+        var d = data[idx];
+        var m = $('#modalUploadImplementasi');
+        m.modal('show');
+        m.find('.input-id').val(d.id);
+        m.find('.input-tugas').val(d.tugas);
+        m.find('.input-jadwal').val(d.tanggal);
+        m.find('.input-url, .input-file').hide();
+        console.log(d);
+        if (d.path == null) {
+            switchUpload();
+        } else {
+            $('.group-link').show();
+            $('.group-upload').hide();
+            $('.btn-simpan').hide();
+            m.find('.input-path').val(d.path);
+        }
+        $('.input-file,.input-url').hide();
+        $('.radio-bukti').prop('checked', false);
+        $('.input-file,.input-url').prop('required', false);
+    }
+    function switchUpload() {
+        $('.group-link').hide();
+        $('.group-upload').show();
+    }
+    $('.radio-bukti').change(function () {
+        var type = $(this).val();
+        var m = $('#modalUploadImplementasi');
+        m.find('.btn-simpan').show();
+        if (type == 'file') {
+            m.find('.input-file').show();
+            m.find('.input-file').prop('required', true);
+            m.find('.input-url').hide();
+            m.find('.input-url').prop('required', false);
+        } else if (type == 'url') {
+            m.find('.input-file').hide();
+            m.find('.input-file').prop('required', false);
+            m.find('.input-url').show();
+            m.find('.input-url').prop('required', true);
+        }
+    });
     $('#btnTugasBaru').click(function () {
         var m = $('#modalTugasBaru');
         m.modal('show');
         m.find('.modal-title').html('Buat Tugas Baru');
+        $('#formTugas').trigger('reset');
         $('#submitButton').attr('name', 'newTugas');
+        m.find('.select-personil').val('').trigger('change');
     });
 //    $('.radio-bukti2').change(function () {
 //        var type = $(this).val();
