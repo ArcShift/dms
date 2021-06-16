@@ -35,6 +35,7 @@
                 </select>
             </div>
         </div>
+        <div class="table-responsive">
         <table class="table" id="tbMain">
             <thead>
                 <tr>
@@ -70,6 +71,7 @@
                 <?php } ?>
             </tbody>
         </table>
+        </div>
     </div>
 </div>
 <!--MODAL UPLOAD IMPLEMENTASI-->
@@ -241,7 +243,8 @@
             "order": [],
             "columnDefs": [
                 {"width": "20%", "targets": 3}
-            ]
+            ],
+            "responsive": true,
         });
         $('#minDate, #maxDate').on('change', function () {
             tbMain.draw();

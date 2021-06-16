@@ -267,7 +267,7 @@ $n = 1;
                     <td>Pemenuhan Total</td>
                     <td></td>
                     <td><?= 'N/' . --$n ?></td>
-                    <td><span class="badge badge-success">0%</span></td>
+                    <td id="pemenuhanTotal"></td>
                 </tr>
             </tbody>
         </table>
@@ -464,7 +464,7 @@ $n = 1;
             for (var item in listProgress) {
                 sum += parseInt(listProgress[item]);
                     length++;
-                if (parseInt(listProgress[item]) != 0) {
+                if (parseInt(listProgress[item]) == 100) {
                     cComplete++;//TODO: count total pemenuhan
                 }
             }
@@ -473,16 +473,14 @@ $n = 1;
                 var n = i * 20;
                 if (aveProgress >= n) {
                     $('#progress' + n).width('20%');
-//                    console.log(20);
                 } else if (aveProgress <= n - 20) {
                     $('#progress' + n).width('0%');
-//                    console.log(0);
                 } else {
                     $('#progress' + n).width((aveProgress - (n - 20)) + '%');
-//                    console.log(aveProgress - (n - 20));
                 }
             }
             $('#titleProgress').html(aveProgress + '%');
+            $('#pemenuhanTotal').html(badgeColor(aveProgress));
         });
     }
     function badgeColor(val) {
