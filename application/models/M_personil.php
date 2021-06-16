@@ -23,7 +23,7 @@ class M_personil extends CI_Model {
 
     function read() {
         $this->db->select('p.id, p.fullname, u.username, c.name AS company');
-        $this->db->join('company c', 'c.id = p.id_company', 'LEFT');
+        $this->db->join('company c', 'c.id = p.id_company AND c.id='.$this->session->activeCompany['id']);
         $this->db->join('users u', 'p.id = u.id_personil', 'LEFT');
         if ($this->session->userdata('user')['role'] == 'pic') {
             $this->db->where('c.id', $this->session->userdata['user']['id_company']);

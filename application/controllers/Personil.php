@@ -13,6 +13,7 @@ class Personil extends MY_Controller {
     }
 
     function index() {
+        $this->data['menuStandard'] = true;
         $this->subTitle = 'List';
         $this->data['data'] = $this->model->read();
         $this->render('read');

@@ -261,7 +261,7 @@ if ($this->input->get('standard')) {
                                     </div>
                                     <div>
                                         <?php if (isset($menuStandard) & $role == 'admin') { ?>
-                                            <?php if (empty($this->session->user['id_company']) & $menuStandard != 'standardOnly') { ?>
+                                            <?php if ($menuStandard !== 'standardOnly') { ?>
                                                 <button type="button" title="Pilih Perusahaan" data-toggle="dropdown" class="btn-shadow mr-3 btn btn-dark">
                                                     <i class="fa fa-angle-double-down"></i>
                                                 </button>
@@ -279,10 +279,10 @@ if ($this->input->get('standard')) {
                                                         <?php } ?>
                                                     </ul>
                                                 </div>
+                                                <span id="company-title">
+                                                    <?= $this->session->activeCompany['name'] ?>
+                                                </span>
                                             <?php } ?>
-                                            <span id="company-title">
-                                                <?= $this->session->activeCompany['name'] ?>
-                                            </span>
                                         <?php } else { ?>
                                             <?= empty($activeModule['title']) ? ucfirst($module) : $activeModule['title']; ?>
                                             <div class="page-title-subheading">
