@@ -40,6 +40,9 @@ if ($role == 'anggota') {
     .dtrg-level-0 td{
         font-weight: normal!important;
     }
+    td{
+        max-width: 250px;
+    }
 </style>
 <!--CONTENT-->
 <div class="main-card mb-3 card">   
