@@ -266,7 +266,7 @@ $n = 1;
                     <td></td>
                     <td>Pemenuhan Total</td>
                     <td></td>
-                    <td><?= 'N/' . --$n ?></td>
+                    <td><b><span id="countPemenuhan"></span>/<?= --$n ?></b></td>
                     <td id="pemenuhanTotal"></td>
                 </tr>
             </tbody>
@@ -481,6 +481,7 @@ $n = 1;
             }
             $('#titleProgress').html(aveProgress + '%');
             $('#pemenuhanTotal').html(badgeColor(aveProgress));
+            $('#countPemenuhan').html(cComplete);
         });
     }
     function badgeColor(val) {
