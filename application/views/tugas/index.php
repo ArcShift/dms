@@ -1,6 +1,24 @@
 <?php
 //print_r($this->session->user);
 ?>
+<style>
+    /*    table{
+            margin: 0 auto;
+            width: 100%;
+            clear: both;
+            border-collapse: collapse;
+            table-layout: fixed; // ***********add this
+            word-wrap:break-word; // ***********and this
+        }*/
+/*    th{
+        max-width: 10px!important;
+        overflow-x: hidden;
+    }
+    td{
+        max-width: 30px!important;
+        overflow-x: hidden;
+    }*/
+</style>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
 <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
@@ -36,41 +54,41 @@
             </div>
         </div>
         <div class="table-responsive">
-        <table class="table" id="tbMain">
-            <thead>
-                <tr>
-                    <th>Proyek</th>
-                    <th>Tugas</th>
-                    <th>Pelaksana</th>
-                    <th>Bukti</th>
-                    <th>Status</th>
-                    <th>Aksi</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach ($data as $k => $d) { ?>
+            <table class="table" id="tbMain">
+                <thead>
                     <tr>
-                        <td><?= $d->project ?></td>
-                        <td><?= $d->tugas ?></td>
-                        <td>
-                            <?php foreach ($d->pelaksana as $k2 => $p) { ?>
-                                <div><span class="badge badge-secondary"><?= $p->fullname ?></span></div>
-                            <?php } ?>
-                        </td>
-                        <td>
-                            <a href="<?= $d->doc_type == 'FILE' ? base_url('upload/implementasi/' . $d->path) : $d->path ?>"><?= $d->path ?></a>
-                        </td>
-                        <td><?= $d->deadline ?></td>
-                        <td>
-                            <button class="btn btn-sm btn-outline-primary fa fa-upload" onclick="initUpload(<?= $k ?>)"></button>
-                            <button class="btn btn-sm btn-outline-primary fa fa-info-circle" onclick="detail(<?= $k ?>)"></button>
-                            <button class="btn btn-sm btn-outline-primary fa fa-edit" onclick="initEdit(<?= $k ?>)"></button>
-                            <button class="btn btn-sm btn-outline-danger fa fa-trash" onclick="initDelete(<?= $k ?>)"></button>
-                        </td>
+                        <th>Proyek</th>
+                        <th>Tugas</th>
+                        <th>Pelaksana</th>
+                        <th>Bukti</th>
+                        <th>Status</th>
+                        <th>Aksi</th>
                     </tr>
-                <?php } ?>
-            </tbody>
-        </table>
+                </thead>
+                <tbody style="z">
+                    <?php foreach ($data as $k => $d) { ?>
+                        <tr>
+                            <td style="max-width: 200px"><?= $d->project ?></td>
+                            <td style="max-width: 200px"><?= $d->tugas ?></td>
+                            <td>
+                                <?php foreach ($d->pelaksana as $k2 => $p) { ?>
+                                    <div><span class="badge badge-secondary"><?= $p->fullname ?></span></div>
+                                <?php } ?>
+                            </td>
+                            <td>
+                                <a href="<?= $d->doc_type == 'FILE' ? base_url('upload/implementasi/' . $d->path) : $d->path ?>"><?= $d->path ?></a>
+                            </td>
+                            <td><?= $d->deadline ?></td>
+                            <td>
+                                <button class="btn btn-sm btn-outline-primary fa fa-upload" onclick="initUpload(<?= $k ?>)"></button>
+                                <button class="btn btn-sm btn-outline-primary fa fa-info-circle" onclick="detail(<?= $k ?>)"></button>
+                                <button class="btn btn-sm btn-outline-primary fa fa-edit" onclick="initEdit(<?= $k ?>)"></button>
+                                <button class="btn btn-sm btn-outline-danger fa fa-trash" onclick="initDelete(<?= $k ?>)"></button>
+                            </td>
+                        </tr>
+                    <?php } ?>
+                </tbody>
+            </table>
         </div>
     </div>
 </div>
@@ -241,10 +259,16 @@
         tbMain = $('#tbMain').DataTable({
             "bLengthChange": false,
             "order": [],
+//            responsive: true,
             "columnDefs": [
-                {"width": "20%", "targets": 3}
+                {
+                    "targets": [3],
+                    "visible": false,
+                    "searchable": false
+                },
+                {"max-width":'1%', 'target':1}
             ],
-            "responsive": true,
+            
         });
         $('#minDate, #maxDate').on('change', function () {
             tbMain.draw();
