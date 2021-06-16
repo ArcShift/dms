@@ -1347,12 +1347,13 @@ if ($role == 'anggota') {
         var p = sortPasal[index];
         p.index_child_documents = [];
         Array.prototype.push.apply(p.index_child_documents, p.index_documents);
+        console.log(p.index_child_documents);
         for (var i = 0; i < p.index_childs.length; i++) {
             var ic = p.index_childs[i];
             listPasalDocuments(ic);
             Array.prototype.push.apply(p.index_child_documents, sortPasal[ic].index_child_documents);
         }
-        sortPasal[index].index_child_documents = sortPasal[index].index_child_documents.filter(onlyUnique);
+        sortPasal[index].index_child_documents = p.index_child_documents.filter(onlyUnique);
     }
     function onlyUnique(value, index, self) {
         return self.indexOf(value) === index;
