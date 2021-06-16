@@ -47,8 +47,8 @@
             <div class="col-sm-2">
                 <select class="form-control form-control-sm" id='filterPeriode'>
                     <option value="">~ Periode ~</option>
-                    <option value="<?= date('d/m/Y') ?>">Hari ini</option>
-                    <option value="<?= date('m/Y') ?>">Bulan ini</option>
+                    <option value="<?= date('Y-m-d') ?>">Hari ini</option>
+                    <option value="<?= date('Y-m') ?>">Bulan ini</option>
                     <option value="<?= date('Y') ?>">Tahun ini</option>
                 </select>
             </div>
@@ -57,6 +57,7 @@
             <table class="table" id="tbMain">
                 <thead>
                     <tr>
+                        <th>Jadwal</th>
                         <th>Proyek</th>
                         <th>Tugas</th>
                         <th>Pelaksana</th>
@@ -68,6 +69,7 @@
                 <tbody style="z">
                     <?php foreach ($data as $k => $d) { ?>
                         <tr>
+                            <td><?= $d->tanggal ?></td>
                             <td style="max-width: 200px"><?= $d->project ?></td>
                             <td style="max-width: 200px"><?= $d->tugas ?></td>
                             <td>
@@ -262,9 +264,9 @@
 //            responsive: true,
             "columnDefs": [
                 {
-                    "targets": [3],
+                    "targets": [0, 4],
                     "visible": false,
-                    "searchable": false
+//                    "searchable": false
                 },
                 {"max-width":'1%', 'target':1}
             ],
@@ -350,21 +352,6 @@
         $('#submitButton').attr('name', 'newTugas');
         m.find('.select-personil').val('').trigger('change');
     });
-//    $('.radio-bukti2').change(function () {
-//        var type = $(this).val();
-//        var m = $('#modalTugasBaru');
-//        if (type == 'file') {
-//            m.find('.input-file').show();
-//            m.find('.input-file').prop('required', true);
-//            m.find('.input-url').hide();
-//            m.find('.input-url').prop('required', false);
-//        } else if (type == 'url') {
-//            m.find('.input-file').hide();
-//            m.find('.input-file').prop('required', false);
-//            m.find('.input-url').show();
-//            m.find('.input-url').prop('required', true);
-//        }
-//    });
     function initEdit(idx) {
         var m = $('#modalTugasBaru');
         m.modal('show');
@@ -393,7 +380,7 @@
         m.find('.input-id-tugas').val(d.id_tugas);
     }
     $('#filterPersonil').change(function () {
-        tbMain.columns(4).search($(this).val()).draw();
+        tbMain.columns(5).search($(this).val()).draw();
     });
     $('#filterPeriode').change(function () {
         console.log('filter status');
