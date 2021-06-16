@@ -74,7 +74,7 @@ class M_dashboard extends CI_Model {
             if (!empty($unit_kerja)) {
                 $this->db->join('position_personil pp', 'pp.id = pt.id_position_personil AND pp.id_unit_kerja = ' . $unit_kerja);
             } elseif (!empty($personil)) {
-                $this->db->join('position_personil pp', 'pp.id = pt.id_position_personil AND pp.id_personil = ' . $personil);
+                $this->db->join('position_personil pp', 'pp.id = pt.id_position_personil AND pp.id = ' . $personil);
             }
             $this->db->join('document d', 'd.id = t.id_document');
             $this->db->join('document_pasal dp', 'dp.id_document = d.id AND dp.id_pasal = ' . $p['id']);
