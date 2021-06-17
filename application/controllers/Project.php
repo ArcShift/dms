@@ -13,6 +13,11 @@ class Project extends MY_Controller {
         }elseif($this->input->post('hapus')){
             $this->db->where('id', $this->input->post('id'));
             $this->db->delete('project');
+        }elseif($this->input->post('edit')){
+            $this->db->set('nama', $this->input->post('name'));
+            $this->db->set('deskripsi', $this->input->post('desc'));
+            $this->db->where('id', $this->input->post('id'));
+            $this->db->update('project');
         }
         $this->data['menuStandard']= 'company';
         $this->subModule = 'read';

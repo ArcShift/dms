@@ -21,6 +21,7 @@ class Implementasi extends MY_Controller {
         $this->subTitle = 'List';
         $this->subModule = 'read';
         $this->data['menuStandard'] = 'standard';
+        $this->data['proyek'] = $this->db->get_where('project',['id_company'=>$this->session->activeCompany['id']])->result();
         $this->render('index');
     }
 

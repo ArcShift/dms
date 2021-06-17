@@ -587,7 +587,7 @@ if ($role == 'anggota') {
 </div>
 <!--MODAL TUGAS-->
 <div class="modal fade" id="modalTugas">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-lg" role="document">
         <form id="formTugas">
             <div class="modal-content">
                 <div class="modal-header">
@@ -600,45 +600,57 @@ if ($role == 'anggota') {
                     <input class="form-control input-document-id" name="id-document" hidden="">
                 </div>
                 <div class="modal-body">
-                    <div class="form-group">
-                        <label>Tugas</label>
-                        <input class="form-control input-field input-tugas" name="tugas" required="">
-                    </div>
-                    <div class="">
-                        <div class="form-group">
-                            <label>Pasal</label>
-                            <div class="form-control input-pasal overflow-auto" style="height: 100px"></div>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label>Dokumen</label>
-                        <input class="form-control input-document-judul" disabled="">
-                    </div>
-                    <div class="form-group item-edit">
-                        <label>Form Terkait</label>
-                        <select class="form-control input-field input-form-terkait" name="form_terkait"></select>
-                    </div>
-                    <div class="form-group item-view group-form-terkait">
-                        <label>Form Terkait</label>
-                        <div class="input-group">
-                            <input class="form-control input-detail-form-terkait" readonly="">
-                            <div class="input-group-append">
-                                <i class="btn btn-outline-primary btn-sm pull-right fa fa-search" onclick=""></i>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label><b>Proyek</b></label>
+                                <select class="form-control input-field select-proyek" name="proyek" required="">
+                                    <option>~ Proyek ~</option>
+                                    <?php foreach ($proyek as $k => $p) { ?>
+                                    <option value="<?= $p->id ?>" ><?= $p->nama ?></option>
+                                    <?php } ?>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label><b>Tugas</b></label>
+                                <input class="form-control input-field input-tugas" name="tugas" required="">
+                            </div>
+                            <div class="form-group">
+                                <label><b>Pasal</b></label>
+                                <div class="form-control input-pasal overflow-auto" style="height: 100px"></div>
                             </div>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <label>Sifat</label>
-                        <select class="form-control input-field input-sifat" name="sifat" required="">
-                            <option value="">-- sifat --</option>
-                            <option value="WAJIB">Wajib</option>
-                            <option value="SITUASIONAL">Situasional</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>PIC Pelaksana</label>
-                        <br>
-                        <select class="form-control input-field select-2 multiselect-dropdown" multiple="" style="width: 450px !important;" name="penerima[]"></select>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label><b>Dokumen</b></label>
+                                <input class="form-control input-document-judul" disabled="">
+                            </div>
+                            <div class="form-group item-edit">
+                                <label><b>Form Terkait</b></label>
+                                <select class="form-control input-field input-form-terkait" name="form_terkait"></select>
+                            </div>
+                            <div class="form-group item-view group-form-terkait">
+                                <label><b>Form Terkait</b></label>
+                                <div class="input-group">
+                                    <input class="form-control input-detail-form-terkait" readonly="">
+                                    <div class="input-group-append">
+                                        <i class="btn btn-outline-primary btn-sm pull-right fa fa-search" onclick=""></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label><b>Sifat</b></label>
+                                <select class="form-control input-field input-sifat" name="sifat" required="">
+                                    <option value="">-- sifat --</option>
+                                    <option value="WAJIB">Wajib</option>
+                                    <option value="SITUASIONAL">Situasional</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label><b>PIC Pelaksana</b></label>
+                                <select class="form-control input-field select-2 multiselect-dropdown" multiple="" style="width: 100% !important;" name="penerima[]"></select>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -1909,7 +1921,7 @@ if ($role == 'anggota') {
     $('#formDistribusi').submit(function (e) {
         e.preventDefault();
         post(this, 'set_distribusi');
-//        $.post('<?php // echo site_url($module);                                    ?>/set_distribusi', $(this).serialize(), function (data) {
+//        $.post('<?php // echo site_url($module);                                         ?>/set_distribusi', $(this).serialize(), function (data) {
 //            $('#modalDistribusi').modal('hide');
 //            getPasal();
 //        });
@@ -1957,6 +1969,7 @@ if ($role == 'anggota') {
         m.find('.input-tugas').val(t.nama);
         m.find('.input-sifat').val(t.sifat);
         m.find('.input-form-terkait').val(t.form_terkait);
+        m.find('.select-proyek').val(t.id_project);
         m.find('.item-view').show();
         if (t.form_terkait != null) {
             var dt = sortDokumen[t.index_form_terkait];

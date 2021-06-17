@@ -287,6 +287,7 @@ class M_treeview_detail extends CI_Model {
         $this->db->set('id_document', $this->input->post('id-document'));
         $this->db->set('nama', $this->input->post('tugas'));
         $this->db->set('sifat', $this->input->post('sifat'));
+        $this->db->set('id_project', $this->input->post('proyek'));
         if ($this->input->post('form_terkait')) {
             $this->db->set('form_terkait', $this->input->post('form_terkait'));
         }

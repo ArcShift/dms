@@ -40,6 +40,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
+                    <input class="input-id" name="id" required="" hidden="">
                     <div class="form-group">
                         <label><b>Nama</b></label>
                         <input class="form-control input-nama" name="name" required="">
@@ -51,7 +52,7 @@
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-outline-primary" data-dismiss="modal">Batal</button>
-                    <button class="btn btn-outline-primary" name="create" value="ok">Simpan</button>
+                    <button class="btn btn-outline-primary btn-save" value="ok">Simpan</button>
                 </div>
             </div>
         </form>
@@ -90,6 +91,7 @@
         m.modal('show');
         m.find('.modal-title').html('Buat Proyek Baru');
         m.find('form').trigger('reset');
+        m.find('.btn-save').attr('name', 'create');
     });
     function initHapus(idx) {
         var d = data[idx];
@@ -106,5 +108,6 @@
         m.find('.input-nama').val(d.nama);
         m.find('.input-id').val(d.id);
         m.find('.input-desc').val(d.deskripsi);
+        m.find('.btn-save').attr('name', 'edit');
     }
 </script>
