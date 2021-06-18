@@ -6,6 +6,11 @@ class Project_tugas extends MY_Controller {
 
     function index() {
         $this->subModule = 'read';
+        $this->load->model('m_document');
+        $this->data['dokumen'] = $this->m_document->dokumen_tugas();
+        $this->data['form_terkait'] = $this->m_document->form_terkait();
+        $this->load->model('m_personil');
+        $this->data['personil'] = $this->m_personil->position_personil();
         $this->render('index');
     }
 
@@ -63,6 +68,75 @@ class Project_tugas extends MY_Controller {
             $jadwal[$k] = $j;
         }
         echo json_encode($jadwal);
+    }
+
+    function set_tugas() {
+        $resp['status'] = 'success';
+        if ($this->input->post('mode')=='create') {
+            $this->db->set('id_document', $this->input->post('dokumen'));
+            $this->db->set('nama', $this->input->post('nama'));
+            $this->db->set('sifat', $this->input->post('sifat'));
+            if ($this->input->post('form_terkait')) {
+                $this->db->set('form_terkait', $this->input->post('form_terkait'));
+            }
+            if ($this->input->post('proyek')) {
+                $this->db->set('id_project', $this->input->post('proyek'));
+            }
+            $this->db->insert('tugas');
+            $id = $this->db->insert_id();
+            foreach ($this->input->post('personil') as $k => $p) {
+                $this->db->set('id_tugas', $id);
+                $this->db->set('id_position_personil', $p);
+                $this->db->insert('personil_task');
+            }
+            $this->db->set('id_tugas', $id);
+            $this->db->set('tanggal', $this->input->post('jadwal'));
+            $this->db->insert('jadwal');
+        } elseif ($this->input->post('mode')=='edit') {
+                $this->db->set('form_terkait', $this->input->post('form_terkait'));
+            $this->db->set('id_document', $this->input->post('dokumen'));
+            $this->db->set('nama', $this->input->post('nama'));
+            $this->db->set('sifat', $this->input->post('sifat'));
+            if ($this->input->post('proyek')) {
+                $this->db->set('id_project', $this->input->post('proyek'));
+            }
+            $this->db->where('id', $this->input->post('id_tugas'));
+            $this->db->update('tugas');
+            $this->load->model('m_tugas');
+            $this->m_tugas->editPelaksana($this->input->post('id_tugas'), $this->input->post('personil'));
+            $this->db->set('tanggal', $this->input->post('jadwal'));
+            $this->db->where('id', $this->input->post('id_jadwal'));
+            $this->db->update('jadwal');
+        } elseif ($this->input->post('mode')== 'delete') {
+            $this->db->where('id_tugas', $this->input->post('id'));
+            $this->db->delete('personil_task');
+            $this->db->where('id_tugas', $this->input->post('id'));
+            $this->db->delete('jadwal');
+            $this->db->where('id', $this->input->post('id'));
+            $this->db->delete('tugas');
+            $this->data['msgSuccess'] = 'Berhasil Menghapus Data';
+        } elseif ($this->input->post('mode')== 'upload') {
+            $step = true;
+            $this->load->model('m_implementasi');
+            if (strtoupper($this->input->post('type_dokumen')) == 'FILE') {
+                $config['upload_path'] = './upload/implementasi';
+                $config['allowed_types'] = '*';
+                $this->load->library('upload', $config);
+                if (!$this->upload->do_upload('dokumen')) {
+                    $this->data['msgError'] = $this->upload->display_errors();
+                    $step = false;
+                }
+                $path = $this->upload->data()['file_name'];
+            } else {
+                $path = $this->input->post('url');
+            }
+            if ($step) {
+                if ($this->m_implementasi->upload($path)) {
+                    $this->data['msgSuccess'] = 'Data Berhasil Diupload';
+                }
+            }
+        }
+        echo json_encode($resp);
     }
 
 }
