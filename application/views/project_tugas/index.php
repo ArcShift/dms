@@ -145,12 +145,7 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label><b>Proyek</b></label>
-                                <select class="form-control select-proyek" id="selectProject" name="proyek">
-                                    <option value="">~ Proyek ~</option>
-                                    <?php foreach ($project as $k => $p) { ?>
-                                        <option value="<?= $p->id ?>"><?= $p->nama ?></option>
-                                    <?php } ?>
-                                </select>
+                                <select class="form-control select-proyek" id="selectProject" name="proyek"></select>
                             </div>
                             <div class="form-group">
                                 <label><b>Tugas</b></label>
