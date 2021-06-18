@@ -219,10 +219,11 @@ if ($this->input->get('standard')) {
                                 <li id="menu-project"></li>
                                 <li id="menu-tugas"></li>
                                 <li id="menu-project_tugas"></li>
+                                <li id="menu-project2"></li>
                                 <li class="app-sidebar__heading">MONITORING & EVALUASI</li>
                                 <li id="menu-pemenuhan"></li>
                                 <li class="app-sidebar__heading">GAP ANALISA</li>
-                                <li id="menu-jadwal_gap_analisa">-</li>
+                                <li id="menu-jadwal_gap_analisa"></li>
                                 <li id="menu-gap_analisa1"></li>
                                 <li id="menu-gap_analisa"></li>
                                 <li id="menu-hasil_gap_analisa"></li>
