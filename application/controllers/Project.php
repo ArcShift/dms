@@ -27,5 +27,5 @@ class Project extends MY_Controller {
         $this->data['data'] = $this->db->get_where('project p', ['p.id_company'=>$this->session->activeCompany['id']])->result();
         $this->render('index');
     }
-
+    
 }
