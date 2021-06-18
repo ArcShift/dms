@@ -49,21 +49,18 @@
                         </select>
                     </div>
                 </div>
-                <div class="table-responsive">
-                    <table class="table" id="tableTugas">
-                        <thead>
-                            <tr>
-                                <th>Jadwal</th>
-                                <th>Proyek</th>
-                                <th>Tugas</th>
-                                <th>Pelaksana</th>
-                                <th>Bukti</th>
-                                <th>Status</th>
-                                <th>Aksi</th>
-                            </tr>
-                        </thead>
-                    </table>
-                </div>
+                <table class="table" id="tableTugas">
+                    <thead>
+                        <tr>
+                            <th>Jadwal</th>
+                            <th>Proyek</th>
+                            <th>Tugas</th>
+                            <th>Pelaksana</th>
+                            <th>Status</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                </table>
             </div>
         </div>
     </div>
@@ -287,12 +284,22 @@
 </div>
 <script>
     getProject();
-    getTugas();
     $(document).ready(function () {
         $('#tableTugas_filter .form-control').attr('placeholder', 'Search');
         $('.div-filter .col-sm-2').eq(0).append($('#tableTugas_filter .form-control'));
         $('#tableTugas_filter').hide();
         $('.select2').select2();
+        tbTugas = $('#tableTugas').DataTable({
+            "bLengthChange": false,
+            "order": [],
+//            "columnDefs": [
+//                {
+//                    "targets": [4],
+//                    "visible": false,
+//                },
+//            ],
+        });
+        getTugas();
     });
     function afterReady() {
     }
@@ -353,17 +360,6 @@
         m.find('.btn-save').attr('name', 'edit');
         m.find('.input-mode').val('edit');
     }
-    tbTugas = $('#tableTugas').DataTable({
-        "bLengthChange": false,
-        "order": [],
-        "columnDefs": [
-            {
-                "targets": [0, 4],
-                "visible": false,
-            },
-            {"max-width": '1%', 'target': 1}
-        ],
-    });
     function getTugas() {
         $.getJSON('project_tugas/get_tugas', null, function (data) {
             tbTugas.clear();
@@ -378,7 +374,6 @@
                     d.project,
                     d.tugas,
                     d.txtPelaksana,
-                    'file',
                     d.deadline,
                     '<button class="btn btn-sm btn-outline-primary fa fa-upload" onclick="initUploadTugas(' + i + ')"></button>'
                             + '<button class="btn btn-sm btn-outline-primary fa fa-edit ml-1" onclick="initEditTugas(' + i + ')"></button>'
