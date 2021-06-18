@@ -1,11 +1,11 @@
 <div class="card">
     <div class="card-body">
         <ul class="nav nav-tabs">
-            <li class="nav-item"><a data-toggle="tab" href="#tab-proyek" class="nav-link">Proyek</a></li>
+            <li class="nav-item"><a data-toggle="tab" href="#tab-proyek" class="nav-link active">Proyek</a></li>
             <li class="nav-item"><a data-toggle="tab" href="#tab-tugas" class="nav-link">Tugas</a></li>
         </ul>
         <div class="tab-content">
-            <div class="tab-pane" id="tab-proyek" role="tabpanel">
+            <div class="tab-pane active" id="tab-proyek" role="tabpanel">
                 <div>
                     <button class="btn btn-sm btn-outline-primary mb-3" id="createProject">Buat Proyek Baru</button>
                 </div>
@@ -20,7 +20,7 @@
                     </thead>
                 </table>
             </div>
-            <div class="tab-pane active" id="tab-tugas" role="tabpanel">
+            <div class="tab-pane" id="tab-tugas" role="tabpanel">
                 <button class="btn btn-sm btn-outline-primary" id="createTugas">Buat Tugas Baru</button>
                 <br/>
                 <br/>
