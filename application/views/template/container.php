@@ -218,6 +218,7 @@ if ($this->input->get('standard')) {
                                 <li class="app-sidebar__heading">PROYEK & TUGAS</li>
                                 <li id="menu-project"></li>
                                 <li id="menu-tugas"></li>
+                                <li id="menu-project_tugas"></li>
                                 <li class="app-sidebar__heading">MONITORING & EVALUASI</li>
                                 <li id="menu-pemenuhan"></li>
                                 <li class="app-sidebar__heading">GAP ANALISA</li>
