@@ -8,5 +8,9 @@ class Project2 extends MY_Controller {
         $this->subModule= 'read';
         $this->render('index');
     }
+    function tugas() {
+        $this->subModule= 'read';
+        $this->render('tugas');
+    }
 
 }

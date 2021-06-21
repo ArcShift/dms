@@ -220,6 +220,7 @@ if ($this->input->get('standard')) {
                                 <li id="menu-tugas"></li>
                                 <li id="menu-project_tugas"></li>
                                 <li id="menu-project2"></li>
+                                <li id="menu-tugas_saya"></li>
                                 <li class="app-sidebar__heading">MONITORING & EVALUASI</li>
                                 <li id="menu-pemenuhan"></li>
                                 <li class="app-sidebar__heading">GAP ANALISA</li>
