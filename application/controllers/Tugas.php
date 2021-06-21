@@ -9,6 +9,7 @@ class Tugas extends MY_Controller {
             $this->db->set('id_document', $this->input->post('dokumen'));
             $this->db->set('nama', $this->input->post('nama'));
             $this->db->set('sifat', $this->input->post('sifat'));
+            $this->db->set('pembuat', $this->input->post('pembuat'));
             if ($this->input->post('form_terkait')) {
                 $this->db->set('form_terkait', $this->input->post('form_terkait'));
             }
@@ -29,6 +30,7 @@ class Tugas extends MY_Controller {
             $this->db->set('id_document', $this->input->post('dokumen'));
             $this->db->set('nama', $this->input->post('nama'));
             $this->db->set('sifat', $this->input->post('sifat'));
+            $this->db->set('pembuat', $this->input->post('pembuat'));
             if ($this->input->post('proyek')) {
                 $this->db->set('id_project', $this->input->post('proyek'));
             }
@@ -77,7 +79,7 @@ class Tugas extends MY_Controller {
         $this->data['project'] = $this->m_project->get();
         $this->load->model('m_personil');
         $this->data['personil'] = $this->m_personil->position_personil();
-        $this->db->select('j.*, pr.nama AS project, t.nama AS tugas, t.id_document, t.form_terkait, t.sifat, t.id_project');
+        $this->db->select('j.*, pr.nama AS project, t.nama AS tugas, t.id_document, t.form_terkait, t.sifat, t.id_project, t.pembuat');
         $this->db->join('tugas t', 't.id = j.id_tugas');
         $this->db->join('document d', 'd.id = t.id_document');
         $this->db->join('project pr', 'pr.id = t.id_project', 'LEFT');

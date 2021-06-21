@@ -199,7 +199,16 @@
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label><b>Personil</b></label>
+                                <label><b>Pemberi Tugas</b></label>
+                                <select class="form-control select-pembuat" name="pembuat" style="width: 100% !important;">
+                                        <option value="">~ Personil ~</option>
+                                    <?php foreach ($personil as $k => $p) { ?>
+                                        <option value="<?= $p->id ?>"><?= $p->fullname ?></option>
+                                    <?php } ?>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label><b>Pelaksana Tugas</b></label>
                                 <select class="form-control select-personil select2" multiple="" required="" name="personil[]" style="width: 100% !important;">
                                     <?php foreach ($personil as $k => $p) { ?>
                                         <option value="<?= $p->id ?>"><?= $p->fullname ?></option>
@@ -295,7 +304,7 @@
             Tugas: d.tugas,
             'SOP Terkait': $('.select-dokumen option[value=' + d.id_document + ']').html(),
             'Form Terkait': (d.form_terkait != null ? $('.select-form option[value=' + d.form_terkait + ']').html() : '-'),
-            'Pemberi Tugas': '-',
+            'Pemberi Tugas': (d.pembuat != null ? $('.select-pembuat option[value=' + d.pembuat + ']').html() : '-'),
             'Pelaksana Tugas': txtPelaksana,
             Sifat: d.sifat,
             Jadwal: d.tanggal,
@@ -369,6 +378,7 @@
         for (var p of d.pelaksana) {
             pel.push(p.id);
         }
+        m.find('.select-pembuat').val(d.pembuat);
         m.find('.select-personil').val(pel).trigger('change');
         m.find('.input-tanggal').val(d.tanggal);
     }
