@@ -1,8 +1,12 @@
+<?php
+//print_r($project);
+print_r($tugas);
+?>
 <div class="card">
     <div class="card-header">
-        Membuat Aplikasi Marketing
+        <?= $project->nama ?>
         &nbsp;
-        <sup class="text-primary fa fa-info-circle" title="aplikasi yang dapat membantu marketing dalam melakukan"></sup>
+        <sup class="text-primary fa fa-info-circle" title="<?= $project->deskripsi ?>"></sup>
     </div>
     <div class="card-body">
         <div class="row mb-2">
@@ -72,5 +76,5 @@
     </div>
 </div>
 <script>
-    $('table').DataTable();
+    $('table').DataTable(); 
 </script>
