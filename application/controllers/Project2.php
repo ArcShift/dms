@@ -19,20 +19,6 @@ class Project2 extends MY_Controller {
         $this->render('index');
     }
 
-    function tugas() {
-        if (empty($this->session->idData)) {
-            redirect($this->module);
-        }
-        $project = $this->db->get_where('project', ['id' => $this->session->idData])->row();
-        if (empty($project)) {
-            redirect($this->module);
-        }
-        $this->data['project'] = $project;
-        $this->data['tugas'] = $this->db->get_where('tugas', ['id_project' => $this->session->idData])->result();
-        $this->subModule = 'read';
-        $this->render('tugas');
-    }
-
     function get() {
         $this->db->select('p.*, COUNT(t.id) AS tugas');
         $this->db->join('tugas t', 't.id_project = p.id', 'LEFT');
@@ -57,6 +43,122 @@ class Project2 extends MY_Controller {
             $this->db->update('project');
         }
         echo json_encode(['status' => 'success']);
+    }
+
+    function tugas() {
+        if (empty($this->session->idData)) {
+            redirect($this->module);
+        }
+        $project = $this->db->get_where('project', ['id' => $this->session->idData])->row();
+        if (empty($project)) {
+            redirect($this->module);
+        }
+        $this->subModule = 'read';
+        $this->subTitle = 'List Tugas';
+        $this->data['project'] = $project;
+        $this->load->model('m_document');
+        $this->data['dokumen'] = $this->m_document->dokumen_tugas();
+        $this->data['form_terkait'] = $this->m_document->form_terkait();
+        $this->load->model('m_personil');
+        $this->data['personil'] = $this->m_personil->position_personil();
+        $this->render('tugas');
+    }
+
+    function get_tugas() {
+        $this->db->select('j.*, t.nama AS tugas, t.id_document, t.form_terkait, t.sifat, t.pembuat');
+        $this->db->join('tugas t', 't.id = j.id_tugas AND t.id_project = ' . $this->session->idData);
+        $this->db->order_by('j.id', 'DESC');
+        $tugas = $this->db->get('jadwal j')->result();
+        foreach ($tugas as $k => $t) {
+            if (!empty($t->tanggal) & !empty($t->upload_date)) {
+                $d1 = new DateTime(date('Y-m-d', strtotime($t->upload_date)));
+                $d2 = new DateTime($t->tanggal);
+                if ($d1->diff($d2)->invert) {
+                    $t->deadline = '<span class="badge badge-danger">terlambat</span>';
+                } else {
+                    $t->deadline = '<span class="badge badge-success">selesai</span>';
+                }
+            } else {
+                $t->deadline = '<span class="badge badge-primary">menunggu</span>';
+            }
+            $this->db->select('pp.id, CONCAT(p.fullname," - ", uk.name) AS fullname, u.photo');
+            $this->db->join('position_personil pp', 'pp.id = pt.id_position_personil');
+            $this->db->join('personil p', 'p.id = pp.id_personil');
+            $this->db->join('unit_kerja uk', 'uk.id = pp.id_unit_kerja');
+            $this->db->join('users u', 'u.id_personil = p.id', 'LEFT');
+            $t->pelaksana = $this->db->get_where('personil_task pt', ['pt.id_tugas' => $t->id_tugas])->result();
+            $tugas[$k] = $t;
+        }
+        echo json_encode($tugas);
+    }
+
+    function set_tugas() {
+        $msg = [];
+        $msg['status'] = 'success';
+        if ($this->input->post('mode') == 'create') {
+            $this->db->set('id_document', $this->input->post('dokumen'));
+            $this->db->set('nama', $this->input->post('nama'));
+            $this->db->set('sifat', $this->input->post('sifat'));
+            $this->db->set('pembuat', $this->input->post('pembuat'));
+            if ($this->input->post('form_terkait')) {
+                $this->db->set('form_terkait', $this->input->post('form_terkait'));
+            }
+            $this->db->set('id_project', $this->session->idData);
+            $this->db->insert('tugas');
+            $id = $this->db->insert_id();
+            foreach ($this->input->post('personil') as $k => $p) {
+                $this->db->set('id_tugas', $id);
+                $this->db->set('id_position_personil', $p);
+                $this->db->insert('personil_task');
+            }
+            $this->db->set('id_tugas', $id);
+            $this->db->set('tanggal', $this->input->post('jadwal'));
+            $this->db->insert('jadwal');
+        } elseif ($this->input->post('mode')== 'edit') {
+            $this->db->set('id_document', $this->input->post('dokumen'));
+            $this->db->set('nama', $this->input->post('nama'));
+            $this->db->set('sifat', $this->input->post('sifat'));
+            $this->db->set('pembuat', $this->input->post('pembuat'));
+            if ($this->input->post('proyek')) {
+                $this->db->set('id_project', $this->input->post('proyek'));
+            }
+            $this->db->where('id', $this->input->post('id_tugas'));
+            $this->db->update('tugas');
+            $this->load->model('m_tugas');
+            $this->m_tugas->editPelaksana($this->input->post('id_tugas'), $this->input->post('personil'));
+            $this->db->set('tanggal', $this->input->post('jadwal'));
+            $this->db->where('id', $this->input->post('id_jadwal'));
+            $this->db->update('jadwal');
+        } elseif ($this->input->post('mode') == 'delete') {
+            $this->db->where('id_tugas', $this->input->post('id'));
+            $this->db->delete('personil_task');
+            $this->db->where('id_tugas', $this->input->post('id'));
+            $this->db->delete('jadwal');
+            $this->db->where('id', $this->input->post('id'));
+            $this->db->delete('tugas');
+            $this->data['msgSuccess'] = 'Berhasil Menghapus Data';
+        } elseif ($this->input->post('upload')) {
+            $step = true;
+            $this->load->model('m_implementasi');
+            if (strtoupper($this->input->post('type_dokumen')) == 'FILE') {
+                $config['upload_path'] = './upload/implementasi';
+                $config['allowed_types'] = '*';
+                $this->load->library('upload', $config);
+                if (!$this->upload->do_upload('dokumen')) {
+                    $this->data['msgError'] = $this->upload->display_errors();
+                    $step = false;
+                }
+                $path = $this->upload->data()['file_name'];
+            } else {
+                $path = $this->input->post('url');
+            }
+            if ($step) {
+                if ($this->m_implementasi->upload($path)) {
+                    $this->data['msgSuccess'] = 'Data Berhasil Diupload';
+                }
+            }
+        }
+        echo json_encode($msg);
     }
 
 }
