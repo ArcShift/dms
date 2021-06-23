@@ -1,3 +1,6 @@
+<?php
+//print_r($this->session->user);
+?>
 <style>
     td.details-control {
         background: url('https://datatables.net/examples/resources/details_open.png') no-repeat center center;
@@ -15,21 +18,21 @@
                 <button class="btn btn-sm btn-outline-primary fa fa-plus"> Tambah Tugas</button>
             </div>
             <div class="col-sm-2"></div>
-            <div class="col-sm-2"></div>
+            <div class="col-sm-2 div-filter-cari"></div>
             <div class="col-sm-2">
-                <select class="form-control form-control-sm">
+                <select class="form-control form-control-sm" id="filterStatus">
                     <option value="">~ Status ~</option>
-                    <option value="">Selesai</option>
-                    <option value="">Menunggu</option>
-                    <option value="">Terlambat</option>
+                    <option value="selesai">Selesai</option>
+                    <option value="menunggu">Menunggu</option>
+                    <option value="terlambat">Terlambat</option>
                 </select>
             </div>
             <div class="col-sm-2">
-                <select class="form-control form-control-sm">
+                <select class="form-control form-control-sm" id="filterPeriode">
                     <option value="">~ Periode ~</option>
-                    <option value="">Hari Ini</option>
-                    <option value="">Minggu Ini</option>
-                    <option value="">Bulan Ini</option>
+                    <option value="<?= date('Y-m-d') ?>">Hari ini</option>
+                    <option value="<?= date('Y-m') ?>">Bulan ini</option>
+                    <option value="<?= date('Y') ?>">Tahun ini</option>
                 </select>
             </div>
         </div>
@@ -47,15 +50,71 @@
     </div>
 </div>
 <script>
-    function afterReady() {
-
+    $(document).ready(function () {
+        tbMain = $('#tableMain').DataTable({
+            "bLengthChange": false,
+            "order": [],
+            "columnDefs": [
+                {className: "details-control", "targets": [0]}
+            ]
+        });
+        $('#filterStatus').change(function () {
+            tbMain.columns(4).search($(this).val()).draw();
+        });
+        $('#filterPeriode').change(function () {
+            console.log('filter status');
+            tbMain.columns(3).search($(this).val()).draw();
+        });
+        getTugas();
+        $('.select2').select2();
+        $('.dataTables_filter .form-control').attr('placeholder', 'Cari');
+        $('.div-filter-cari').append($('.dataTables_filter .form-control'));
+        $('.dataTables_filter').hide();
+        // Add event listener for opening and closing details
+        $('#tableMain tbody').on('click', 'td.details-control', function () {
+            var tr = $(this).closest('tr');
+            var row = tbMain.row(tr);
+            if (row.child.isShown()) {
+                // This row is already open - close it
+                row.child.hide();
+                tr.removeClass('shown');
+            } else {
+                // Open this row
+                row.child(format(row.index())).show();
+                tr.addClass('shown');
+            }
+        });
+    });
+    function afterReady() {}
+    function getTugas() {
+        $.getJSON('<?= site_url($module . '/get') ?>', null, function (data) {
+            console.log(data);
+            tbMain.clear();
+            for (var i = 0; i < data.length; i++) {
+                var d = data[i];
+                var pelaksana = '';
+                for (var j = 0; j < d.pelaksana.length; j++) {
+                    var pel = d.pelaksana[j];
+                    pelaksana += '<img class="rounded-circle" style="object-fit: cover" src="' + (pel.photo == null ? '<?= base_url('assets/images/default_user.jpg') ?>' : '<?= base_url('upload/profile_photo/') ?>' + pel.photo) + '" width="30" height="30" title="' + pel.fullname + '">';
+                }
+                tbMain.row.add([
+                    '',
+                    d.tugas,
+                    pelaksana,
+                    d.tanggal,
+                    d.deadline,
+                ]);
+            }
+            tugas = data;
+            tbMain.draw();
+        });
     }
-    function format(d) {
-        // `d` is the original data object for the row
+    function format(idx) {
+        var d = tugas[idx];
         return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">' +
                 '<tr>' +
                 '<td>Proyek:</td>' +
-                '<td>' + d.proyek + '</td>' +
+                '<td>' + (d.project == null ? '-' : d.project) + '</td>' +
                 '</tr>' +
                 '<tr>' +
                 '<td>Aksi:</td>' +
@@ -64,9 +123,8 @@
                 '<button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' +
                 '</button>' +
                 '<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">' +
-                '<a class="dropdown-item" href="#">Detail</a>' +
+//                '<a class="dropdown-item" href="#">Detail</a>' +
                 '<a class="dropdown-item" href="#">Ubah</a>' +
-                '<a class="dropdown-item" href="<?= site_url('project2/tugas') ?>">Tugas</a>' +
                 '<a class="dropdown-item" href="#">Hapus</a>' +
                 '</div>' +
                 '</div>' +
@@ -74,55 +132,4 @@
                 '</tr>' +
                 '</table>';
     }
-    imgTest = "";
-    for (var i = 0; i < 5; i++) {
-        imgTest += '<img src="<?= base_url('assets/images/default_user.jpg') ?>" width="30" title="Toimul Setyo Andri - IT">';
-
-    }
-    dt = {
-        tugas: 'Membuat database',
-        pelaksana: imgTest,
-        jadwal: '2021-01-01',
-        status: '<span class="badge badge-success">selesai</span>',
-        proyek: 'Membuat Aplikasi Marketing',
-        aksi: '',
-    }
-
-    var data2 = [];
-    for (var i = 0; i < 10; i++) {
-        data2.push(dt);
-    }
-    $(document).ready(function () {
-        var table = $('#tableMain').DataTable({
-            data: data2,
-            "columns": [
-                {
-                    "className": 'details-control',
-                    "orderable": false,
-                    "defaultContent": ''
-                },
-                {"data": "tugas"},
-                {"data": "pelaksana"},
-                {"data": "jadwal"},
-                {"data": "status"}
-            ],
-            "order": [[1, 'asc']]
-        });
-
-        // Add event listener for opening and closing details
-        $('#tableMain tbody').on('click', 'td.details-control', function () {
-            var tr = $(this).closest('tr');
-            var row = table.row(tr);
-
-            if (row.child.isShown()) {
-                // This row is already open - close it
-                row.child.hide();
-                tr.removeClass('shown');
-            } else {
-                // Open this row
-                row.child(format(row.data())).show();
-                tr.addClass('shown');
-            }
-        });
-    });
 </script>
