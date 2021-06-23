@@ -168,7 +168,9 @@
         tbMain.columns(3).search($(this).val()).draw();
     });
     function afterReady() {}
-    tbMain = $('table').DataTable();
+    tbMain = $('table').DataTable({
+        "bLengthChange": false,
+    });
     getTugas();
     function getTugas() {
         $.getJSON('<?= site_url($module . '/get_tugas') ?>', null, function (data) {
