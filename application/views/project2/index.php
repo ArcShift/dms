@@ -139,7 +139,8 @@
             tbMain.clear();
             for (var i = 0; i < data.length; i++) {
                 var d = data[i];
-                data[i].pelaksana = '<img src="<?= base_url('assets/images/default_user.jpg') ?>" width="30" title="Toimul Setyo Andri - IT">';
+//                data[i].pelaksana = '<img src="<?= base_url('assets/images/default_user.jpg') ?>" width="30" title="Toimul Setyo Andri - IT">';
+                data[i].pelaksana = '-';
                 data[i].status = 'n%';
                 tbMain.row.add([
                     '',
