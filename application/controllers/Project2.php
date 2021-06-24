@@ -114,11 +114,13 @@ class Project2 extends MY_Controller {
             $this->db->set('id_tugas', $id);
             $this->db->set('tanggal', $this->input->post('jadwal'));
             $this->db->insert('jadwal');
-        } elseif ($this->input->post('mode')== 'edit') {
+        } elseif ($this->input->post('mode') == 'edit') {
             $this->db->set('id_document', $this->input->post('dokumen'));
             $this->db->set('nama', $this->input->post('nama'));
             $this->db->set('sifat', $this->input->post('sifat'));
-            $this->db->set('pembuat', $this->input->post('pembuat'));
+            if ($this->input->post('pembuat')) {
+                $this->db->set('pembuat', $this->input->post('pembuat'));
+            }
             if ($this->input->post('proyek')) {
                 $this->db->set('id_project', $this->input->post('proyek'));
             }
