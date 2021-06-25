@@ -125,7 +125,7 @@
                 '<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">' +
 //                '<a class="dropdown-item" href="#">Detail</a>' +
                 '<a class="dropdown-item" onclick="initEdit(' + idx + ')">Ubah</a>' +
-                '<button class="dropdown-item" name="idData" value="'+ d.id +'">Tugas</a>' +
+                '<button class="dropdown-item" name="idData" value="' + d.id + '">Tugas</a>' +
                 (d.tugas == 0 ? '<a class="dropdown-item" onclick="initDelete(' + idx + ')">Hapus</a>' : '') +
                 '</div>' +
                 '</div>' +
@@ -147,7 +147,7 @@
                     d.nama,
                     d.deskripsi,
                     d.tugas,
-                    d.status,
+                    (d.jadwal == 0 ? '0' : d.selesai / d.jadwal * 100) + '%',
                 ]);
             }
             project = data;

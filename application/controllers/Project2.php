@@ -3,7 +3,11 @@
 class Project2 extends MY_Controller {
 
     protected $module = 'project2';
-
+    public function __construct() {
+        parent::__construct();
+        $this->load->model('m_position_personil');
+    }
+        
     function index() {
         if ($this->input->post('idData')) {
             $this->session->set_userdata('idData', $this->input->post('idData'));
@@ -20,10 +24,14 @@ class Project2 extends MY_Controller {
     }
 
     function get() {
-        $this->db->select('p.*, COUNT(t.id) AS tugas');
+        $this->db->select('p.*, COUNT(t.id) AS tugas, COUNT(j.id) AS jadwal, SUM(IF(j.upload_date IS NOT NULL, 1, 0)) AS selesai');
         $this->db->join('tugas t', 't.id_project = p.id', 'LEFT');
+        $this->db->join('jadwal j', 'j.id_tugas = t.id', 'LEFT');
         $this->db->group_by('p.id');
         $data = $this->db->get_where('project p', ['p.id_company' => $this->session->activeCompany['id']])->result();
+        foreach ($data as $k => $d) {
+//            $data[$k]->pelaksana = $this->m_position_personil->get_pelaksana_project($d->id);
+        }
         echo json_encode($data);
     }
 
@@ -92,7 +100,6 @@ class Project2 extends MY_Controller {
         echo json_encode($tugas);
     }
     function get_personil_dokumen(){
-        $this->load->model('m_position_personil');
         $personil = $this->m_position_personil->get_by_document($this->input->get('id'));
         echo json_encode($personil);
     }

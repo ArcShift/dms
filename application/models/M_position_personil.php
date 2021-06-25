@@ -9,5 +9,8 @@ class M_position_personil extends CI_Model{
         $this->db->join('unit_kerja uk', 'uk.id = pp.id_unit_kerja');
         return $this->db->get_where('distribution ds',['ds.id_document'=>$id_document])->result();
     }
+    function get_pelaksana_project($id_project){
+        
+    }
 
 }
