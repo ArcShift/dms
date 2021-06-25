@@ -91,7 +91,11 @@ class Project2 extends MY_Controller {
         }
         echo json_encode($tugas);
     }
-
+    function get_personil_dokumen(){
+        $this->load->model('m_position_personil');
+        $personil = $this->m_position_personil->get_by_document($this->input->get('id'));
+        echo json_encode($personil);
+    }
     function set_tugas() {
         $msg = [];
         $msg['status'] = 'success';

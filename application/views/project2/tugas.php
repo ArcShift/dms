@@ -67,7 +67,7 @@
                             </div>
                             <div class="form-group">
                                 <label><b>SOP Terkait</b></label>
-                                <select class="form-control select-dokumen" name="dokumen" required="">
+                                <select class="form-control select-dokumen" id="selectDokumen" name="dokumen" required="">
                                     <option value="">~ Dokumen ~</option>
                                     <?php foreach ($dokumen as $k => $d) { ?>
                                         <option value="<?= $d->id ?>"><?= $d->judul ?></option>
@@ -105,11 +105,7 @@
                             </div>
                             <div class="form-group">
                                 <label><b>Pelaksana Tugas</b></label>
-                                <select class="form-control select-personil select2" multiple="" required="" name="personil[]" style="width: 100% !important;">
-                                    <?php foreach ($personil as $k => $p) { ?>
-                                        <option value="<?= $p->id ?>"><?= $p->fullname ?></option>
-                                    <?php } ?>
-                                </select>
+                                <select class="form-control select-personil select2" id="selectPelaksana" multiple="" required="" name="personil[]" style="width: 100% !important;"></select>
                             </div>
                             <div class="form-group">
                                 <label><b>Jadwal</b></label>
@@ -154,6 +150,7 @@
     </div>
 </div>
 <script>
+    var pel = [];
     $(document).ready(function () {
         $('.select2').select2();
         $('.dataTables_filter .form-control').attr('placeholder', 'Cari');
@@ -205,6 +202,19 @@
         m.find('.select-personil').val('').trigger('change');
         m.find('.input-mode').val('create');
     });
+    $('#selectDokumen').change(function () {
+        $.getJSON('<?= site_url($module . '/get_personil_dokumen') ?>', {id: $(this).val()}, function (data) {
+            console.log(data);
+            $('#selectPelaksana').empty();
+            for (var i = 0; i < data.length; i++) {
+                var d = data[i];
+                $('#selectPelaksana').append(new Option(d.personil, d.id, false, false));
+            }
+            $('#selectPelaksana').val(pel).trigger('change');
+            $('#selectPelaksana').trigger('change');
+
+        });
+    });
     $('#formTugas').submit(function (e) {
         e.preventDefault();
         post(this, 'set_tugas');
@@ -231,16 +241,16 @@
         m.find('.input-id-tugas').val(d.id_tugas);
         m.find('.input-id-jadwal').val(d.id);
         m.find('.select-dokumen').val(d.id_document);
+        $('#selectDokumen').change();
         m.find('.input-tugas').val(d.tugas);
         m.find('.select-form').val(d.form_terkait);
         m.find('.select-sifat').val(d.sifat);
         m.find('.select-proyek').val(d.id_project);
         m.find('.select-pembuat').val(d.pembuat);
-        var pel = [];
+        pel = [];
         for (var p of d.pelaksana) {
             pel.push(p.id);
         }
-        m.find('.select-personil').val(pel).trigger('change');
         m.find('.input-tanggal').val(d.tanggal);
         m.find('.input-mode').val('edit');
     }

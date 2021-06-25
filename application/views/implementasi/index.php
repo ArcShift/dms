@@ -604,8 +604,8 @@ if ($role == 'anggota') {
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label><b>Proyek</b></label>
-                                <select class="form-control input-field select-proyek" name="proyek" required="">
-                                    <option>~ Proyek ~</option>
+                                <select class="form-control input-field select-proyek" name="proyek">
+                                    <option value="">~ Proyek ~</option>
                                     <?php foreach ($proyek as $k => $p) { ?>
                                     <option value="<?= $p->id ?>" ><?= $p->nama ?></option>
                                     <?php } ?>
@@ -1264,7 +1264,6 @@ if ($role == 'anggota') {
                         (role == 'anggota' ? btnDetail : btnDetail + btnEdit),
                     ]);
                 }
-
                 n++;
                 d.index_tugas = [];
                 sortDokumen.push(d);
