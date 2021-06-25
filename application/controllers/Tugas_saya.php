@@ -7,7 +7,7 @@ class Tugas_saya extends MY_Controller {
     function index() {
         $this->subModule = 'read';
         $this->load->model('m_document');
-        $this->data['dokumen'] = $this->m_document->dokumen_tugas();
+        $this->data['dokumen'] = $this->m_document->dokumen_saya();
         $this->data['form_terkait'] = $this->m_document->form_terkait();
         $this->db->select('uk.*, pp.id AS jabatan');
         $this->db->join('position_personil pp', 'pp.id_unit_kerja = uk.id AND pp.id_personil=' . $this->session->user['id_personil']);
@@ -75,9 +75,6 @@ class Tugas_saya extends MY_Controller {
             }
             $this->db->where('id', $this->input->post('id_tugas'));
             $this->db->update('tugas');
-            $this->db->set('id_position_personil', $this->input->post('jabatan'));
-            $this->db->where('id_tugas', $this->input->post('id_tugas'));
-            $this->db->update('personil_task');
             $this->db->set('tanggal', $this->input->post('jadwal'));
             $this->db->where('id', $this->input->post('id_jadwal'));
             $this->db->update('jadwal');
