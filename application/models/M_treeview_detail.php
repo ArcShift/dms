@@ -189,6 +189,11 @@ class M_treeview_detail extends CI_Model {
                 }
             }
         }
+        foreach ($result as $k => $r) {
+            $this->db->select('dp.*, p.name');
+            $this->db->join('pasal p', 'p.id = dp.id_pasal');
+            $result[$k]['pasal_dokumen'] = $this->db->get_where('document_pasal dp', ['dp.id_document' => $r['id']])->result();
+        }
         return $result;
     }
 
@@ -280,6 +285,16 @@ class M_treeview_detail extends CI_Model {
                 $result[$i]['personil'] = [];
             }
         }
+        foreach ($result as $k => $r) {
+            $this->db->select('dp.*, p.name');
+            $this->db->join('document_pasal dp', 'dp.id = pt.id_document_pasal');
+            $this->db->join('pasal p', 'p.id = dp.id_pasal');
+            $result[$k]['pasal_tugas'] = $this->db->get_where('pasal_tugas pt', ['pt.id_tugas' => $r['id']])->result_array();
+            $result[$k]['pasal_tugas_id'] = [];
+            foreach ($result[$k]['pasal_tugas'] as $k2 => $pt) {
+                array_push($result[$k]['pasal_tugas_id'], $pt['id']);
+            }
+        }
         return $result;
     }
 
@@ -311,6 +326,35 @@ class M_treeview_detail extends CI_Model {
             return $this->db->delete('tugas');
         }
         return false;
+    }
+
+    function editPasal($id_tugas) {
+        $add = [];
+        if (!empty($this->input->post('pasal'))) {
+            $input = $this->input->post('pasal');
+            $this->db->where('id_tugas', $id_tugas);
+            $result = $this->db->get('pasal_tugas')->result_array();
+            $db = [];
+            foreach ($result as $r) {
+                array_push($db, $r['id_document_pasal']);
+            }
+            $remove = array_diff($db, $input);
+            $add = array_diff($input, $db);
+            foreach ($remove as $r) {
+                $this->db->where('id_tugas', $id_tugas);
+                $this->db->where('id_document_pasal', $r);
+                $this->db->delete('pasal_tugas');
+            }
+            foreach ($add as $a) {
+                $this->db->set('id_tugas', $id_tugas);
+                $this->db->set('id_document_pasal', $a);
+                $this->db->insert('pasal_tugas');
+            }
+        } else {//remove all data
+            $this->db->where('id_tugas', $id_tugas);
+            $this->db->delete('pasal_tugas');
+        }
+        return $add;
     }
 
     function editPenerima($id_tugas) {

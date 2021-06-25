@@ -507,7 +507,7 @@ if ($role == 'anggota') {
         </div>
     </div>
 </div>
-<!-- MODAL DISTRIBUSI -->
+<!-- MODAL DISTRIBUSI 
 <div class="modal fade" id="modalDistribusi" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <form method="post" id="formDistribusi">
@@ -584,7 +584,7 @@ if ($role == 'anggota') {
             </div>
         </form>
     </div>
-</div>
+</div>-->
 <!--MODAL TUGAS-->
 <div class="modal fade" id="modalTugas">
     <div class="modal-dialog modal-lg" role="document">
@@ -617,7 +617,8 @@ if ($role == 'anggota') {
                             </div>
                             <div class="form-group">
                                 <label><b>Pasal</b></label>
-                                <div class="form-control input-pasal overflow-auto" style="height: 100px"></div>
+                                <select class="form-control input-field select-pasal select-2" multiple="" name="pasal[]" style="width: 100%"></select>
+                                <!--<div class="form-control input-pasal overflow-auto" style="height: 100px"></div>-->
                             </div>
                         </div>
                         <div class="col-sm-6">
@@ -648,7 +649,7 @@ if ($role == 'anggota') {
                             </div>
                             <div class="form-group">
                                 <label><b>PIC Pelaksana</b></label>
-                                <select class="form-control input-field select-2 multiselect-dropdown" multiple="" style="width: 100% !important;" name="penerima[]"></select>
+                                <select class="form-control input-field select-pelaksana select-2 multiselect-dropdown" multiple="" style="width: 100% !important;" name="penerima[]"></select>
                             </div>
                         </div>
                     </div>
@@ -1287,9 +1288,7 @@ if ($role == 'anggota') {
             $('.input-form-terkait').append('<option value="">-- form terkait --</option>');
             for (var i = 0; i < sortDokumen.length; i++) {
                 var d = sortDokumen[i];
-                console.log(d.jenis);
                 if (d.jenis < 4 & d.jenis >= 1) {
-                    console.log('in');
                     var listTugas = '';
                     var listPersonil = '';
                     var listPersonil2 = [];
@@ -1940,6 +1939,7 @@ if ($role == 'anggota') {
         m.find('.modal-title').text('Tambah Tugas');
         m.find('.input-id').val('');
         m.find('.input-pasal').html(d.txt_pasals_span);
+//        m.find('.input-pasal').html(d.txt_pasals_span);
         m.find('.input-document-id').val(d.id);
         m.find('.input-document-judul').val(d.judul);
         m.find('.input-field').prop('disabled', false);
@@ -1947,6 +1947,7 @@ if ($role == 'anggota') {
 //        m.find('.btn-save').show();
         m.find('.btn-delete').hide();
         m.find('.item-view').hide();
+        loadPasalTugas(index);
         loadUserDistribusi(index);
     }
     $('#formTugas').on("submit", function (e) {
@@ -1986,7 +1987,9 @@ if ($role == 'anggota') {
         m.find('.input-field').prop('disabled', true);
         m.find('.item-edit').hide();
         loadUserDistribusi(t.index_document);
-        m.find('.select-2').val(t.personil).trigger('change');
+        loadPasalTugas(t.index_document);
+        m.find('.select-pasal').val(t.pasal_tugas_id).trigger('change');
+        m.find('.select-pelaksana').val(t.personil).trigger('change');
     }
     function initEditTugas(index) {
         detailTugas(index);
@@ -2009,12 +2012,22 @@ if ($role == 'anggota') {
         m.find('.input-delete').val(t.id);
         m.find('.btn-delete').show();
     }
+    function loadPasalTugas(idx){
+        var d = sortDokumen[idx];
+        var m = $('#modalTugas');
+        m.find('.select-pasal').empty();
+        for (var i = 0; i < d.pasal_dokumen.length; i++) {
+            var pd= d.pasal_dokumen[i];
+            m.find('.select-pasal').append(new Option(pd.name, pd.id, false, false));
+        }
+        m.find('.select-pasal').trigger('change');
+    }
     function loadUserDistribusi(idx) {
         var d = sortDokumen[idx];
         var m = $('#modalTugas');
-        m.find('.select-2').empty();
+        m.find('.select-pelaksana').empty();
         for (var i = 0; i < d.distribution.length; i++) {
-            m.find('.select-2').append(new Option(personil[d.indexDistribusi[i]].fullname, personil[d.indexDistribusi[i]].id, false, false));
+            m.find('.select-pelaksana').append(new Option(personil[d.indexDistribusi[i]].fullname, personil[d.indexDistribusi[i]].id, false, false));
         }
         m.find('select-2').trigger('change');
     }

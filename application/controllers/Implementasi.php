@@ -171,6 +171,7 @@ class Implementasi extends MY_Controller {
             }
         } else {
             $id_tugas = $this->model->tugas();
+            $this->model->editPasal($id_tugas);
             $penerima = $this->model->editPenerima($id_tugas);
             $result['message'] = 'Berhasil';
             foreach ($penerima as $p) {
