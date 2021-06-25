@@ -10,7 +10,7 @@
 </style>
 <div class="card">
     <div class="card-body">
-        <button class="btn btn-sm btn-outline-primary mb-2" id="createProject">Buat Tugas Baru</button>
+        <button class="btn btn-sm btn-outline-primary mb-2" id="createProject">Buat Proyek Baru</button>
         <form method="post">
             <table class="table" id="tableMain" style="width: 100%">
                 <thead>
