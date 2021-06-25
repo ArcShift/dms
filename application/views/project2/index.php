@@ -125,7 +125,7 @@
                 '<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">' +
 //                '<a class="dropdown-item" href="#">Detail</a>' +
                 '<a class="dropdown-item" onclick="initEdit(' + idx + ')">Ubah</a>' +
-                '<button class="dropdown-item" name="idData" value="' + d.id + '">Tugas</a>' +
+                '<button class="dropdown-item" name="idData" value="' + d.id + '">Tugas</button>' +
                 (d.tugas == 0 ? '<a class="dropdown-item" onclick="initDelete(' + idx + ')">Hapus</a>' : '') +
                 '</div>' +
                 '</div>' +
