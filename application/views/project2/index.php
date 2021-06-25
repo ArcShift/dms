@@ -184,6 +184,9 @@
                     data = JSON.parse(data);
                     if (data.status == 'success') {
                         getProject();
+                        if(data.idData!=null){
+                            window.location.replace('<?php echo site_url($module . '/tugas') ?>');
+                        }
                         if (data.message) {
                             $('#modalNotif .modal-message').html(data.message);
                         } else {

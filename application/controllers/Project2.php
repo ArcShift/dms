@@ -3,11 +3,12 @@
 class Project2 extends MY_Controller {
 
     protected $module = 'project2';
+
     public function __construct() {
         parent::__construct();
         $this->load->model('m_position_personil');
     }
-        
+
     function index() {
         if ($this->input->post('idData')) {
             $this->session->set_userdata('idData', $this->input->post('idData'));
@@ -36,11 +37,14 @@ class Project2 extends MY_Controller {
     }
 
     function set() {//
+        $idData = null;
         if ($this->input->post('mode') == 'create') {
             $this->db->set('id_company', $this->session->activeCompany['id']);
             $this->db->set('nama', $this->input->post('name'));
             $this->db->set('deskripsi', $this->input->post('desc'));
             $this->db->insert('project');
+            $idData = $this->db->insert_id();
+            $this->session->idData = $idData;
         } elseif ($this->input->post('mode') == 'hapus') {
             $this->db->where('id', $this->input->post('id'));
             $this->db->delete('project');
@@ -50,7 +54,7 @@ class Project2 extends MY_Controller {
             $this->db->where('id', $this->input->post('id'));
             $this->db->update('project');
         }
-        echo json_encode(['status' => 'success']);
+        echo json_encode(['status' => 'success', 'idData' => $idData]);
     }
 
     function tugas() {
@@ -99,10 +103,12 @@ class Project2 extends MY_Controller {
         }
         echo json_encode($tugas);
     }
-    function get_personil_dokumen(){
+
+    function get_personil_dokumen() {
         $personil = $this->m_position_personil->get_by_document($this->input->get('id'));
         echo json_encode($personil);
     }
+
     function set_tugas() {
         $msg = [];
         $msg['status'] = 'success';
