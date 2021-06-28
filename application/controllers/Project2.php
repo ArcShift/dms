@@ -31,7 +31,7 @@ class Project2 extends MY_Controller {
         $this->db->group_by('p.id');
         $data = $this->db->get_where('project p', ['p.id_company' => $this->session->activeCompany['id']])->result();
         foreach ($data as $k => $d) {
-//            $data[$k]->pelaksana = $this->m_position_personil->get_pelaksana_project($d->id);
+            $data[$k]->pelaksana = $this->m_position_personil->get_pelaksana_project($d->id);
         }
         echo json_encode($data);
     }

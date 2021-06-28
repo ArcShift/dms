@@ -114,7 +114,7 @@
         return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">' +
                 '<tr>' +
                 '<td>Pelaksana:</td>' +
-                '<td>' + d.pelaksana + '</td>' +
+                '<td>' + d.pelaksanaImg + '</td>' +
                 '</tr>' +
                 '<tr>' +
                 '<td>Aksi:</td>' +
@@ -139,8 +139,13 @@
             tbMain.clear();
             for (var i = 0; i < data.length; i++) {
                 var d = data[i];
+                data[i].pelaksanaImg = '';
 //                data[i].pelaksana = '<img src="<?= base_url('assets/images/default_user.jpg') ?>" width="30" title="Toimul Setyo Andri - IT">';
-                data[i].pelaksana = '-';
+//                data[i].pelaksana = '-';
+                for (var j = 0; j < d.pelaksana.length; j++) {
+                    var pel = d.pelaksana[j];
+                    data[i].pelaksanaImg += '<img class="rounded-circle" style="object-fit: cover" src="' + (pel.photo == null ? '<?= base_url('assets/images/default_user.jpg') ?>' : '<?= base_url('upload/profile_photo/') ?>' + pel.photo) + '" width="30" height="30" title="' + pel.personil + '">';
+                }
                 data[i].status = 'n%';
                 tbMain.row.add([
                     '',
@@ -184,7 +189,7 @@
                     data = JSON.parse(data);
                     if (data.status == 'success') {
                         getProject();
-                        if(data.idData!=null){
+                        if (data.idData != null) {
                             window.location.replace('<?php echo site_url($module . '/tugas') ?>');
                         }
                         if (data.message) {
