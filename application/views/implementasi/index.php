@@ -1339,6 +1339,8 @@ if ($role == 'anggota') {
                                         break;
                                     }
                                 }
+                                
+//                                console.log(t.form_terkait +' - '+ t.index_form_terkait );
                                 var btnDetail = '<span class="text-primary fa fa-info-circle" title="Detail" onclick="detailTugas(' + sortTugas.length + ')"></span>&nbsp';
                                 var btnEdit = '<span class="text-primary fa fa-edit" title="Edit" onclick="initEditTugas(' + sortTugas.length + ')"></span>&nbsp';
                                 var btnHapus = '<span class="text-danger fa fa-trash" title="Hapus" onclick="initDeleteTugas(' + sortTugas.length + ')"></span>';
@@ -1959,6 +1961,7 @@ if ($role == 'anggota') {
     }
     function detailTugas(index) {
         var t = sortTugas[index];
+        console.log(t);
         var m = $('#modalTugas');
         m.modal('show');
         m.find('form').trigger('reset');
@@ -1971,7 +1974,7 @@ if ($role == 'anggota') {
         m.find('.input-form-terkait').val(t.form_terkait);
         m.find('.select-proyek').val(t.id_project);
         m.find('.item-view').show();
-        if (t.form_terkait != null) {
+        if (t.index_form_terkait != null) {
             var dt = sortDokumen[t.index_form_terkait];
             m.find('.input-detail-form-terkait').val(dt.judul);
             m.find('.input-group-append').empty();

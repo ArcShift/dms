@@ -304,12 +304,12 @@ class M_treeview_detail extends CI_Model {
         $this->db->set('sifat', $this->input->post('sifat'));
         if ($this->input->post('proyek')) {
             $this->db->set('id_project', $this->input->post('proyek'));
-        }else{
+        } else {
             $this->db->set('id_project', NULL);
         }
         if ($this->input->post('form_terkait')) {
             $this->db->set('form_terkait', $this->input->post('form_terkait'));
-        }else{
+        } else {
             $this->db->set('form_terkait', NULL);
         }
         if ($this->input->post('id')) {//UPDATE
@@ -602,15 +602,19 @@ class M_treeview_detail extends CI_Model {
         $this->db->join('pasal_access pa', 'pa.id_pasal = p.id AND pa.id_company = ' . $company, 'LEFT');
         $this->db->join('document_pasal dp', 'dp.id_pasal = p.id', 'LEFT');
         $this->db->join('document d', 'd.id = dp.id_document AND d.id_company = ' . $company, 'LEFT');
-        $this->db->join('tugas t', 't.id_document = d.id', 'LEFT');
+        //join2
+        $this->db->join('pasal_tugas pt', 'pt.id_document_pasal = dp.id', 'LEFT');
+        $this->db->join('tugas t', 't.id = pt.id_tugas', 'LEFT');
+        //end
+//        $this->db->join('tugas t', 't.id_document = d.id', 'LEFT');
         $this->db->join('jadwal j', 'j.id_tugas = t.id', 'LEFT');
         $this->db->join('hope h', 'h.id_pasal = p.id', 'LEFT');
+
         $this->db->where('p.id_standard', $standard);
         $this->db->where('pa.status IS NULL');
         $this->db->or_where('pa.status', 'ENABLE');
         $this->db->order_by('p.id');
-//        $this->db->group_by('p.id');
-        $this->db->group_by('p.id, p.parent, h.persentase');
+        $this->db->group_by('p.id');
         $pasal = $this->db->get('pasal p')->result_array();
         foreach ($pasal as $k => $p) {
             $pasal[$k]['indexChild'] = [];
