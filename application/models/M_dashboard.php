@@ -68,7 +68,7 @@ class M_dashboard extends CI_Model {
             $p['doc'] = count($data);
 //            $p['que'] = $this->db->last_query();
 //            GET COUNT IMP
-            $this->db->select('COUNT(j.id) AS jd, SUM(IF(j.path IS NULL, 0, 1)) AS complete');
+            $this->db->select('COUNT(j.id) AS jd, SUM(IF(j.upload_date <= j.tanggal AND j.upload_date IS NOT NULL,1,0)) AS complete');
             $this->db->join('tugas t', 't.id = j.id_tugas');
             $this->db->join('personil_task pt', 'pt.id_tugas = t.id');
             if (!empty($unit_kerja)) {
@@ -76,8 +76,10 @@ class M_dashboard extends CI_Model {
             } elseif (!empty($personil)) {
                 $this->db->join('position_personil pp', 'pp.id = pt.id_position_personil AND pp.id = ' . $personil);
             }
-            $this->db->join('document d', 'd.id = t.id_document');
-            $this->db->join('document_pasal dp', 'dp.id_document = d.id AND dp.id_pasal = ' . $p['id']);
+//            $this->db->join('document d', 'd.id = t.id_document');
+            $this->db->join('pasal_tugas pt2', 'pt2.id_tugas = t.id');
+            $this->db->join('document_pasal dp', 'dp.id = pt2.id_document_pasal AND dp.id_pasal = ' . $p['id']);
+            
             $this->db->group_by('dp.id_pasal');
             $data = $this->db->get('jadwal j')->row();
             $p['jadwal'] = empty($data) ? '0' : $data->jd;
