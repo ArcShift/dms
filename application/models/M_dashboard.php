@@ -68,7 +68,8 @@ class M_dashboard extends CI_Model {
             $p['doc'] = count($data);
 //            $p['que'] = $this->db->last_query();
 //            GET COUNT IMP
-            $this->db->select('COUNT(j.id) AS jd, SUM(IF(j.upload_date <= j.tanggal AND j.upload_date IS NOT NULL,1,0)) AS complete');
+//            $this->db->select('COUNT(j.id) AS jd, SUM(IF(j.upload_date <= j.tanggal AND j.upload_date IS NOT NULL,1,0)) AS complete');
+            $this->db->select('COUNT(j.id) AS jd, SUM(IF(j.upload_date IS NOT NULL,1,0)) AS complete');
             $this->db->join('tugas t', 't.id = j.id_tugas');
             $this->db->join('personil_task pt', 'pt.id_tugas = t.id');
             if (!empty($unit_kerja)) {

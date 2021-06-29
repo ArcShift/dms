@@ -32,7 +32,6 @@ if (empty($this->session->activeCompany)) {
                 </a>
             <?php } ?>
         </div>
-
     </div>
     <!--MENU PERSONIL-->
     <div class="d-inline-block dropdown ml-1" id="menuPersonil">
