@@ -3,12 +3,12 @@
 ?>
 <style>
     td.details-control {
-        background: url('https://datatables.net/examples/resources/details_open.png') no-repeat center center;
+        background: url('https://datatables.net/examples/resources/details_open.png') no-repeat center;
         cursor: pointer;
         width: 30px;
     }
     tr.shown td.details-control {
-        background: url('https://datatables.net/examples/resources/details_close.png') no-repeat center center;
+        background: url('https://datatables.net/examples/resources/details_close.png') no-repeat center;
     }
 </style>
 <div class="card">
@@ -72,7 +72,7 @@
                             </div>
                             <div class="form-group">
                                 <label><b>SOP Terkait</b></label>
-                                <select class="form-control select-dokumen" name="dokumen" required="">
+                                <select class="form-control select-dokumen" id="selectDokumen" name="dokumen" required="">
                                     <option value="">~ Dokumen ~</option>
                                     <?php foreach ($dokumen as $k => $d) { ?>
                                         <option value="<?= $d->id ?>"><?= $d->judul ?></option>
@@ -88,15 +88,19 @@
                                     <?php } ?>
                                 </select>
                             </div>
-                        </div>
-                        <div class="col-sm-6">
                             <div class="form-group">
                                 <label><b>Unit Kerja</b></label>
-                                <select class="form-control" required="" name="jabatan[]">
+                                <select class="form-control" required="" name="jabatan">
                                     <?php foreach ($unit_kerja as $k => $uk) { ?>
                                         <option value="<?= $uk->jabatan ?>"><?= $uk->name ?></option>
                                     <?php } ?>
                                 </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label><b>Pelaksana Tugas</b></label>
+                                <select class="form-control select-personil select2" id="selectPelaksana" multiple="" required="" name="pelaksana[]" style="width: 100% !important;"></select>
                             </div>
                             <div class="form-group">
                                 <label><b>Sifat</b></label>
@@ -205,6 +209,7 @@
     </div>
 </div>
 <script>
+    var pel = [];
     $(document).ready(function () {
         tbMain = $('#tableMain').DataTable({
             "bLengthChange": false,
@@ -268,12 +273,25 @@
         m.find('.modal-title').html('Buat Tugas Baru');
         $('#formTugas').trigger('reset');
         $('#submitButton').attr('name', 'newTugas');
-        m.find('.select-personil').val('').trigger('change');
+        $('#selectDokumen').change();
         m.find('.input-mode').val('create');
     });
     $('#formTugas').submit(function (e) {
         e.preventDefault();
         post(this, 'set');
+    });
+    $('#selectDokumen').change(function () {
+        $.getJSON('<?= site_url('project2/get_personil_dokumen') ?>', {id: $(this).val()}, function (data) {
+            console.log(data);
+            $('#selectPelaksana').empty();
+            for (var i = 0; i < data.length; i++) {
+                var d = data[i];
+                $('#selectPelaksana').append(new Option(d.personil, d.id, false, false));
+            }
+            $('#selectPelaksana').val(pel).trigger('change');
+            $('#selectPelaksana').trigger('change');
+
+        });
     });
     function initEdit(idx) {
         var m = $('#modalTugasBaru');
@@ -285,11 +303,16 @@
         m.find('.input-id-tugas').prop('required', true);
         m.find('.input-id-tugas').val(d.id_tugas);
         m.find('.select-dokumen').val(d.id_document);
+        $('#selectDokumen').change();
         m.find('.input-tugas').val(d.tugas);
         m.find('.input-id-jadwal').val(d.id);
         m.find('.select-form').val(d.form_terkait);
         m.find('.select-sifat').val(d.sifat);
         m.find('.input-tanggal').val(d.tanggal);
+        pel = [];
+        for (var p of d.pelaksana) {
+            pel.push(p.id);
+        }
         m.find('.input-mode').val('edit');
     }
     function initDelete(idx) {
@@ -351,7 +374,19 @@
     });
     function format(idx) {
         var d = tugas[idx];
+        var pembuat = ' - ';
+        var editDelete = '';
+        if (d.pembuat != null) {
+            pembuat = '<img class="rounded-circle" style="object-fit: cover" src="' + (d.photo == null ? '<?= base_url('assets/images/default_user.jpg') ?>' : '<?= base_url('upload/profile_photo/') ?>' + d.photo) + '" width="30" height="30" title="' + d.pembuat + '">';
+            editDelete = '<a class="dropdown-item" onclick="initEdit(' + idx + ')">Ubah</a>'
+                    + '<a class="dropdown-item" onclick="initDelete(' + idx + ')">Hapus</a>';
+        }
+
         return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">' +
+                '<tr>' +
+                '<td>Pemberi Tugas:</td>' +
+                '<td>' + pembuat + '</td>' +
+                '</tr>' +
                 '<tr>' +
                 '<td>Proyek:</td>' +
                 '<td>' + (d.project == null ? '-' : d.project) + '</td>' +
@@ -365,8 +400,7 @@
                 '<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">' +
 //                '<a class="dropdown-item" href="#">Detail</a>' +
                 '<a class="dropdown-item" onclick="initUpload(' + idx + ')">Upload</a>' +
-                '<a class="dropdown-item" onclick="initEdit(' + idx + ')">Ubah</a>' +
-                '<a class="dropdown-item" onclick="initDelete(' + idx + ')">Hapus</a>' +
+                editDelete +
                 '</div>' +
                 '</div>' +
                 '</td>' +

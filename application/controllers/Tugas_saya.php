@@ -16,12 +16,19 @@ class Tugas_saya extends MY_Controller {
     }
 
     function get() {
-        $this->db->select('j.*, t.nama AS tugas, p.nama AS project, t.id_document, t.form_terkait, t.sifat');
+        $this->db->select('j.*, t.nama AS tugas, p.nama AS project, t.id_document, t.form_terkait, t.sifat, u.photo, CONCAT(p2.fullname, " - ", uk.name) AS pembuat');
         $this->db->join('tugas t', 't.id = j.id_tugas');
-        $this->db->join('personil_task pt', 'pt.id_tugas = t.id');
-        $this->db->join('position_personil pp', 'pp.id = pt.id_position_personil AND pp.id_personil =' . $this->session->user['id_personil']);
+        $this->db->join('personil_task pt', 'pt.id_tugas = t.id', 'LEFT');
+        $this->db->join('position_personil pp', 'pp.id = pt.id_position_personil', 'LEFT');
         $this->db->join('project p', 'p.id = t.id_project', 'LEFT');
+        $this->db->join('position_personil pp2', 'pp2.id = t.pembuat', 'LEFT');
+        $this->db->join('personil p2', 'p2.id = pp2.id_personil', 'LEFT');
+        $this->db->join('unit_kerja uk', 'uk.id = pp2.id_unit_kerja', 'LEFT');
+        $this->db->join('users u', 'u.id_personil = p2.id', 'LEFT');
         $this->db->order_by('j.id', 'DESC');
+        $this->db->group_by('j.id');
+        $this->db->where('pp2.id_personil', $this->session->user['id_personil']);
+        $this->db->or_where('pp.id_personil', $this->session->user['id_personil']);
         $data = $this->db->get('jadwal j')->result();
         foreach ($data as $k => $t) {
             if (!empty($t->tanggal) & !empty($t->upload_date)) {
@@ -53,15 +60,17 @@ class Tugas_saya extends MY_Controller {
             $this->db->set('id_document', $this->input->post('dokumen'));
             $this->db->set('nama', $this->input->post('nama'));
             $this->db->set('sifat', $this->input->post('sifat'));
-            $this->db->set('asal', 'MANDIRI');
+            $this->db->set('pembuat', $this->input->post('jabatan'));
             if ($this->input->post('form_terkait')) {
                 $this->db->set('form_terkait', $this->input->post('form_terkait'));
             }
             $this->db->insert('tugas');
             $id = $this->db->insert_id();
-            $this->db->set('id_tugas', $id);
-            $this->db->set('id_position_personil', $this->input->post('jabatan'));
-            $this->db->insert('personil_task');
+            foreach ($this->input->post('pelaksana') as $k => $p) {
+                $this->db->set('id_tugas', $id);
+                $this->db->set('id_position_personil', $p);
+                $this->db->insert('personil_task');
+            }
             $this->db->set('id_tugas', $id);
             $this->db->set('tanggal', $this->input->post('jadwal'));
             $this->db->insert('jadwal');
@@ -69,7 +78,6 @@ class Tugas_saya extends MY_Controller {
             $this->db->set('id_document', $this->input->post('dokumen'));
             $this->db->set('nama', $this->input->post('nama'));
             $this->db->set('sifat', $this->input->post('sifat'));
-            $this->db->set('pembuat', $this->input->post('pembuat'));
             if ($this->input->post('proyek')) {
                 $this->db->set('id_project', $this->input->post('proyek'));
             }
@@ -78,6 +86,8 @@ class Tugas_saya extends MY_Controller {
             $this->db->set('tanggal', $this->input->post('jadwal'));
             $this->db->where('id', $this->input->post('id_jadwal'));
             $this->db->update('jadwal');
+            $this->load->model('m_tugas');
+            $this->m_tugas->editPelaksana($this->input->post('id_tugas'), $this->input->post('pelaksana'));
         } elseif ($this->input->post('mode') == 'delete') {
             $this->db->where('id_tugas', $this->input->post('id'));
             $this->db->delete('personil_task');

@@ -7,6 +7,7 @@ class Project2 extends MY_Controller {
     public function __construct() {
         parent::__construct();
         $this->load->model('m_position_personil');
+        $this->load->model('m_log');
     }
 
     function index() {
@@ -44,15 +45,19 @@ class Project2 extends MY_Controller {
             $this->db->set('deskripsi', $this->input->post('desc'));
             $this->db->insert('project');
             $idData = $this->db->insert_id();
+            $this->m_log->create_project($idData);
             $this->session->idData = $idData;
         } elseif ($this->input->post('mode') == 'hapus') {
+            $result = $this->db->get_where('project', ['id' => $this->input->post('id')])->row();
             $this->db->where('id', $this->input->post('id'));
             $this->db->delete('project');
+            $this->m_log->delete_project($result->nama);
         } elseif ($this->input->post('mode') == 'edit') {
             $this->db->set('nama', $this->input->post('name'));
             $this->db->set('deskripsi', $this->input->post('desc'));
             $this->db->where('id', $this->input->post('id'));
             $this->db->update('project');
+            $this->m_log->update_project($this->input->post('id'));
         }
         echo json_encode(['status' => 'success', 'idData' => $idData]);
     }
@@ -116,13 +121,16 @@ class Project2 extends MY_Controller {
             $this->db->set('id_document', $this->input->post('dokumen'));
             $this->db->set('nama', $this->input->post('nama'));
             $this->db->set('sifat', $this->input->post('sifat'));
-            $this->db->set('pembuat', $this->input->post('pembuat'));
+            if ($this->input->post('form_terkait')) {
+                $this->db->set('pembuat', $this->input->post('form_terkait'));
+            }
             if ($this->input->post('form_terkait')) {
                 $this->db->set('form_terkait', $this->input->post('form_terkait'));
             }
             $this->db->set('id_project', $this->session->idData);
             $this->db->insert('tugas');
             $id = $this->db->insert_id();
+            $this->m_log->create_tugas($id);
             foreach ($this->input->post('personil') as $k => $p) {
                 $this->db->set('id_tugas', $id);
                 $this->db->set('id_position_personil', $p);
@@ -131,6 +139,7 @@ class Project2 extends MY_Controller {
             $this->db->set('id_tugas', $id);
             $this->db->set('tanggal', $this->input->post('jadwal'));
             $this->db->insert('jadwal');
+            
         } elseif ($this->input->post('mode') == 'edit') {
             $this->db->set('id_document', $this->input->post('dokumen'));
             $this->db->set('nama', $this->input->post('nama'));
