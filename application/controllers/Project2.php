@@ -138,8 +138,7 @@ class Project2 extends MY_Controller {
             }
             $this->db->set('id_tugas', $id);
             $this->db->set('tanggal', $this->input->post('jadwal'));
-            $this->db->insert('jadwal');
-            
+            $this->db->insert('jadwal');            
         } elseif ($this->input->post('mode') == 'edit') {
             $this->db->set('id_document', $this->input->post('dokumen'));
             $this->db->set('nama', $this->input->post('nama'));
@@ -164,7 +163,6 @@ class Project2 extends MY_Controller {
             $this->db->where('id_tugas', $this->input->post('id'));
             $this->db->delete('jadwal');
             $result = $this->db->get_where('tugas', ['id' => $this->input->post('id')])->row();
-            
             $this->db->where('id', $this->input->post('id'));
             $this->db->delete('tugas');
             $this->m_log->delete_tugas($result->nama);
