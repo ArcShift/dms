@@ -152,6 +152,7 @@ class Project2 extends MY_Controller {
             }
             $this->db->where('id', $this->input->post('id_tugas'));
             $this->db->update('tugas');
+            $this->m_log->update_tugas($this->input->post('id_tugas'));
             $this->load->model('m_tugas');
             $this->m_tugas->editPelaksana($this->input->post('id_tugas'), $this->input->post('personil'));
             $this->db->set('tanggal', $this->input->post('jadwal'));
@@ -162,8 +163,11 @@ class Project2 extends MY_Controller {
             $this->db->delete('personil_task');
             $this->db->where('id_tugas', $this->input->post('id'));
             $this->db->delete('jadwal');
+            $result = $this->db->get_where('tugas', ['id' => $this->input->post('id')])->row();
+            
             $this->db->where('id', $this->input->post('id'));
             $this->db->delete('tugas');
+            $this->m_log->delete_tugas($result->nama);
             $this->data['msgSuccess'] = 'Berhasil Menghapus Data';
         } elseif ($this->input->post('upload')) {
             $step = true;

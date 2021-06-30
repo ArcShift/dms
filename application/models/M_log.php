@@ -121,12 +121,19 @@ class M_log extends CI_Model {
         $this->db->set('id_user', $this->session->user['id']);
         $this->db->insert('log');
     }
-//    function update_update($id) {
-//        $result = $this->db->get_where('project', ['id' => $id])->row();
-//        $this->db->set('desc', '<b>' . $this->session->user['fullname'] . '</b> mengubah proyek <b>' . $result->nama . '</b>');
-//        $this->db->set('type', 'U_PRO');
-//        $this->db->set('target', $id);
-//        $this->db->set('id_user', $this->session->user['id']);
-//        $this->db->insert('log');
-//    }
+
+    function update_tugas($id) {
+        $result = $this->db->get_where('tugas', ['id' => $id])->row();
+        $this->db->set('desc', '<b>' . $this->session->user['fullname'] . '</b> mengubah tugas <b>' . $result->nama . '</b>');
+        $this->db->set('type', 'U_TSK');
+        $this->db->set('target', $id);
+        $this->db->set('id_user', $this->session->user['id']);
+        $this->db->insert('log');
+    }
+    function delete_tugas($name) {
+        $this->db->set('desc', '<b>' . $this->session->user['fullname'] . '</b> menghapus tugas <b>' . $name . '</b>');
+        $this->db->set('type', 'D_PRO');
+        $this->db->set('id_user', $this->session->user['id']);
+        $this->db->insert('log');
+    }
 }
