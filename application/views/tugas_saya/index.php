@@ -1,5 +1,5 @@
 <?php
-//print_r($this->session->user);
+    print_r($this->session->user);
 ?>
 <style>
     td.details-control {
@@ -290,7 +290,6 @@
             }
             $('#selectPelaksana').val(pel).trigger('change');
             $('#selectPelaksana').trigger('change');
-
         });
     });
     function initEdit(idx) {
@@ -376,12 +375,13 @@
         var d = tugas[idx];
         var pembuat = ' - ';
         var editDelete = '';
-        if (d.pembuat != null) {
+        if (d.pembuat != null ) {
             pembuat = '<img class="rounded-circle" style="object-fit: cover" src="' + (d.photo == null ? '<?= base_url('assets/images/default_user.jpg') ?>' : '<?= base_url('upload/profile_photo/') ?>' + d.photo) + '" width="30" height="30" title="' + d.pembuat + '">';
+        }
+        if(d.filter){
             editDelete = '<a class="dropdown-item" onclick="initEdit(' + idx + ')">Ubah</a>'
                     + '<a class="dropdown-item" onclick="initDelete(' + idx + ')">Hapus</a>';
         }
-
         return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">' +
                 '<tr>' +
                 '<td>Pemberi Tugas:</td>' +

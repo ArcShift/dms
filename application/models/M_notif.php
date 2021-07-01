@@ -1,6 +1,7 @@
 <?php
 
 class M_notif extends CI_Model {
+
     private $table = 'notification';
 
     private function time_elapsed_string($datetime, $full = false) {
@@ -38,6 +39,20 @@ class M_notif extends CI_Model {
         $this->db->insert('notification');
     }
 
+    function set2($id_personil, $type, $id_target, $pesan) {
+        $this->db->select('u.*');
+        $this->db->join('personil p', 'p.id = u.id_personil');
+        $this->db->join('position_personil pp', 'pp.id_personil = p.id AND pp.id ='. $id_personil);
+        $user = $this->db->get('users u')->row();
+        if (!empty($user)) {
+            $this->db->set('penerima', $user->id);
+            $this->db->set('type', $type);
+            $this->db->set('target', $id_target);
+            $this->db->set('pesan', $pesan);
+            $this->db->insert('notification');
+        }
+    }
+
     function get($limit, $status = null) {
         $this->db->order_by('id', 'DESC');
         $this->db->limit($limit);
@@ -64,9 +79,11 @@ class M_notif extends CI_Model {
         $this->db->set('status', $sw);
         $this->db->update('notification');
     }
+
     function count_unread() {
         $this->db->where('status', 'UNREAD');
         $this->db->where('penerima', $this->session->user['id']);
         return $this->db->count_all_results($this->table);
     }
+
 }

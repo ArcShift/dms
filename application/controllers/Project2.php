@@ -115,6 +115,7 @@ class Project2 extends MY_Controller {
     }
 
     function set_tugas() {
+        $this->load->model('m_notif');
         $msg = [];
         $msg['status'] = 'success';
         if ($this->input->post('mode') == 'create') {
@@ -135,10 +136,11 @@ class Project2 extends MY_Controller {
                 $this->db->set('id_tugas', $id);
                 $this->db->set('id_position_personil', $p);
                 $this->db->insert('personil_task');
+                $this->m_notif->set2($p, 'TASK', $id, 'Anda telah terdaftar sebagai pelaksana tugas untuk tugas dengan judul <b>'.$this->input->post('nama').'</b> di Standar <b>'.$this->session->activeStandard['name'].'</b>');
             }
             $this->db->set('id_tugas', $id);
             $this->db->set('tanggal', $this->input->post('jadwal'));
-            $this->db->insert('jadwal');            
+            $this->db->insert('jadwal'); 
         } elseif ($this->input->post('mode') == 'edit') {
             $this->db->set('id_document', $this->input->post('dokumen'));
             $this->db->set('nama', $this->input->post('nama'));
@@ -153,7 +155,10 @@ class Project2 extends MY_Controller {
             $this->db->update('tugas');
             $this->m_log->update_tugas($this->input->post('id_tugas'));
             $this->load->model('m_tugas');
-            $this->m_tugas->editPelaksana($this->input->post('id_tugas'), $this->input->post('personil'));
+            $pelaksana = $this->m_tugas->editPelaksana($this->input->post('id_tugas'), $this->input->post('personil'));
+            foreach ($pelaksana as $k => $p) {
+                $this->m_notif->set2($p, 'TASK', $this->input->post('id_tugas'), 'Anda telah terdaftar sebagai pelaksana tugas untuk tugas dengan judul <b>'.$this->input->post('nama').'</b> di Standar <b>'.$this->session->activeStandard['name'].'</b>');
+            }
             $this->db->set('tanggal', $this->input->post('jadwal'));
             $this->db->where('id', $this->input->post('id_jadwal'));
             $this->db->update('jadwal');

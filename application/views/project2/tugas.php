@@ -1,4 +1,6 @@
-<?php ?>
+<?php
+//print_r($this->session->);
+?>
 <div class="card">
     <div class="card-header">
         <?= $project->nama ?>

@@ -7,7 +7,7 @@ class Tugas_saya extends MY_Controller {
     function index() {
         $this->subModule = 'read';
         $this->load->model('m_document');
-        $this->data['dokumen'] = $this->m_document->dokumen_saya();
+        $this->data['dokumen'] = $this->m_document->dokumen_tugas();
         $this->data['form_terkait'] = $this->m_document->form_terkait();
         $this->db->select('uk.*, pp.id AS jabatan');
         $this->db->join('position_personil pp', 'pp.id_unit_kerja = uk.id AND pp.id_personil=' . $this->session->user['id_personil']);
@@ -16,7 +16,7 @@ class Tugas_saya extends MY_Controller {
     }
 
     function get() {
-        $this->db->select('j.*, t.nama AS tugas, p.nama AS project, t.id_document, t.form_terkait, t.sifat, u.photo, CONCAT(p2.fullname, " - ", uk.name) AS pembuat');
+        $this->db->select('j.*, t.nama AS tugas, p.nama AS project, t.id_document, t.form_terkait, t.sifat, u.photo, CONCAT(p2.fullname, " - ", uk.name) AS pembuat, pp.id_personil');
         $this->db->join('tugas t', 't.id = j.id_tugas');
         $this->db->join('personil_task pt', 'pt.id_tugas = t.id', 'LEFT');
         $this->db->join('position_personil pp', 'pp.id = pt.id_position_personil', 'LEFT');
@@ -42,6 +42,11 @@ class Tugas_saya extends MY_Controller {
             } else {
                 $t->deadline = '<span class="badge badge-primary">menunggu</span>';
             }
+            if($t->id_personil == $this->session->user['id_personil']){
+                $t->filter = true;
+            }else{
+                $t->filter = false;
+            }
             $this->db->select('pp.id, CONCAT(p.fullname," - ", uk.name) AS fullname, u.photo');
             $this->db->join('position_personil pp', 'pp.id = pt.id_position_personil');
             $this->db->join('personil p', 'p.id = pp.id_personil');
@@ -54,6 +59,7 @@ class Tugas_saya extends MY_Controller {
     }
 
     function set() {
+        $this->load->model('m_notif');
         $msg = [];
         $msg['status'] = 'success';
         if ($this->input->post('mode') == 'create') {
@@ -70,6 +76,7 @@ class Tugas_saya extends MY_Controller {
                 $this->db->set('id_tugas', $id);
                 $this->db->set('id_position_personil', $p);
                 $this->db->insert('personil_task');
+                $this->m_notif->set2($p, 'TASK', $id, 'Anda telah terdaftar sebagai pelaksana tugas untuk tugas dengan judul <b>'.$this->input->post('nama').'</b> di Standar <b>'.$this->session->activeStandard['name'].'</b>');
             }
             $this->db->set('id_tugas', $id);
             $this->db->set('tanggal', $this->input->post('jadwal'));
@@ -87,7 +94,10 @@ class Tugas_saya extends MY_Controller {
             $this->db->where('id', $this->input->post('id_jadwal'));
             $this->db->update('jadwal');
             $this->load->model('m_tugas');
-            $this->m_tugas->editPelaksana($this->input->post('id_tugas'), $this->input->post('pelaksana'));
+            $pelaksana = $this->m_tugas->editPelaksana($this->input->post('id_tugas'), $this->input->post('pelaksana'));
+            foreach ($pelaksana as $k => $p) {
+                $this->m_notif->set2($p, 'TASK', $this->input->post('id_tugas'), 'Anda telah terdaftar sebagai pelaksana tugas untuk tugas dengan judul <b>'.$this->input->post('nama').'</b> di Standar <b>'.$this->session->activeStandard['name'].'</b>');
+            }
         } elseif ($this->input->post('mode') == 'delete') {
             $this->db->where('id_tugas', $this->input->post('id'));
             $this->db->delete('personil_task');
