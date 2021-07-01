@@ -137,6 +137,29 @@ class Project2 extends MY_Controller {
                 $this->db->set('id_position_personil', $p);
                 $this->db->insert('personil_task');
                 $this->m_notif->set2($p, 'TASK', $id, 'Anda telah terdaftar sebagai pelaksana tugas untuk tugas dengan judul <b>'.$this->input->post('nama').'</b> di Standar <b>'.$this->session->activeStandard['name'].'</b>');
+                //NOTIF EMAIL
+                $this->db->select('u.*, p.fullname');
+                $this->db->join('position_personil pp', 'pp.id_personil = p.id AND pp.id = ' . $p);
+                $this->db->join('users u', 'u.id_personil = p.id');
+                $user = $this->db->get('personil p')->row_array();
+                if (!empty($user)) {
+                    $this->db->select('t.nama AS tugas, s.name AS standard');
+                    $this->db->join('document d', 'd.id = t.id_document');
+                    $this->db->join('document_pasal dp', 'dp.id_document = d.id');
+                    $this->db->join('pasal p', 'p.id = dp.id_pasal');
+                    $this->db->join('standard s', 's.id = p.id_standard');
+                    $this->db->where('t.id', $id);
+                    $r = $this->db->get('tugas t')->row_array();
+                    $msg2 = "Anda telah terdaftar sebagai pelaksana tugas untuk tugas dengan judul <b>" . $r['tugas'] . "</b> di Standar <b>" . $r['standard'] . "</b>";
+                    if (!empty($user['email']) & $user['notif_email'] == 'ENABLE') {//cek apakah user memiliki email
+                        $statusEmail = parent::notif_mail($user['email'], $user['fullname'] . ' menerima tugas', $msg2);
+                        if ($statusEmail !== true) {
+                            $result['status'] = 'error';
+                            $result['message'] = 'Gagal mengirim notifikasi email';
+                            $result['message2'] = $statusEmail;
+                        }
+                    }
+                }
             }
             $this->db->set('id_tugas', $id);
             $this->db->set('tanggal', $this->input->post('jadwal'));
@@ -158,6 +181,28 @@ class Project2 extends MY_Controller {
             $pelaksana = $this->m_tugas->editPelaksana($this->input->post('id_tugas'), $this->input->post('personil'));
             foreach ($pelaksana as $k => $p) {
                 $this->m_notif->set2($p, 'TASK', $this->input->post('id_tugas'), 'Anda telah terdaftar sebagai pelaksana tugas untuk tugas dengan judul <b>'.$this->input->post('nama').'</b> di Standar <b>'.$this->session->activeStandard['name'].'</b>');
+                $this->db->select('u.*, p.fullname');
+                $this->db->join('position_personil pp', 'pp.id_personil = p.id AND pp.id = ' . $p);
+                $this->db->join('users u', 'u.id_personil = p.id');
+                $user = $this->db->get('personil p')->row_array();
+                if (!empty($user)) {
+                    $this->db->select('t.nama AS tugas, s.name AS standard');
+                    $this->db->join('document d', 'd.id = t.id_document');
+                    $this->db->join('document_pasal dp', 'dp.id_document = d.id');
+                    $this->db->join('pasal p', 'p.id = dp.id_pasal');
+                    $this->db->join('standard s', 's.id = p.id_standard');
+                    $this->db->where('t.id', $this->input->post('id_tugas'));
+                    $r = $this->db->get('tugas t')->row_array();
+                    $msg2 = "Anda telah terdaftar sebagai pelaksana tugas untuk tugas dengan judul <b>" . $r['tugas'] . "</b> di Standar <b>" . $r['standard'] . "</b>";
+                    if (!empty($user['email']) & $user['notif_email'] == 'ENABLE') {//cek apakah user memiliki email
+                        $statusEmail = parent::notif_mail($user['email'], $user['fullname'] . ' menerima tugas', $msg2);
+                        if ($statusEmail !== true) {
+                            $result['status'] = 'error';
+                            $result['message'] = 'Gagal mengirim notifikasi email';
+                            $result['message2'] = $statusEmail;
+                        }
+                    }
+                }
             }
             $this->db->set('tanggal', $this->input->post('jadwal'));
             $this->db->where('id', $this->input->post('id_jadwal'));

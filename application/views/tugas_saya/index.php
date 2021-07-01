@@ -1,6 +1,3 @@
-<?php
-    print_r($this->session->user);
-?>
 <style>
     td.details-control {
         background: url('https://datatables.net/examples/resources/details_open.png') no-repeat center;
