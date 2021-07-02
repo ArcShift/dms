@@ -159,9 +159,7 @@ class Dev extends CI_Controller {
         print_r(scandir('upload/implementasi'));
     }
     function migration_gap_analisa() {
-        $this->db->select('ga.*');
         $this->db->join('kuesioner k', 'k.id = ks.id_kuesioner');
-        $this->db->join('gap_analisa ga', 'ga.id = k.id_gap_analisa');
         $data = $this->db->get('kuesioner_status ks')->result();
         foreach ($data as $k => $d) {
             $this->db->set('id_gap_analisa', $d->id_gap_analisa);
