@@ -163,7 +163,7 @@ class Dev extends CI_Controller {
         $data = $this->db->get('kuesioner_status ks')->result();
         foreach ($data as $k => $d) {
             $this->db->set('id_gap_analisa', $d->id_gap_analisa);
-            $this->db->insert('kuesioner_status');
+            $this->db->update('kuesioner_status');
         }
     }
 }
