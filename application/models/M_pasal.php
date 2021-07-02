@@ -115,9 +115,12 @@ class M_pasal extends CI_Model {
         }
     }
 
-    function get($id = null) {
+    function get($id = null, $id_standard = null) {
         if (empty($id)) {
-            $this->db->where('id_standard', $this->session->activeStandard['id']);
+            if(empty($id_standard)){
+                $id_standard = $this->session->activeStandard['id'];
+            }
+            $this->db->where('id_standard', $id_standard);
             $this->db->where('parent IS NULL');
             $result = $this->db->get_where('pasal p')->result_array();
             $sort = [];

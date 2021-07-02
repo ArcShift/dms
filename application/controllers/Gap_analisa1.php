@@ -12,6 +12,13 @@ class Gap_analisa1 extends MY_Controller {
     }
 
     function index() {
+        if ($this->session->user['role'] == 'admin') {
+            $this->data['menuStandard'] = 'standardOnly';
+            $pasal = $this->m_pasal->get(null, $this->session->activeStandards['id']);
+        } else {
+            $pasal = $this->m_pasal->get();
+            $this->data['menuStandard'] = 'standard';
+        }
         if ($this->input->post('edit')) {
             $this->session->set_userdata('idData', $this->input->post('edit'));
             redirect($this->module . '/edit');
@@ -41,12 +48,10 @@ class Gap_analisa1 extends MY_Controller {
         }
         $this->subTitle = 'List';
         $this->subModule = 'read';
-        $this->data['menuStandard'] = 'standard';
-        $pasal = $this->m_pasal->get();
         if ($this->session->has_userdata('gapAnalisa')) {
             foreach ($pasal as $k => $p) {
                 $n = 0;
-                $pertanyaan = $this->db->get_where('kuesioner', ['id_pasal' => $p['id'], 'id_gap_analisa' => $this->session->gapAnalisa['id']])->result_array();
+                $pertanyaan = $this->db->get_where('kuesioner', ['id_pasal' => $p['id']])->result_array();
                 foreach ($pertanyaan as $k2 => $p2) {
                     $status = $this->m_kuesioner->getStatus($p2['id']);
                     foreach ($status as $k3 => $s) {
@@ -67,17 +72,16 @@ class Gap_analisa1 extends MY_Controller {
         }
         $this->data['data'] = $pasal;
         if ($this->role == 'admin') {
-            $this->render('index0');
+            $this->render('indexAdmin');
         } else {
             $this->render('index');
         }
     }
 
-    function edit() {
+    function edit() {//EDIT FOR ADMIN
         if ($this->input->post('save')) {
             $this->db->set('kuesioner', $this->input->post('pertanyaan'));
             $this->db->set('id_pasal', $this->session->idData);
-            $this->db->set('id_gap_analisa', $this->session->gapAnalisa['id']);
             $this->db->insert('kuesioner');
         } elseif ($this->input->post('edit')) {
             $this->db->set('kuesioner', $this->input->post('pertanyaan'));
@@ -88,7 +92,7 @@ class Gap_analisa1 extends MY_Controller {
             $this->db->delete('kuesioner');
         }
         $this->data['pasal'] = $this->m_pasal->get($this->session->idData);
-        $this->data['pertanyaan'] = $this->db->get_where('kuesioner', ['id_pasal' => $this->session->idData, 'id_gap_analisa' => $this->session->gapAnalisa['id']])->result_array();
+        $this->data['pertanyaan'] = $this->db->get_where('kuesioner', ['id_pasal' => $this->session->idData])->result_array();
         $this->subTitle = 'Edit';
         $this->render('edit');
     }
@@ -97,6 +101,7 @@ class Gap_analisa1 extends MY_Controller {
         if ($this->input->post('tambah')) {
             $this->db->set('id_kuesioner', $this->session->idData);
             $this->db->set('status', $this->input->post('status'));
+            $this->db->set('id_gap_analisa', $this->session->gapAnalisa['id']);
             $this->db->set('id_unit_kerja', $this->input->post('unit_kerja'));
             $this->db->insert('kuesioner_status');
         } elseif ($this->input->post('edit')) {
