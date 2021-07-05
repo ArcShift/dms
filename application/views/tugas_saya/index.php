@@ -64,19 +64,23 @@
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label><b>Tugas</b></label>
+                                <label><b>Judul Tugas <i class="text-danger">*</i></b></label>
                                 <input class="form-control input-tugas" name="nama" required="">
                             </div>
                             <div class="form-group">
-                                <label><b>SOP Terkait</b></label>
-                                <select class="form-control select-dokumen" id="selectDokumen" name="dokumen" required="">
-                                    <option value="">~ Dokumen ~</option>
-                                    <?php foreach ($dokumen as $k => $d) { ?>
-                                        <option value="<?= $d->id ?>"><?= $d->judul ?></option>
+                                <label><b>Standar</b></label>
+                                <select class="form-control select-dokumen" id="selectStandard" name="standard">
+                                    <option value="">~ Standard ~</option>
+                                    <?php foreach ($standard as $k => $s) { ?>
+                                        <option value="<?= $s->id ?>"><?= $s->name ?></option>
                                     <?php } ?>
                                 </select>
                             </div>
-                            <div class="form-group">
+                            <div class="form-group standard-child">
+                                <label><b>SOP Terkait</b></label>
+                                <select class="form-control select-dokumen" id="selectDokumen" name="dokumen"></select>
+                            </div>
+                            <div class="form-group standard-child">
                                 <label><b>Form Terkait</b></label>
                                 <select class="form-control select-form" name="form_terkait">
                                     <option value="">~ Form Terkait ~</option>
@@ -86,7 +90,7 @@
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label><b>Unit Kerja</b></label>
+                                <label><b>Buat Tugas Sebagai <i class="text-danger">*</i></b></label>
                                 <select class="form-control" required="" name="jabatan">
                                     <?php foreach ($unit_kerja as $k => $uk) { ?>
                                         <option value="<?= $uk->jabatan ?>"><?= $uk->name ?></option>
@@ -96,11 +100,11 @@
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label><b>Pelaksana Tugas</b></label>
+                                <label><b>Pelaksana Tugas <i class="text-danger">*</i></b></label>
                                 <select class="form-control select-personil select2" id="selectPelaksana" multiple="" required="" name="pelaksana[]" style="width: 100% !important;"></select>
                             </div>
                             <div class="form-group">
-                                <label><b>Sifat</b></label>
+                                <label><b>Sifat <i class="text-danger">*</i></b></label>
                                 <select class="form-control select-sifat" required="" name="sifat">
                                     <option value="">~ Sifat ~</option>
                                     <option value="WAJIB">Wajib</option>
@@ -108,7 +112,7 @@
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label><b>Jadwal</b></label>
+                                <label><b>Jadwal <i class="text-danger">*</i></b></label>
                                 <input class="form-control input-tanggal" type="date" name="jadwal" required="" value="<?= date('Y-m-d') ?>">
                             </div>
                         </div>
@@ -270,15 +274,30 @@
         m.find('.modal-title').html('Buat Tugas Baru');
         $('#formTugas').trigger('reset');
         $('#submitButton').attr('name', 'newTugas');
-        $('#selectDokumen').change();
         m.find('.input-mode').val('create');
+        $('#selectStandard').change();
     });
     $('#formTugas').submit(function (e) {
         e.preventDefault();
         post(this, 'set');
     });
+    $('#selectStandard').change(function () {
+        if ($(this).val() == '') {
+            $('.standard-child').hide();
+        } else {
+            $('.standard-child').show();
+            $.getJSON('<?= site_url($module . '/get_dokumen') ?>', {standard: $(this).val()}, function (data) {
+                $('#selectDokumen').empty();
+                $('#selectDokumen').append('<option value="">~ Dokumen ~</option>');
+                for (var i = 0; i < data.length; i++) {
+                    $('#selectDokumen').append('<option value="' + data[i].id + '">' + data[i].judul + '</option>');
+                }
+            });
+        }
+        $('#selectDokumen').change();
+    });
     $('#selectDokumen').change(function () {
-        $.getJSON('<?= site_url('project2/get_personil_dokumen') ?>', {id: $(this).val()}, function (data) {
+        $.getJSON('<?= site_url($module . '/get_pelaksana') ?>', {id: $(this).val()}, function (data) {
             console.log(data);
             $('#selectPelaksana').empty();
             for (var i = 0; i < data.length; i++) {
@@ -372,10 +391,10 @@
         var d = tugas[idx];
         var pembuat = ' - ';
         var editDelete = '';
-        if (d.pembuat != null ) {
+        if (d.pembuat != null) {
             pembuat = '<img class="rounded-circle" style="object-fit: cover" src="' + (d.photo == null ? '<?= base_url('assets/images/default_user.jpg') ?>' : '<?= base_url('upload/profile_photo/') ?>' + d.photo) + '" width="30" height="30" title="' + d.pembuat + '">';
         }
-        if(d.filter){
+        if (d.filter) {
             editDelete = '<a class="dropdown-item" onclick="initEdit(' + idx + ')">Ubah</a>'
                     + '<a class="dropdown-item" onclick="initDelete(' + idx + ')">Hapus</a>';
         }

@@ -7,7 +7,10 @@ class Tugas_saya extends MY_Controller {
     function index() {
         $this->subModule = 'read';
         $this->load->model('m_document');
-        $this->data['dokumen'] = $this->m_document->dokumen_tugas();
+        $this->db->select('s.*');
+        $this->db->join('company_standard cs', 'cs.id_standard = s.id AND cs.id_company = ' . $this->session->activeCompany['id']);
+        $this->data['standard'] = $this->db->get('standard s')->result();
+        $this->data['dokumen'] = $this->m_document->dokumen_tugas(); //remove later
         $this->data['form_terkait'] = $this->m_document->form_terkait();
         $this->db->select('uk.*, pp.id AS jabatan');
         $this->db->join('position_personil pp', 'pp.id_unit_kerja = uk.id AND pp.id_personil=' . $this->session->user['id_personil']);
@@ -63,7 +66,9 @@ class Tugas_saya extends MY_Controller {
         $msg = [];
         $msg['status'] = 'success';
         if ($this->input->post('mode') == 'create') {
+            if ($this->input->post('dokumen')) {
             $this->db->set('id_document', $this->input->post('dokumen'));
+            }
             $this->db->set('nama', $this->input->post('nama'));
             $this->db->set('sifat', $this->input->post('sifat'));
             $this->db->set('pembuat', $this->input->post('jabatan'));
@@ -83,10 +88,10 @@ class Tugas_saya extends MY_Controller {
                 $user = $this->db->get('personil p')->row_array();
                 if (!empty($user)) {
                     $this->db->select('t.nama AS tugas, s.name AS standard');
-                    $this->db->join('document d', 'd.id = t.id_document');
-                    $this->db->join('document_pasal dp', 'dp.id_document = d.id');
-                    $this->db->join('pasal p', 'p.id = dp.id_pasal');
-                    $this->db->join('standard s', 's.id = p.id_standard');
+                    $this->db->join('document d', 'd.id = t.id_document', 'LEFT');
+                    $this->db->join('document_pasal dp', 'dp.id_document = d.id', 'LEFT');
+                    $this->db->join('pasal p', 'p.id = dp.id_pasal', 'LEFT');
+                    $this->db->join('standard s', 's.id = p.id_standard', 'LEFT');
                     $this->db->where('t.id', $id);
                     $r = $this->db->get('tugas t')->row_array();
                     $msg2 = "Anda telah terdaftar sebagai pelaksana tugas untuk tugas dengan judul <b>" . $r['tugas'] . "</b> di Standar <b>" . $r['standard'] . "</b>";
@@ -174,6 +179,23 @@ class Tugas_saya extends MY_Controller {
             }
         }
         echo json_encode($msg);
+    }
+
+    function get_dokumen() {
+        $this->db->where('jenis <> 4');
+        $this->db->where('id_standard', $this->input->get('standard'));
+        $doc = $this->db->get('document')->result();
+        echo json_encode($doc);
+    }
+
+    function get_pelaksana() {
+        $this->load->model('m_position_personil');
+        if ($this->input->get('id')) {
+            $data = $this->m_position_personil->get_by_document($this->input->get('id'));
+        } else {
+            $data = $this->m_position_personil->get_by_company();
+        }
+        echo json_encode($data);
     }
 
 }
