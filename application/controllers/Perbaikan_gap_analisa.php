@@ -36,33 +36,37 @@ class Perbaikan_gap_analisa extends MY_Controller {
         }
         $this->data['menuStandard'] = 'standard';
         $this->subModule = 'read';
-        $pertanyaan = $this->db->get_where('kuesioner', ['id_gap_analisa' => $this->session->gapAnalisa['id']])->result_array();
-        foreach ($pertanyaan as $k2 => $p2) {
-            $status = $this->model->getUnit($p2['id']);
-            foreach ($status as $k3 => $s) {
-                $this->db->select('bga.*, d.judul, d.type_doc');
-                $this->db->join('document d', 'd.id = bga.id_document', 'LEFT');
-                $imp = $this->db->get_where('bukti_perbaikan_gap_analisa bga', ['bga.id_kuesioner_detail' => $s['id']])->result_array();
-                $status[$k3]['implementasi'] = $imp;
-                $status[$k3]['dl'] = 0;
-                if (!empty($imp) & !empty($s['target'])) {
-                    $d1 = new DateTime(date('Y-m-d', strtotime($imp[0]['created_at'])));
-                    $d2 = new DateTime($s['target']);
-                    $status[$k3]['dl'] = $d1->diff($d2);
-                    if ($d1->diff($d2)->invert) {
-                        $status[$k3]['deadline'] = 'danger';
+        if ($this->session->gapAnalisa) {
+            $this->db->select('k.*');
+            $this->db->join('pasal p', 'p.id = k.id_pasal AND p.id_standard = ' . $this->session->activeStandard['id']);
+            $pertanyaan = $this->db->get('kuesioner k')->result_array();
+            foreach ($pertanyaan as $k2 => $p2) {
+                $status = $this->model->getUnit($p2['id']);
+                foreach ($status as $k3 => $s) {
+                    $this->db->select('bga.*, d.judul, d.type_doc');
+                    $this->db->join('document d', 'd.id = bga.id_document', 'LEFT');
+                    $imp = $this->db->get_where('bukti_perbaikan_gap_analisa bga', ['bga.id_kuesioner_detail' => $s['id']])->result_array();
+                    $status[$k3]['implementasi'] = $imp;
+                    $status[$k3]['dl'] = 0;
+                    if (!empty($imp) & !empty($s['target'])) {
+                        $d1 = new DateTime(date('Y-m-d', strtotime($imp[0]['created_at'])));
+                        $d2 = new DateTime($s['target']);
+                        $status[$k3]['dl'] = $d1->diff($d2);
+                        if ($d1->diff($d2)->invert) {
+                            $status[$k3]['deadline'] = 'danger';
+                        } else {
+                            $status[$k3]['deadline'] = 'success';
+                        }
                     } else {
-                        $status[$k3]['deadline'] = 'success';
+                        $status[$k3]['deadline'] = 'secondary';
                     }
-                } else {
-                    $status[$k3]['deadline'] = 'secondary';
                 }
+                $pertanyaan[$k2]['unit'] = $status;
+                $n2 = count($status) + 1;
+                $pertanyaan[$k2]['row'] = $n2;
             }
-            $pertanyaan[$k2]['unit'] = $status;
-            $n2 = count($status) + 1;
-            $pertanyaan[$k2]['row'] = $n2;
+            $this->data['data'] = $pertanyaan;
         }
-        $this->data['data'] = $pertanyaan;
         $this->render('index');
     }
 

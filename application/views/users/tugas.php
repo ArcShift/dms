@@ -1,6 +1,16 @@
 <?php
 //print_r($this->session->user);
 ?>
+<style>
+    td.details-control {
+        background: url('https://datatables.net/examples/resources/details_open.png') no-repeat center;
+        cursor: pointer;
+        width: 30px;
+    }
+    tr.shown td.details-control {
+        background: url('https://datatables.net/examples/resources/details_close.png') no-repeat center;
+    }
+</style>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
 <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
@@ -12,14 +22,15 @@
         <br/>
         <div class="row div-filter">
             <div class="col-sm-2"></div>
+            <div class="col-sm-2"></div>
             <div class="col-sm-2">
-                <input class="form-control form-control-sm" onfocus="(this.type='date')" id="minDate" placeholder="Tanggal Awal">
+                <!--<input class="form-control form-control-sm" onfocus="(this.type='date')" id="minDate" placeholder="Tanggal Awal">-->
+            </div>
+            <div class="col-sm-2 col-search-box">
+                <!--<input class="form-control form-control-sm" onfocus="(this.type='date')" id="maxDate" placeholder="Tanggal Akhir">-->
             </div>
             <div class="col-sm-2">
-                <input class="form-control form-control-sm" onfocus="(this.type='date')" id="maxDate" placeholder="Tanggal Akhir">
-            </div>
-            <div class="col-sm-2">
-                <select class="form-control form-control-sm" id='filterPersonil'>
+                <select class="form-control form-control-sm" id='filterStatus'>
                     <option value="">~ Status ~</option>
                     <option value="selesai">Selesai</option>
                     <option value="terlambat">Terlambat</option>
@@ -29,8 +40,8 @@
             <div class="col-sm-2">
                 <select class="form-control form-control-sm" id='filterPeriode'>
                     <option value="">~ Periode ~</option>
-                    <option value="<?= date('d/m/Y') ?>">Hari ini</option>
-                    <option value="<?= date('m/Y') ?>">Bulan ini</option>
+                    <option value="<?= date('Y-m-d') ?>">Hari ini</option>
+                    <option value="<?= date('Y-m') ?>">Bulan ini</option>
                     <option value="<?= date('Y') ?>">Tahun ini</option>
                 </select>
             </div>
@@ -38,30 +49,34 @@
         <table class="table" id="tbMain">
             <thead>
                 <tr>
-                    <th>Jadwal</th>
+                    <th>#</th>
                     <th>Tugas</th>
-                    <th>Form Terkait</th>
-                    <th>Bukti</th>
+                    <th>Pelaksana</th>
+                    <!--<th>Form Terkait</th>-->
+                    <th>Jadwal</th>
+                    <!--<th>Bukti</th>-->
                     <th>Status</th>
-                    <th>Aksi</th>
+                    <!--<th>Aksi</th>-->
                 </tr>
             </thead>
             <tbody>
                 <?php foreach ($data as $k => $d) { ?>
                     <tr>
-                        <td><?= $d->tanggal ?></td>
+                        <td class="details-control"></td>
                         <td><?= $d->tugas ?></td>
-                        <td><?= empty($d->form_terkait) ? '-' : $d->form_terkait->judul ?></td>
-                        <td><?= $d->path ?></td>
+                        <td>pelaksana</td>
+                        <!--<td><?= empty($d->form_terkait) ? '-' : $d->form_terkait->judul ?></td>-->
+                        <td><?= $d->tanggal ?></td>
+                        <!--<td><?= $d->path ?></td>-->
                         <td><?= $d->deadline ?></td>
-                        <td>
+<!--                        <td>
                             <button class="btn btn-sm btn-outline-primary fa fa-upload" onclick="initUpload(<?= $k ?>)"></button>
                             <button class="btn btn-sm btn-outline-primary fa fa-info-circle" onclick="detail(<?= $k ?>)"></button>
                             <?php if ($d->asal == 'MANDIRI') { ?>
                                 <button class="btn btn-sm btn-outline-primary fa fa-edit" onclick="initEdit(<?= $k ?>)"></button>
                                 <button class="btn btn-sm btn-outline-danger fa fa-trash" onclick="initDelete(<?= $k ?>)"></button>
                             <?php } ?>
-                        </td>
+                        </td>-->
                     </tr>
                 <?php } ?>
             </tbody>
@@ -309,9 +324,22 @@
         $('#minDate, #maxDate').on('change', function () {
             tbMain.draw();
         });
-        $('.dataTables_filter .form-control').attr('placeholder', 'Search');
-        $('.div-filter .col-sm-2').eq(0).append($('.dataTables_filter .form-control'));
+        $('.dataTables_filter .form-control').attr('placeholder', 'Cari');
+        $('.div-filter .col-search-box').eq(0).append($('.dataTables_filter .form-control'));
         $('.dataTables_filter').hide();
+        $('#tbMain tbody').on('click', 'td.details-control', function () {
+            var tr = $(this).closest('tr');
+            var row = tbMain.row(tr);
+            if (row.child.isShown()) {
+                // This row is already open - close it
+                row.child.hide();
+                tr.removeClass('shown');
+            } else {
+                // Open this row
+                row.child(format(row.index())).show();
+                tr.addClass('shown');
+            }
+        });
     });
     function detail(idx) {
         var d = data[idx];
@@ -418,12 +446,11 @@
         m.find('.input-tugas').html(d.tugas);
         m.find('.input-id-tugas').val(d.id_tugas);
     }
-    $('#filterPersonil').change(function () {
+    $('#filterStatus').change(function () {
         tbMain.columns(4).search($(this).val()).draw();
     });
     $('#filterPeriode').change(function () {
-        console.log('filter status');
-        tbMain.columns(0).search($(this).val()).draw();
+        tbMain.columns(3).search($(this).val()).draw();
     });
     var minDate, maxDate;
     minDate = $('#minDate');
@@ -444,4 +471,41 @@
                 return false;
             }
     );
+    function format(idx) {
+        var d = data[idx];
+        var pembuat = ' - ';
+        var editDelete = '';
+        if (d.pembuat != null ) {
+            pembuat = '<img class="rounded-circle" style="object-fit: cover" src="' + (d.photo == null ? '<?= base_url('assets/images/default_user.jpg') ?>' : '<?= base_url('upload/profile_photo/') ?>' + d.photo) + '" width="30" height="30" title="' + d.pembuat + '">';
+        }
+        if(d.filter){
+            editDelete = '<a class="dropdown-item" onclick="initEdit(' + idx + ')">Ubah</a>'
+                    + '<a class="dropdown-item" onclick="initDelete(' + idx + ')">Hapus</a>';
+        }
+        return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">' +
+                '<tr>' +
+                '<td>Pemberi Tugas:</td>' +
+                '<td>' + pembuat + '</td>' +
+                '</tr>' +
+                '<tr>' +
+                '<td>Proyek:</td>' +
+                '<td>' + (d.project == null ? '-' : d.project) + '</td>' +
+                '</tr>' +
+                '<tr>' +
+                '<td>Aksi:</td>' +
+                '<td>' +
+                '<div class="dropdown">' +
+                '<button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' +
+                '</button>' +
+                '<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">' +
+//                '<a class="dropdown-item" href="#">Detail</a>' +
+                '<a class="dropdown-item" onclick="initUpload(' + idx + ')">Upload</a>' +
+                '<a class="dropdown-item" onclick="detail(' + idx + ')">Detail</a>' +
+                editDelete +
+                '</div>' +
+                '</div>' +
+                '</td>' +
+                '</tr>' +
+                '</table>';
+    }
 </script>
