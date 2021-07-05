@@ -98,13 +98,18 @@ class Tugas extends MY_User {
             $this->db->update('jadwal');
         }
         $this->data['menuStandard'] = true;
-        $this->db->select('j.*, t.nama AS tugas, t.form_terkait AS id_form, t.sifat, t.id_document, t.asal, pp.id AS jabatan');
+        $this->db->select('j.*, t.nama AS tugas, t.form_terkait AS id_form, pro.nama AS project, t.sifat, t.id_document, t.asal, pp.id AS jabatan, CONCAT(p2.fullname, " - ", uk2.name) AS pembuat, u2.photo');
         $this->db->join('tugas t', 't.id = j.id_tugas');
         $this->db->join('document d', 'd.id = t.id_document AND d.id_standard=' . $this->session->activeStandard['id']);
         $this->db->join('personil_task pt', 'pt.id_tugas = t.id');
         $this->db->join('position_personil pp', 'pp.id = pt.id_position_personil');
         $this->db->join('personil p', 'p.id = pp.id_personil');
         $this->db->join('users u', 'u.id_personil = p.id AND u.id=' . $this->session->user['id']);
+        $this->db->join('project pro', 'pro.id = t.id_project', 'LEFT');
+        $this->db->join('position_personil pp2', 'pp2.id = t.pembuat', 'LEFT');//get pembuat
+        $this->db->join('personil p2', 'p2.id = pp2.id_personil', 'LEFT');
+        $this->db->join('unit_kerja uk2', 'uk2.id = pp2.id_unit_kerja', 'LEFT');
+        $this->db->join('users u2', 'u2.id_personil = p2.id', 'LEFT');
         $this->db->order_by('j.tanggal', 'DESC');
         $data = $this->db->get('jadwal j')->result();
         foreach ($data as $k => $d) {
@@ -119,10 +124,12 @@ class Tugas extends MY_User {
             } else {
                 $d->deadline = 'menunggu';
             }
-            $this->db->select('p.*');
-            $this->db->join('position_personil pp', 'pp.id_personil = p.id');
-            $this->db->join('personil_task pt', 'pt.id_position_personil = pp.id AND pt.id_tugas =' . $d->id_tugas);
-            $d->pelaksana = $this->db->get('personil p')->result();
+            $this->db->select('pp.id, CONCAT(p.fullname," - ", uk.name) AS fullname, u.photo');
+            $this->db->join('position_personil pp', 'pp.id = pt.id_position_personil');
+            $this->db->join('personil p', 'p.id = pp.id_personil');
+            $this->db->join('unit_kerja uk', 'uk.id = pp.id_unit_kerja');
+            $this->db->join('users u', 'u.id_personil = p.id', 'LEFT');
+            $d->pelaksana = $this->db->get_where('personil_task pt', ['pt.id_tugas' => $d->id_tugas])->result();
             $d->form_terkait = $this->db->get_where('document', ['id' => $d->id_form])->row();
             $this->load->model('m_document');
             $d->dokumen = $this->m_document->get($d->id_document);

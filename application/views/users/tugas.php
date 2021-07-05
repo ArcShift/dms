@@ -64,18 +64,22 @@
                     <tr>
                         <td class="details-control"></td>
                         <td><?= $d->tugas ?></td>
-                        <td>pelaksana</td>
+                        <td>
+                            <?php foreach ($d->pelaksana as $k => $p) { ?>
+                            <img class="rounded-circle" style="object-fit: cover" src="<?= $p->photo == null ? base_url('assets/images/default_user.jpg') : base_url('upload/profile_photo/').$p->photo ?>" width="30" height="30" title="<?= $p->fullname ?>">
+                            <?php } ?>
+                        </td>
                         <!--<td><?= empty($d->form_terkait) ? '-' : $d->form_terkait->judul ?></td>-->
                         <td><?= $d->tanggal ?></td>
                         <!--<td><?= $d->path ?></td>-->
                         <td><?= $d->deadline ?></td>
-<!--                        <td>
+    <!--                        <td>
                             <button class="btn btn-sm btn-outline-primary fa fa-upload" onclick="initUpload(<?= $k ?>)"></button>
                             <button class="btn btn-sm btn-outline-primary fa fa-info-circle" onclick="detail(<?= $k ?>)"></button>
-                            <?php if ($d->asal == 'MANDIRI') { ?>
-                                <button class="btn btn-sm btn-outline-primary fa fa-edit" onclick="initEdit(<?= $k ?>)"></button>
-                                <button class="btn btn-sm btn-outline-danger fa fa-trash" onclick="initDelete(<?= $k ?>)"></button>
-                            <?php } ?>
+                        <?php if ($d->asal == 'MANDIRI') { ?>
+                                    <button class="btn btn-sm btn-outline-primary fa fa-edit" onclick="initEdit(<?= $k ?>)"></button>
+                                    <button class="btn btn-sm btn-outline-danger fa fa-trash" onclick="initDelete(<?= $k ?>)"></button>
+                        <?php } ?>
                         </td>-->
                     </tr>
                 <?php } ?>
@@ -475,10 +479,10 @@
         var d = data[idx];
         var pembuat = ' - ';
         var editDelete = '';
-        if (d.pembuat != null ) {
+        if (d.pembuat != null) {
             pembuat = '<img class="rounded-circle" style="object-fit: cover" src="' + (d.photo == null ? '<?= base_url('assets/images/default_user.jpg') ?>' : '<?= base_url('upload/profile_photo/') ?>' + d.photo) + '" width="30" height="30" title="' + d.pembuat + '">';
         }
-        if(d.filter){
+        if (d.filter) {
             editDelete = '<a class="dropdown-item" onclick="initEdit(' + idx + ')">Ubah</a>'
                     + '<a class="dropdown-item" onclick="initDelete(' + idx + ')">Hapus</a>';
         }
