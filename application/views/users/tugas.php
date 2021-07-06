@@ -482,7 +482,7 @@
         if (d.pembuat != null) {
             pembuat = '<img class="rounded-circle" style="object-fit: cover" src="' + (d.photo == null ? '<?= base_url('assets/images/default_user.jpg') ?>' : '<?= base_url('upload/profile_photo/') ?>' + d.photo) + '" width="30" height="30" title="' + d.pembuat + '">';
         }
-        if (d.filter) {
+        if (d.asal == 'MANDIRI') {
             editDelete = '<a class="dropdown-item" onclick="initEdit(' + idx + ')">Ubah</a>'
                     + '<a class="dropdown-item" onclick="initDelete(' + idx + ')">Hapus</a>';
         }
