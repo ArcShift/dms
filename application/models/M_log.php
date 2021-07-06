@@ -30,6 +30,16 @@ class M_log extends CI_Model {
         return $result;
     }
 
+    function set($type, $desc, $target = null) {
+        $this->db->set('type', $type);
+        $this->db->set('desc', $desc);
+        if (!empty($target)) {
+            $this->db->set('target', $target);
+        }
+        $this->db->set('id_user', $this->session->user['id']);
+        $this->db->insert('log');
+    }
+
     function update_company() {
         $this->db->set('desc', '<b>' . $this->session->user['fullname'] . '</b> mengubah data perusahaan <b>' . $this->session->activeCompany['name'] . '</b>');
         $this->db->set('type', 'U_COMP');
@@ -130,10 +140,12 @@ class M_log extends CI_Model {
         $this->db->set('id_user', $this->session->user['id']);
         $this->db->insert('log');
     }
+
     function delete_tugas($name) {
         $this->db->set('desc', '<b>' . $this->session->user['fullname'] . '</b> menghapus tugas <b>' . $name . '</b>');
         $this->db->set('type', 'D_PRO');
         $this->db->set('id_user', $this->session->user['id']);
         $this->db->insert('log');
     }
+
 }

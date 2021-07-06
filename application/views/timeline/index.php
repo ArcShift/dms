@@ -286,7 +286,7 @@ $n = 1;
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
-                        <select class="form-control" name="gap">
+                        <select class="form-control" name="gap" required="">
                             <option value="">~ Pilih Gap ~</option>
                             <?php foreach ($gapAnalisa as $g) { ?>
                                 <option value="<?= $g->id ?>"><?= $g->judul ?></option>

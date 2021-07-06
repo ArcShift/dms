@@ -4,6 +4,11 @@ class Timeline extends MY_Controller {
 
     protected $module = 'timeline';
 
+    public function __construct() {
+        parent::__construct();
+        $this->load->model('m_log');
+    }
+
     function index() {
         $this->subModule = 'read';
         if ($this->session->user['role'] == 'admin') {
@@ -19,9 +24,9 @@ class Timeline extends MY_Controller {
                 if (!empty($standard['pasal_' . $p])) {
                     $standard['pasal_name_' . $p] = $this->db->get_where('pasal', ['id' => $standard['pasal_' . $p]])->row_array()['name'];
                     $pemenuhan = $this->getPemenuhanByPasal($standard['pasal_' . $p]);
-                    $standard['status_pasal_' . $p] = round(($pemenuhan['doc'] + $pemenuhan['imp'])/2);
+                    $standard['status_pasal_' . $p] = round(($pemenuhan['doc'] + $pemenuhan['imp']) / 2);
                 }
-                    $standard['status_pasal_' . $p] = '0';
+                $standard['status_pasal_' . $p] = '0';
             }
             $this->data['standard'] = $standard;
             $this->data['gapAnalisa'] = $this->db->get_where('gap_analisa', ['id_company' => $this->session->activeCompany['id'], 'id_standard' => $this->session->activeStandard['id']])->result();
@@ -33,6 +38,8 @@ class Timeline extends MY_Controller {
         $this->db->set('id_gap_analisa', $this->input->post('gap'));
         $this->db->where('id', $this->session->activeStandard['id_company_standard']);
         $this->db->update('company_standard');
+        $gap = $this->db->get_where('gap_analisa', ['id' => $this->input->post('gap')])->row();
+        $this->m_log->set('RDM_GAP', '<b>' . $this->session->user['fullname'] . '</b> Mengubah Roadmap: Gap Analisa menjadi <b>' . $gap->judul . '</b>', $this->session->activeStandard['id_company_standard']);
     }
 
     function get_timeline() {
@@ -41,7 +48,8 @@ class Timeline extends MY_Controller {
         $timeline = $this->db->get_where('company_standard cs', ['cs.id' => $this->session->activeStandard['id_company_standard']])->row();
         if (!empty($timeline->id_gap_analisa)) {
             $this->db->select_avg('ks.status');
-            $this->db->join('kuesioner k', 'k.id = ks.id_kuesioner AND k.id_gap_analisa =' . $timeline->id_gap_analisa);
+            $this->db->join('kuesioner k', 'k.id = ks.id_kuesioner');
+            $this->db->where('ks.id_gap_analisa', $timeline->id_gap_analisa);
             $status = $this->db->get('kuesioner_status ks')->row();
             $timeline->statusGap = empty($status) ? 0 : round($status->status);
         } else {
@@ -80,6 +88,7 @@ class Timeline extends MY_Controller {
             }
             echo json_encode($this->data);
         }
+        $this->m_log->set('RDM_UP', '<b>' . $this->session->user['fullname'] . '</b> Mengupload Roadmap: <b>' . $header . '</b>', $this->session->activeStandard['id_company_standard']);
     }
 
     private function status_distribusi() {
