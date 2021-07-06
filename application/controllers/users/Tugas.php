@@ -9,6 +9,7 @@ class Tugas extends MY_User {
     }
 
     function index() {
+        $this->load->model('m_log');
         if ($this->input->post('upload')) {
             $step = true;
             $this->load->model('m_implementasi', 'model');
@@ -64,6 +65,7 @@ class Tugas extends MY_User {
                 }
             }
             $this->db->insert('jadwal');
+            $this->m_log->create_tugas($id);
         } else if ($this->input->post('delete')) {
             $this->db->where('id_tugas', $this->input->post('id'));
             $jd = $this->db->get('jadwal')->row();
@@ -78,6 +80,7 @@ class Tugas extends MY_User {
                 unlink('upload/implementasi/' . $jd->path);
             }
             $this->data['msgSuccess'] = 'Berhasil menghapus data';
+            $this->m_log->delete_tugas($this->input->post('id'));
         } else if ($this->input->post('edit')) {
             $jd = $this->db->get_where('jadwal', ['id' => $this->input->post('id')])->row();
             $this->db->set('id_document', $this->input->post('dokumen'));
@@ -96,6 +99,7 @@ class Tugas extends MY_User {
             $this->db->set('tanggal', $this->input->post('jadwal'));
             $this->db->where('id_tugas', $jd->id_tugas);
             $this->db->update('jadwal');
+            $this->m_log->update_tugas($jd->id_tugas);
         }
         $this->data['menuStandard'] = true;
         $this->db->select('j.*, t.nama AS tugas, t.form_terkait AS id_form, pro.nama AS project, t.sifat, t.id_document, t.asal, pp.id AS jabatan, CONCAT(p2.fullname, " - ", uk2.name) AS pembuat, u2.photo');

@@ -63,6 +63,7 @@ class Tugas_saya extends MY_Controller {
 
     function set() {
         $this->load->model('m_notif');
+        $this->load->model('m_log');
         $msg = [];
         $msg['status'] = 'success';
         if ($this->input->post('mode') == 'create') {
@@ -109,6 +110,7 @@ class Tugas_saya extends MY_Controller {
             $this->db->set('id_tugas', $id);
             $this->db->set('tanggal', $this->input->post('jadwal'));
             $this->db->insert('jadwal');
+            $this->m_log->create_tugas($id);
         } elseif ($this->input->post('mode') == 'edit') {
             $this->db->set('id_document', $this->input->post('dokumen'));
             $this->db->set('nama', $this->input->post('nama'));
@@ -149,6 +151,7 @@ class Tugas_saya extends MY_Controller {
                     }
                 }
             }
+            $this->m_log->update_tugas($this->input->post('id_tugas'));
         } elseif ($this->input->post('mode') == 'delete') {
             $this->db->where('id_tugas', $this->input->post('id'));
             $this->db->delete('personil_task');
@@ -157,6 +160,7 @@ class Tugas_saya extends MY_Controller {
             $this->db->where('id', $this->input->post('id'));
             $this->db->delete('tugas');
             $this->data['msgSuccess'] = 'Berhasil Menghapus Data';
+            $this->m_log->delete_tugas($this->input->post('id'));
         } elseif ($this->input->post('mode') == 'upload') {
             $step = true;
             $this->load->model('m_implementasi');
