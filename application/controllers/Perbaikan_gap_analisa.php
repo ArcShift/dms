@@ -12,9 +12,13 @@ class Perbaikan_gap_analisa extends MY_Controller {
 
     function index() {
         if ($this->input->post('edit')) {
+            $ks = $this->db->get_where('kuesioner_status', ['id' => $this->input->post('id')])->row();
+            $uk = $this->db->get_where('unit_kerja', ['id' => $ks->id_unit_kerja])->row();
+            $que = $this->db->get_where('kuesioner', ['id' => $ks->id_kuesioner])->row();
             $this->db->set('status_perbaikan', $this->input->post('status'));
             $this->db->where('id', $this->input->post('id'));
             $this->db->update('kuesioner_status');
+            $this->m_log->set('GAP_REV_U', '<b>' . $this->session->user['fullname'] . '</b> Mengubah Perbaikan Unit <b>' . $uk->name . '</b> pada pertanyaan <b>' . $que->kuesioner . '</b> untuk gap analisa : <b>' . $this->session->gapAnalisa['judul'] . '</b>', $ks->id);
         } elseif ($this->input->post('upload')) {
             $this->session->set_userdata('idData', $this->input->post('upload'));
             redirect($this->module . '/upload_bukti');
