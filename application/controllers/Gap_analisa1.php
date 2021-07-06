@@ -30,6 +30,10 @@ class Gap_analisa1 extends MY_Controller {
             redirect($this->module . '/upload_bukti');
         } else if ($this->input->post('edit2')) {
             $this->m_kuesioner->update();
+            $ks = $this->db->get_where('kuesioner_status', ['id' => $this->input->post('id')])->row();
+            $uk = $this->db->get_where('unit_kerja', ['id' => $ks->id_unit_kerja])->row();
+            $que = $this->db->get_where('kuesioner', ['id' => $ks->id_kuesioner])->row();
+            $this->m_log->set('GAP_DT_U', '<b>' . $this->session->user['fullname'] . '</b> Mengubah Unit <b>' . $uk->name . '</b> pada pertanyaan <b>' . $que->kuesioner . '</b> untuk gap analisa : <b>' . $this->session->gapAnalisa['judul'] . '</b>', $this->input->post('id'));
         }
         $gap = $this->model->get();
         $this->data['gap_analisa'] = $gap;
@@ -98,20 +102,25 @@ class Gap_analisa1 extends MY_Controller {
     }
 
     function edit2() {
+        $uk = $this->db->get_where('unit_kerja', ['id' => $this->input->post('unit_kerja')])->row();
+        $que = $this->db->get_where('kuesioner', ['id' => $this->session->idData])->row();
         if ($this->input->post('tambah')) {
             $this->db->set('id_kuesioner', $this->session->idData);
             $this->db->set('status', $this->input->post('status'));
             $this->db->set('id_gap_analisa', $this->session->gapAnalisa['id']);
             $this->db->set('id_unit_kerja', $this->input->post('unit_kerja'));
             $this->db->insert('kuesioner_status');
+            $this->m_log->set('GAP_DT_C', '<b>' . $this->session->user['fullname'] . '</b> Menambahkan Unit <b>' . $uk->name . '</b> pada pertanyaan <b>' . $que->kuesioner . '</b> untuk gap analisa : <b>' . $this->session->gapAnalisa['judul'] . '</b>', $this->db->insert_id());
         } elseif ($this->input->post('edit')) {
             $this->db->set('status', $this->input->post('status'));
             $this->db->set('id_unit_kerja', $this->input->post('unit_kerja'));
             $this->db->where('id', $this->input->post('id'));
             $this->db->update('kuesioner_status');
+            $this->m_log->set('GAP_DT_U', '<b>' . $this->session->user['fullname'] . '</b> Mengubah Unit <b>' . $uk->name . '</b> pada pertanyaan <b>' . $que->kuesioner . '</b> untuk gap analisa : <b>' . $this->session->gapAnalisa['judul'] . '</b>', $this->input->post('id'));
         } elseif ($this->input->post('hapus')) {
             $this->db->where('id', $this->input->post('id'));
             $this->db->delete('kuesioner_status');
+            $this->m_log->set('GAP_DT_D', '<b>' . $this->session->user['fullname'] . '</b> Menghapus Unit <b>' . $uk->name . '</b> pada pertanyaan <b>' . $que->kuesioner . '</b> untuk gap analisa : <b>' . $this->session->gapAnalisa['judul'] . '</b>');
         }
         $this->subModule = 'edit';
         $this->data['pertanyaan'] = $this->db->get_where('kuesioner', ['id' => $this->session->idData])->row_array();
@@ -137,6 +146,9 @@ class Gap_analisa1 extends MY_Controller {
     }
 
     function upload_bukti() {
+        $ks = $this->db->get_where('kuesioner_status', ['id' => $this->session->idData])->row();//for log
+        $uk = $this->db->get_where('unit_kerja', ['id' => $ks->id_unit_kerja])->row();
+        $que = $this->db->get_where('kuesioner', ['id' => $ks->id_kuesioner])->row();
         if ($this->input->post('tambah')) {
             $this->db->set('id_kuesioner_detail', $this->session->idData);
             $type = $this->input->post('type');
@@ -161,6 +173,7 @@ class Gap_analisa1 extends MY_Controller {
                 $this->db->set('path', $path);
             }
             $this->db->insert('bukti_gap_analisa');
+            $this->m_log->set('GAP_UP_C', '<b>' . $this->session->user['fullname'] . '</b> Menambahkan Upload Bukti Gap Analisa unit kerja <b>' . $uk->name . '</b> pada pertanyaan <b>' . $que->kuesioner . '</b> untuk gap analisa : <b>' . $this->session->gapAnalisa['judul'] . '</b>', $this->db->insert_id());
         } elseif ($this->input->post('hapus')) {
             $data = $this->db->get_where('bukti_gap_analisa', ['id' => $this->input->post('id')])->row();
             $this->db->where('id', $this->input->post('id'));
@@ -168,6 +181,7 @@ class Gap_analisa1 extends MY_Controller {
             if ($data->type == 'FILE' & file_exists('upload/gap_analisa/' . $data->path)) {//delete old file
                 unlink('upload/gap_analisa/' . $data->path);
             }
+            $this->m_log->set('GAP_UP_D', '<b>' . $this->session->user['fullname'] . '</b> Menghapus Upload Bukti Gap Analisa unit kerja <b>' . $uk->name . '</b> pada pertanyaan <b>' . $que->kuesioner . '</b> untuk gap analisa : <b>' . $this->session->gapAnalisa['judul'] . '</b>', $this->db->insert_id());
         }
         $this->subTitle = 'Upload Bukti';
         $this->subModule = 'edit';
