@@ -91,7 +91,7 @@
                             </div>
                             <div class="form-group">
                                 <label><b>Buat Tugas Sebagai <i class="text-danger">*</i></b></label>
-                                <select class="form-control" required="" name="jabatan">
+                                <select class="form-control" required="" id="selectJabatan" name="jabatan">
                                     <?php foreach ($unit_kerja as $k => $uk) { ?>
                                         <option value="<?= $uk->jabatan ?>"><?= $uk->name ?></option>
                                     <?php } ?>
@@ -282,13 +282,13 @@
         post(this, 'set');
     });
     $('#selectStandard').change(function () {
+        $('#selectDokumen').empty();
+        $('#selectDokumen').append('<option value="">~ Dokumen ~</option>');
         if ($(this).val() == '') {
             $('.standard-child').hide();
         } else {
             $('.standard-child').show();
             $.getJSON('<?= site_url($module . '/get_dokumen') ?>', {standard: $(this).val()}, function (data) {
-                $('#selectDokumen').empty();
-                $('#selectDokumen').append('<option value="">~ Dokumen ~</option>');
                 for (var i = 0; i < data.length; i++) {
                     $('#selectDokumen').append('<option value="' + data[i].id + '">' + data[i].judul + '</option>');
                 }
@@ -297,7 +297,10 @@
         $('#selectDokumen').change();
     });
     $('#selectDokumen').change(function () {
-        $.getJSON('<?= site_url($module . '/get_pelaksana') ?>', {id: $(this).val()}, function (data) {
+        getPelaksana();
+    });
+    function getPelaksana() {
+        $.getJSON('<?= site_url($module . '/get_pelaksana') ?>', {id_dokumen: $('#selectDokumen').val(), pp: $('#selectJabatan').val()}, function (data) {
             console.log(data);
             $('#selectPelaksana').empty();
             for (var i = 0; i < data.length; i++) {
@@ -305,9 +308,9 @@
                 $('#selectPelaksana').append(new Option(d.personil, d.id, false, false));
             }
             $('#selectPelaksana').val(pel).trigger('change');
-            $('#selectPelaksana').trigger('change');
+//            $('#selectPelaksana').trigger('change');
         });
-    });
+    }
     function initEdit(idx) {
         var m = $('#modalTugasBaru');
         m.modal('show');

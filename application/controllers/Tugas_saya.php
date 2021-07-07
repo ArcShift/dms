@@ -68,7 +68,7 @@ class Tugas_saya extends MY_Controller {
         $msg['status'] = 'success';
         if ($this->input->post('mode') == 'create') {
             if ($this->input->post('dokumen')) {
-            $this->db->set('id_document', $this->input->post('dokumen'));
+                $this->db->set('id_document', $this->input->post('dokumen'));
             }
             $this->db->set('nama', $this->input->post('nama'));
             $this->db->set('sifat', $this->input->post('sifat'));
@@ -194,10 +194,19 @@ class Tugas_saya extends MY_Controller {
 
     function get_pelaksana() {
         $this->load->model('m_position_personil');
-        if ($this->input->get('id')) {
-            $data = $this->m_position_personil->get_by_document($this->input->get('id'));
-        } else {
-            $data = $this->m_position_personil->get_by_company();
+        if ($this->session->user['role'] === 'pic') {
+            if ($this->input->get('id')) {
+                $data = $this->m_position_personil->get_by_document($this->input->get('id_dokumen'));
+            } else {
+                $data = $this->m_position_personil->get_by_company();
+            }
+        } elseif ($this->session->user['role'] === 'ketua') {
+            $data = $this->m_position_personil->get_by_distribution_ketua($this->input->get('pp'), $this->input->get('id_dokumen'));
+//            if ($this->input->get('id')) {
+//                $data = $this->m_position_personil->get_by_document($this->input->get('id'));
+//            } else {
+//                $data = $this->m_position_personil->get_by_company();
+//            }
         }
         echo json_encode($data);
     }
