@@ -96,8 +96,7 @@
 //            'Judul Pasal': d.sort_desc==null?'-':d.sort_desc,
 //            'Deskripsi': d.long_desc==null?'-':d.long_desc,
 //        }
-        showDetail(d.name, data, null);
-        
+        showDetail(d.name, data, null);        
     }
     function detailPasal(index) {
         var m = $('#modalDetailPasal');
@@ -128,7 +127,6 @@
                     + '<td>' + link
                     + '</td>'
                     + '</tr>');
-            
         }
     }
 </script>

@@ -317,10 +317,12 @@
         $.getJSON('<?= site_url($module . '/get_pelaksana') ?>', {id_dokumen: $('#selectDokumen').val(), pp: $('#selectJabatan').val()}, function (data) {
             console.log(data);
             $('#selectPelaksana').empty();
+                $('#selectPelaksana').append(new Option('<?= $this->session->user['fullname']?> - '+$('#selectJabatan').text(), $('#selectJabatan').val(), true, true));
             for (var i = 0; i < data.length; i++) {
                 var d = data[i];
                 $('#selectPelaksana').append(new Option(d.personil, d.id, false, false));
             }
+            pel.push($('#selectJabatan').val());
             $('#selectPelaksana').val(pel).trigger('change');
 //            $('#selectPelaksana').trigger('change');
         });
