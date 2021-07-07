@@ -498,17 +498,27 @@ if ($this->input->get('standard')) {
                 $('#colLeft, #colRight').empty();
                 var m = $('#modalDetail');
                 m.modal('show');
-                var i = 1
-                col = $('#colLeft');
-                for (var k in data) {
-                    if (i == count + 1) {
-                        col = $('#colRight');
+                if (count != null) {
+                    var i = 1
+                    col = $('#colLeft');
+                    for (var k in data) {
+                        if (i == count + 1) {
+                            col = $('#colRight');
+                        }
+                        col.append('<div class="form-group">'
+                                + '<label><b>' + i + '. ' + k + '</b></label>'
+                                + '<div class="card-body bg-light p-2 box-detail">' + data[k] + '</div>'
+                                + '</div>');
+                        i++;
                     }
-                    col.append('<div class="form-group">'
-                            + '<label><b>' + i + '. ' + k + '</b></label>'
-                            + '<div class="card-body bg-light p-2 box-detail">' + data[k] + '</div>'
-                            + '</div>');
-                    i++;
+                } else {
+                    for (var k in data) {
+                        col.append('<div class="form-group">'
+                                + '<label><b>' + i + '. ' + k + '</b></label>'
+                                + '<div class="card-body bg-light p-2 box-detail">' + data[k] + '</div>'
+                                + '</div>');
+                        i++;
+                    }
                 }
             }
         </script>

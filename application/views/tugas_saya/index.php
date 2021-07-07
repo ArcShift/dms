@@ -48,7 +48,7 @@
 </div>
 <!--MODAL TUGAS BARU & EDIT TUGAS-->
 <div class="modal fade" id="modalTugasBaru">
-    <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-dialog" role="document">
         <form method="post" enctype="multipart/form-data" id="formTugas">
             <div class="modal-content">
                 <div class="modal-header">
@@ -62,58 +62,72 @@
                     <input class="input-id-tugas" name="id_tugas" hidden="">
                     <input class="input-id-jadwal" name="id_jadwal" hidden=""/>
                     <div class="row">
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label><b>Judul Tugas <i class="text-danger">*</i></b></label>
-                                <input class="form-control input-tugas" name="nama" required="">
+                        <div class="col-sm-12">
+                            <div class="form-group row">
+                                <label class="col-form-label col-sm-5"><b>Judul Tugas <i class="text-danger">*</i></b></label>
+                                <div class="col-sm-7">
+                                    <input class="form-control input-tugas" name="nama" required="">
+                                </div>
                             </div>
-                            <div class="form-group">
-                                <label><b>Standar</b></label>
-                                <select class="form-control select-dokumen" id="selectStandard" name="standard">
-                                    <option value="">~ Standard ~</option>
-                                    <?php foreach ($standard as $k => $s) { ?>
-                                        <option value="<?= $s->id ?>"><?= $s->name ?></option>
-                                    <?php } ?>
-                                </select>
+                            <div class="form-group row">
+                                <label class="col-form-label col-sm-5"><b>Standar</b></label>
+                                <div class="col-sm-7">
+                                    <select class="form-control select-dokumen" id="selectStandard" name="standard">
+                                        <option value="">~ Standard ~</option>
+                                        <?php foreach ($standard as $k => $s) { ?>
+                                            <option value="<?= $s->id ?>"><?= $s->name ?></option>
+                                        <?php } ?>
+                                    </select>
+                                </div>
                             </div>
-                            <div class="form-group standard-child">
-                                <label><b>SOP Terkait</b></label>
-                                <select class="form-control select-dokumen" id="selectDokumen" name="dokumen"></select>
+                            <div class="form-group row standard-child">
+                                <label class="col-form-label col-sm-5"><b>SOP Terkait</b></label>
+                                <div class="col-sm-7">
+                                    <select class="form-control select-dokumen" id="selectDokumen" name="dokumen"></select>
+                                </div>
                             </div>
-                            <div class="form-group standard-child">
-                                <label><b>Form Terkait</b></label>
-                                <select class="form-control select-form" name="form_terkait">
-                                    <option value="">~ Form Terkait ~</option>
-                                    <?php foreach ($form_terkait as $k => $d) { ?>
-                                        <option value="<?= $d->id ?>"><?= $d->judul ?></option>
-                                    <?php } ?>
-                                </select>
+                            <div class="form-group row standard-child">
+                                <label class="col-form-label col-sm-5"><b>Form Terkait</b></label>
+                                <div class="col-sm-7">
+                                    <select class="form-control select-form" name="form_terkait">
+                                        <option value="">~ Form Terkait ~</option>
+                                        <?php foreach ($form_terkait as $k => $d) { ?>
+                                            <option value="<?= $d->id ?>"><?= $d->judul ?></option>
+                                        <?php } ?>
+                                    </select>
+                                </div>
                             </div>
-                            <div class="form-group">
-                                <label><b>Buat Tugas Sebagai <i class="text-danger">*</i></b></label>
-                                <select class="form-control" required="" id="selectJabatan" name="jabatan">
-                                    <?php foreach ($unit_kerja as $k => $uk) { ?>
-                                        <option value="<?= $uk->jabatan ?>"><?= $uk->name ?></option>
-                                    <?php } ?>
-                                </select>
+                            <div class="form-group row">
+                                <label class="col-form-label col-sm-5"><b>Buat Tugas Sebagai <i class="text-danger">*</i></b></label>
+                                <div class="col-sm-7">
+                                    <select class="form-control" required="" id="selectJabatan" name="jabatan">
+                                        <?php foreach ($unit_kerja as $k => $uk) { ?>
+                                            <option value="<?= $uk->jabatan ?>"><?= $uk->name ?></option>
+                                        <?php } ?>
+                                    </select>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label><b>Pelaksana Tugas <i class="text-danger">*</i></b></label>
-                                <select class="form-control select-personil select2" id="selectPelaksana" multiple="" required="" name="pelaksana[]" style="width: 100% !important;"></select>
+                            <div class="form-group row">
+                                <label class="col-form-label col-sm-5"><b>Pelaksana Tugas <i class="text-danger">*</i></b></label>
+                                <div class="col-sm-7">
+                                    <select class="form-control select-personil select2" id="selectPelaksana" multiple="" required="" name="pelaksana[]" style="width: 100% !important;"></select>
+                                </div>
                             </div>
-                            <div class="form-group">
-                                <label><b>Sifat <i class="text-danger">*</i></b></label>
-                                <select class="form-control select-sifat" required="" name="sifat">
-                                    <option value="">~ Sifat ~</option>
-                                    <option value="WAJIB">Wajib</option>
-                                    <option value="SITUASIONAL">Situasional</option>
-                                </select>
+                            <div class="form-group row">
+                                <label class="col-form-label col-sm-5"><b>Sifat <i class="text-danger">*</i></b></label>
+                                <div class="col-sm-7">
+                                    <select class="form-control select-sifat" required="" name="sifat">
+                                        <option value="">~ Sifat ~</option>
+                                        <option value="WAJIB">Wajib</option>
+                                        <option value="SITUASIONAL">Situasional</option>
+                                    </select>
+                                </div>
                             </div>
-                            <div class="form-group">
-                                <label><b>Jadwal <i class="text-danger">*</i></b></label>
-                                <input class="form-control input-tanggal" type="date" name="jadwal" required="" value="<?= date('Y-m-d') ?>">
+                            <div class="form-group row">
+                                <label class="col-form-label col-sm-5"><b>Jadwal <i class="text-danger">*</i></b></label>
+                                <div class="col-sm-7">
+                                    <input class="form-control input-tanggal" type="date" name="jadwal" required="" value="<?= date('Y-m-d') ?>">
+                                </div>
                             </div>
                         </div>
                     </div>
