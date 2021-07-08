@@ -27,6 +27,7 @@ class M_company extends CI_Model {
     function create() {
         $this->db->set('name', $this->input->post('nama'));
         $this->db->set('id_regency', $this->input->post('kota'));
+        $this->db->set('max_akun', $this->input->post('akun'));
         return $this->db->insert($this->table);
     }
 
@@ -45,11 +46,16 @@ class M_company extends CI_Model {
 
     function update() {
         $input = $this->input->post();
-        $id = $this->session->user['role']=='admin'?$this->session->idData: $this->session->activeCompany['id'];
+        $id = $this->session->user['role'] == 'admin' ? $this->session->idData : $this->session->activeCompany['id'];
         $this->db->where('id', $id);
         $this->db->set('name', $input['nama']);
-        $this->db->set('id_regency', $input['kota']);
+        if (!empty($input['kota'])) {
+            $this->db->set('id_regency', $input['kota']);
+        }
         $this->db->set('alamat', $input['alamat']);
+        if (!empty($input['akun'])) {
+            $this->db->set('max_akun', $input['akun']);
+        }
         return $this->db->update($this->table);
     }
 

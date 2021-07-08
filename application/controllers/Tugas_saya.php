@@ -19,7 +19,8 @@ class Tugas_saya extends MY_Controller {
     }
 
     function get() {
-        $this->db->select('j.*, t.nama AS tugas, p.nama AS project, t.id_document, t.form_terkait, t.sifat, u.photo, CONCAT(p2.fullname, " - ", uk.name) AS pembuat, pp2.id_personil');
+        $this->db->select('j.*, t.nama AS tugas, p.nama AS project, t.id_document, t.form_terkait, t.sifat, u.photo, CONCAT(p2.fullname, " - ", uk.name) AS pembuat, pp2.id_personil,'
+                . 'pp.id_personil AS masuk, pp2.id_personil AS keluar');
         $this->db->join('tugas t', 't.id = j.id_tugas');
         $this->db->join('personil_task pt', 'pt.id_tugas = t.id', 'LEFT');
         $this->db->join('position_personil pp', 'pp.id = pt.id_position_personil', 'LEFT');
@@ -56,6 +57,13 @@ class Tugas_saya extends MY_Controller {
             $this->db->join('unit_kerja uk', 'uk.id = pp.id_unit_kerja');
             $this->db->join('users u', 'u.id_personil = p.id', 'LEFT');
             $t->pelaksana = $this->db->get_where('personil_task pt', ['pt.id_tugas' => $t->id_tugas])->result();
+            $t->alur = '';
+            if ($t->masuk == $this->session->user['id_personil']) {
+                $t->alur .= 'tugas_masuk ';
+            }
+            if($t->keluar == $this->session->user['id_personil']){
+                $t->alur .= 'tugas_keluar ';
+            }
             $data[$k] = $t;
         }
         echo json_encode($data);

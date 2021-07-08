@@ -14,7 +14,9 @@
                         <th>Nama</th>
                         <th>Role</th>
                         <th>Unit Kerja</th>
-                        <th>Perusahaan</th>
+                        <?php if ($this->session->user['role'] == 'admin') { ?>
+                            <th>Perusahaan</th>
+                        <?php } ?>
                         <th>Aksi</th>
                     </tr>
                 </thead>
@@ -30,7 +32,9 @@
                                     <span class="badge badge-secondary"><?= $uk['name'] ?></span>
                                 <?php } ?>
                             </td>
-                            <td><?php echo $r['company'] ?></td>
+                            <?php if ($this->session->user['role'] == 'admin') { ?>
+                                <td><?php echo $r['company'] ?></td>
+                            <?php } ?>
                             <td>
                                 <?php if ($this->session->user['role'] == 'admin' | ($this->session->user['role'] == 'pic' & $r['rl'] == 'anggota')) { ?>
                                     <button class="btn btn-outline-primary btn-sm fa fa-edit" title="Edit" name="initEdit" value="<?php echo $r['id'] ?>" formaction="<?php echo site_url($module . '/edit') ?>"></button>

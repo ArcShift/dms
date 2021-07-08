@@ -27,6 +27,13 @@
                     <?php echo form_error('kota'); ?>
                 </div>
             </div>
+            <div class="form-group">
+                <label>Jumlah Akun</label>
+                <input class="form-control" value="10" type="number" name="akun">
+                <div class="error invalid-feedback">
+                    <?php echo form_error('akun'); ?>
+                </div>
+            </div>
         </div>
         <div class="d-block text-right card-footer">
             <a class="mr-2 btn btn-primary" href="<?php echo site_url($module) ?>">Kembali</a>

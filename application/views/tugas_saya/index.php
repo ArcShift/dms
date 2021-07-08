@@ -14,8 +14,14 @@
             <div class="col-sm-4">
                 <button class="btn btn-sm btn-outline-primary fa fa-plus" id="btnTugasBaru"> Tambah Tugas</button>
             </div>
-            <div class="col-sm-2"></div>
             <div class="col-sm-2 div-filter-cari"></div>
+            <div class="col-sm-2">
+                <select class="form-control form-control-sm" id="filterPenerima">
+                    <option value="">~ Semua tugas ~</option>
+                    <option value="tugas_masuk">Tugas masuk</option>
+                    <option value="tugas_keluar">Tugas keluar</option>
+                </select>
+            </div>
             <div class="col-sm-2">
                 <select class="form-control form-control-sm" id="filterStatus">
                     <option value="">~ Status ~</option>
@@ -41,6 +47,7 @@
                     <th>Pelaksana</th>
                     <th>Jadwal</th>
                     <th>Status</th>
+                    <th>Alur</th>
                 </tr>
             </thead>
         </table>
@@ -230,7 +237,8 @@
             "bLengthChange": false,
             "order": [],
             "columnDefs": [
-                {className: "details-control", "targets": [0]}
+                {className: "details-control", "targets": [0]},
+                {"targets": [5], "visible": false}
             ]
         });
         $('#filterStatus').change(function () {
@@ -238,6 +246,9 @@
         });
         $('#filterPeriode').change(function () {
             tbMain.columns(3).search($(this).val()).draw();
+        });
+        $('#filterPenerima').change(function () {
+            tbMain.columns(5).search($(this).val()).draw();
         });
         getTugas();
         $('.select2').select2();
@@ -276,6 +287,7 @@
                     pelaksana,
                     d.tanggal,
                     d.deadline,
+                    d.alur,
                 ]);
             }
             tugas = data;

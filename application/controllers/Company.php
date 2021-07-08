@@ -58,6 +58,7 @@ class Company extends MY_Controller {
         } elseif ($this->input->post('edit')) {
 //            $result = $this->model->detail($this->input->post('edit'));
             $this->form_validation->set_rules('nama', 'Nama', 'required');
+            $this->form_validation->set_rules('akun', 'Akun', 'required|integer');
             if ($this->form_validation->run()) {
                 if ($this->model->update()) {
                     $this->load->model('m_log');
@@ -93,6 +94,10 @@ class Company extends MY_Controller {
         }
         if (!empty($company)) {
             $this->data['data'] = $company;
+            $this->db->join('personil p', 'p.id = u.id_personil AND p.id_company='. $company['id']);
+            $this->data['pic'] = count($this->db->get_where('users u', ['u.id_role'=> '2'])->result());
+            $this->db->join('personil p', 'p.id = u.id_personil AND p.id_company='. $company['id']);
+            $this->data['akun'] = count($this->db->get_where('users u', ['u.id_role!='=> '2'])->result());
             $this->data['unit_kerja'] = $this->db->get_where('unit_kerja', ['id_company'=> $company['id']])->result_array();
             $this->data['personil'] = $this->db->get_where('personil', ['id_company'=> $company['id']])->result_array();
             $this->db->join('company_standard cs', 'cs.id_standard = s.id');

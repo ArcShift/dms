@@ -5,13 +5,36 @@ class M_user extends CI_Model {
     private $table = 'users';
 
     function role() {
-        $this->db->order_by('id', 'ASC');
-        if ($this->session->userdata('user')['role'] == 'pic' | $this->session->userdata('user')['role'] == 'ketua') {
-            $this->db->where('name', 'anggota');
-            $this->db->or_where('name', 'pic');
-            $this->db->or_where('name', 'ketua');
+//        $this->db->order_by('id', 'ASC');
+//        if ($this->session->userdata('user')['role'] == 'pic' | $this->session->userdata('user')['role'] == 'ketua') {
+//            $this->db->where('name', 'anggota');
+//            $this->db->or_where('name', 'pic');
+//            $this->db->or_where('name', 'ketua');
+//        }
+        $role = $this->db->get('role')->result_array();
+        $role2 = [];
+        foreach ($role as $r) {
+            $role2[$r['name']] = $r;
         }
-        return $this->db->get('role')->result_array();
+        if ($this->session->user['role'] != 'admin') {
+            unset($role2['admin']);
+            unset($role2['konsultan']);
+        }
+        //cek batas user perusahaan
+        $this->db->select('c.*, SUM(IF(r.name = "pic", 1,0)) AS pic, SUM(IF(r.name = "ketua" OR r.name = "anggota", 1,0)) AS akun');
+        $this->db->join('personil p', 'p.id_company = c.id');
+        $this->db->join('users u', 'u.id_personil = p.id');
+        $this->db->join('role r', 'r.id = u.id_role');
+        $this->db->group_by('c.id');
+        $c = $this->db->get('company c', ['c.id' => $this->session->activeCompany['id']])->row();
+        if ($c->pic >= $c->max_pic) {//check batas pic
+            unset($role2['pic']);
+        }
+        if ($c->akun >= $c->max_akun) {//check batas pic
+            unset($role2['anggota']);
+            unset($role2['ketua']);
+        }
+        return $role2;
     }
 
     function create() {

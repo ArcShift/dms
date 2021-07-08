@@ -22,12 +22,18 @@
         <br/>
         <div class="row div-filter">
             <div class="col-sm-2"></div>
-            <div class="col-sm-2"></div>
             <div class="col-sm-2">
                 <!--<input class="form-control form-control-sm" onfocus="(this.type='date')" id="minDate" placeholder="Tanggal Awal">-->
+                <!--<input class="form-control form-control-sm" onfocus="(this.type='date')" id="maxDate" placeholder="Tanggal Akhir">-->
             </div>
             <div class="col-sm-2 col-search-box">
-                <!--<input class="form-control form-control-sm" onfocus="(this.type='date')" id="maxDate" placeholder="Tanggal Akhir">-->
+            </div>
+            <div class="col-sm-2">
+                <select class="form-control form-control-sm" id='filterAsal'>
+                    <option value="">~ Semua Tugas ~</option>
+                    <option value="PIC">Tugas dari PIC</option>
+                    <option value="MANDIRI">Tugas Mandiri</option>
+                </select>
             </div>
             <div class="col-sm-2">
                 <select class="form-control form-control-sm" id='filterStatus'>
@@ -56,6 +62,7 @@
                     <th>Jadwal</th>
                     <!--<th>Bukti</th>-->
                     <th>Status</th>
+                    <th>Asal</th>
                     <!--<th>Aksi</th>-->
                 </tr>
             </thead>
@@ -73,6 +80,7 @@
                         <td><?= $d->tanggal ?></td>
                         <!--<td><?= $d->path ?></td>-->
                         <td><?= $d->deadline ?></td>
+                        <td><?= $d->asal ?></td>
     <!--                        <td>
                             <button class="btn btn-sm btn-outline-primary fa fa-upload" onclick="initUpload(<?= $k ?>)"></button>
                             <button class="btn btn-sm btn-outline-primary fa fa-info-circle" onclick="detail(<?= $k ?>)"></button>
@@ -324,6 +332,9 @@
         tbMain = $('#tbMain').DataTable({
             "bLengthChange": false,
             "order": [],
+            "columnDefs": [
+                {"targets": [5], "visible": false}
+            ]
         });
         $('#minDate, #maxDate').on('change', function () {
             tbMain.draw();
@@ -455,6 +466,9 @@
     });
     $('#filterPeriode').change(function () {
         tbMain.columns(3).search($(this).val()).draw();
+    });
+    $('#filterAsal').change(function () {
+        tbMain.columns(5).search($(this).val()).draw();
     });
     var minDate, maxDate;
     minDate = $('#minDate');

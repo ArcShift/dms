@@ -1,4 +1,4 @@
-<?php // print_r($data)             ?>
+<?php // print_r($data)                   ?>
 <div class="card">
     <div class="card-header">
         <div>
@@ -6,16 +6,30 @@
         </div>
     </div>
     <div class="card-body">
-        <label>Alamat</label><br>
-        <label><b><?= $data['alamat']; ?></b></label>
+        <div class="form-group">
+            <label><b>Alamat</b></label>
+            <div class="bg-light box-detail p-2"><?= $data['alamat']; ?></div>
+        </div>
         <div class="row">
             <div class="col-sm-6">
-                <label>Kota</label><br>
-                <label><b><?= $data['kota']; ?></b></label>
+                <div class="form-group">
+                    <label><b>Kota</b></label>
+                    <div class="bg-light box-detail p-2"><?= $data['kota']; ?></div>
+                </div>
+                <div class="form-group">
+                    <label><b>PIC</b></label>
+                    <div class="bg-light box-detail p-2"><?= $pic . '/' . $data['max_pic']; ?></div>
+                </div>
             </div>
             <div class="col-sm-6">
-                <label>Propinsi</label><br>
-                <label><b><?= $data['province']; ?></b></label>
+                <div class="form-group">
+                    <label><b>Propinsi</b></label>
+                    <div class="bg-light box-detail p-2"><?= $data['province']; ?></div>
+                </div>
+                <div class="form-group">
+                    <label><b>Ketua / Anggota</b></label>
+                    <div class="bg-light box-detail p-2"><?= $akun . '/' . $data['max_akun']; ?></div>
+                </div>
             </div>
         </div>
         <hr>
