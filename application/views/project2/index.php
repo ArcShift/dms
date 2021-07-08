@@ -124,9 +124,9 @@
                 '</button>' +
                 '<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">' +
 //                '<a class="dropdown-item" href="#">Detail</a>' +
-                '<a class="dropdown-item" onclick="initEdit(' + idx + ')">Ubah</a>' +
-                '<button class="dropdown-item" name="idData" value="' + d.id + '">Tugas</button>' +
-                (d.tugas == 0 ? '<a class="dropdown-item" onclick="initDelete(' + idx + ')">Hapus</a>' : '') +
+                '<a class="dropdown-item" onclick="initEdit(' + idx + ')"><i class="text-primary fa fa-edit"></i>&nbsp&nbspUbah Proyek</a>' +
+                '<button class="dropdown-item" name="idData" value="' + d.id + '"><i class="text-primary fa fa-list"></i>&nbsp&nbspTugas</button>' +
+                (d.tugas == 0 ? '<a class="dropdown-item" onclick="initDelete(' + idx + ')"><i class="text-danger fa fa-trash"></i>&nbsp&nbspHapus</a>' : '') +
                 '</div>' +
                 '</div>' +
                 '</td>' +
@@ -152,7 +152,7 @@
                     d.nama,
                     d.deskripsi,
                     d.tugas,
-                    (d.jadwal == 0 ? '0' : d.selesai / d.jadwal * 100) + '%',
+                    (d.jadwal == 0 ? '0' : Math.round(d.selesai / d.jadwal * 100)) + '%',
                 ]);
             }
             project = data;

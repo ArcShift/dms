@@ -26,11 +26,11 @@ class M_position_personil extends CI_Model {
         return $this->db->get('position_personil pp')->result();
     }
 
-//    function get_pelaksana_project($id_project) {
-//        $this->db->join('personil_task pt', 'pt.id_position_personil = pp.id');
-//        $this->db->join('tugas t', 't.id = pt.id_tugas AND t.id_project='.$id_project);
-//        return $this->get();
-//    }
+    function get_pelaksana_project($id_project) {
+        $this->db->join('personil_task pt', 'pt.id_position_personil = pp.id');
+        $this->db->join('tugas t', 't.id = pt.id_tugas AND t.id_project='.$id_project);
+        return $this->get();
+    }
 
     function get_by_distribution_ketua($id_pp_ketua, $id_document = null) {
         $pp = $this->db->get_where('position_personil', ['id'=> $id_pp_ketua])->row();

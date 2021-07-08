@@ -66,7 +66,10 @@ class Project2 extends MY_Controller {
         if (empty($this->session->idData)) {
             redirect($this->module);
         }
-        $project = $this->db->get_where('project', ['id' => $this->session->idData])->row();
+        $this->db->select('p.*, COUNT(t.id) AS tugas, COUNT(j.id) AS jadwal, SUM(IF(j.upload_date IS NOT NULL, 1, 0)) AS selesai');
+        $this->db->join('tugas t', 't.id_project = p.id', 'LEFT');
+        $this->db->join('jadwal j', 'j.id_tugas = t.id', 'LEFT');
+        $project = $this->db->get_where('project p', ['p.id' => $this->session->idData])->row();
         if (empty($project)) {
             redirect($this->module);
         }

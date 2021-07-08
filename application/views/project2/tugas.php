@@ -2,12 +2,15 @@
 //print_r($this->session->);
 ?>
 <div class="card">
-    <div class="card-header">
-        <?= $project->nama ?>
-        &nbsp;
-        <sup class="text-primary fa fa-info-circle" title="<?= $project->deskripsi ?>"></sup>
-    </div>
     <div class="card-body">
+        <b>
+            <?= $project->nama ?>
+            &nbsp;
+            <sup class="text-primary fa fa-info-circle" title="<?= $project->deskripsi ?>"></sup>
+            <span><?= round($project->selesai/$project->jadwal*100, 2) ?>%</span>
+            <a class="btn btn-sm btn-outline-primary float-right" href="<?= site_url($module)?>">Kembali</a>
+        </b>
+        <hr>
         <div class="row mb-2">
             <div class="col-sm-2">
                 <button class="btn btn-sm btn-outline-primary fa fa-plus" id="btnTugasBaru"> Tambah Tugas</button>

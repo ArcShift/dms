@@ -55,9 +55,11 @@
                             <!--<td></td>-->
                             <td class="text-center">
                                 <?php if (!empty($uk['tugas_unit'])) { ?>
-                                    <button class="btn btn-outline-primary fa fa-edit" value="<?= $uk['id_position_personil'] ?>" name="jobdesk" title="Job Desk"></button>
+                                    <button class="btn btn-outline-primary fa fa-edit" value="<?= $uk['id_position_personil'] ?>" name="jobdesk" title="Edit Tugas Personil"></button>
+                                <?php }else{ ?>
+                                    <button class="btn btn-outline-primary fa fa-edit" value="<?= $uk['id'] ?>" name="tugasUnit" title="Edit Tugas Unit"></button>
                                 <?php } ?>
-                                <span class="btn btn-outline-danger fa fa-trash" onclick="initDelete(<?= $k ?>)" title="Hapus"></span>
+                                <span class="btn btn-outline-danger fa fa-trash" onclick="initDelete(<?= $k ?>)" title="Hapus Unit Kerja pada Personil"></span>
                             </td>
                         </tr>
                         <?php foreach ($uk['tugas_unit'] as $k2 => $tu) { ?>

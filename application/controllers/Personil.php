@@ -59,6 +59,9 @@ class Personil extends MY_Controller {
         } elseif ($this->input->post('jobdesk')) {
             $this->session->set_userdata('idData', $this->input->post('jobdesk'));
             redirect($this->module . '/jobdesk');
+        } elseif ($this->input->post('tugasUnit')) {
+            $this->session->set_userdata('idData', $this->input->post('tugasUnit'));
+            redirect('unit_kerja/edit');
         }
         $this->data['data'] = $this->model->detail($this->session->idData);
         $this->render('edit');
