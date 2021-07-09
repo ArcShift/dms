@@ -57,6 +57,12 @@
                                 <?php echo $this->config->item('app_name') ?>
                             </span>
                         <?php } ?>
+                        <?php if (!empty($this->session->flashdata('msgSuccess'))) { ?>
+                            <div class="alert alert-success alert-dismissible">
+                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                <h4><i class="icon fa fa-ban"></i> <?= $this->session->flashdata('msgSuccess') ?></h4>
+                            </div>
+                        <?php } ?>
                         <?php if ($this->input->post('login')) { ?>
                             <div class="alert alert-danger alert-dismissible">
                                 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
@@ -83,6 +89,7 @@
                                 Login
                             </button>
                         </div>
+                        <a class="pull-right" href="<?= site_url('login/lupa_password') ?>">lupa password</a>
                     </form>
                     <div class="login100-more" style="background-image: url('<?= base_url('assets/images/login-ema.jpg') ?>');">
                     </div>

@@ -18,7 +18,7 @@ class Dms {
         $config['validation'] = TRUE; // bool whether to validate email or not 
         $CI->load->library('email');
         $CI->email->initialize($config);
-        $CI->email->from('darkwarrior0236@gmail.com', 'DMS Delta');
+        $CI->email->from('darkwarrior0236@gmail.com', 'EMA: Easy Management');
         $CI->email->to($penerima);
         $CI->email->subject($judul);
         $CI->email->message($message);
