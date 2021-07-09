@@ -39,7 +39,7 @@ class Login extends MY_Core {
             if (empty($row)) {
                 $data['msgError'] = 'Email tidak ditemukan';
             } else {
-                $this->load->helper('main');
+                $this->load->helper('main1');
                 $token = randomString(20);
                 $this->db->set('token', $token);
                 $this->db->where('id', $row->id);
