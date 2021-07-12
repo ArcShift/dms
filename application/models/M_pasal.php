@@ -121,9 +121,9 @@ class M_pasal extends CI_Model {
                 $id_standard = $this->session->activeStandard['id'];
             }
             if ($filterAccess) {
-                $this->db->select('p.*');
+                $this->db->select('p.*, pa.status');
                 $this->db->join('pasal_access pa', 'pa.id_pasal = p.id  AND pa.id_company=' . $this->session->activeCompany['id'], 'LEFT');
-                $this->db->where('pa.status<>', 'DISABLE');
+//                $this->db->where('pa.status<>', 'DISABLE');
                 $this->db->group_by('p.id');
             }
             $this->db->where('p.id_standard', $id_standard);
@@ -132,12 +132,15 @@ class M_pasal extends CI_Model {
 //            die($this->db->last_query());
             $sort = [];
             foreach ($result as $k => $v) {
-                $v['level'] = 0;
-                array_push($sort, $v);
-                $child = $this->getChild($v['id'], 1, $filterAccess);
-                foreach ($child as $v2) {
+                if ($filterAccess & $v['status'] == 'DISABLE') {                    
+                } else {
+                    $v['level'] = 0;
+                    array_push($sort, $v);
+                    $child = $this->getChild($v['id'], 1, $filterAccess);
+                    foreach ($child as $v2) {
 //                    $v2['name'] = $v['name'] . ' - ' . $v2['name'];
-                    array_push($sort, $v2);
+                        array_push($sort, $v2);
+                    }
                 }
             }
 //            die (print_r($sort));
@@ -151,15 +154,16 @@ class M_pasal extends CI_Model {
 
     private function getChild($id, $level, $filterAccess) {
 //        if ($filterAccess) {
-            $this->db->select('p.*, pa.status');
-            $this->db->join('pasal_access pa', 'pa.id_pasal = p.id AND pa.id_company=' . $this->session->activeCompany['id'], 'LEFT');
-            $this->db->group_by('p.id');
+        $this->db->select('p.*, pa.status');
+        $this->db->join('pasal_access pa', 'pa.id_pasal = p.id AND pa.id_company=' . $this->session->activeCompany['id'], 'LEFT');
+        $this->db->group_by('p.id');
 //        }
         $result = $this->db->get_where('pasal p', ['p.parent' => $id])->result_array();
 //        die(print_r($this->db->last_query()));
         $sort = [];
         foreach ($result as $k => $v) {
             if ($filterAccess & $v['status'] == 'DISABLE') {
+                
             } else {
                 $v['level'] = $level;
                 array_push($sort, $v);
