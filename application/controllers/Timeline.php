@@ -14,7 +14,7 @@ class Timeline extends MY_Controller {
         if ($this->session->user['role'] == 'admin') {
             $this->data['menuStandard'] = 'standardOnly';
             $this->load->model('m_pasal');
-            $this->data['pasal'] = $this->m_pasal->getByStandard($this->session->activeStandards['id']);
+            $this->data['pasal'] = $this->m_pasal->get(null, $this->session->activeStandards['id']);
             $this->render('indexAdmin');
         } else {//pic
             $this->data['menuStandard'] = 'standard';
@@ -25,8 +25,9 @@ class Timeline extends MY_Controller {
                     $standard['pasal_name_' . $p] = $this->db->get_where('pasal', ['id' => $standard['pasal_' . $p]])->row_array()['name'];
                     $pemenuhan = $this->getPemenuhanByPasal($standard['pasal_' . $p]);
                     $standard['status_pasal_' . $p] = round(($pemenuhan['doc'] + $pemenuhan['imp']) / 2);
+                } else {
+                    $standard['status_pasal_' . $p] = '0';
                 }
-                $standard['status_pasal_' . $p] = '0';
             }
             $this->data['standard'] = $standard;
             $this->data['gapAnalisa'] = $this->db->get_where('gap_analisa', ['id_company' => $this->session->activeCompany['id'], 'id_standard' => $this->session->activeStandard['id']])->result();
