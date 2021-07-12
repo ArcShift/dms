@@ -10,7 +10,7 @@ class Management_hope extends MY_Controller {
     }
 
     public function index() {
-        $this->data['menuStandard']= 'standard';
+        $this->data['menuStandard'] = 'standard';
         $this->render('read');
     }
 
@@ -23,12 +23,19 @@ class Management_hope extends MY_Controller {
     }
 
     function pasal() {
-        $this->db->select('p.*, h.persentase');
+        $this->db->select('p.*, h.persentase, pa.status');
         $this->db->join('hope h', 'h.id_pasal = p.id AND h.id_company = ' . $this->session->activeCompany['id'], 'LEFT');
+        $this->db->join('pasal_access pa', 'pa.id_pasal = p.id AND pa.id_company = ' . $this->session->activeCompany['id'], 'LEFT');
         $this->db->where('p.parent', null);
         $this->db->where('p.id_standard', $this->session->activeStandard['id']);
         $result = $this->db->get('pasal p')->result_array();
-        echo json_encode($result);
+        $data = [];
+        foreach ($result as $k => $r) {
+            if ($r['status'] != 'DISABLE') {
+                array_push($data, $r);
+            }
+        }
+        echo json_encode($data);
     }
 
     function edit() {
@@ -48,4 +55,5 @@ class Management_hope extends MY_Controller {
         }
         echo 'success';
     }
+
 }

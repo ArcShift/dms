@@ -49,7 +49,7 @@ class Document_search extends MY_Controller {
 
     function get_pasal() {//AJAX
         $this->load->model('m_pasal');
-        $data = $this->m_pasal->getByStandard($this->input->get('id'));//TODO: fix pasal sort order
+        $data = $this->m_pasal->get(null, $this->input->get('id'));//TODO: fix pasal sort order
         echo json_encode($data);
     }
 

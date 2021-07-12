@@ -115,23 +115,32 @@ class M_pasal extends CI_Model {
         }
     }
 
-    function get($id = null, $id_standard = null) {
+    function get($id = null, $id_standard = null, $filterAccess = true) {//get sorted pasal
         if (empty($id)) {
-            if(empty($id_standard)){
+            if (empty($id_standard)) {
                 $id_standard = $this->session->activeStandard['id'];
             }
-            $this->db->where('id_standard', $id_standard);
-            $this->db->where('parent IS NULL');
+            if ($filterAccess) {
+                $this->db->select('p.*');
+                $this->db->join('pasal_access pa', 'pa.id_pasal = p.id  AND pa.id_company=' . $this->session->activeCompany['id'], 'LEFT');
+                $this->db->where('pa.status<>', 'DISABLE');
+                $this->db->group_by('p.id');
+            }
+            $this->db->where('p.id_standard', $id_standard);
+            $this->db->where('p.parent IS NULL');
             $result = $this->db->get_where('pasal p')->result_array();
+//            die($this->db->last_query());
             $sort = [];
             foreach ($result as $k => $v) {
+                $v['level'] = 0;
                 array_push($sort, $v);
-                $child = $this->getChild($v['id']);
+                $child = $this->getChild($v['id'], 1, $filterAccess);
                 foreach ($child as $v2) {
 //                    $v2['name'] = $v['name'] . ' - ' . $v2['name'];
                     array_push($sort, $v2);
                 }
             }
+//            die (print_r($sort));
             return $sort;
         } else {
             $data = $this->db->get_where('pasal', ['id' => $id])->row_array();
@@ -140,33 +149,45 @@ class M_pasal extends CI_Model {
         }
     }
 
-    private function getChild($id) {
-        $result = $this->db->get_where('pasal', ['parent' => $id])->result_array();
+    private function getChild($id, $level, $filterAccess) {
+//        if ($filterAccess) {
+            $this->db->select('p.*, pa.status');
+            $this->db->join('pasal_access pa', 'pa.id_pasal = p.id AND pa.id_company=' . $this->session->activeCompany['id'], 'LEFT');
+            $this->db->group_by('p.id');
+//        }
+        $result = $this->db->get_where('pasal p', ['p.parent' => $id])->result_array();
+//        die(print_r($this->db->last_query()));
+        $sort = [];
+        foreach ($result as $k => $v) {
+            if ($filterAccess & $v['status'] == 'DISABLE') {
+            } else {
+                $v['level'] = $level;
+                array_push($sort, $v);
+                $child = $this->getChild($v['id'], $level++, $filterAccess);
+                foreach ($child as $k2 => $v2) {
+//                $v2['name'] = $v['name'] . ' - ' . $v2['name'];
+                    array_push($sort, $v2);
+                }
+            }
+        }
+        return $sort;
+    }
+
+    function getByStandard($standard) {
+        $this->db->where('id_standard', $standard);
+        $this->db->where('parent IS NULL');
+        $result = $this->db->get_where('pasal p')->result_array();
         $sort = [];
         foreach ($result as $k => $v) {
             array_push($sort, $v);
-            $child = $this->getChild($v['id']);
-            foreach ($child as $k2 => $v2) {
-//                $v2['name'] = $v['name'] . ' - ' . $v2['name'];
+            $child = $this->getChild($v['id'],);
+            foreach ($child as $v2) {
                 array_push($sort, $v2);
             }
         }
         return $sort;
     }
-    function getByStandard($standard) {
-        $this->db->where('id_standard', $standard);
-            $this->db->where('parent IS NULL');
-            $result = $this->db->get_where('pasal p')->result_array();
-            $sort = [];
-            foreach ($result as $k => $v) {
-                array_push($sort, $v);
-                $child = $this->getChild($v['id']);
-                foreach ($child as $v2) {
-                    array_push($sort, $v2);
-                }
-            }
-            return $sort;
-    }
+
     function getByDocument($id_document) {
         $this->db->select('p.*');
         $this->db->join('document_pasal dp', 'dp.id_pasal = p.id AND dp.id_document = ' . $id_document);
