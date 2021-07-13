@@ -17,7 +17,7 @@
                     <tr>
                         <th>#</th>
                         <th style="width: 300px">Proyek</th>
-                        <th style="width: 300px">Deskripsi</th>
+                        <th style="width: 300px">Pelaksana</th>
                         <th>Jumlah Tugas</th>
                         <th>Status Proyek</th>
                         <th>Aksi</th>
@@ -114,8 +114,8 @@
         // `d` is the original data object for the row
         return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">' +
                 '<tr>' +
-                '<td>Pelaksana:</td>' +
-                '<td>' + d.pelaksanaImg + '</td>' +
+                '<td>Deskripsi:</td>' +
+                '<td>' + d.deskripsi + '</td>' +
                 '</tr>' +
                 '</table>';
     }
@@ -136,11 +136,11 @@
                 tbMain.row.add([
                         '',
                         d.nama,
-                        d.deskripsi,
+                        d.pelaksanaImg,
                         d.tugas,
                         (d.jadwal == 0 ? '0' : Math.round(d.selesai / d.jadwal * 100)) + '%',
-                        '<button class="btn btn-sm btn-outline-primary fa fa-edit ml-1" type="button" onclick="initEdit(' + i + ')" title="Edit"></button>' +
-                        '<button class="btn btn-sm btn-outline-primary fa fa-list ml-1" name="idData" value="' + d.id + '" title="Tugas"></button>'+
+                        '<button class="btn btn-sm btn-outline-primary fa fa-edit ml-1" type="button" onclick="initEdit(' + i + ')" title="Ubah Proyek"></button>' +
+                        '<button class="btn btn-sm btn-outline-primary fa fa-list ml-1" name="idData" value="' + d.id + '" title="Lihat & Kelola Tugas"></button>'+
                         (d.tugas == 0 ? '<button class="btn btn-sm btn-outline-danger fa fa-trash ml-1" onclick="initDelete(' + i + ')"></button>' : ''),
                 ]);
         }
