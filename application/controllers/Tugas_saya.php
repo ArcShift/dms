@@ -15,6 +15,7 @@ class Tugas_saya extends MY_Controller {
         $this->db->select('uk.*, pp.id AS jabatan');
         $this->db->join('position_personil pp', 'pp.id_unit_kerja = uk.id AND pp.id_personil=' . $this->session->user['id_personil']);
         $this->data['unit_kerja'] = $this->db->get('unit_kerja uk')->result();
+        $this->data['proyek'] = $this->db->get_where('project', ['id_company'=> $this->session->activeCompany['id']])->result();
         $this->render('index');
     }
 

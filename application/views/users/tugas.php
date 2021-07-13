@@ -31,8 +31,8 @@
             <div class="col-sm-2">
                 <select class="form-control form-control-sm" id='filterAsal'>
                     <option value="">~ Semua Tugas ~</option>
-                    <option value="PIC">Tugas dari PIC</option>
-                    <option value="MANDIRI">Tugas Mandiri</option>
+                    <option value="PIC">Tugas masuk</option>
+                    <option value="MANDIRI">Tugas Saya</option>
                 </select>
             </div>
             <div class="col-sm-2">

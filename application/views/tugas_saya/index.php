@@ -11,10 +11,18 @@
 <div class="card">
     <div class="card-body">
         <div class="row mb-2">
-            <div class="col-sm-4">
+            <div class="col-sm-2">
                 <button class="btn btn-sm btn-outline-primary fa fa-plus" id="btnTugasBaru"> Tambah Tugas</button>
             </div>
             <div class="col-sm-2 div-filter-cari"></div>
+            <div class="col-sm-2">
+                <select class="form-control form-control-sm" id="filterProyek">
+                    <option value="">~ Semua Proyek ~</option>
+                    <?php foreach ($proyek as $k => $p) { ?>
+                        <option value="<?= $p->nama ?>"><?= $p->nama ?></option>
+                    <?php } ?>
+                </select>
+            </div>
             <div class="col-sm-2">
                 <select class="form-control form-control-sm" id="filterPenerima">
                     <option value="">~ Semua tugas ~</option>
@@ -49,6 +57,7 @@
                     <th>Status</th>
                     <th>Alur</th>
                     <th>Aksi</th>
+                    <th>Proyek</th>
                 </tr>
             </thead>
         </table>
@@ -239,7 +248,7 @@
             "order": [],
             "columnDefs": [
                 {className: "details-control", "targets": [0]},
-                {"targets": [5], "visible": false}
+                {"targets": [5, 7], "visible": false}
             ]
         });
         $('#filterStatus').change(function () {
@@ -248,8 +257,8 @@
         $('#filterPeriode').change(function () {
             tbMain.columns(3).search($(this).val()).draw();
         });
-        $('#filterPenerima').change(function () {
-            tbMain.columns(5).search($(this).val()).draw();
+        $('#filterProyek').change(function () {
+            tbMain.columns(7).search($(this).val()).draw();
         });
         getTugas();
         $('.select2').select2();
@@ -287,7 +296,7 @@
                     editDelete = '<button class="btn btn-sm btn-outline-primary fa fa-edit ml-1" onclick="initEdit(' + i + ')"></button>'
                             + '<button class="btn btn-sm btn-outline-danger fa fa-trash ml-1" onclick="initDelete(' + i + ')"></button>';
                 }
-                tbMain.row.add([    
+                tbMain.row.add([
                     '',
                     d.tugas,
                     pelaksana,
@@ -296,6 +305,7 @@
                     d.alur,
                     '<button class="btn btn-sm btn-outline-primary fa fa-upload ml-1" onclick="initUpload(' + i + ')"></button>' +
                             editDelete,
+                    d.project,
                 ]);
             }
             tugas = data;

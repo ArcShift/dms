@@ -429,6 +429,7 @@ if ($this->input->get('standard')) {
                     autoclose: true,
                 });
                 $('.data-table').DataTable();
+                $('form').attr('autocomplete','off');
                 afterReady();
             });
             var module = <?php echo json_encode($this->session->userdata('module')) ?>;
