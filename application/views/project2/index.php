@@ -20,6 +20,7 @@
                         <th style="width: 300px">Deskripsi</th>
                         <th>Jumlah Tugas</th>
                         <th>Status Proyek</th>
+                        <th>Aksi</th>
                     </tr>
                 </thead>
             </table>
@@ -116,57 +117,46 @@
                 '<td>Pelaksana:</td>' +
                 '<td>' + d.pelaksanaImg + '</td>' +
                 '</tr>' +
-                '<tr>' +
-                '<td>Aksi:</td>' +
-                '<td>' +
-                '<div class="dropdown">' +
-                '<button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' +
-                '</button>' +
-                '<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">' +
-//                '<a class="dropdown-item" href="#">Detail</a>' +
-                '<a class="dropdown-item" onclick="initEdit(' + idx + ')"><i class="text-primary fa fa-edit"></i>&nbsp&nbspUbah Proyek</a>' +
-                '<button class="dropdown-item" name="idData" value="' + d.id + '"><i class="text-primary fa fa-list"></i>&nbsp&nbspTugas</button>' +
-                (d.tugas == 0 ? '<a class="dropdown-item" onclick="initDelete(' + idx + ')"><i class="text-danger fa fa-trash"></i>&nbsp&nbspHapus</a>' : '') +
-                '</div>' +
-                '</div>' +
-                '</td>' +
-                '</tr>' +
                 '</table>';
     }
     function getProject() {
         $.getJSON('<?= site_url($module . '/get') ?>', null, function (data) {
-            console.log(data);
-            tbMain.clear();
-            for (var i = 0; i < data.length; i++) {
-                var d = data[i];
+        console.log(data);
+                tbMain.clear();
+                for (var i = 0; i < data.length; i++) {
+        var d = data[i];
                 data[i].pelaksanaImg = '';
 //                data[i].pelaksana = '<img src="<?= base_url('assets/images/default_user.jpg') ?>" width="30" title="Toimul Setyo Andri - IT">';
 //                data[i].pelaksana = '-';
                 for (var j = 0; j < d.pelaksana.length; j++) {
-                    var pel = d.pelaksana[j];
-                    data[i].pelaksanaImg += '<img class="rounded-circle" style="object-fit: cover" src="' + (pel.photo == null ? '<?= base_url('assets/images/default_user.jpg') ?>' : '<?= base_url('upload/profile_photo/') ?>' + pel.photo) + '" width="30" height="30" title="' + pel.personil + '">';
-                }
-                data[i].status = 'n%';
+        var pel = d.pelaksana[j];
+                data[i].pelaksanaImg += '<img class="rounded-circle" style="object-fit: cover" src="' + (pel.photo == null ? '<?= base_url('assets/images/default_user.jpg') ?>' : '<?= base_url('upload/profile_photo/') ?>' + pel.photo) + '" width="30" height="30" title="' + pel.personil + '">';
+        }
+        data[i].status = 'n%';
                 tbMain.row.add([
-                    '',
-                    d.nama,
-                    d.deskripsi,
-                    d.tugas,
-                    (d.jadwal == 0 ? '0' : Math.round(d.selesai / d.jadwal * 100)) + '%',
+                        '',
+                        d.nama,
+                        d.deskripsi,
+                        d.tugas,
+                        (d.jadwal == 0 ? '0' : Math.round(d.selesai / d.jadwal * 100)) + '%',
+                        '<button class="btn btn-sm btn-outline-primary fa fa-edit ml-1" type="button" onclick="initEdit(' + i + ')" title="Edit"></button>' +
+                        '<button class="btn btn-sm btn-outline-primary fa fa-list ml-1" name="idData" value="' + d.id + '" title="Tugas"></button>'+
+                        (d.tugas == 0 ? '<button class="btn btn-sm btn-outline-danger fa fa-trash ml-1" onclick="initDelete(' + i + ')"></button>' : ''),
                 ]);
-            }
-            project = data;
-            tbMain.draw();
+        }
+        project = data;
+                tbMain.draw();
         });
-    }
-    $('#createProject').click(function () {
+        }
+        $('#createProject').click(function () {
         var m = $('#modalCreate');
         m.modal('show');
         m.find('.modal-title').html('Buat Proyek Baru');
         m.find('form').trigger('reset');
         m.find('.btn-save').attr('name', 'create');
         m.find('.input-mode').val('create');
-    });
+    }
+    );
     $('#formCreate').submit(function (e) {
         e.preventDefault();
         post(this, 'set');

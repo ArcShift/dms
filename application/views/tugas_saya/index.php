@@ -48,6 +48,7 @@
                     <th>Jadwal</th>
                     <th>Status</th>
                     <th>Alur</th>
+                    <th>Aksi</th>
                 </tr>
             </thead>
         </table>
@@ -281,13 +282,20 @@
                     var pel = d.pelaksana[j];
                     pelaksana += '<img class="rounded-circle" style="object-fit: cover" src="' + (pel.photo == null ? '<?= base_url('assets/images/default_user.jpg') ?>' : '<?= base_url('upload/profile_photo/') ?>' + pel.photo) + '" width="30" height="30" title="' + pel.fullname + '">';
                 }
-                tbMain.row.add([
+                var editDelete = '';
+                if (d.filter) {
+                    editDelete = '<button class="btn btn-sm btn-outline-primary fa fa-edit ml-1" onclick="initEdit(' + i + ')"></button>'
+                            + '<button class="btn btn-sm btn-outline-danger fa fa-trash ml-1" onclick="initDelete(' + i + ')"></button>';
+                }
+                tbMain.row.add([    
                     '',
                     d.tugas,
                     pelaksana,
                     d.tanggal,
                     d.deadline,
                     d.alur,
+                    '<button class="btn btn-sm btn-outline-primary fa fa-upload ml-1" onclick="initUpload(' + i + ')"></button>' +
+                            editDelete,
                 ]);
             }
             tugas = data;
@@ -423,14 +431,11 @@
     function format(idx) {
         var d = tugas[idx];
         var pembuat = ' - ';
-        var editDelete = '';
+
         if (d.pembuat != null) {
             pembuat = '<img class="rounded-circle" style="object-fit: cover" src="' + (d.photo == null ? '<?= base_url('assets/images/default_user.jpg') ?>' : '<?= base_url('upload/profile_photo/') ?>' + d.photo) + '" width="30" height="30" title="' + d.pembuat + '">';
         }
-        if (d.filter) {
-            editDelete = '<a class="dropdown-item" onclick="initEdit(' + idx + ')">Ubah</a>'
-                    + '<a class="dropdown-item" onclick="initDelete(' + idx + ')">Hapus</a>';
-        }
+
         return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">' +
                 '<tr>' +
                 '<td>Pemberi Tugas:</td>' +
@@ -439,20 +444,6 @@
                 '<tr>' +
                 '<td>Proyek:</td>' +
                 '<td>' + (d.project == null ? '-' : d.project) + '</td>' +
-                '</tr>' +
-                '<tr>' +
-                '<td>Aksi:</td>' +
-                '<td>' +
-                '<div class="dropdown">' +
-                '<button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' +
-                '</button>' +
-                '<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">' +
-//                '<a class="dropdown-item" href="#">Detail</a>' +
-                '<a class="dropdown-item" onclick="initUpload(' + idx + ')">Upload</a>' +
-                editDelete +
-                '</div>' +
-                '</div>' +
-                '</td>' +
                 '</tr>' +
                 '</table>';
     }

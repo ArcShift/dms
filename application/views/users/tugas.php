@@ -63,7 +63,7 @@
                     <!--<th>Bukti</th>-->
                     <th>Status</th>
                     <th>Asal</th>
-                    <!--<th>Aksi</th>-->
+                    <th>Aksi</th>
                 </tr>
             </thead>
             <tbody>
@@ -73,7 +73,7 @@
                         <td><?= $d->tugas ?></td>
                         <td>
                             <?php foreach ($d->pelaksana as $k => $p) { ?>
-                            <img class="rounded-circle" style="object-fit: cover" src="<?= $p->photo == null ? base_url('assets/images/default_user.jpg') : base_url('upload/profile_photo/').$p->photo ?>" width="30" height="30" title="<?= $p->fullname ?>">
+                                <img class="rounded-circle" style="object-fit: cover" src="<?= $p->photo == null ? base_url('assets/images/default_user.jpg') : base_url('upload/profile_photo/') . $p->photo ?>" width="30" height="30" title="<?= $p->fullname ?>">
                             <?php } ?>
                         </td>
                         <!--<td><?= empty($d->form_terkait) ? '-' : $d->form_terkait->judul ?></td>-->
@@ -81,14 +81,14 @@
                         <!--<td><?= $d->path ?></td>-->
                         <td><?= $d->deadline ?></td>
                         <td><?= $d->asal ?></td>
-    <!--                        <td>
+                        <td>
                             <button class="btn btn-sm btn-outline-primary fa fa-upload" onclick="initUpload(<?= $k ?>)"></button>
                             <button class="btn btn-sm btn-outline-primary fa fa-info-circle" onclick="detail(<?= $k ?>)"></button>
-                        <?php if ($d->asal == 'MANDIRI') { ?>
-                                    <button class="btn btn-sm btn-outline-primary fa fa-edit" onclick="initEdit(<?= $k ?>)"></button>
-                                    <button class="btn btn-sm btn-outline-danger fa fa-trash" onclick="initDelete(<?= $k ?>)"></button>
-                        <?php } ?>
-                        </td>-->
+                            <?php if ($d->asal == 'MANDIRI') { ?>
+                                <button class="btn btn-sm btn-outline-primary fa fa-edit" onclick="initEdit(<?= $k ?>)"></button>
+                                <button class="btn btn-sm btn-outline-danger fa fa-trash" onclick="initDelete(<?= $k ?>)"></button>
+                            <?php } ?>
+                        </td>
                     </tr>
                 <?php } ?>
             </tbody>
@@ -216,6 +216,7 @@
                                 <label>File</label>
                                 <input class="radio-bukti2" type="radio" name="type_dokumen" value="url">
                                 <label>Url</label>
+                                <i class="text-primary fa fa-window-close" id="cancelRadioBukti"></i>
                                 <input class="form-control input-bukti input-file" type="file" name="dokumen">
                                 <input class="form-control input-bukti input-url" type="url" name="url">
                             </div>
@@ -425,10 +426,13 @@
         var m = $('#modalTugasBaru');
         m.modal('show');
         m.find('.input-bukti').hide();
+        $('.radio-bukti2').prop('checked', false);
+        $('#cancelRadioBukti').hide();
     });
     $('.radio-bukti2').change(function () {
         var type = $(this).val();
         var m = $('#modalTugasBaru');
+        $('#cancelRadioBukti').show();
         if (type == 'file') {
             m.find('.input-file').show();
             m.find('.input-file').prop('required', true);
@@ -440,6 +444,13 @@
             m.find('.input-url').show();
             m.find('.input-url').prop('required', true);
         }
+    });
+    $('#cancelRadioBukti').click(function () {
+        var m = $('#modalTugasBaru');
+        $('.radio-bukti2').prop('checked', false);
+        m.find('.input-bukti').hide();
+        m.find('.input-bukti').prop('required', false);
+        $(this).hide();
     });
     function initEdit(idx) {
         var m = $('#modalEdit');
@@ -508,21 +519,6 @@
                 '<tr>' +
                 '<td>Proyek:</td>' +
                 '<td>' + (d.project == null ? '-' : d.project) + '</td>' +
-                '</tr>' +
-                '<tr>' +
-                '<td>Aksi:</td>' +
-                '<td>' +
-                '<div class="dropdown">' +
-                '<button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' +
-                '</button>' +
-                '<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">' +
-//                '<a class="dropdown-item" href="#">Detail</a>' +
-                '<a class="dropdown-item" onclick="initUpload(' + idx + ')">Upload</a>' +
-                '<a class="dropdown-item" onclick="detail(' + idx + ')">Detail</a>' +
-                editDelete +
-                '</div>' +
-                '</div>' +
-                '</td>' +
                 '</tr>' +
                 '</table>';
     }
