@@ -18,9 +18,9 @@
             <span class="badge badge-secondary">Penerima Tugas: <?= count($data['task']) ?></span>
             <br>
             <br>
-            <?php if (!empty($data['dist'])|!empty($data['creator'])|!empty($data['task'])){  ?>
+            <?php if (!empty($data['dist'])|!empty($data['creator'])|!empty($data['task'])|!empty($data['task_creator'])){  ?>
             <div class="alert alert-danger" role="alert">
-                Personil ini terkait dengan data dokumen. Anda yakin ingin menghapusnya?
+                Personil ini terkait dengan data dokumen / tugas. Anda yakin ingin menghapusnya?
             </div>
             <?php } ?>
         </div>

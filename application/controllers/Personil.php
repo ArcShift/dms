@@ -87,6 +87,15 @@ class Personil extends MY_Controller {
             }
             $this->db->where('id_personil', $this->input->post('id'));
             $this->db->delete('position_personil');
+            $user = $this->db->get_where('users', ['id_personil' => $this->input->post('id')])->row();
+            if (!empty($user)) {
+                $this->db->where('id_user', $user->id);
+                $this->db->delete('log');
+                $this->db->where('penerima', $user->id);
+                $this->db->delete('notification');
+            }
+            $this->db->where('id_personil', $this->input->post('id'));
+            $this->db->delete('personil_jobdesk');
             $this->db->where('id_personil', $this->input->post('id'));
             $this->db->delete('users');
             $result = $this->db->get_where('personil', ['id' => $this->input->post('id')])->row_array();

@@ -31,7 +31,7 @@
                                 <?php if ($activeModule['acc_update']) { ?>
                                     <button class="btn btn-outline-primary btn-sm fa fa-edit" title="Edit" name="initEdit" value="<?php echo $r['id'] ?>" formaction="<?php echo site_url($module . '/edit') ?>"></button>
                                 <?php } ?>
-                                <?php if ($activeModule['acc_delete']) { ?>
+                                <?php if ($activeModule['acc_delete'] & $r['id']!= $this->session->user['id_personil']) { ?>
                                     <button class="btn btn-outline-danger btn-sm fa fa-trash" title="Hapus" name="initHapus" value="<?php echo $r['id'] ?>" formaction="<?php echo site_url($module . '/delete') ?>"></button>
                                 <?php } ?>
                             </td>
