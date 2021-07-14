@@ -7,6 +7,9 @@
     tr.shown td.details-control {
         background: url('https://datatables.net/examples/resources/details_close.png') no-repeat center;
     }
+    select .default-select {
+        color: gray;
+    }
 </style>
 <div class="card">
     <div class="card-body">
@@ -83,14 +86,14 @@
                             <div class="form-group row">
                                 <label class="col-form-label col-sm-5"><b>Judul Tugas <i class="text-danger">*</i></b></label>
                                 <div class="col-sm-7">
-                                    <input class="form-control input-tugas" name="nama" required="">
+                                    <input class="form-control input-tugas" name="nama" required="" placeholder="Tulis judul tugas">
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label class="col-form-label col-sm-5"><b>Standar</b></label>
                                 <div class="col-sm-7">
                                     <select class="form-control select-dokumen" id="selectStandard" name="standard">
-                                        <option value="">~ Standard ~</option>
+                                        <option value="" class="default-select">Tidak terikat standar</option>
                                         <?php foreach ($standard as $k => $s) { ?>
                                             <option value="<?= $s->id ?>"><?= $s->name ?></option>
                                         <?php } ?>
@@ -107,7 +110,7 @@
                                 <label class="col-form-label col-sm-5 pl-4">Form</label>
                                 <div class="col-sm-7">
                                     <select class="form-control select-form" name="form_terkait">
-                                        <option value="">~ Form ~</option>
+                                        <option value="" class="default-select">Pilih form</option>
                                         <?php foreach ($form_terkait as $k => $d) { ?>
                                             <option value="<?= $d->id ?>"><?= $d->judul ?></option>
                                         <?php } ?>
@@ -118,7 +121,7 @@
                                 <label class="col-form-label col-sm-5"><b>Proyek</b></label>
                                 <div class="col-sm-7">
                                     <select class="form-control" id="selectJabatan" name="proyek">
-                                        <option value="">~ Proyek ~</option>
+                                        <option value="" class="default-select">Tidak terikat proyek</option>
                                         <?php foreach ($proyek as $k => $p) { ?>
                                             <option value="<?= $p->id ?>"><?= $p->nama ?></option>
                                         <?php } ?>
@@ -145,7 +148,7 @@
                                 <label class="col-form-label col-sm-5"><b>Sifat <i class="text-danger">*</i></b></label>
                                 <div class="col-sm-7">
                                     <select class="form-control select-sifat" required="" name="sifat">
-                                        <option value="">~ Sifat ~</option>
+                                        <option value="" class="default-select">Pilih Sifat Tugas</option>
                                         <option value="WAJIB">Wajib</option>
                                         <option value="SITUASIONAL">Situasional</option>
                                     </select>
@@ -272,7 +275,9 @@
             tbMain.columns(7).search($(this).val()).draw();
         });
         getTugas();
-        $('.select2').select2();
+        $('.select2').select2({
+            placeholder: "Pilih penerima tugas",
+        });
         $('.dataTables_filter .form-control').attr('placeholder', 'Cari');
         $('.div-filter-cari').append($('.dataTables_filter .form-control'));
         $('.dataTables_filter').hide();
