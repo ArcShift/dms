@@ -85,6 +85,9 @@ class Tugas_saya extends MY_Controller {
             if ($this->input->post('form_terkait')) {
                 $this->db->set('form_terkait', $this->input->post('form_terkait'));
             }
+            if ($this->input->post('proyek')) {
+                $this->db->set('id_project', $this->input->post('proyek'));
+            }
             $this->db->insert('tugas');
             $id = $this->db->insert_id();
             foreach ($this->input->post('pelaksana') as $k => $p) {

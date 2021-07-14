@@ -117,7 +117,7 @@
                             <div class="form-group row">
                                 <label class="col-form-label col-sm-5"><b>Proyek</b></label>
                                 <div class="col-sm-7">
-                                    <select class="form-control" id="selectJabatan" name="jabatan">
+                                    <select class="form-control" id="selectJabatan" name="proyek">
                                         <option value="">~ Proyek ~</option>
                                         <?php foreach ($proyek as $k => $p) { ?>
                                             <option value="<?= $p->id ?>"><?= $p->nama ?></option>
