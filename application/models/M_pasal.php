@@ -132,7 +132,8 @@ class M_pasal extends CI_Model {
 //            die($this->db->last_query());
             $sort = [];
             foreach ($result as $k => $v) {
-                if ($filterAccess & $v['status'] == 'DISABLE') {                    
+                $status = empty($v['status'])?'ENABLE':$v['status'];
+                if ($filterAccess & $status == 'DISABLE') {                    
                 } else {
                     $v['level'] = 0;
                     array_push($sort, $v);
