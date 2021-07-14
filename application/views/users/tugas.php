@@ -57,7 +57,8 @@
                 <tr>
                     <th>#</th>
                     <th>Tugas</th>
-                    <th>Pelaksana</th>
+                    <!--<th>Pelaksana</th>-->
+                    <th>Pemberi<br>Tugas</th>
                     <!--<th>Form Terkait</th>-->
                     <th>Jadwal</th>
                     <!--<th>Bukti</th>-->
@@ -72,10 +73,13 @@
                         <td class="details-control"></td>
                         <td><?= $d->tugas ?></td>
                         <td>
-                            <?php foreach ($d->pelaksana as $k => $p) { ?>
-                                <img class="rounded-circle" style="object-fit: cover" src="<?= $p->photo == null ? base_url('assets/images/default_user.jpg') : base_url('upload/profile_photo/') . $p->photo ?>" width="30" height="30" title="<?= $p->fullname ?>">
-                            <?php } ?>
+                            <?= empty($d->pembuat) ? '-' : '<img class="rounded-circle" style="object-fit: cover" src="' . ($d->photo == null ? base_url('assets/images/default_user.jpg') : base_url('upload/profile_photo/') . $d->photo) . '" width="30" height="30" title="' . $d->pembuat . '">' ?>
                         </td>
+    <!--                        <td>
+                        <?php foreach ($d->pelaksana as $k => $p) { ?>
+                                                    <img class="rounded-circle" style="object-fit: cover" src="<?= $p->photo == null ? base_url('assets/images/default_user.jpg') : base_url('upload/profile_photo/') . $p->photo ?>" width="30" height="30" title="<?= $p->fullname ?>">
+                        <?php } ?>
+                        </td>-->
                         <!--<td><?= empty($d->form_terkait) ? '-' : $d->form_terkait->judul ?></td>-->
                         <td><?= $d->tanggal ?></td>
                         <!--<td><?= $d->path ?></td>-->
@@ -502,19 +506,23 @@
     );
     function format(idx) {
         var d = data[idx];
-        var pembuat = ' - ';
+//        var pembuat = ' - ';
         var editDelete = '';
-        if (d.pembuat != null) {
-            pembuat = '<img class="rounded-circle" style="object-fit: cover" src="' + (d.photo == null ? '<?= base_url('assets/images/default_user.jpg') ?>' : '<?= base_url('upload/profile_photo/') ?>' + d.photo) + '" width="30" height="30" title="' + d.pembuat + '">';
-        }
+//        if (d.pembuat != null) {
+//            pembuat = '<img class="rounded-circle" style="object-fit: cover" src="' + (d.photo == null ? '<?= base_url('assets/images/default_user.jpg') ?>' : '<?= base_url('upload/profile_photo/') ?>' + d.photo) + '" width="30" height="30" title="' + d.pembuat + '">';
+//        }
         if (d.asal == 'MANDIRI') {
             editDelete = '<a class="dropdown-item" onclick="initEdit(' + idx + ')">Ubah</a>'
                     + '<a class="dropdown-item" onclick="initDelete(' + idx + ')">Hapus</a>';
         }
+        var pelaksana = '';
+        for (var p of d.pelaksana) {
+            pelaksana += '<img class="rounded-circle" style="object-fit: cover" src="' + (p.photo == null ? '<?= base_url('assets/images/default_user.jpg') ?>' : '<?= base_url('upload/profile_photo/') ?>' + p.photo) + '" width="30" height="30" title="' + p.fullname + '">';
+        }
         return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">' +
                 '<tr>' +
-                '<td>Pemberi Tugas:</td>' +
-                '<td>' + pembuat + '</td>' +
+                '<td>Penerima Tugas:</td>' +
+                '<td>' + pelaksana + '</td>' +
                 '</tr>' +
                 '<tr>' +
                 '<td>Proyek:</td>' +
