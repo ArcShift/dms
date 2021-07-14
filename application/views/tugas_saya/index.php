@@ -98,18 +98,29 @@
                                 </div>
                             </div>
                             <div class="form-group row standard-child">
-                                <label class="col-form-label col-sm-5"><b>SOP Terkait</b></label>
+                                <label class="col-form-label col-sm-5 pl-4">SOP</label>
                                 <div class="col-sm-7">
                                     <select class="form-control select-dokumen" id="selectDokumen" name="dokumen"></select>
                                 </div>
                             </div>
                             <div class="form-group row standard-child">
-                                <label class="col-form-label col-sm-5"><b>Form Terkait</b></label>
+                                <label class="col-form-label col-sm-5 pl-4">Form</label>
                                 <div class="col-sm-7">
                                     <select class="form-control select-form" name="form_terkait">
-                                        <option value="">~ Form Terkait ~</option>
+                                        <option value="">~ Form ~</option>
                                         <?php foreach ($form_terkait as $k => $d) { ?>
                                             <option value="<?= $d->id ?>"><?= $d->judul ?></option>
+                                        <?php } ?>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-form-label col-sm-5"><b>Proyek</b></label>
+                                <div class="col-sm-7">
+                                    <select class="form-control" id="selectJabatan" name="jabatan">
+                                        <option value="">~ Proyek ~</option>
+                                        <?php foreach ($proyek as $k => $p) { ?>
+                                            <option value="<?= $p->id ?>"><?= $p->nama ?></option>
                                         <?php } ?>
                                     </select>
                                 </div>
@@ -327,7 +338,7 @@
     });
     $('#selectStandard').change(function () {
         $('#selectDokumen').empty();
-        $('#selectDokumen').append('<option value="">~ Dokumen ~</option>');
+        $('#selectDokumen').append('<option value="">~ SOP ~</option>');
         if ($(this).val() == '') {
             $('.standard-child').hide();
         } else {
