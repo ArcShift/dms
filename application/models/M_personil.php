@@ -23,7 +23,7 @@ class M_personil extends CI_Model {
 
     function read() {
         $this->db->select('p.id, p.fullname, u.username, c.name AS company');
-        $this->db->join('company c', 'c.id = p.id_company AND c.id='.$this->session->activeCompany['id']);
+        $this->db->join('company c', 'c.id = p.id_company AND c.id=' . $this->session->activeCompany['id']);
         $this->db->join('users u', 'p.id = u.id_personil', 'LEFT');
         if ($this->session->userdata('user')['role'] == 'pic') {
             $this->db->where('c.id', $this->session->userdata['user']['id_company']);
@@ -82,6 +82,8 @@ class M_personil extends CI_Model {
         $r['creator'] = $this->db->get('document d')->result_array();
         $this->db->join('position_personil pp', 'pp.id = pt.id_position_personil AND pp.id_personil = ' . $id);
         $r['task'] = $this->db->get('personil_task pt')->result_array();
+        $this->db->join('position_personil pp', 'pp.id = t.pembuat AND pp.id_personil = ' . $id);
+        $r['task_creator'] = $this->db->get_where('tugas t')->result();
         return $r;
     }
 
@@ -102,12 +104,13 @@ class M_personil extends CI_Model {
         $this->db->set('id_unit_kerja', $this->input->post('unit_kerja'));
         $this->db->insert('position_personil');
     }
+
     function position_personil($id_tugas = null) {
         $this->db->select('pp.*, CONCAT(p.fullname, " - ", uk.name) AS fullname');
         $this->db->join('personil p', 'p.id = pp.id_personil');
         $this->db->join('unit_kerja uk', 'uk.id = pp.id_unit_kerja');
-        if(isset($id_tugas)){
-            $this->db->join('personil_task pt', 'pt.id_position_personil = pp.id AND pt.id_tugas='.$id_tugas);
+        if (isset($id_tugas)) {
+            $this->db->join('personil_task pt', 'pt.id_position_personil = pp.id AND pt.id_tugas=' . $id_tugas);
         }
         $this->db->where('p.id_company', $this->session->activeCompany['id']);
         return $this->db->get('position_personil pp')->result();

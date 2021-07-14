@@ -81,6 +81,9 @@ class Personil extends MY_Controller {
                 $this->db->delete('distribution');
                 $this->db->where('id_position_personil', $uk['id_position_personil']);
                 $this->db->delete('personil_task');
+                $this->db->set('pembuat', NULL);
+                $this->db->where('pembuat', $uk['id_position_personil']);
+                $this->db->update('tugas');
             }
             $this->db->where('id_personil', $this->input->post('id'));
             $this->db->delete('position_personil');

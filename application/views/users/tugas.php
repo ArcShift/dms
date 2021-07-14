@@ -17,15 +17,15 @@
 <!--TABLE-->
 <div class="main-card card">
     <div class="card-body">
-        <button class="btn btn-sm btn-outline-primary float-right" id="btnTugasBaru">Buat Tugas Baru</button>
-        <br/>
-        <br/>
         <div class="row div-filter">
-            <div class="col-sm-2"></div>
-            <div class="col-sm-2">
+            <div class="col-sm-4">
+        <button class="btn btn-sm btn-outline-primary fa fa-plus" id="btnTugasBaru"> Buat Tugas Baru</button>
+                
+            </div>
+            <!--<div class="col-sm-2">-->
                 <!--<input class="form-control form-control-sm" onfocus="(this.type='date')" id="minDate" placeholder="Tanggal Awal">-->
                 <!--<input class="form-control form-control-sm" onfocus="(this.type='date')" id="maxDate" placeholder="Tanggal Akhir">-->
-            </div>
+            <!--</div>-->
             <div class="col-sm-2 col-search-box">
             </div>
             <div class="col-sm-2">
@@ -58,7 +58,7 @@
                     <th>#</th>
                     <th>Tugas</th>
                     <!--<th>Pelaksana</th>-->
-                    <th>Pemberi<br>Tugas</th>
+                    <th>Pemberi Tugas</th>
                     <!--<th>Form Terkait</th>-->
                     <th>Jadwal</th>
                     <!--<th>Bukti</th>-->

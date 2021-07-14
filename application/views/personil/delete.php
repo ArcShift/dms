@@ -12,9 +12,10 @@
                 <label>Nama</label>
                 <input class="form-control" readonly="" value="<?php echo $data['fullname'] ?>">
             </div>
-            <span class="badge badge-secondary">Creator: <?= count($data['creator']) ?></span>
-            <span class="badge badge-secondary">Distribusi: <?= count($data['dist']) ?></span>
-            <span class="badge badge-secondary">Tugas: <?= count($data['task']) ?></span>
+            <span class="badge badge-secondary">Pembuat Dokumen: <?= count($data['creator']) ?></span>
+            <span class="badge badge-secondary">Distribusi Dokumen: <?= count($data['dist']) ?></span>
+            <span class="badge badge-secondary">Pembuat Tugas: <?= count($data['task_creator']) ?></span>
+            <span class="badge badge-secondary">Penerima Tugas: <?= count($data['task']) ?></span>
             <br>
             <br>
             <?php if (!empty($data['dist'])|!empty($data['creator'])|!empty($data['task'])){  ?>
