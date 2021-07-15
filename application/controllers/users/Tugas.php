@@ -101,10 +101,10 @@ class Tugas extends MY_User {
             $this->db->update('jadwal');
             $this->m_log->update_tugas($jd->id_tugas);
         }
-        $this->data['menuStandard'] = true;
+//        $this->data['menuStandard'] = true;
         $this->db->select('j.*, t.nama AS tugas, t.form_terkait AS id_form, pro.nama AS project, t.sifat, t.id_document, t.asal, pp.id AS jabatan, CONCAT(p2.fullname, " - ", uk2.name) AS pembuat, u2.photo');
         $this->db->join('tugas t', 't.id = j.id_tugas');
-        $this->db->join('document d', 'd.id = t.id_document AND d.id_standard=' . $this->session->activeStandard['id']);
+//        $this->db->join('document d', 'd.id = t.id_document AND d.id_standard=' . $this->session->activeStandard['id']);
         $this->db->join('personil_task pt', 'pt.id_tugas = t.id');
         $this->db->join('position_personil pp', 'pp.id = pt.id_position_personil');
         $this->db->join('personil p', 'p.id = pp.id_personil');
