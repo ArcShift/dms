@@ -19,8 +19,8 @@
     <div class="card-body">
         <div class="row div-filter">
             <div class="col-sm-4">
-        <button class="btn btn-sm btn-outline-primary fa fa-plus" id="btnTugasBaru"> Buat Tugas Baru</button>
-                
+                <button class="btn btn-sm btn-outline-primary fa fa-plus" id="btnTugasBaru"> Buat Tugas Baru</button>
+
             </div>
             <!--<div class="col-sm-2">-->
                 <!--<input class="form-control form-control-sm" onfocus="(this.type='date')" id="minDate" placeholder="Tanggal Awal">-->
@@ -75,14 +75,7 @@
                         <td>
                             <?= empty($d->pembuat) ? '-' : '<img class="rounded-circle" style="object-fit: cover" src="' . ($d->photo == null ? base_url('assets/images/default_user.jpg') : base_url('upload/profile_photo/') . $d->photo) . '" width="30" height="30" title="' . $d->pembuat . '">' ?>
                         </td>
-    <!--                        <td>
-                        <?php foreach ($d->pelaksana as $k => $p) { ?>
-                                                    <img class="rounded-circle" style="object-fit: cover" src="<?= $p->photo == null ? base_url('assets/images/default_user.jpg') : base_url('upload/profile_photo/') . $p->photo ?>" width="30" height="30" title="<?= $p->fullname ?>">
-                        <?php } ?>
-                        </td>-->
-                        <!--<td><?= empty($d->form_terkait) ? '-' : $d->form_terkait->judul ?></td>-->
                         <td><?= $d->tanggal ?></td>
-                        <!--<td><?= $d->path ?></td>-->
                         <td><?= $d->deadline ?></td>
                         <td><?= $d->asal ?></td>
                         <td>
@@ -156,7 +149,7 @@
 </div>
 <!--MODAL TUGAS BARU-->
 <div class="modal fade" id="modalTugasBaru">
-    <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-dialog" role="document">
         <form method="post" enctype="multipart/form-data">
             <div class="modal-content">
                 <div class="modal-header">
@@ -168,61 +161,61 @@
                 <div class="modal-body">
                     <input class="input-id" name="id" hidden=""/>
                     <div class="row">
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label><b>Dokumen</b></label>
-                                <select class="form-control" name="dokumen" required="">
-                                    <option value="">~Dokumen~</option>
-                                    <?php foreach ($dokumen as $k => $d) { ?>
-                                        <option value="<?= $d->id ?>"><?= $d->judul ?></option>
-                                    <?php } ?>
-                                </select>
+                        <div class="col-sm-12">
+                            <div class="form-group row">
+                                <label class="col-form-label col-sm-5"><b>Judul Tugas <i class="text-danger">*</i></b></label>
+                                <div class="col-sm-7">
+                                    <input class="form-control input-tugas" name="nama" required="" placeholder="Tulis judul tugas">
+                                </div>
                             </div>
-                            <div class="form-group">
-                                <label><b>Tugas</b></label>
-                                <input class="form-control" name="nama" required="">
+                            <div class="form-group row">
+                                <label class="col-form-label col-sm-5"><b>Proyek</b></label>
+                                <div class="col-sm-7">
+                                    <select class="form-control" name="proyek">
+                                        <option value="" class="default-select">Tidak terikat proyek</option>
+                                        <?php foreach ($proyek as $k => $p) { ?>
+                                            <option value="<?= $p->id ?>"><?= $p->nama ?></option>
+                                        <?php } ?>
+                                    </select>
+                                </div>
                             </div>
-                            <div class="form-group">
-                                <label><b>Form Terkait</b></label>
-                                <select class="form-control" name="form_terkait">
-                                    <option value="">~Dokumen~</option>
-                                    <?php foreach ($form_terkait as $k => $d) { ?>
-                                        <option value="<?= $d->id ?>"><?= $d->judul ?></option>
-                                    <?php } ?>
-                                </select>
+                            <div class="form-group row">
+                                <label class="col-form-label col-sm-5"><b>Buat Tugas Sebagai <i class="text-danger">*</i></b></label>
+                                <div class="col-sm-7">
+                                    <select class="form-control" required="" id="selectJabatan" name="jabatan">
+                                        <?php foreach ($unit_kerja as $k => $uk) { ?>
+                                            <option value="<?= $uk->jabatan ?>"><?= $uk->name ?></option>
+                                        <?php } ?>
+                                    </select>
+                                </div>
                             </div>
-                            <div class="form-group">
-                                <label><b>Sifat</b></label>
-                                <select class="form-control" required="" name="sifat">
-                                    <option value="">~Sifat~</option>
-                                    <option value="WAJIB">Wajib</option>
-                                    <option value="SITUASIONAL">Situasional</option>
-                                </select>
+                            <div class="form-group row">
+                                <label class="col-form-label col-sm-5"><b>Sifat <i class="text-danger">*</i></b></label>
+                                <div class="col-sm-7">
+                                    <select class="form-control select-sifat" required="" name="sifat">
+                                        <option value="" class="default-select">Pilih Sifat Tugas</option>
+                                        <option value="WAJIB">Wajib</option>
+                                        <option value="SITUASIONAL">Situasional</option>
+                                    </select>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label><b>Unit Kerja</b></label>
-                                <select class="form-control" required="" name="jabatan">
-                                    <?php foreach ($unit_kerja as $k => $uk) { ?>
-                                        <option value="<?= $uk->jabatan ?>"><?= $uk->name ?></option>
-                                    <?php } ?>
-                                </select>
+                            <div class="form-group row">
+                                <label class="col-form-label col-sm-5"><b>Jadwal <i class="text-danger">*</i></b></label>
+                                <div class="col-sm-7">
+                                    <input class="form-control" type="date" name="jadwal" required="" value="<?= date('Y-m-d') ?>">
+                                </div>
                             </div>
-                            <div class="form-group">
-                                <label><b>Jadwal</b></label>
-                                <input class="form-control" type="date" name="jadwal" required="" value="<?= date('Y-m-d') ?>">
-                            </div>
-                            <div class="form-group">
-                                <label><b>Bukti Implementasi</b></label>
-                                <br>
-                                <input class="radio-bukti2" type="radio" name="type_dokumen" value="file">
-                                <label>File</label>
-                                <input class="radio-bukti2" type="radio" name="type_dokumen" value="url">
-                                <label>Url</label>
-                                <i class="text-primary fa fa-window-close" id="cancelRadioBukti"></i>
-                                <input class="form-control input-bukti input-file" type="file" name="dokumen">
-                                <input class="form-control input-bukti input-url" type="url" name="url">
+                            <div class="form-group row">
+                                <label class="col-form-label col-sm-5"><b>Bukti Implementasi</b></label>
+                                <div class="col-sm-7">
+                                    <input class="radio-bukti2" type="radio" name="type_dokumen" value="file">
+                                    <label>File</label>
+                                    <input class="radio-bukti2" type="radio" name="type_dokumen" value="url">
+                                    <label>Url</label>
+                                    <i class="text-primary fa fa-window-close" id="cancelRadioBukti"></i>
+                                    <input class="form-control input-bukti input-file" type="file" name="dokumen">
+                                    <input class="form-control input-bukti input-url" type="url" name="url">
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -237,7 +230,7 @@
 </div>
 <!--MODAL EDIT TUGAS-->
 <div class="modal fade" id="modalEdit">
-    <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-dialog">
         <form method="post" enctype="multipart/form-data">
             <div class="modal-content">
                 <div class="modal-header">
@@ -249,50 +242,49 @@
                 <div class="modal-body">
                     <input class="input-id" name="id" hidden=""/>
                     <div class="row">
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label><b>Dokumen</b></label>
-                                <select class="form-control select-dokumen" name="dokumen" required="">
-                                    <option value="">~Dokumen~</option>
-                                    <?php foreach ($dokumen as $k => $d) { ?>
-                                        <option value="<?= $d->id ?>"><?= $d->judul ?></option>
-                                    <?php } ?>
-                                </select>
+                        <div class="col-sm-12">
+                            <div class="form-group row">
+                                <label class="col-form-label col-sm-5"><b>Judul Tugas <i class="text-danger">*</i></b></label>
+                                <div class="col-sm-7">
+                                    <input class="form-control input-tugas" name="nama" required="" placeholder="Tulis judul tugas">
+                                </div>
                             </div>
-                            <div class="form-group">
-                                <label><b>Tugas</b></label>
-                                <input class="form-control input-tugas" name="nama" required="">
+                            <div class="form-group row">
+                                <label class="col-form-label col-sm-5"><b>Proyek</b></label>
+                                <div class="col-sm-7">
+                                    <select class="form-control select-proyek" name="proyek">
+                                        <option value="" class="default-select">Tidak terikat proyek</option>
+                                        <?php foreach ($proyek as $k => $p) { ?>
+                                            <option value="<?= $p->id ?>"><?= $p->nama ?></option>
+                                        <?php } ?>
+                                    </select>
+                                </div>
                             </div>
-                            <div class="form-group">
-                                <label><b>Form Terkait</b></label>
-                                <select class="form-control input-form" name="form_terkait">
-                                    <option value="">~Dokumen~</option>
-                                    <?php foreach ($form_terkait as $k => $d) { ?>
-                                        <option value="<?= $d->id ?>"><?= $d->judul ?></option>
-                                    <?php } ?>
-                                </select>
+                            <div class="form-group row">
+                                <label class="col-form-label col-sm-5"><b>Buat Tugas Sebagai <i class="text-danger">*</i></b></label>
+                                <div class="col-sm-7">
+                                    <select class="form-control select-jabatan" required="" name="jabatan">
+                                        <?php foreach ($unit_kerja as $k => $uk) { ?>
+                                            <option value="<?= $uk->jabatan ?>"><?= $uk->name ?></option>
+                                        <?php } ?>
+                                    </select>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label><b>Sifat</b></label>
-                                <select class="form-control select-sifat" required="" name="sifat">
-                                    <option value="">~Sifat~</option>
-                                    <option value="WAJIB">Wajib</option>
-                                    <option value="SITUASIONAL">Situasional</option>
-                                </select>
+                            <div class="form-group row">
+                                <label class="col-form-label col-sm-5"><b>Sifat <i class="text-danger">*</i></b></label>
+                                <div class="col-sm-7">
+                                    <select class="form-control select-sifat" required="" name="sifat">
+                                        <option value="" class="default-select">Pilih Sifat Tugas</option>
+                                        <option value="WAJIB">Wajib</option>
+                                        <option value="SITUASIONAL">Situasional</option>
+                                    </select>
+                                </div>
                             </div>
-                            <div class="form-group">
-                                <label><b>Unit Kerja</b></label>
-                                <select class="form-control select-unit-kerja" required="" name="jabatan">
-                                    <?php foreach ($unit_kerja as $k => $uk) { ?>
-                                        <option value="<?= $uk->jabatan ?>"><?= $uk->name ?></option>
-                                    <?php } ?>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label><b>Jadwal</b></label>
-                                <input class="form-control input-jd" name="jadwal" type="date" required="" value="<?= date('Y-m-d') ?>">
+                            <div class="form-group row">
+                                <label class="col-form-label col-sm-5"><b>Jadwal <i class="text-danger">*</i></b></label>
+                                <div class="col-sm-7">
+                                    <input class="form-control" type="date" name="jadwal" required="" value="<?= date('Y-m-d') ?>">
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -369,10 +361,6 @@
             txtPelaksana += '<li>' + p.fullname + '</li>';
         }
         var data2 = {
-            Pasal: d.dokumen.pasal[0].name,
-            'Judul Pasal': d.dokumen.pasal[0].sort_desc,
-            'Deskripsi Pasal': d.dokumen.pasal[0].long_desc,
-            'Judul Dokumen': d.dokumen.judul,
             'Tugas': d.tugas,
             'Form Terkait': d.form_terkait != null ? d.form_terkait.judul : '-',
             Sifat: d.sifat,
@@ -382,7 +370,7 @@
             Status: d.deadline,
             Asal: d.asal,
         };
-        showDetail('Detail Tugas', data2, 5);
+        showDetail('Detail Tugas', data2, 4);
     }
     function initUpload(idx) {
         $('#formUploadImplementasi').trigger('reset');
@@ -462,11 +450,10 @@
         console.log(d);
         m.modal('show');
         m.find('.input-id').val(d.id);
-        m.find('.select-dokumen').val(d.dokumen.id);
         m.find('.input-tugas').val(d.tugas);
-        m.find('.input-form').val(d.id_form);
+        m.find('.select-proyek').val(d.id_project);
         m.find('.select-sifat').val(d.sifat);
-        m.find('.select-unit-kerja').val(d.jabatan);
+        m.find('.select-jabatan').val(d.jabatan);
         m.find('.input-jd').val(d.tanggal);
     }
     function initDelete(idx) {

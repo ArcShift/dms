@@ -15,7 +15,7 @@ class Tugas_saya extends MY_Controller {
         $this->db->select('uk.*, pp.id AS jabatan');
         $this->db->join('position_personil pp', 'pp.id_unit_kerja = uk.id AND pp.id_personil=' . $this->session->user['id_personil']);
         $this->data['unit_kerja'] = $this->db->get('unit_kerja uk')->result();
-        $this->data['proyek'] = $this->db->get_where('project', ['id_company'=> $this->session->activeCompany['id']])->result();
+        $this->data['proyek'] = $this->db->get_where('project', ['id_company' => $this->session->activeCompany['id']])->result();
         $this->render('index');
     }
 
@@ -62,7 +62,7 @@ class Tugas_saya extends MY_Controller {
             if ($t->masuk == $this->session->user['id_personil']) {
                 $t->alur .= 'tugas_masuk ';
             }
-            if($t->keluar == $this->session->user['id_personil']){
+            if ($t->keluar == $this->session->user['id_personil']) {
                 $t->alur .= 'tugas_keluar ';
             }
             $data[$k] = $t;
@@ -146,13 +146,9 @@ class Tugas_saya extends MY_Controller {
                 $user = $this->db->get('personil p')->row_array();
                 if (!empty($user)) {
                     $this->db->select('t.nama AS tugas, s.name AS standard');
-                    $this->db->join('document d', 'd.id = t.id_document');
-                    $this->db->join('document_pasal dp', 'dp.id_document = d.id');
-                    $this->db->join('pasal p', 'p.id = dp.id_pasal');
-                    $this->db->join('standard s', 's.id = p.id_standard');
                     $this->db->where('t.id', $this->input->post('id_tugas'));
                     $r = $this->db->get('tugas t')->row_array();
-                    $msg2 = "Anda telah terdaftar sebagai pelaksana tugas untuk tugas dengan judul <b>" . $r['tugas'] . "</b> di Standar <b>" . $r['standard'] . "</b>";
+                    $msg2 = "Anda telah terdaftar sebagai pelaksana tugas untuk tugas dengan judul <b>" . $r['tugas'];
                     if (!empty($user['email']) & $user['notif_email'] == 'ENABLE') {//cek apakah user memiliki email
                         $statusEmail = parent::notif_mail($user['email'], $user['fullname'] . ' menerima tugas', $msg2);
                         if ($statusEmail !== true) {

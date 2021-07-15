@@ -89,38 +89,40 @@
                                     <input class="form-control input-tugas" name="nama" required="" placeholder="Tulis judul tugas">
                                 </div>
                             </div>
-                            <div class="form-group row">
-                                <label class="col-form-label col-sm-5"><b>Standar</b></label>
-                                <div class="col-sm-7">
-                                    <select class="form-control select-dokumen" id="selectStandard" name="standard">
-                                        <option value="" class="default-select">Tidak terikat standar</option>
-                                        <?php foreach ($standard as $k => $s) { ?>
-                                            <option value="<?= $s->id ?>"><?= $s->name ?></option>
-                                        <?php } ?>
-                                    </select>
+                            <?php if ($this->session->user['role'] == 'pic') { ?>
+                                <div class="form-group row">
+                                    <label class="col-form-label col-sm-5"><b>Standar</b></label>
+                                    <div class="col-sm-7">
+                                        <select class="form-control select-dokumen" id="selectStandard" name="standard">
+                                            <option value="" class="default-select">Tidak terikat standar</option>
+                                            <?php foreach ($standard as $k => $s) { ?>
+                                                <option value="<?= $s->id ?>"><?= $s->name ?></option>
+                                            <?php } ?>
+                                        </select>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="form-group row standard-child">
-                                <label class="col-form-label col-sm-5 pl-4">SOP</label>
-                                <div class="col-sm-7">
-                                    <select class="form-control select-dokumen" id="selectDokumen" name="dokumen"></select>
+                                <div class="form-group row standard-child">
+                                    <label class="col-form-label col-sm-5 pl-4">SOP</label>
+                                    <div class="col-sm-7">
+                                        <select class="form-control select-dokumen" id="selectDokumen" name="dokumen"></select>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="form-group row standard-child">
-                                <label class="col-form-label col-sm-5 pl-4">Form</label>
-                                <div class="col-sm-7">
-                                    <select class="form-control select-form" name="form_terkait">
-                                        <option value="" class="default-select">Pilih form</option>
-                                        <?php foreach ($form_terkait as $k => $d) { ?>
-                                            <option value="<?= $d->id ?>"><?= $d->judul ?></option>
-                                        <?php } ?>
-                                    </select>
+                                <div class="form-group row standard-child">
+                                    <label class="col-form-label col-sm-5 pl-4">Form</label>
+                                    <div class="col-sm-7">
+                                        <select class="form-control select-form" name="form_terkait">
+                                            <option value="" class="default-select">Pilih form</option>
+                                            <?php foreach ($form_terkait as $k => $d) { ?>
+                                                <option value="<?= $d->id ?>"><?= $d->judul ?></option>
+                                            <?php } ?>
+                                        </select>
+                                    </div>
                                 </div>
-                            </div>
+                            <?php } ?>
                             <div class="form-group row">
                                 <label class="col-form-label col-sm-5"><b>Proyek</b></label>
                                 <div class="col-sm-7">
-                                    <select class="form-control" id="selectJabatan" name="proyek">
+                                    <select class="form-control" name="proyek">
                                         <option value="" class="default-select">Tidak terikat proyek</option>
                                         <?php foreach ($proyek as $k => $p) { ?>
                                             <option value="<?= $p->id ?>"><?= $p->nama ?></option>
@@ -359,11 +361,11 @@
     $('#selectDokumen').change(function () {
         getPelaksana();
     });
+    getPelaksana();
     function getPelaksana() {
         $.getJSON('<?= site_url($module . '/get_pelaksana') ?>', {id_dokumen: $('#selectDokumen').val(), pp: $('#selectJabatan').val()}, function (data) {
             console.log(data);
             $('#selectPelaksana').empty();
-
             for (var i = 0; i < data.length; i++) {
                 var d = data[i];
                 $('#selectPelaksana').append(new Option(d.personil, d.id, false, false));

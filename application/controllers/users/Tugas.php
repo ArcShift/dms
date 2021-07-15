@@ -33,8 +33,8 @@ class Tugas extends MY_User {
                 }
             }
         } else if ($this->input->post('newTugas')) {
-            $this->db->set('id_document', $this->input->post('dokumen'));
             $this->db->set('nama', $this->input->post('nama'));
+            $this->db->set('id_project', $this->input->post('proyek'));
             $this->db->set('sifat', $this->input->post('sifat'));
             $this->db->set('asal', 'MANDIRI');
             if ($this->input->post('form_terkait'))
@@ -75,7 +75,6 @@ class Tugas extends MY_User {
             $this->db->delete('jadwal');
             $this->db->where('id', $this->input->post('id'));
             $this->db->delete('tugas');
-            //TODO: unlink file
             if($jd->doc_type == 'FILE'& file_exists('upload/implementasi/' . $jd->path)){
                 unlink('upload/implementasi/' . $jd->path);
             }
@@ -85,12 +84,8 @@ class Tugas extends MY_User {
             $jd = $this->db->get_where('jadwal', ['id' => $this->input->post('id')])->row();
             $this->db->set('id_document', $this->input->post('dokumen'));
             $this->db->set('nama', $this->input->post('nama'));
-            if ($this->input->post('form_terkait')) {
-                $this->db->set('form_terkait', $this->input->post('form_terkait'));
-            }else{
-                $this->db->set('form_terkait', null);
-            }
             $this->db->set('sifat', $this->input->post('sifat'));
+            $this->db->set('id_project', $this->input->post('proyek'));
             $this->db->where('id', $jd->id_tugas);
             $this->db->update('tugas');
             $this->db->set('id_position_personil', $this->input->post('jabatan'));
@@ -101,10 +96,8 @@ class Tugas extends MY_User {
             $this->db->update('jadwal');
             $this->m_log->update_tugas($jd->id_tugas);
         }
-//        $this->data['menuStandard'] = true;
-        $this->db->select('j.*, t.nama AS tugas, t.form_terkait AS id_form, pro.nama AS project, t.sifat, t.id_document, t.asal, pp.id AS jabatan, CONCAT(p2.fullname, " - ", uk2.name) AS pembuat, u2.photo');
+        $this->db->select('j.*, t.nama AS tugas, t.id_project, t.form_terkait AS id_form, pro.nama AS project, t.sifat, t.id_document, t.asal, pp.id AS jabatan, CONCAT(p2.fullname, " - ", uk2.name) AS pembuat, u2.photo');
         $this->db->join('tugas t', 't.id = j.id_tugas');
-//        $this->db->join('document d', 'd.id = t.id_document AND d.id_standard=' . $this->session->activeStandard['id']);
         $this->db->join('personil_task pt', 'pt.id_tugas = t.id');
         $this->db->join('position_personil pp', 'pp.id = pt.id_position_personil');
         $this->db->join('personil p', 'p.id = pp.id_personil');
@@ -140,12 +133,10 @@ class Tugas extends MY_User {
             $data[$k] = $d;
         }
         $this->data['data'] = $data;
-        $this->load->model('m_document');
-        $this->data['dokumen'] = $this->m_document->dokumen_saya();
-        $this->data['form_terkait'] = $this->m_document->form_terkait();
         $this->db->select('uk.*, pp.id AS jabatan');
         $this->db->join('position_personil pp', 'pp.id_unit_kerja = uk.id AND pp.id_personil=' . $this->session->user['id_personil']);
         $this->data['unit_kerja'] = $this->db->get('unit_kerja uk')->result();
+        $this->data['proyek'] = $this->db->get_where('project', ['id_company' => $this->session->activeCompany['id']])->result();
         $this->render('tugas');
     }
 
