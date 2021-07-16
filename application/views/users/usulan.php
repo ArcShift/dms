@@ -59,9 +59,6 @@
                             <?php } else { ?>
                                 <div class="btn-group">
                                     <span class="badge badge-info" data-toggle="dropdown">Menunggu <i class="fa fa-info-circle"></i></span>
-                                    <!--                                    <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                                            Right-aligned menu
-                                                                        </button>-->
                                     <div class="dropdown-menu">
                                         <table class="table">
                                             <thead>
@@ -97,39 +94,13 @@
                         <td>
                             <?php if (empty($u->ketua_approve)) { ?>
                                 <button class="btn btn-sm btn-outline-primary fa fa-edit"></button>
-                                <button class="btn btn-sm btn-outline-danger fa fa-trash"></button>
+                                <button class="btn btn-sm btn-outline-danger fa fa-trash" onclick="initDelete(<?= $k ?>)"></button>
                             <?php } ?>
                         </td>
                     </tr>
                 <?php } ?>
             </tbody>
         </table>
-    </div>
-</div>
-<div class="btn-group">
-    <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        Right-aligned menu
-    </button>
-    <div class="dropdown-menu dropdown-menu-">
-        <button class="dropdown-item" type="button">Action</button>
-        <button class="dropdown-item" type="button">Another action</button>
-        <button class="dropdown-item" type="button">Something else here</button>
-    </div>
-</div>
-<div class="row">
-    <div class="col-md-12 school-options-dropdown text-center">
-        <div class="dropdown btn-group">
-
-            <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Choose a School
-                <span class="caret"></span>
-            </button>
-
-            <ul class="dropdown-menu">
-                <li><a href="#">Add your school</a></li>
-                <li><a href="#">Hello</a></li>
-            </ul>
-
-        </div>
     </div>
 </div>
 <!--FORM CREATE-->
@@ -182,6 +153,24 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Batal</button>
                     <button type="submit" class="btn btn-outline-primary" id="btnSubmit" value="ok">Simpan</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<!--MODAL DELETE-->
+<div class="modal fade" id="modalDelete">
+    <div class="modal-dialog">
+        <form method="post">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Hapus Usulan</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <input class="input-id" name="id" hidden=""/>
                 </div>
             </div>
         </form>
@@ -260,5 +249,9 @@
             });
         }
     });
+    function initDelete(idx) {
+        var m = $('#modalDelete');
+        m.modal('show');
+    }
 </script>
 
