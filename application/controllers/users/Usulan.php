@@ -6,7 +6,7 @@ class Usulan extends MY_User {
         if ($this->input->post('create')) {
             $this->db->set('created_by', $this->input->post('jabatan'));
             $this->db->set('nama', $this->input->post('usulan'));
-            $this->db->set('created_at', NOW());
+            $this->db->set('created_at', 'NOW()', false);
             if ($this->input->post('standar')) {
                 $this->db->set('id_company_standard', $this->input->post('standar'));
             }
