@@ -20,7 +20,6 @@
         <div class="row div-filter">
             <div class="col-sm-4">
                 <button class="btn btn-sm btn-outline-primary fa fa-plus" id="btnTugasBaru"> Buat Tugas Baru</button>
-
             </div>
             <!--<div class="col-sm-2">-->
                 <!--<input class="form-control form-control-sm" onfocus="(this.type='date')" id="minDate" placeholder="Tanggal Awal">-->

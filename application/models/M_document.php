@@ -133,26 +133,36 @@ class M_document extends CI_Model {
         $this->db->where('id_company', $company);
         $this->db->where('id_standard', $standard);
         return $this->db->get('document')->result_array();
-    }   
+    }
 
-    function dokumen_saya(){
+    function dokumen_saya($standard = null) {
+        if (empty($standard)) {
+            $standard = $this->session->activeStandard['id'];
+        }
         $this->db->select('d.*');
         $this->db->join('distribution ds', 'ds.id_document = d.id');
-        $this->db->join('position_personil pp', 'pp.id = ds.id_position_personil AND pp.id_personil='.$this->session->user['id_personil']);
+        $this->db->join('position_personil pp', 'pp.id = ds.id_position_personil AND pp.id_personil=' . $this->session->user['id_personil']);
         $this->db->group_by('d.id');
-        $this->db->where('d.id_standard', $this->session->activeStandard['id']);
+        $this->db->where('d.id_standard', $standard);
+        $this->db->where('d.jenis <>', 4);
         return $this->db->get('document d')->result();
     }
+
     function dokumen_tugas() {
         $this->db->where('id_company', $this->session->activeCompany['id']);
         $this->db->where('id_standard', $this->session->activeStandard['id']);
         $this->db->where('jenis <>', 4);
         return $this->db->get('document')->result();
     }
-    function form_terkait() {
-        $this->db->where('id_standard', $this->session->activeStandard['id']);
+
+    function form_terkait($standard = null) {
+        if (empty($standard)) {
+            $standard = $this->session->activeStandard['id'];
+        }
+        $this->db->where('id_standard', $standard);
         $this->db->where('id_company', $this->session->activeCompany['id']);
         $this->db->where('jenis', 4);
         return $this->db->get('document')->result();
     }
+
 }

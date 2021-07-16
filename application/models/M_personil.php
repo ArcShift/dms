@@ -115,5 +115,10 @@ class M_personil extends CI_Model {
         $this->db->where('p.id_company', $this->session->activeCompany['id']);
         return $this->db->get('position_personil pp')->result();
     }
+    function get_unit_kerja() {
+        $this->db->select('pp.id, uk.name');
+        $this->db->join('position_personil pp', 'pp.id_unit_kerja = uk.id AND pp.id_personil = '.$this->session->user['id_personil']);
+        return $this->db->get('unit_kerja uk')->result();
+    }
 
 }

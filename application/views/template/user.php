@@ -7,6 +7,7 @@ if ($this->input->get('standard')) {
 $menus = [
     ['type' => 'parent', 'name' => 'dashboard'],
     ['type' => 'child', 'name' => 'dashboard', 'href' => '', 'icon' => 'home'],
+    ['type' => 'child', 'name' => 'usulan', 'href' => 'usulan', 'icon' => 'book'],
     ['type' => 'parent', 'name' => 'area kerja'],
     ['type' => 'child', 'name' => 'tugas saya', 'href' => 'tugas', 'icon' => 'chalkboard-teacher'],
     ['type' => 'child', 'name' => 'dokumen saya', 'href' => 'dokumen', 'icon' => 'copy'],

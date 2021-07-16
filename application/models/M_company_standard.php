@@ -18,7 +18,11 @@ class M_company_standard extends CI_Model {
         $this->db->group_by('c.id');
         return $this->db->get('company c')->result_array();
     }
-
+    function get() {
+        $this->db->select('cs.id, s.name');
+        $this->db->join('standard s', 's.id = cs.id_standard AND cs.id_company = '.$this->session->user['id_company']);
+        return $this->db->get('company_standard cs')->result();
+    }
     function standard($comp) {
         $this->db->select('s.*, COUNT(cs.id) AS count');
         $this->db->join('company_standard cs', 'cs.id_standard = s.id AND cs.id_company='.$comp, 'LEFT');
