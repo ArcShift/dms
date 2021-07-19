@@ -25,7 +25,7 @@ class Personil extends MY_Controller {
             if ($id = $this->model->create()) {
                 $this->m_log->create_personil($id);
                 $this->session->set_userdata('idData', $id);
-                redirect($this->module);
+                redirect($this->module.'/edit');
             } else {
                 //SHOW ERROR
             }
