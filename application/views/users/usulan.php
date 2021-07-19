@@ -23,9 +23,9 @@
             <div class="col-sm-2">
                 <select class="form-control form-control-sm" id='filterStatus'>
                     <option value="">Semua usulan</option>
-                    <option value="selesai">Usulan selesai</option>
-                    <option value="terlambat">Usulan ditolak</option>
-                    <option value="menunggu">Menunggu</option>
+                    <option value="1">Usulan selesai</option>
+                    <option value="0">Usulan ditolak</option>
+                    <option value="-">Menunggu</option>
                 </select>
             </div>
             <div class="col-sm-2">
@@ -46,6 +46,7 @@
                     <th>Tanggal Usulan</th>
                     <th>Umpan Balik</th>
                     <th>Aksi</th>
+                    <th>Status</th>
                 </tr>
             </thead>
             <tbody>
@@ -107,6 +108,7 @@
                                 <button class="btn btn-sm btn-outline-danger fa fa-trash" onclick="initDelete(<?= $k ?>)"></button>
                             <?php } ?>
                         </td>
+                        <td><?= $u->pic_approve==null?'-':$u->pic_approve ?></td>
                     </tr>
                 <?php } ?>
             </tbody>
@@ -193,10 +195,19 @@
         tbMain = $('#tbMain').DataTable({
             "bLengthChange": false,
             "order": [],
+            "columnDefs": [
+                {"targets": [6], "visible": false}
+            ]
         });
         $('.dataTables_filter .form-control').attr('placeholder', 'Cari');
         $('.div-filter .col-search-box').eq(0).append($('.dataTables_filter .form-control'));
         $('.dataTables_filter').hide();
+    });
+    $('#filterPeriode').change(function () {
+        tbMain.columns(3).search($(this).val()).draw();
+    });
+    $('#filterStatus').change(function () {
+        tbMain.columns(6).search($(this).val()).draw();
     });
     $('#tbMain tbody').on('click', 'td.details-control', function () {
         var tr = $(this).closest('tr');
