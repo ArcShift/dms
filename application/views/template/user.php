@@ -7,7 +7,6 @@ if ($this->input->get('standard')) {
 $menus = [
     ['type' => 'parent', 'name' => 'dashboard'],
     ['type' => 'child', 'name' => 'dashboard', 'href' => '', 'icon' => 'home'],
-    ['type' => 'child', 'name' => 'usulan', 'href' => 'usulan', 'icon' => 'book'],
     ['type' => 'parent', 'name' => 'area kerja'],
     ['type' => 'child', 'name' => 'tugas saya', 'href' => 'tugas', 'icon' => 'chalkboard-teacher'],
     ['type' => 'child', 'name' => 'dokumen saya', 'href' => 'dokumen', 'icon' => 'copy'],
@@ -21,6 +20,8 @@ $menus = [
     ['type' => 'child', 'name' => 'akun', 'href' => 'akun', 'icon' => 'user'],
     ['type' => 'child', 'name' => 'notifikasi email', 'href' => 'notif', 'icon' => 'envelope'],
     ['type' => 'hide', 'name' => 'notifikasi', 'href' => 'notifikasi', 'icon' => 'bell'],
+    ['type' => 'parent', 'name' => 'umum'],
+    ['type' => 'child', 'name' => 'usulan', 'href' => 'usulan', 'icon' => 'book'],
 ];
 foreach ($menus as $k => $m) {
     if (isset($m['href'])) {
