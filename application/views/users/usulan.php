@@ -55,7 +55,9 @@
                         <td><?= $u->nama ?></td>
                         <td>
                             <?php if (!empty($u->pic_approve)) { ?>
-                                -
+                                <span class="badge badge-success">Ketua Disetujui</span>
+                                <br/>
+                                <span class="badge badge-success">PIC disetujui</span>
                             <?php } else { ?>
                                 <div class="btn-group">
                                     <span class="badge badge-info" data-toggle="dropdown">Menunggu <i class="fa fa-info-circle"></i></span>
@@ -71,13 +73,21 @@
                                             <tbody>
                                                 <tr>
                                                     <td>Ketua</td>
-                                                    <td>-</td>
-                                                    <td>0000-00-00</td>
+                                                    <td>
+                                                        <?php if ($u->ketua_approve == 1) { ?>
+                                                            Disetujui
+                                                        <?php } elseif ($u->ketua_approve == 0) { ?>
+                                                            Ditolak
+                                                        <?php } else { ?>
+                                                            Menunggu
+                                                        <?php } ?>
+                                                    </td>
+                                                    <td><?= $u->ketua_tgl_approve ?></td>
                                                 </tr>
                                                 <tr>
                                                     <td>PIC</td>
+                                                    <td>Menunggu</td>
                                                     <td>-</td>
-                                                    <td>0000-00-00</td>
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -87,9 +97,9 @@
                         </td>
                         <td><?= $u->created_at ?></td>
                         <td>
-                            Ketua
+                            Ketua :<?= $u->ketua_feedback ?>
                             <br>
-                            PIC
+                            PIC :<?= $u->pic_feedback ?>
                         </td>
                         <td>
                             <?php if (empty($u->ketua_approve)) { ?>

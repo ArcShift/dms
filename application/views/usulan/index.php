@@ -1,6 +1,3 @@
-<?php
-//print_r($usulan);
-?>
 <style>
     td.details-control {
         background: url('https://datatables.net/examples/resources/details_open.png') no-repeat center;
@@ -16,15 +13,14 @@
     <div class="card-body">
         <div class="row div-filter">
             <div class="col-sm-6"></div>
+            <div class="col-sm-2 col-search-box"></div>
             <div class="col-sm-2">
-<!--                <select class="form-control form-control-sm" id='filterStatus'>
+                <select class="form-control form-control-sm" id='filterStatus'>
                     <option value="">Semua usulan</option>
                     <option value="selesai">Usulan selesai</option>
                     <option value="terlambat">Usulan ditolak</option>
                     <option value="menunggu">Menunggu</option>
-                </select>-->
-            </div>
-            <div class="col-sm-2 col-search-box">
+                </select>
             </div>
             <div class="col-sm-2">
                 <select class="form-control form-control-sm" id='filterPeriode'>
@@ -40,7 +36,7 @@
                 <tr>
                     <th>#</th>
                     <th>Usulan</th>
-                    <!--<th>Status Usulan</th>-->
+                    <th>Status Usulan</th>
                     <th>Tanggal Usulan</th>
                     <th>Umpan Balik</th>
                     <th>Aksi</th>
@@ -51,14 +47,66 @@
                     <tr>
                         <td class="details-control"></td>
                         <td><?= $u->nama ?></td>
+                        <td>
+                            <?php if (!empty($u->pic_approve)) { ?>
+                                <span class="badge badge-success">Ketua Disetujui</span>
+                                <br/>
+                                <span class="badge badge-success">PIC disetujui</span>
+                            <?php } else { ?>
+                                <div class="btn-group">
+                                    <span class="badge badge-info" data-toggle="dropdown">Menunggu <i class="fa fa-info-circle"></i></span>
+                                    <div class="dropdown-menu">
+                                        <table class="table">
+                                            <thead>
+                                                <tr>
+                                                    <th class="text-nowrap">Tim Terkait</th>
+                                                    <th class="text-nowrap">Status Usulan</th>
+                                                    <th class="text-nowrap">Tanggal Status</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>Ketua</td>
+                                                    <td>
+                                                        <?php if ($u->ketua_approve == 1) { ?>
+                                                            Disetujui
+                                                        <?php } elseif ($u->ketua_approve == 0) { ?>
+                                                            Ditolak
+                                                        <?php } else { ?>
+                                                            Menunggu
+                                                        <?php } ?>
+                                                    </td>
+                                                    <td><?= $u->ketua_tgl_approve ?></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>PIC</td>
+                                                    <td>Menunggu</td>
+                                                    <td>-</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            <?php } ?>
+                        </td>
                         <td><?= $u->created_at ?></td>
                         <td>
-                            Ketua
+                            Ketua :<?= $u->ketua_feedback ?>
                             <br>
-                            PIC
+                            PIC :<?= $u->pic_feedback ?>
                         </td>
                         <td>
-                            <button class="btn btn-sm btn-outline-primary fa fa-edit" onclick="initEdit(<?= $k ?>)"></button>   
+                            <?php
+                            $edit = false;
+                            if ($this->session->user['role'] == 'ketua' & $u->pic_approve == null) {
+                                $edit = true;
+                            } else if ($this->session->user['role'] == 'pic' & $u->pic_approve == null & $u->ketua_approve) {
+                                $edit = true;
+                            }
+                            if ($edit) {
+                                ?>
+                                <button class="btn btn-sm btn-outline-primary fa fa-edit" onclick="initEdit(<?= $k ?>)"></button>   
+                            <?php } ?>
                         </td>
                     </tr>
                 <?php } ?>
@@ -66,7 +114,7 @@
         </table>
     </div>
 </div>
-<!--FORM CREATE-->
+<!--FORM MAIN-->
 <div class="modal fade" id="modalMain">
     <div class="modal-dialog">
         <form id="formCreate" method="post">
@@ -83,7 +131,7 @@
                         <label><b>Status <i class="text-danger">*</i></b></label>
                         <select class="form-control" name="status" required="">
                             <option>~ Status ~</option>
-                            <option value="1">Terima</option>
+                            <option value="1">Setujui</option>
                             <option value="0">Tolak</option>
                         </select>
                     </div>
@@ -94,7 +142,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Batal</button>
-                    <button type="submit" class="btn btn-outline-primary" id="btnSubmit" value="ok">Simpan</button>
+                    <button type="submit" class="btn btn-outline-primary" name="approval" value="ok">Simpan</button>
                 </div>
             </div>
         </form>
@@ -145,10 +193,12 @@
                 '<tr>' +
                 '</table>';
     }
-    function initEdit(idx){
+    function initEdit(idx) {
         var m = $('#modalMain');
+        var d = data[idx];
         m.modal('show');
         m.find('.modal-title').text('Buat Usulan');
+        m.find('.input-id').val(d.id);
         $('#btnSubmit').attr('name', 'create');
         $('.standard-child').hide();
     }
@@ -173,6 +223,6 @@
             });
         }
     });
-    
+
 </script>
 
