@@ -3,7 +3,7 @@
         <span class="btn-icon-wrapper pr-2 opacity-7">
             <i class="fa fa-file fa-w-20"></i>
         </span>
-        <?= empty($this->session->gapAnalisa) ? '-' : $this->session->gapAnalisa['judul'] ?>
+        <?= empty($this->session->gapAnalisa) ? 'Belum ada jadwal' : $this->session->gapAnalisa['judul'] ?>
     </button>
     <div tabindex="-1" role="menu" aria-hidden="true" class="dropdown-menu dropdown-menu-right">
         <ul class="nav flex-column">
@@ -20,7 +20,11 @@
         </ul>
     </div>
 </div>
-<?php if ($this->session->has_userdata('gapAnalisa')) { ?>
+<?php if (!$this->session->has_userdata('gapAnalisa')) { ?>
+<div class="text-center">
+    <h3>Belum ada jadwal</h3>
+</div>
+<?php }else { ?>
     <p class="text-center">Waktu Gap Analisa: <?= date('d M Y', strtotime($this->session->gapAnalisa['tanggal'])) ?></p>
     <!--CARD-->
     <div class="card">
